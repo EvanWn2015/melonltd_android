@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    tools:context=".view.LoginActivity">
+
+
+    <!--<ImageView-->
+        <!--android:id="@+id/imageView"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginBottom="23dp"-->
+        <!--android:layout_marginEnd="166dp"-->
+        <!--android:layout_marginStart="146dp"-->
+        <!--android:layout_marginTop="92dp"-->
+        <!--android:src="@mipmap/ic_launcher_round"-->
+        <!--app:layout_constraintBottom_toTopOf="@+id/textView"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toTopOf="parent"-->
+        <!--tools:ignore="MissingConstraints" />-->
+
+    <!--<TextView-->
+        <!--android:id="@+id/textView"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginBottom="13dp"-->
+        <!--android:layout_marginEnd="16dp"-->
+        <!--android:layout_marginStart="16dp"-->
+        <!--android:layout_marginTop="23dp"-->
+        <!--android:text="Email:"-->
+        <!--android:textColor="@android:color/black"-->
+        <!--app:layout_constraintBottom_toTopOf="@+id/emailEdit"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/imageView"-->
+        <!--tools:ignore="MissingConstraints" />-->
+
+    <!--<EditText-->
+        <!--android:text="NER-18X1X11@melonltd.com.tw"-->
+        <!--android:textColor="@android:color/black"-->
+        <!--android:id="@+id/emailEdit"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="30dp"-->
+        <!--android:layout_marginBottom="9dp"-->
+        <!--android:layout_marginEnd="16dp"-->
+        <!--android:layout_marginStart="16dp"-->
+        <!--android:textSize="16dp"-->
+        <!--android:layout_marginTop="2dp"-->
+        <!--app:layout_constraintBottom_toTopOf="@+id/textView2"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/textView"-->
+        <!--tools:ignore="MissingConstraints" />-->
+
+    <!--<TextView-->
+        <!--android:id="@+id/textView2"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginBottom="10dp"-->
+        <!--android:layout_marginEnd="16dp"-->
+        <!--android:layout_marginStart="16dp"-->
+        <!--android:layout_marginTop="9dp"-->
+        <!--android:text="Password:"-->
+        <!--android:textColor="@android:color/black"-->
+        <!--app:layout_constraintBottom_toTopOf="@+id/passwordEdit"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/emailEdit"-->
+        <!--tools:ignore="MissingConstraints" />-->
+
+    <!--<EditText-->
+        <!--android:textColor="@android:color/black"-->
+        <!--android:text="DemoDemo"-->
+        <!--android:id="@+id/passwordEdit"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="30dp"-->
+        <!--android:textSize="16dp"-->
+        <!--android:layout_marginBottom="21dp"-->
+        <!--android:layout_marginEnd="16dp"-->
+        <!--android:layout_marginStart="16dp"-->
+        <!--android:layout_marginTop="10dp"-->
+        <!--app:layout_constraintBottom_toTopOf="@+id/loginBtn"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/textView2"-->
+        <!--tools:ignore="MissingConstraints" />-->
+
+    <!--<Button-->
+        <!--android:id="@+id/loginBtn"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginBottom="144dp"-->
+        <!--android:layout_marginEnd="16dp"-->
+        <!--android:layout_marginStart="16dp"-->
+        <!--android:layout_marginTop="15dp"-->
+        <!--android:text="Login"-->
+        <!--app:layout_constraintBottom_toBottomOf="parent"-->
+        <!--app:layout_constraintEnd_toEndOf="parent"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/passwordEdit"-->
+        <!--tools:ignore="MissingConstraints" />-->
+
+
+</android.support.constraint.ConstraintLayout>
