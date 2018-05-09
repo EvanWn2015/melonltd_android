@@ -26,6 +26,7 @@ import com.melonltd.naberc.R;
 import com.melonltd.naberc.model.preferences.SharedPreferencesService;
 import com.melonltd.naberc.util.Tools;
 import com.melonltd.naberc.view.customize.LoadingBar;
+import com.melonltd.naberc.view.page.type.PageType;
 
 public abstract class BaseActivity extends AppCompatActivity implements LocationListener {
     private static final String TAG = BaseActivity.class.getSimpleName();
@@ -33,6 +34,7 @@ public abstract class BaseActivity extends AppCompatActivity implements Location
     private static ConnectivityManager cm;
     private LocationManager locationManager;
     public static LoadingBar LOADING_BAR;
+    public static String FRAGMENT_TAG = PageType.HOME.name();
 
     private Handler handler;
 
@@ -49,7 +51,7 @@ public abstract class BaseActivity extends AppCompatActivity implements Location
     public static FirebaseUser currentUser = auth.getCurrentUser();
 
 
-    protected FragmentManager fragmentManager = getSupportFragmentManager();
+    protected  FragmentManager fragmentManager = getSupportFragmentManager();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

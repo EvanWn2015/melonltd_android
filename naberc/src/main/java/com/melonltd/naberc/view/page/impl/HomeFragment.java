@@ -11,17 +11,14 @@ import com.melonltd.naberc.R;
 import com.melonltd.naberc.view.BaseActivity;
 import com.melonltd.naberc.view.page.abs.AbsPageFragment;
 
-
+/**
+ * getArguments(); get this Bundle
+ */
 public class HomeFragment extends AbsPageFragment {
     private static final String TAG = HomeFragment.class.getSimpleName();
     private static HomeFragment FRAGMENT = null;
 
-
     public HomeFragment() {
-    }
-
-    public static HomeFragment newInstance() {
-        return new HomeFragment();
     }
 
     @Override
@@ -30,11 +27,7 @@ public class HomeFragment extends AbsPageFragment {
     }
 
     @Override
-    public AbsPageFragment newInstance(Bundle bundle) {
-        return new HomeFragment();
-    }
-
-    public static AbsPageFragment getInstance(Bundle bundle) {
+    public AbsPageFragment getInstance(Bundle bundle) {
         if (FRAGMENT == null) {
             FRAGMENT = new HomeFragment();
             FRAGMENT.setArguments(bundle);
@@ -45,8 +38,8 @@ public class HomeFragment extends AbsPageFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(TAG, BaseActivity.currentUser + "");
-        Log.d(TAG, BaseActivity.currentUser + "");
+        Log.d(TAG, BaseActivity.currentUser.getUid() + "");
+        Log.d(TAG, BaseActivity.currentUser.getEmail() + "");
     }
 
     @Override

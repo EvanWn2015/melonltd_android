@@ -1,21 +1,20 @@
 package com.melonltd.naberc.view.page.type;
 
+import com.melonltd.naberc.R;
+import com.melonltd.naberc.view.page.impl.HistoryFragment;
 import com.melonltd.naberc.view.page.impl.LoginFragment;
 import com.melonltd.naberc.view.page.abs.AbsPageFragment;
 import com.melonltd.naberc.view.page.impl.HomeFragment;
+import com.melonltd.naberc.view.page.impl.SetUpFragment;
+import com.melonltd.naberc.view.page.impl.ShoppingCartFragment;
 
 public enum PageType {
 
-    HOME(0, HomeFragment.class),
-    LOGIN(0, LoginFragment.class);
-
-//    E_WALLET(3, EWalletFragment.class),
-//    ATTRACTIONS(R.id.nav_attractions, AttractionsFragment.class),
-//    RIDE_RECORD(R.id.nav_ride_record, RideRecordFragment.class),
-//    VIP(R.id.nav_vip, VipFragment.class),
-//    MARKETING_ACTIVITIES(R.id.nav_marketing_activities, MarketingActivitiesFragment.class),
-//    MEMBER_MANAGEMENT(R.id.nav_member_management, MemberManagementFragment.class),
-//    HELP(R.id.nav_help, HelpFragment.class);
+    LOGIN(R.id.loginBtn, LoginFragment.class),
+    HOME(R.id.menuHomeBtn, HomeFragment.class),
+    SHOPPING_CART(R.id.menuShoppingCartBtn, ShoppingCartFragment.class),
+    HISTORY(R.id.menuHistoryBtn, HistoryFragment.class),
+    SET_UP(R.id.menuSetUpBtn, SetUpFragment.class);
 
     private final int id;
     private final Class zlass;
@@ -32,6 +31,16 @@ public enum PageType {
     public static PageType ofId(int id) {
         for (PageType entity : values()) {
             if (entity.equals(id)) {
+                return entity;
+            }
+        }
+        return null;
+    }
+
+
+    public static PageType equalsName(String name){
+        for (PageType entity : values()) {
+            if (entity.name().equals(name)) {
                 return entity;
             }
         }

@@ -6,9 +6,6 @@
     android:background="@android:color/white"
     tools:context=".view.page.impl.LoginFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-
-
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="wrap_content"
@@ -71,7 +68,6 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
         android:layout_marginBottom="54dp"
-        android:text="Login"
-        tools:ignore="MissingConstraints" />
+        android:text="Login" />
 
 </RelativeLayout>

@@ -33,6 +33,12 @@ public class SharedPreferencesService {
 //        Log.i("isFirstUse", c + "");
     }
 
+    public static void setUserUID(String uid) {
+        SERVICE.preferences.edit().putString("IS_FIRST_USE", uid).commit();
+//        boolean c = SERVICE.preferences.getBoolean("IS_FIRST_USE", true);
+//        Log.i("isFirstUse", c + "");
+    }
+
     public void setPreferences(SharedPreferences preferences) {
         this.preferences = preferences;
     }

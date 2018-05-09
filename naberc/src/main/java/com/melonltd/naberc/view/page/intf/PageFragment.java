@@ -4,7 +4,9 @@ import android.os.Bundle;
 
 public interface PageFragment {
 
-    PageFragment newInstance(Bundle bundle);
+//    PageFragment getInstance(Bundle bundle);
+
+    PageFragment getInstance(Bundle bundle);
 
     PageFragment newInstance(Object... o);
 }

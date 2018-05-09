@@ -4,8 +4,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.melonltd.naberc.model.helper.ConnectHelper;
 import com.melonltd.naberc.model.helper.ThreadCallback;
 
-public abstract class CustomersAbstractService extends AbstractService {
-    private static final String TAG = CustomersAbstractService.class.getSimpleName();
+public abstract class CustomersService extends AbstractService {
+    private static final String TAG = CustomersService.class.getSimpleName();
     private static DatabaseReference reference = ConnectHelper.getCustomersReference();
 
     public static void findByEmail(String mail, final ThreadCallback callback) {

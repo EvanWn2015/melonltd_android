@@ -1,25 +1,41 @@
-package com.melonltd.naberc;
+package com.melonltd.naberc.view.page.impl;
 
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class ShoppingCartFragment extends Fragment {
+import com.melonltd.naberc.R;
+import com.melonltd.naberc.view.page.abs.AbsPageFragment;
+import com.melonltd.naberc.view.page.intf.PageFragment;
 
+public class ShoppingCartFragment extends AbsPageFragment {
+    private static final String TAG = HomeFragment.class.getSimpleName();
+    private static ShoppingCartFragment FRAGMENT = null;
 
     public ShoppingCartFragment() {
-        // Required empty public constructor
     }
 
+    @Override
+    public PageFragment getInstance(Bundle bundle) {
+        if (FRAGMENT == null){
+            FRAGMENT = new ShoppingCartFragment();
+            FRAGMENT.setArguments(bundle);
+        }
+        return FRAGMENT;
+    }
+
+    @Override
+    public PageFragment newInstance(Object... o) {
+        return new ShoppingCartFragment();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_shopping_cart, container, false);
     }
+
 
 }

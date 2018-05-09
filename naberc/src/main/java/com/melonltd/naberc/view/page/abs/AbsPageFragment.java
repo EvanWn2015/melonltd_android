@@ -1,20 +1,16 @@
 package com.melonltd.naberc.view.page.abs;
 
-import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 
 import com.melonltd.naberc.view.page.intf.PageFragment;
 
 public abstract class AbsPageFragment extends Fragment implements PageFragment {
 
     @Override
-    public PageFragment newInstance(Bundle bundle) {
-        return null;
-    }
+    public abstract PageFragment getInstance(Bundle bundle);
 
     @Override
-    public PageFragment newInstance(Object... o) {
-        return null;
-    }
+    public abstract PageFragment newInstance(Object... o);
 
 }

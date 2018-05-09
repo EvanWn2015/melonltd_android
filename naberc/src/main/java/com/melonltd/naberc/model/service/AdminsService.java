@@ -1,4 +1,4 @@
 package com.melonltd.naberc.model.service;
 
-public class AdminsService {
+public class AdminsService extends AbstractService {
 }
