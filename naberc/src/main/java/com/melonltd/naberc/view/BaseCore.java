@@ -2,8 +2,8 @@ package com.melonltd.naberc.view;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.ActionBar;
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
@@ -26,11 +26,12 @@ import com.melonltd.naberc.R;
 import com.melonltd.naberc.model.preferences.SharedPreferencesService;
 import com.melonltd.naberc.util.Tools;
 import com.melonltd.naberc.view.customize.LoadingBar;
+import com.melonltd.naberc.view.customize.PopUpDialog;
 import com.melonltd.naberc.view.page.type.PageType;
 
-public abstract class BaseActivity extends AppCompatActivity implements LocationListener {
-    private static final String TAG = BaseActivity.class.getSimpleName();
-    //    private Context context;
+public abstract class BaseCore extends AppCompatActivity implements LocationListener {
+    private static final String TAG = BaseCore.class.getSimpleName();
+    public static Context context;
     private static ConnectivityManager cm;
     private LocationManager locationManager;
     public static LoadingBar LOADING_BAR;
@@ -51,17 +52,20 @@ public abstract class BaseActivity extends AppCompatActivity implements Location
     public static FirebaseUser currentUser = auth.getCurrentUser();
 
 
-    protected  FragmentManager fragmentManager = getSupportFragmentManager();
+    public FragmentManager fragmentManager = getSupportFragmentManager();
+    public static PopUpDialog POPUP = PopUpDialog.getInstance();
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-//        context = this;
+        context = this;
         LOADING_BAR = new LoadingBar(this);
         // TODO do get GCM token
 //        Intent intent = new Intent(BasisActivity.this, RegistrationIntentService.class);
 //        startService(intent);
 
+        // TODO init PopUp
+        POPUP.setTransaction(fragmentManager);
         // TODO init Manager
         cm = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
 
@@ -184,13 +188,5 @@ public abstract class BaseActivity extends AppCompatActivity implements Location
     public void onProviderDisabled(String s) {
         Log.d(TAG, "onProviderDisabled: ");
     }
-
-//    @Override
-//    public boolean onKeyDown(int keyCode, KeyEvent event) {
-//        if (keyCode == KeyEvent.KEYCODE_BACK) {
-//            return true;
-//        }
-//        return super.onKeyDown(keyCode, event);
-//    }
 
 }

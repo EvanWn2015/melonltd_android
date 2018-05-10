@@ -1,5 +1,6 @@
 package com.melonltd.naberc.view.page.impl;
 
+
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -11,25 +12,22 @@ import com.melonltd.naberc.R;
 import com.melonltd.naberc.view.BaseCore;
 import com.melonltd.naberc.view.page.abs.AbsPageFragment;
 
-/**
- * getArguments(); get this Bundle
- */
-public class HomeFragment extends AbsPageFragment {
-    private static final String TAG = HomeFragment.class.getSimpleName();
-    private static HomeFragment FRAGMENT = null;
+public class RestaurantFragment extends AbsPageFragment {
+    private static final String TAG = RestaurantFragment.class.getSimpleName();
+    private static RestaurantFragment FRAGMENT = null;
 
-    public HomeFragment() {
+    public RestaurantFragment() {
     }
 
     @Override
     public AbsPageFragment newInstance(Object... o) {
-        return new HomeFragment();
+        return new RestaurantFragment();
     }
 
     @Override
     public AbsPageFragment getInstance(Bundle bundle) {
         if (FRAGMENT == null) {
-            FRAGMENT = new HomeFragment();
+            FRAGMENT = new RestaurantFragment();
             FRAGMENT.setArguments(bundle);
         }
         return FRAGMENT;
@@ -44,7 +42,7 @@ public class HomeFragment extends AbsPageFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_home, container, false);
+        return inflater.inflate(R.layout.fragment_restaurant, container, false);
     }
 
     @Override
@@ -54,3 +52,5 @@ public class HomeFragment extends AbsPageFragment {
     }
 
 }
+
+

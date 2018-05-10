@@ -1,17 +1,30 @@
 package com.melonltd.naberc.view.page.type;
 
 import com.melonltd.naberc.R;
-import com.melonltd.naberc.view.page.impl.HistoryFragment;
-import com.melonltd.naberc.view.page.impl.LoginFragment;
 import com.melonltd.naberc.view.page.abs.AbsPageFragment;
+import com.melonltd.naberc.view.page.impl.HistoryFragment;
 import com.melonltd.naberc.view.page.impl.HomeFragment;
+import com.melonltd.naberc.view.page.impl.LoginFragment;
+import com.melonltd.naberc.view.page.impl.RestaurantFragment;
 import com.melonltd.naberc.view.page.impl.SetUpFragment;
 import com.melonltd.naberc.view.page.impl.ShoppingCartFragment;
 
+/**
+ * LOGIN 登入
+ * REGISTERED 註冊
+ * HOME 首頁
+ * RESTAURANT 餐館
+ * SHOPPING_CART 購物車
+ * HISTORY 紀錄
+ * SET_UP 設定
+ *
+ */
 public enum PageType {
 
     LOGIN(R.id.loginBtn, LoginFragment.class),
+    REGISTERED(0, LoginFragment.class),
     HOME(R.id.menuHomeBtn, HomeFragment.class),
+    RESTAURANT(R.id.menuRestaurantBtn, RestaurantFragment.class),
     SHOPPING_CART(R.id.menuShoppingCartBtn, ShoppingCartFragment.class),
     HISTORY(R.id.menuHistoryBtn, HistoryFragment.class),
     SET_UP(R.id.menuSetUpBtn, SetUpFragment.class);
@@ -34,17 +47,17 @@ public enum PageType {
                 return entity;
             }
         }
-        return null;
+        return HOME;
     }
 
 
-    public static PageType equalsName(String name){
+    public static PageType equalsName(String name) {
         for (PageType entity : values()) {
             if (entity.name().equals(name)) {
                 return entity;
             }
         }
-        return null;
+        return HOME;
     }
 
     public Class toClass() {

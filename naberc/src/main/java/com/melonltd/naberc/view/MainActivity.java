@@ -23,11 +23,10 @@ import com.melonltd.naberc.view.page.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.page.type.PageType;
 import com.melonltd.naberc.vo.CustomersVo;
 
-public class MainActivity extends BaseActivity implements View.OnClickListener {
+public class MainActivity extends BaseCore implements View.OnClickListener {
     private static final String TAG = MainActivity.class.getSimpleName();
     private Context context;
     public static LinearLayout bottomMenuLayout;
-    private Button loginBtn;
 
     @Override
     protected void onCreate(@NonNull Bundle savedInstanceState) {
@@ -39,15 +38,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
         if (currentUser != null) {
             Log.d(TAG, currentUser.getEmail());
         }
-
-
-//        int ss = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(context);
-//        Log.d(TAG, ss + "");
-//        FragmentManager fragmentManager = getSupportFragmentManager();
-//        Fragment fragment = new IntroFragment();
-//        if (fragment != null) {
-//
-//        }
 
     }
 
@@ -78,7 +68,6 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
         Log.i(TAG, "onDestroy");
     }
 
@@ -91,23 +80,7 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
             fragmentManager.beginTransaction().replace(R.id.frame_container, fragment).commit();
         }
 
-//        switch (v.getId()) {
-//            case R.id.menuHomeBtn:
-//                fragmentManager.beginTransaction().replace(R.id.frame_container, fragment).commit();
-//                break;
-//            case R.id.menuShoppingCartBtn:
-//                break;
-//            case R.id.menuHistoryBtn:
-//                break;
-//            case R.id.menuSetUpBtn:
-//                break;
-//        }
         Log.d(TAG, v.getId() + "");
-//        auth.signOut();
-//        Log.d(TAG, currentUser.getUid() + "");
-//        Log.d(TAG, currentUser.getEmail());
-//        Log.d(TAG, currentUser.getUid());
-//        Log.d(TAG, currentUser.getUid());
 //        auth.signInWithEmailAndPassword("evantest@gmail.com", "123456")
 //                        .addOnCompleteListener(MainActivity.this, new OnCompleteListener<AuthResult>() {
 //                                    @Override
@@ -126,20 +99,20 @@ public class MainActivity extends BaseActivity implements View.OnClickListener {
 //                                });
 
 
-                CustomersService.findByEmail("a@gmail.com", new ThreadCallback() {
-                            @Override
-                            public void onSuccess(DataSnapshot dataSnapshot) {
-                                for (DataSnapshot data : dataSnapshot.getChildren()) {
-                                    Log.d(TAG, data.getKey());
-                                    Log.d(TAG, GsonUtil.toJson(data.getValue(CustomersVo.class)));
-                                }
-                            }
-
-                            @Override
-                            public void onFail(DatabaseError error) {
-                                Log.e(TAG, error.getMessage());
-                            }
-                        }
-                );
+//                CustomersService.findByEmail("a@gmail.com", new ThreadCallback() {
+//                            @Override
+//                            public void onSuccess(DataSnapshot dataSnapshot) {
+//                                for (DataSnapshot data : dataSnapshot.getChildren()) {
+//                                    Log.d(TAG, data.getKey());
+//                                    Log.d(TAG, GsonUtil.toJson(data.getValue(CustomersVo.class)));
+//                                }
+//                            }
+//
+//                            @Override
+//                            public void onFail(DatabaseError error) {
+//                                Log.e(TAG, error.getMessage());
+//                            }
+//                        }
+//                );
     }
 }

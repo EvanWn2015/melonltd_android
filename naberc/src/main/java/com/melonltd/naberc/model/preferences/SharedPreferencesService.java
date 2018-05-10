@@ -2,6 +2,8 @@ package com.melonltd.naberc.model.preferences;
 
 import android.content.SharedPreferences;
 
+import com.melonltd.naberc.R;
+
 public class SharedPreferencesService {
     private static SharedPreferencesService SERVICE = null;
     private SharedPreferences preferences = null;
@@ -22,21 +24,16 @@ public class SharedPreferencesService {
     }
 
     public static boolean isFirstUse() {
-//        boolean c = SERVICE.preferences.getBoolean("IS_FIRST_USE", true);
-//        Log.i("isFirstUse", c + "");
-        return SERVICE.preferences.getBoolean("IS_FIRST_USE", true);
+
+        return SERVICE.preferences.getBoolean(String.valueOf(R.string.is_first_use), true);
     }
 
     public static void setFirstUse() {
-        SERVICE.preferences.edit().putBoolean("IS_FIRST_USE", false).commit();
-//        boolean c = SERVICE.preferences.getBoolean("IS_FIRST_USE", true);
-//        Log.i("isFirstUse", c + "");
+        SERVICE.preferences.edit().putBoolean(String.valueOf(R.string.is_first_use), false).commit();
     }
 
     public static void setUserUID(String uid) {
-        SERVICE.preferences.edit().putString("IS_FIRST_USE", uid).commit();
-//        boolean c = SERVICE.preferences.getBoolean("IS_FIRST_USE", true);
-//        Log.i("isFirstUse", c + "");
+        SERVICE.preferences.edit().putString(String.valueOf(R.string.user_uid), uid).commit();
     }
 
     public void setPreferences(SharedPreferences preferences) {

@@ -35,6 +35,8 @@
         android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:layout_marginTop="229dp"
+        android:maxLines="1"
+        android:singleLine="true"
         android:text="NER-18X1X11@melonltd.com.tw"
         android:textColor="@android:color/black"
         android:textSize="16dp" />
@@ -57,6 +59,8 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentStart="true"
         android:layout_marginBottom="211dp"
+        android:maxLines="1"
+        android:singleLine="true"
         android:text="DemoDemo"
         android:textColor="@android:color/black"
         android:textSize="16dp" />
