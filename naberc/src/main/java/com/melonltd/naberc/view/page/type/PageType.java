@@ -5,6 +5,7 @@ import com.melonltd.naberc.view.page.abs.AbsPageFragment;
 import com.melonltd.naberc.view.page.impl.HistoryFragment;
 import com.melonltd.naberc.view.page.impl.HomeFragment;
 import com.melonltd.naberc.view.page.impl.LoginFragment;
+import com.melonltd.naberc.view.page.impl.RegisteredFragment;
 import com.melonltd.naberc.view.page.impl.RestaurantFragment;
 import com.melonltd.naberc.view.page.impl.SetUpFragment;
 import com.melonltd.naberc.view.page.impl.ShoppingCartFragment;
@@ -22,7 +23,7 @@ import com.melonltd.naberc.view.page.impl.ShoppingCartFragment;
 public enum PageType {
 
     LOGIN(R.id.loginBtn, LoginFragment.class),
-    REGISTERED(0, LoginFragment.class),
+    REGISTERED(0, RegisteredFragment.class),
     HOME(R.id.menuHomeBtn, HomeFragment.class),
     RESTAURANT(R.id.menuRestaurantBtn, RestaurantFragment.class),
     SHOPPING_CART(R.id.menuShoppingCartBtn, ShoppingCartFragment.class),

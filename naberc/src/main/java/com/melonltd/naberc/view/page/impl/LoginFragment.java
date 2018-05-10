@@ -3,24 +3,27 @@ package com.melonltd.naberc.view.page.impl;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
-import com.google.common.base.Strings;
 import com.melonltd.naberc.R;
 import com.melonltd.naberc.model.service.AuthService;
-import com.melonltd.naberc.util.VerifyUtil;
 import com.melonltd.naberc.view.page.abs.AbsPageFragment;
+import com.melonltd.naberc.view.page.factory.PageFragmentFactory;
+import com.melonltd.naberc.view.page.type.PageType;
 
 public class LoginFragment extends AbsPageFragment implements View.OnClickListener {
     private static final String TAG = LoginFragment.class.getSimpleName();
     private static LoginFragment FRAGMENT = null;
 
-    private Button loginBtn;
-    private EditText mailEdit, passwordEdit;
+    private Button loginBtn, registeredBtn;
+    private EditText accountEdit, passwordEdit;
+    private TextView recoverPasswordText;
 
     public LoginFragment() {
     }
@@ -55,28 +58,38 @@ public class LoginFragment extends AbsPageFragment implements View.OnClickListen
     }
 
     private void getView(View v) {
-        mailEdit = v.findViewById(R.id.emailEdit);
+        accountEdit = v.findViewById(R.id.accountEdit);
         passwordEdit = v.findViewById(R.id.passwordEdit);
         loginBtn = v.findViewById(R.id.loginBtn);
+        registeredBtn = v.findViewById(R.id.registeredBtn);
+        recoverPasswordText = v.findViewById(R.id.recoverPasswordText);
     }
 
     private void setListener() {
         loginBtn.setOnClickListener(this);
+        registeredBtn.setOnClickListener(this);
+        recoverPasswordText.setOnClickListener(this);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-
     }
 
     @Override
     public void onClick(View v) {
-        if (v.getId() == R.id.loginBtn) {
-
-            String mail = mailEdit.getText().toString();
-            String password = passwordEdit.getText().toString();
-            AuthService.signInWithEmailAndPassword(mail, password, getFragmentManager(),null);
+        switch (v.getId()) {
+            case R.id.loginBtn:
+                String mail = accountEdit.getText().toString();
+                String password = passwordEdit.getText().toString();
+                AuthService.signInWithEmailAndPassword(mail, password, getFragmentManager(), null);
+                break;
+            case R.id.registeredBtn:
+                getFragmentManager().beginTransaction().remove(this).replace(R.id.frame_container, PageFragmentFactory.of(PageType.REGISTERED, null)).commit();
+                break;
+            case R.id.recoverPasswordText:
+                Log.d(TAG, "找回密碼");
+                break;
         }
     }
 

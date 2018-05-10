@@ -10,15 +10,19 @@ import com.melonltd.naberc.model.helper.ThreadCallback;
 
 public abstract class AbstractService {
 
-    public static void send(@NonNull DataSnapshot dataSnapshot, @NonNull ThreadCallback callback) {
-        callback.onSuccess(dataSnapshot);
-    }
+//    public static void send(@NonNull DataSnapshot dataSnapshot, @NonNull ThreadCallback callback) {
+//        callback.onSuccess(dataSnapshot);
+//    }
 
     public static ValueEventListener getValueEventListener(@NonNull ThreadCallback callback) {
         return new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                send(dataSnapshot, callback);
+                if (dataSnapshot.getValue() == null){
+                    callback.onFail(DatabaseError.fromException(new RuntimeException("~~~~~")));
+                }else{
+                    callback.onSuccess(dataSnapshot);
+                }
             }
 
             @Override

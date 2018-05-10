@@ -3,13 +3,18 @@ package com.melonltd.naberc.view;
 import android.Manifest;
 import android.annotation.SuppressLint;
 import android.app.ActionBar;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.PersistableBundle;
@@ -19,7 +24,11 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.KeyEvent;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.melonltd.naberc.R;
@@ -60,6 +69,21 @@ public abstract class BaseCore extends AppCompatActivity implements LocationList
         super.onCreate(savedInstanceState);
         context = this;
         LOADING_BAR = new LoadingBar(this);
+
+
+//        try {
+//            int v = getPackageManager().getPackageInfo("com.google.android.gms", 0 ).versionCode;
+//            Log.d(TAG, v +"");
+//        } catch (PackageManager.NameNotFoundException e) {
+//            e.printStackTrace();
+//        }
+//        GoogleApiAvailability.isGooglePlayServicesAvailable(context);
+//
+
+
+//         int version = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(context);
+//        Log.d(TAG, "google play service version == >" + version);
+
         // TODO do get GCM token
 //        Intent intent = new Intent(BasisActivity.this, RegistrationIntentService.class);
 //        startService(intent);
@@ -113,7 +137,30 @@ public abstract class BaseCore extends AppCompatActivity implements LocationList
         // TODO check mobile has net work
         if (!Tools.network.hasNetWork(cm)) {
             // TODO show Dialog
+            Log.d(TAG, "no network? ???");
+        }else {
+            // TODO check google service version
+            // Tools.GoogleVersion.checkVersion(context, this);
         }
+
+//        GoogleApiAvailability googleAPI = GoogleApiAvailability.getInstance();
+//        int result = googleAPI.isGooglePlayServicesAvailable(this);
+//        if (result != ConnectionResult.SUCCESS) {
+//            if (googleAPI.isUserResolvableError(result)) {
+//                Dialog dialog = googleAPI.getErrorDialog(this, result, 9000);
+//                dialog.setCanceledOnTouchOutside(false);
+//                dialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
+//                    @Override
+//                    public boolean onKey(DialogInterface dialogInterface, int i, KeyEvent keyEvent) {
+//                        if (i == KeyEvent.KEYCODE_BACK) {
+//                            return true;
+//                        }
+//                        return false;
+//                    }
+//                });
+//                dialog.show();
+//            }
+//        }
 
     }
 
@@ -169,8 +216,8 @@ public abstract class BaseCore extends AppCompatActivity implements LocationList
     @Override
     public void onLocationChanged(Location loc) {
         if (loc != null) {
-            Log.d(TAG, "Latitude: " + loc.getLatitude());
-            Log.d(TAG, "Longitude: " + loc.getLongitude());
+//            Log.d(TAG, "Latitude: " + loc.getLatitude());
+//            Log.d(TAG, "Longitude: " + loc.getLongitude());
         }
     }
 
@@ -187,6 +234,14 @@ public abstract class BaseCore extends AppCompatActivity implements LocationList
     @Override
     public void onProviderDisabled(String s) {
         Log.d(TAG, "onProviderDisabled: ");
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
 }

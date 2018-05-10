@@ -12,16 +12,22 @@ import android.widget.LinearLayout;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.GenericTypeIndicator;
 import com.melonltd.naberc.R;
 import com.melonltd.naberc.model.helper.ThreadCallback;
 import com.melonltd.naberc.model.preferences.SharedPreferencesService;
+import com.melonltd.naberc.model.service.AdminsService;
 import com.melonltd.naberc.model.service.CustomersService;
 import com.melonltd.naberc.util.GsonUtil;
 import com.melonltd.naberc.view.intro.IntroFragment;
 import com.melonltd.naberc.view.page.abs.AbsPageFragment;
 import com.melonltd.naberc.view.page.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.page.type.PageType;
+import com.melonltd.naberc.vo.AdminsVo;
 import com.melonltd.naberc.vo.CustomersVo;
+
+import java.util.HashMap;
+import java.util.List;
 
 public class MainActivity extends BaseCore implements View.OnClickListener {
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -58,7 +64,7 @@ public class MainActivity extends BaseCore implements View.OnClickListener {
             fragmentManager.beginTransaction().replace(R.id.frame_container, fragment).commit();
         } else {
             fragment = PageFragmentFactory.of(PageType.equalsName(FRAGMENT_TAG), null);
-            if (fragment == null){
+            if (fragment == null) {
                 fragment = PageFragmentFactory.of(PageType.HOME, null);
             }
             fragmentManager.beginTransaction().replace(R.id.frame_container, fragment).commit();
@@ -73,6 +79,29 @@ public class MainActivity extends BaseCore implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
+
+//        String uid = SharedPreferencesService.getUserUID();
+//        Log.d(TAG, uid);
+//        AdminsService.findByKey(uid, new ThreadCallback() {
+//            @Override
+//            public void onSuccess(DataSnapshot dataSnapshot) {
+//                AdminsVo data = AdminsVo.valueOf(dataSnapshot);
+//            }
+//
+//            @Override
+//            public void onFail(DatabaseError error) {
+//                Log.e(TAG, error.getMessage());
+//            }
+//        });
+//
+//        if (true) {
+//            return;
+//        }
+
+        // 判斷當前頁面 不再重新載入
+        if (PageType.ofId(v.getId()).name().equals(FRAGMENT_TAG)) {
+            return;
+        }
 
         AbsPageFragment fragment = PageFragmentFactory.of(PageType.ofId(v.getId()), null);
         if (fragment != null) {

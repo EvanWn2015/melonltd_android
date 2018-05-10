@@ -18,21 +18,23 @@ import com.melonltd.naberc.view.page.type.PageType;
 
 public class AuthService {
 
-
     public static void signInWithEmailAndPassword(String mail, String password, FragmentManager fm, OnCompleteListener<AuthResult> listener) {
-
-        // 驗證Email不為空 & 錯誤格式
+        // 驗證Email不為空
+        if (Strings.isNullOrEmpty(mail)) {
+            BaseCore.POPUP.show(R.string.mail_wrong_format);
+            return;
+        }
+        // 驗證Email錯誤格式
         if (!VerifyUtil.email(mail)) {
             BaseCore.POPUP.show(R.string.mail_wrong_format);
             return;
         }
-
         // 驗證密碼不為空
         if (Strings.isNullOrEmpty(password)) {
             BaseCore.POPUP.show(R.string.password_wrong_format);
             return;
         }
-
+        
         BaseCore.LOADING_BAR.show();
         if (listener != null) {
             BaseCore.auth.signInWithEmailAndPassword(mail, password).addOnCompleteListener(listener);

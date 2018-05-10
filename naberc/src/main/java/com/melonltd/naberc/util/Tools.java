@@ -1,7 +1,10 @@
 package com.melonltd.naberc.util;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.app.Dialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -13,7 +16,10 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.util.Base64;
 import android.util.Log;
+import android.view.KeyEvent;
 
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.gson.Gson;
 
 import java.io.ByteArrayOutputStream;
@@ -187,4 +193,22 @@ public class Tools {
     }
 
 
+    public static class GoogleVersion {
+        public static boolean checkVersion(Context context, Activity activity) {
+            GoogleApiAvailability googleAPI = GoogleApiAvailability.getInstance();
+            int result = GoogleApiAvailability.getInstance().isGooglePlayServicesAvailable(context);
+            if (googleAPI.isUserResolvableError(result)) {
+                Dialog dialog = googleAPI.getErrorDialog(activity, result, 9000);
+                dialog.setCanceledOnTouchOutside(false);
+                dialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
+                    @Override
+                    public boolean onKey(DialogInterface dialogInterface, int i, KeyEvent keyEvent) {
+                        return i == KeyEvent.KEYCODE_BACK;
+                    }
+                });
+                dialog.show();
+            }
+            return false;
+        }
+    }
 }
