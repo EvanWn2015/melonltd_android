@@ -11,6 +11,4 @@ public interface ThreadCallback {
     void onSuccess(DataSnapshot dataSnapshot);
 
     void onFail(DatabaseError error);
-
-
 }

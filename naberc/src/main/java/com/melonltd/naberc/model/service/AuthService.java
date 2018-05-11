@@ -34,7 +34,7 @@ public class AuthService {
             BaseCore.POPUP.show(R.string.password_wrong_format);
             return;
         }
-        
+
         BaseCore.LOADING_BAR.show();
         if (listener != null) {
             BaseCore.auth.signInWithEmailAndPassword(mail, password).addOnCompleteListener(listener);
@@ -48,10 +48,14 @@ public class AuthService {
                                 String uid = BaseCore.currentUser.getUid();
                                 SharedPreferencesService.setUserUID(uid);
                                 BaseCore.LOADING_BAR.hide();
-                                if (MainActivity.bottomMenuLayout != null) {
-                                    MainActivity.bottomMenuLayout.setVisibility(View.VISIBLE);
+//                                if (MainActivity.bottomMenuLayout != null) {
+//                                    MainActivity.bottomMenuLayout.setVisibility(View.VISIBLE);
+//                                }
+
+                                if (MainActivity.bottomMenuTabLayout != null) {
+                                    MainActivity.bottomMenuTabLayout.setVisibility(View.VISIBLE);
                                 }
-                                fm.beginTransaction().replace(R.id.frame_container, PageFragmentFactory.of(PageType.HOME, null)).commit();
+                                fm.beginTransaction().replace(R.id.frameContainer, PageFragmentFactory.of(PageType.HOME, null)).commit();
                             } else {
                                 BaseCore.LOADING_BAR.hide();
                                 BaseCore.POPUP.show(R.string.account_does_not_exist);

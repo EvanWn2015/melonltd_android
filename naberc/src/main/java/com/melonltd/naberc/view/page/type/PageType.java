@@ -18,23 +18,24 @@ import com.melonltd.naberc.view.page.impl.ShoppingCartFragment;
  * SHOPPING_CART 購物車
  * HISTORY 紀錄
  * SET_UP 設定
- *
  */
 public enum PageType {
 
-    LOGIN(R.id.loginBtn, LoginFragment.class),
-    REGISTERED(0, RegisteredFragment.class),
-    HOME(R.id.menuHomeBtn, HomeFragment.class),
-    RESTAURANT(R.id.menuRestaurantBtn, RestaurantFragment.class),
-    SHOPPING_CART(R.id.menuShoppingCartBtn, ShoppingCartFragment.class),
-    HISTORY(R.id.menuHistoryBtn, HistoryFragment.class),
-    SET_UP(R.id.menuSetUpBtn, SetUpFragment.class);
+    LOGIN(R.id.loginBtn, 99, LoginFragment.class),
+    REGISTERED(R.id.registeredBtn, 999, RegisteredFragment.class),
+    HOME(R.id.menuHomeBtn, 0, HomeFragment.class),
+    RESTAURANT(R.id.menuRestaurantBtn, 1, RestaurantFragment.class),
+    SHOPPING_CART(R.id.menuShoppingCartBtn, 2, ShoppingCartFragment.class),
+    HISTORY(R.id.menuHistoryBtn, 3, HistoryFragment.class),
+    SET_UP(R.id.menuSetUpBtn, 4, SetUpFragment.class);
 
     private final int id;
+    private final int position;
     private final Class zlass;
 
-    PageType(int id, Class zlass) {
+    PageType(int id, int position, Class zlass) {
         this.id = id;
+        this.position = position;
         this.zlass = zlass;
     }
 
@@ -42,9 +43,22 @@ public enum PageType {
         return this.id == id;
     }
 
-    public static PageType ofId(int id) {
+    public boolean equalsPosition(int position) {
+        return this.position == position;
+    }
+
+//    public static PageType ofId(int id) {
+//        for (PageType entity : values()) {
+//            if (entity.equals(id)) {
+//                return entity;
+//            }
+//        }
+//        return HOME;
+//    }
+
+    public static PageType ofPosition(int position) {
         for (PageType entity : values()) {
-            if (entity.equals(id)) {
+            if (entity.equalsPosition(position)) {
                 return entity;
             }
         }

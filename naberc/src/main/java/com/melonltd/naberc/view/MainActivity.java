@@ -2,14 +2,20 @@ package com.melonltd.naberc.view;
 
 
 import android.content.Context;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
+import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
+import android.support.design.widget.TabLayout;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.content.ContextCompat;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 import android.widget.LinearLayout;
 
+import com.google.common.util.concurrent.Service;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.GenericTypeIndicator;
@@ -29,10 +35,11 @@ import com.melonltd.naberc.vo.CustomersVo;
 import java.util.HashMap;
 import java.util.List;
 
-public class MainActivity extends BaseCore implements View.OnClickListener {
+public class MainActivity extends BaseCore implements View.OnClickListener, TabLayout.OnTabSelectedListener {
     private static final String TAG = MainActivity.class.getSimpleName();
     private Context context;
-    public static LinearLayout bottomMenuLayout;
+    public static TabLayout bottomMenuTabLayout;
+    private FrameLayout frameContainer;
 
     @Override
     protected void onCreate(@NonNull Bundle savedInstanceState) {
@@ -44,11 +51,12 @@ public class MainActivity extends BaseCore implements View.OnClickListener {
         if (currentUser != null) {
             Log.d(TAG, currentUser.getEmail());
         }
-
     }
 
     private void getView() {
-        bottomMenuLayout = findViewById(R.id.bottomMenuLayout);
+        frameContainer = findViewById(R.id.frameContainer);
+        bottomMenuTabLayout = findViewById(R.id.bottomMenuTabLayout);
+        bottomMenuTabLayout.addOnTabSelectedListener(this);
     }
 
     @Override
@@ -57,18 +65,20 @@ public class MainActivity extends BaseCore implements View.OnClickListener {
 
         AbsPageFragment fragment = null;
         if (SharedPreferencesService.isFirstUse()) {
-            fragmentManager.beginTransaction().replace(R.id.frame_container, new IntroFragment()).commit();
-        } else if (currentUser == null) {
-            bottomMenuLayout.setVisibility(View.GONE);
-            fragment = PageFragmentFactory.of(PageType.LOGIN, null);
-            fragmentManager.beginTransaction().replace(R.id.frame_container, fragment).commit();
+            fragmentManager.beginTransaction().replace(R.id.frameContainer, new IntroFragment()).commit();
+//        }else if (BaseCore.currentUser == null){
+//            bottomMenuTabLayout.setVisibility(View.GONE);
+//            fragment = PageFragmentFactory.of(PageType.LOGIN, null);
+//            fragmentManager.beginTransaction().replace(R.id.frameContainer, fragment).commit();
         } else {
             fragment = PageFragmentFactory.of(PageType.equalsName(FRAGMENT_TAG), null);
             if (fragment == null) {
                 fragment = PageFragmentFactory.of(PageType.HOME, null);
             }
-            fragmentManager.beginTransaction().replace(R.id.frame_container, fragment).commit();
+            fragmentManager.beginTransaction().replace(R.id.frameContainer, fragment).commit();
         }
+
+
     }
 
     @Override
@@ -99,17 +109,16 @@ public class MainActivity extends BaseCore implements View.OnClickListener {
 //        }
 
         // 判斷當前頁面 不再重新載入
-        if (PageType.ofId(v.getId()).name().equals(FRAGMENT_TAG)) {
-            return;
-        }
+//        if (PageType.ofId(v.getId()).name().equals(FRAGMENT_TAG)) {
+//            return;
+//        }
+//
+//        AbsPageFragment fragment = PageFragmentFactory.of(PageType.ofId(v.getId()), null);
+//        if (fragment != null) {
+//            FRAGMENT_TAG = PageType.ofId(v.getId()).name();
+//            fragmentManager.beginTransaction().replace(R.id.frame_container, fragment).commit();
+//        }
 
-        AbsPageFragment fragment = PageFragmentFactory.of(PageType.ofId(v.getId()), null);
-        if (fragment != null) {
-            FRAGMENT_TAG = PageType.ofId(v.getId()).name();
-            fragmentManager.beginTransaction().replace(R.id.frame_container, fragment).commit();
-        }
-
-        Log.d(TAG, v.getId() + "");
 //        auth.signInWithEmailAndPassword("evantest@gmail.com", "123456")
 //                        .addOnCompleteListener(MainActivity.this, new OnCompleteListener<AuthResult>() {
 //                                    @Override
@@ -143,5 +152,26 @@ public class MainActivity extends BaseCore implements View.OnClickListener {
 //                            }
 //                        }
 //                );
+    }
+
+
+    @Override
+    public void onTabSelected(TabLayout.Tab tab) {
+        int position = tab.getPosition();
+        AbsPageFragment fragment = PageFragmentFactory.of(PageType.ofPosition(position), null);
+        if (fragment != null) {
+            tab.getIcon().setColorFilter(ContextCompat.getColor(context, R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
+            FRAGMENT_TAG = PageType.ofPosition(position).name();
+            fragmentManager.beginTransaction().replace(R.id.frameContainer, fragment).commit();
+        }
+    }
+
+    @Override
+    public void onTabUnselected(TabLayout.Tab tab) {
+        tab.getIcon().setColorFilter(ContextCompat.getColor(context, R.color.colorAccent), PorterDuff.Mode.SRC_IN);
+    }
+
+    @Override
+    public void onTabReselected(TabLayout.Tab tab) {
     }
 }

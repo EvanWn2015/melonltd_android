@@ -13,6 +13,7 @@ import android.widget.TextView;
 
 import com.melonltd.naberc.R;
 import com.melonltd.naberc.model.service.AuthService;
+import com.melonltd.naberc.view.BaseCore;
 import com.melonltd.naberc.view.page.abs.AbsPageFragment;
 import com.melonltd.naberc.view.page.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.page.type.PageType;
@@ -20,9 +21,8 @@ import com.melonltd.naberc.view.page.type.PageType;
 public class LoginFragment extends AbsPageFragment implements View.OnClickListener {
     private static final String TAG = LoginFragment.class.getSimpleName();
     private static LoginFragment FRAGMENT = null;
-
-    private Button loginBtn, registeredBtn;
     private EditText accountEdit, passwordEdit;
+    private Button loginBtn, registeredBtn;
     private TextView recoverPasswordText;
 
     public LoginFragment() {
@@ -39,10 +39,8 @@ public class LoginFragment extends AbsPageFragment implements View.OnClickListen
             FRAGMENT = new LoginFragment();
             FRAGMENT.setArguments(bundle);
         }
-
         return FRAGMENT;
     }
-
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -85,7 +83,8 @@ public class LoginFragment extends AbsPageFragment implements View.OnClickListen
                 AuthService.signInWithEmailAndPassword(mail, password, getFragmentManager(), null);
                 break;
             case R.id.registeredBtn:
-                getFragmentManager().beginTransaction().remove(this).replace(R.id.frame_container, PageFragmentFactory.of(PageType.REGISTERED, null)).commit();
+                BaseCore.FRAGMENT_TAG = PageType.REGISTERED.name();
+                getFragmentManager().beginTransaction().remove(this).replace(R.id.frameContainer, PageFragmentFactory.of(PageType.REGISTERED, null)).commit();
                 break;
             case R.id.recoverPasswordText:
                 Log.d(TAG, "找回密碼");

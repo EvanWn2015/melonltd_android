@@ -1,146 +1,61 @@
-<?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/bottomMenuLayout"
+<?xml version="1.0" encoding="utf-8"?><!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"--><!--android:id="@+id/bottomMenuLayout"--><!--android:layout_width="match_parent"--><!--android:layout_height="wrap_content"--><!--android:layout_alignParentBottom="true"--><!--android:layout_alignParentStart="true"--><!--android:background="@android:color/white">-->
+<android.support.design.widget.TabLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/bottomMenuTabLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_alignParentBottom="true"
-    android:layout_alignParentStart="true"
-    android:background="@android:color/white">
+    app:tabGravity="fill"
+    app:tabIndicatorColor="@android:color/transparent"
+    app:tabIndicatorHeight="0dp"
+    android:background="#92bcbcbc"
+    app:tabMode="fixed"
+    app:tabPaddingTop="0dp"
+    app:tabSelectedTextColor="@color/colorPrimary"
+    app:tabTextAppearance="@style/MineCustomTabText"
+    app:tabTextColor="@android:color/black">
 
+    <android.support.design.widget.TabItem
+        android:id="@+id/menuHomeBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="false"
+        android:icon="@drawable/ic_launcher_background"
+        android:onClick="onClick"
+        android:text="首頁" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:orientation="vertical">
+    <android.support.design.widget.TabItem
+        android:id="@+id/menuRestaurantBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="false"
+        android:icon="@drawable/ic_launcher_background"
+        android:onClick="onClick"
+        android:text="餐館" />
 
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:background="@android:color/darker_gray" />
+    <android.support.design.widget.TabItem
+        android:id="@+id/menuShoppingCartBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="false"
+        android:icon="@drawable/ic_launcher_background"
+        android:onClick="onClick"
+        android:text="購物車" />
 
-        <ImageButton
-            android:id="@+id/menuHomeBtn"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:background="@android:color/transparent"
-            android:clickable="false"
-            android:onClick="onClick"
-            android:scaleType="centerCrop"
-            android:src="@mipmap/ic_launcher_round" />
+    <android.support.design.widget.TabItem
+        android:id="@+id/menuHistoryBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="false"
+        android:icon="@drawable/ic_launcher_background"
+        android:onClick="onClick"
+        android:text="紀錄" />
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="首页"
-            android:textColor="@android:color/black"
-            android:textSize="12sp" />
-    </LinearLayout>
+    <android.support.design.widget.TabItem
+        android:id="@+id/menuSetUpBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:icon="@drawable/ic_launcher_background"
+        android:onClick="onClick"
+        android:text="設定" />
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:orientation="vertical">
-
-        <View
-            android:layout_width="match_parent"
-            android:layout_height="2dp"
-            android:background="@android:color/darker_gray" />
-
-        <ImageButton
-            android:id="@+id/menuRestaurantBtn"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:background="@android:color/transparent"
-            android:clickable="false"
-            android:onClick="onClick"
-            android:scaleType="centerCrop"
-            android:src="@mipmap/ic_launcher_round" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="餐館"
-            android:textColor="@android:color/black"
-            android:textSize="12sp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:orientation="vertical">
-
-        <ImageButton
-            android:id="@+id/menuShoppingCartBtn"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:background="@android:color/transparent"
-            android:clickable="false"
-            android:onClick="onClick"
-            android:scaleType="centerCrop"
-            android:src="@mipmap/ic_launcher_round" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="購物車"
-            android:textColor="@android:color/black"
-            android:textSize="12sp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:orientation="vertical">
-
-        <ImageButton
-            android:id="@+id/menuHistoryBtn"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:background="@android:color/transparent"
-            android:clickable="false"
-            android:onClick="onClick"
-            android:scaleType="centerCrop"
-            android:src="@mipmap/ic_launcher_round" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="紀錄"
-            android:textColor="@android:color/black"
-            android:textSize="12sp" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_weight="1"
-        android:gravity="center"
-        android:orientation="vertical">
-
-        <ImageButton
-            android:id="@+id/menuSetUpBtn"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:background="@android:color/transparent"
-            android:clickable="false"
-            android:onClick="onClick"
-            android:scaleType="centerCrop"
-            android:src="@mipmap/ic_launcher_round" />
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="設定"
-            android:textColor="@android:color/black"
-            android:textSize="12sp" />
-    </LinearLayout>
-
-</LinearLayout>
+</android.support.design.widget.TabLayout>

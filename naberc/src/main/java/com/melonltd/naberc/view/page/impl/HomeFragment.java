@@ -38,8 +38,8 @@ public class HomeFragment extends AbsPageFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Log.d(TAG, BaseCore.currentUser.getUid() + "");
-        Log.d(TAG, BaseCore.currentUser.getEmail() + "");
+//        Log.d(TAG, BaseCore.currentUser.getUid() + "");
+//        Log.d(TAG, BaseCore.currentUser.getEmail() + "");
     }
 
     @Override
