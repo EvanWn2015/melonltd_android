@@ -4,40 +4,26 @@ package com.melonltd.naberc.view;
 import android.content.Context;
 import android.graphics.PorterDuff;
 import android.os.Bundle;
-import android.support.annotation.DrawableRes;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 
-import com.google.common.util.concurrent.Service;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.GenericTypeIndicator;
+
 import com.melonltd.naberc.R;
-import com.melonltd.naberc.model.helper.ThreadCallback;
 import com.melonltd.naberc.model.preferences.SharedPreferencesService;
-import com.melonltd.naberc.model.service.AdminsService;
-import com.melonltd.naberc.model.service.CustomersService;
-import com.melonltd.naberc.util.GsonUtil;
 import com.melonltd.naberc.view.intro.IntroFragment;
 import com.melonltd.naberc.view.page.abs.AbsPageFragment;
 import com.melonltd.naberc.view.page.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.page.type.PageType;
-import com.melonltd.naberc.vo.AdminsVo;
-import com.melonltd.naberc.vo.CustomersVo;
-
-import java.util.HashMap;
-import java.util.List;
 
 public class MainActivity extends BaseCore implements View.OnClickListener, TabLayout.OnTabSelectedListener {
     private static final String TAG = MainActivity.class.getSimpleName();
     private Context context;
+    private Toolbar toolbar;
     public static TabLayout bottomMenuTabLayout;
     private FrameLayout frameContainer;
 
@@ -47,13 +33,16 @@ public class MainActivity extends BaseCore implements View.OnClickListener, TabL
         setContentView(R.layout.activity_main);
         context = this;
         getView();
+        setSupportActionBar(toolbar);
 
         if (currentUser != null) {
             Log.d(TAG, currentUser.getEmail());
         }
+//        bottomMenuTabLayout.removeAllTabs();
     }
 
     private void getView() {
+        toolbar = findViewById(R.id.toolbar);
         frameContainer = findViewById(R.id.frameContainer);
         bottomMenuTabLayout = findViewById(R.id.bottomMenuTabLayout);
         bottomMenuTabLayout.addOnTabSelectedListener(this);
