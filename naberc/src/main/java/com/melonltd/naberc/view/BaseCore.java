@@ -60,9 +60,10 @@ public abstract class BaseCore extends AppCompatActivity implements LocationList
     public static FirebaseAuth auth = FirebaseAuth.getInstance();
     public static FirebaseUser currentUser = auth.getCurrentUser();
 
-
     public FragmentManager fragmentManager = getSupportFragmentManager();
     public static PopUpDialog POPUP = PopUpDialog.getInstance();
+    public static boolean IS_USER = true;
+    public static boolean IS_HAS_ACC = false;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -133,7 +134,6 @@ public abstract class BaseCore extends AppCompatActivity implements LocationList
     protected void onResume() {
         super.onResume();
 
-
         // TODO check mobile has net work
         if (!Tools.network.hasNetWork(cm)) {
             // TODO show Dialog
@@ -161,7 +161,6 @@ public abstract class BaseCore extends AppCompatActivity implements LocationList
 //                dialog.show();
 //            }
 //        }
-
     }
 
 

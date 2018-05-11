@@ -8,8 +8,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.melonltd.naberc.R;
+import com.melonltd.naberc.view.BaseCore;
 import com.melonltd.naberc.view.page.abs.AbsPageFragment;
+import com.melonltd.naberc.view.page.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.page.intf.PageFragment;
+import com.melonltd.naberc.view.page.type.PageType;
 
 
 public class SetUpFragment extends AbsPageFragment {
@@ -35,6 +38,9 @@ public class SetUpFragment extends AbsPageFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        if (BaseCore.IS_HAS_ACC){
+            getFragmentManager().beginTransaction().remove(this).replace(R.id.frameContainer, PageFragmentFactory.of(PageType.REGISTERED, null)).commit();
+        }
         return inflater.inflate(R.layout.fragment_set_up, container, false);
     }
 

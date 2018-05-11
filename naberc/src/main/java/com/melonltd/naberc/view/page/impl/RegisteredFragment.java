@@ -2,13 +2,11 @@ package com.melonltd.naberc.view.page.impl;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.melonltd.naberc.R;
-import com.melonltd.naberc.view.BaseCore;
 import com.melonltd.naberc.view.page.abs.AbsPageFragment;
 
 public class RegisteredFragment extends AbsPageFragment {

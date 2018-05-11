@@ -65,7 +65,6 @@ public enum PageType {
         return HOME;
     }
 
-
     public static PageType equalsName(String name) {
         for (PageType entity : values()) {
             if (entity.name().equals(name)) {
@@ -74,6 +73,21 @@ public enum PageType {
         }
         return HOME;
     }
+
+    public static int equalsPositionByName(String name, boolean checkMaxTab) {
+        for (PageType entity : values()) {
+            if (entity.name().equals(name)) {
+                if (checkMaxTab) {
+                    return entity.position < 10 ? entity.position : SET_UP.position;
+                }else{
+                    return entity.position;
+                }
+
+            }
+        }
+        return HOME.position;
+    }
+
 
     public Class toClass() {
         return this.zlass.asSubclass(AbsPageFragment.class);

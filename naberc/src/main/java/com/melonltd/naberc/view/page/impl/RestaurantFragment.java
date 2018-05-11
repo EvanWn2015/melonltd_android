@@ -11,6 +11,8 @@ import android.view.ViewGroup;
 import com.melonltd.naberc.R;
 import com.melonltd.naberc.view.BaseCore;
 import com.melonltd.naberc.view.page.abs.AbsPageFragment;
+import com.melonltd.naberc.view.page.factory.PageFragmentFactory;
+import com.melonltd.naberc.view.page.type.PageType;
 
 public class RestaurantFragment extends AbsPageFragment {
     private static final String TAG = RestaurantFragment.class.getSimpleName();

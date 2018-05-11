@@ -12,10 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 
-
 import com.melonltd.naberc.R;
-import com.melonltd.naberc.model.preferences.SharedPreferencesService;
-import com.melonltd.naberc.view.intro.IntroFragment;
 import com.melonltd.naberc.view.page.abs.AbsPageFragment;
 import com.melonltd.naberc.view.page.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.page.type.PageType;
@@ -34,6 +31,7 @@ public class MainActivity extends BaseCore implements View.OnClickListener, TabL
         context = this;
         getView();
         setSupportActionBar(toolbar);
+        serTab();
 
         if (currentUser != null) {
             Log.d(TAG, currentUser.getEmail());
@@ -46,6 +44,31 @@ public class MainActivity extends BaseCore implements View.OnClickListener, TabL
         frameContainer = findViewById(R.id.frameContainer);
         bottomMenuTabLayout = findViewById(R.id.bottomMenuTabLayout);
         bottomMenuTabLayout.addOnTabSelectedListener(this);
+
+//        bottomMenuTabLayout.setNextFocusUpId(1);
+        frameContainer.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
+            @Override
+            public void onLayoutChange(View view, int i, int i1, int i2, int i3, int i4, int i5, int i6, int i7) {
+                Log.i(TAG, FRAGMENT_TAG);
+//              bottomMenuTabLayout.getSelectedTabPosition();
+                TabLayout.Tab tab = bottomMenuTabLayout.getTabAt(PageType.equalsPositionByName(FRAGMENT_TAG, true));
+                if (tab != null){
+                    tab.select();
+                }
+            }
+        });
+    }
+
+    private static void serTab() {
+        if (IS_USER) {
+//            bottomMenuTabLayout.addTab(bottomMenuTabLayout.newTab().setText("首頁").setIcon(R.drawable.ic_launcher_background), 0,true);
+//            bottomMenuTabLayout.addTab(bottomMenuTabLayout.newTab().setText("餐館").setIcon(R.drawable.ic_launcher_background), 1,true);
+//            bottomMenuTabLayout.addTab(bottomMenuTabLayout.newTab().setText("購物車").setIcon(R.drawable.ic_launcher_background), 2,true);
+//            bottomMenuTabLayout.addTab(bottomMenuTabLayout.newTab().setText("紀錄").setIcon(R.drawable.ic_launcher_background), 3,true);
+//            bottomMenuTabLayout.addTab(bottomMenuTabLayout.newTab().setText("設定").setIcon(R.drawable.ic_launcher_background), 4,true);
+        } else {
+            bottomMenuTabLayout.setVisibility(View.GONE);
+        }
     }
 
     @Override
@@ -53,21 +76,23 @@ public class MainActivity extends BaseCore implements View.OnClickListener, TabL
         super.onResume();
 
         AbsPageFragment fragment = null;
-        if (SharedPreferencesService.isFirstUse()) {
-            fragmentManager.beginTransaction().replace(R.id.frameContainer, new IntroFragment()).commit();
-//        }else if (BaseCore.currentUser == null){
-//            bottomMenuTabLayout.setVisibility(View.GONE);
-//            fragment = PageFragmentFactory.of(PageType.LOGIN, null);
+//        bottomMenuTabLayout.setVisibility(View.GONE);
+        fragment = PageFragmentFactory.of(PageType.LOGIN, null);
+        fragmentManager.beginTransaction().replace(R.id.frameContainer, fragment).commit();
+
+//        if (SharedPreferencesService.isFirstUse()) {
+//            fragmentManager.beginTransaction().replace(R.id.frameContainer, new IntroFragment()).commit();
+////        }else if (BaseCore.currentUser == null){
+////            bottomMenuTabLayout.setVisibility(View.GONE);
+////            fragment = PageFragmentFactory.of(PageType.LOGIN, null);
+////            fragmentManager.beginTransaction().replace(R.id.frameContainer, fragment).commit();
+//        } else {
+//            fragment = PageFragmentFactory.of(PageType.equalsName(FRAGMENT_TAG), null);
+//            if (fragment == null) {
+//                fragment = PageFragmentFactory.of(PageType.HOME, null);
+//            }
 //            fragmentManager.beginTransaction().replace(R.id.frameContainer, fragment).commit();
-        } else {
-            fragment = PageFragmentFactory.of(PageType.equalsName(FRAGMENT_TAG), null);
-            if (fragment == null) {
-                fragment = PageFragmentFactory.of(PageType.HOME, null);
-            }
-            fragmentManager.beginTransaction().replace(R.id.frameContainer, fragment).commit();
-        }
-
-
+//        }
     }
 
     @Override
@@ -143,15 +168,18 @@ public class MainActivity extends BaseCore implements View.OnClickListener, TabL
 //                );
     }
 
-
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
         int position = tab.getPosition();
         AbsPageFragment fragment = PageFragmentFactory.of(PageType.ofPosition(position), null);
-        if (fragment != null) {
+        if (PageType.equalsPositionByName(FRAGMENT_TAG, false) > 10){
             tab.getIcon().setColorFilter(ContextCompat.getColor(context, R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
             FRAGMENT_TAG = PageType.ofPosition(position).name();
+            return;
+        }else if(fragment != null) {
             fragmentManager.beginTransaction().replace(R.id.frameContainer, fragment).commit();
+            tab.getIcon().setColorFilter(ContextCompat.getColor(context, R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
+            FRAGMENT_TAG = PageType.ofPosition(position).name();
         }
     }
 

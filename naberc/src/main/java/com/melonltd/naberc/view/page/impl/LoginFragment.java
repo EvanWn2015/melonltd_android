@@ -84,7 +84,9 @@ public class LoginFragment extends AbsPageFragment implements View.OnClickListen
                 break;
             case R.id.registeredBtn:
                 BaseCore.FRAGMENT_TAG = PageType.REGISTERED.name();
+//                fragment = PageFragmentFactory.of(PageType.SET_UP, null);
                 getFragmentManager().beginTransaction().remove(this).replace(R.id.frameContainer, PageFragmentFactory.of(PageType.REGISTERED, null)).commit();
+//                getFragmentManager().beginTransaction().remove(this).replace(R.id.frameContainer, PageFragmentFactory.of(PageType.SET_UP, null)).commit();
                 break;
             case R.id.recoverPasswordText:
                 Log.d(TAG, "找回密碼");

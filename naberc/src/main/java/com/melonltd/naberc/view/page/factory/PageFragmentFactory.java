@@ -13,7 +13,6 @@ public class PageFragmentFactory {
     private final static String TAG = PageFragmentFactory.class.getSimpleName();
 
     public static AbsPageFragment of(@NonNull PageType pageType, Bundle bundle)  {
-
         try{
             Class<? extends AbsPageFragment> zlass = pageType.toClass();
             AbsPageFragment fragment = (AbsPageFragment) zlass.newInstance().getInstance(bundle);
