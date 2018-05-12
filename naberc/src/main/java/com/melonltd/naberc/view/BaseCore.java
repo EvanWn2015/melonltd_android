@@ -44,7 +44,7 @@ public abstract class BaseCore extends AppCompatActivity implements LocationList
     private static ConnectivityManager cm;
     private LocationManager locationManager;
     public static LoadingBar LOADING_BAR;
-    public static String FRAGMENT_TAG = PageType.HOME.name();
+    public static String FRAGMENT_TAG = PageType.LOGIN.name();
 
     private Handler handler;
 

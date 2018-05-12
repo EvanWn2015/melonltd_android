@@ -11,7 +11,7 @@ import com.melonltd.naberc.view.page.abs.AbsPageFragment;
 import com.melonltd.naberc.view.page.intf.PageFragment;
 
 public class ShoppingCartFragment extends AbsPageFragment {
-    private static final String TAG = HomeFragment.class.getSimpleName();
+    private static final String TAG = ShoppingCartFragment.class.getSimpleName();
     private static ShoppingCartFragment FRAGMENT = null;
 
     public ShoppingCartFragment() {

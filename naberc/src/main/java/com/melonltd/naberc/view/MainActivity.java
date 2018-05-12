@@ -12,12 +12,15 @@ import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 
+import com.google.common.collect.Lists;
 import com.melonltd.naberc.R;
 import com.melonltd.naberc.view.page.abs.AbsPageFragment;
 import com.melonltd.naberc.view.page.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.page.type.PageType;
 
-public class MainActivity extends BaseCore implements View.OnClickListener, TabLayout.OnTabSelectedListener {
+import java.util.List;
+
+public class MainActivity extends BaseCore implements View.OnClickListener, TabLayout.OnTabSelectedListener, View.OnLayoutChangeListener {
     private static final String TAG = MainActivity.class.getSimpleName();
     private Context context;
     private Toolbar toolbar;
@@ -32,11 +35,11 @@ public class MainActivity extends BaseCore implements View.OnClickListener, TabL
         getView();
         setSupportActionBar(toolbar);
         serTab();
+        bottomMenuTabLayout.setVisibility(View.GONE);
 
         if (currentUser != null) {
             Log.d(TAG, currentUser.getEmail());
         }
-//        bottomMenuTabLayout.removeAllTabs();
     }
 
     private void getView() {
@@ -44,28 +47,21 @@ public class MainActivity extends BaseCore implements View.OnClickListener, TabL
         frameContainer = findViewById(R.id.frameContainer);
         bottomMenuTabLayout = findViewById(R.id.bottomMenuTabLayout);
         bottomMenuTabLayout.addOnTabSelectedListener(this);
-
-//        bottomMenuTabLayout.setNextFocusUpId(1);
-        frameContainer.addOnLayoutChangeListener(new View.OnLayoutChangeListener() {
-            @Override
-            public void onLayoutChange(View view, int i, int i1, int i2, int i3, int i4, int i5, int i6, int i7) {
-                Log.i(TAG, FRAGMENT_TAG);
-//              bottomMenuTabLayout.getSelectedTabPosition();
-                TabLayout.Tab tab = bottomMenuTabLayout.getTabAt(PageType.equalsPositionByName(FRAGMENT_TAG, true));
-                if (tab != null){
-                    tab.select();
-                }
-            }
-        });
+        frameContainer.addOnLayoutChangeListener(this);
     }
 
     private static void serTab() {
+        bottomMenuTabLayout.removeAllTabs();
         if (IS_USER) {
-//            bottomMenuTabLayout.addTab(bottomMenuTabLayout.newTab().setText("首頁").setIcon(R.drawable.ic_launcher_background), 0,true);
-//            bottomMenuTabLayout.addTab(bottomMenuTabLayout.newTab().setText("餐館").setIcon(R.drawable.ic_launcher_background), 1,true);
-//            bottomMenuTabLayout.addTab(bottomMenuTabLayout.newTab().setText("購物車").setIcon(R.drawable.ic_launcher_background), 2,true);
-//            bottomMenuTabLayout.addTab(bottomMenuTabLayout.newTab().setText("紀錄").setIcon(R.drawable.ic_launcher_background), 3,true);
-//            bottomMenuTabLayout.addTab(bottomMenuTabLayout.newTab().setText("設定").setIcon(R.drawable.ic_launcher_background), 4,true);
+            List<TabLayout.Tab> userTabs = Lists.newArrayList(
+                    bottomMenuTabLayout.newTab().setText(R.string.menu_home_btn).setIcon(R.drawable.ic_launcher_background).setTag(R.string.menu_home_btn),
+                    bottomMenuTabLayout.newTab().setText(R.string.menu_restaurant_btn).setIcon(R.drawable.ic_launcher_background).setTag(R.string.menu_restaurant_btn),
+                    bottomMenuTabLayout.newTab().setText(R.string.menu_shopping_cart_btn).setIcon(R.drawable.ic_launcher_background).setTag(R.string.menu_shopping_cart_btn),
+                    bottomMenuTabLayout.newTab().setText(R.string.menu_history_btn).setIcon(R.drawable.ic_launcher_background).setTag(R.string.menu_history_btn),
+                    bottomMenuTabLayout.newTab().setText(R.string.menu_set_up_btn).setIcon(R.drawable.ic_launcher_background).setTag(R.string.menu_set_up_btn));
+            for (TabLayout.Tab t : userTabs) {
+                bottomMenuTabLayout.addTab(t, true);
+            }
         } else {
             bottomMenuTabLayout.setVisibility(View.GONE);
         }
@@ -76,7 +72,7 @@ public class MainActivity extends BaseCore implements View.OnClickListener, TabL
         super.onResume();
 
         AbsPageFragment fragment = null;
-//        bottomMenuTabLayout.setVisibility(View.GONE);
+        bottomMenuTabLayout.setVisibility(View.GONE);
         fragment = PageFragmentFactory.of(PageType.LOGIN, null);
         fragmentManager.beginTransaction().replace(R.id.frameContainer, fragment).commit();
 
@@ -103,84 +99,23 @@ public class MainActivity extends BaseCore implements View.OnClickListener, TabL
 
     @Override
     public void onClick(View v) {
+    }
 
-//        String uid = SharedPreferencesService.getUserUID();
-//        Log.d(TAG, uid);
-//        AdminsService.findByKey(uid, new ThreadCallback() {
-//            @Override
-//            public void onSuccess(DataSnapshot dataSnapshot) {
-//                AdminsVo data = AdminsVo.valueOf(dataSnapshot);
-//            }
-//
-//            @Override
-//            public void onFail(DatabaseError error) {
-//                Log.e(TAG, error.getMessage());
-//            }
-//        });
-//
-//        if (true) {
-//            return;
-//        }
-
-        // 判斷當前頁面 不再重新載入
-//        if (PageType.ofId(v.getId()).name().equals(FRAGMENT_TAG)) {
-//            return;
-//        }
-//
-//        AbsPageFragment fragment = PageFragmentFactory.of(PageType.ofId(v.getId()), null);
-//        if (fragment != null) {
-//            FRAGMENT_TAG = PageType.ofId(v.getId()).name();
-//            fragmentManager.beginTransaction().replace(R.id.frame_container, fragment).commit();
-//        }
-
-//        auth.signInWithEmailAndPassword("evantest@gmail.com", "123456")
-//                        .addOnCompleteListener(MainActivity.this, new OnCompleteListener<AuthResult>() {
-//                                    @Override
-//                                    public void onComplete(@NonNull Task<AuthResult> task) {
-//                                        if (task.isSuccessful()) {
-//                                            // Sign in success, update UI with the signed-in user's information
-//                                            Log.d(TAG, "createUserWithEmail:success");
-//                                            user = auth.getCurrentUser();
-//                                            Log.d(TAG, user.getEmail());
-//                                        } else {
-//                                            // If sign in fails, display a message to the user.
-//                                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
-//                                            Toast.makeText(context, "Authentication failed.", Toast.LENGTH_SHORT).show();
-//                                        }
-//                                    }
-//                                });
-
-
-//                CustomersService.findByEmail("a@gmail.com", new ThreadCallback() {
-//                            @Override
-//                            public void onSuccess(DataSnapshot dataSnapshot) {
-//                                for (DataSnapshot data : dataSnapshot.getChildren()) {
-//                                    Log.d(TAG, data.getKey());
-//                                    Log.d(TAG, GsonUtil.toJson(data.getValue(CustomersVo.class)));
-//                                }
-//                            }
-//
-//                            @Override
-//                            public void onFail(DatabaseError error) {
-//                                Log.e(TAG, error.getMessage());
-//                            }
-//                        }
-//                );
+    @Override
+    public void onLayoutChange(View view, int i, int i1, int i2, int i3, int i4, int i5, int i6, int i7) {
+        TabLayout.Tab tab = bottomMenuTabLayout.getTabAt(PageType.equalsPositionByName(FRAGMENT_TAG, true));
+        if (tab != null) {
+            FRAGMENT_TAG = PageType.ofName(FRAGMENT_TAG).name();
+            tab.select();
+        }
     }
 
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
-        int position = tab.getPosition();
-        AbsPageFragment fragment = PageFragmentFactory.of(PageType.ofPosition(position), null);
-        if (PageType.equalsPositionByName(FRAGMENT_TAG, false) > 10){
-            tab.getIcon().setColorFilter(ContextCompat.getColor(context, R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
-            FRAGMENT_TAG = PageType.ofPosition(position).name();
-            return;
-        }else if(fragment != null) {
-            fragmentManager.beginTransaction().replace(R.id.frameContainer, fragment).commit();
-            tab.getIcon().setColorFilter(ContextCompat.getColor(context, R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
-            FRAGMENT_TAG = PageType.ofPosition(position).name();
-        }
+        tab.getIcon().setColorFilter(ContextCompat.getColor(context, R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
+        AbsPageFragment fragment = PageFragmentFactory.of(PageType.ofId(Integer.parseInt(tab.getTag().toString())), null);
+        FRAGMENT_TAG = PageType.ofId(Integer.parseInt(tab.getTag().toString())).name();
+        fragmentManager.beginTransaction().replace(R.id.frameContainer, fragment).commit();
     }
 
     @Override
