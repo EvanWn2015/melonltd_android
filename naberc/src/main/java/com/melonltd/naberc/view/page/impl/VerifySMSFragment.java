@@ -9,8 +9,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.melonltd.naberc.R;
+import com.melonltd.naberc.view.MainActivity;
 import com.melonltd.naberc.view.page.abs.AbsPageFragment;
+import com.melonltd.naberc.view.page.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.page.intf.PageFragment;
+import com.melonltd.naberc.view.page.type.PageType;
+
+import static com.melonltd.naberc.view.BaseCore.FRAGMENT_TAG;
 
 
 public class VerifySMSFragment extends AbsPageFragment implements View.OnClickListener {
@@ -60,7 +65,10 @@ public class VerifySMSFragment extends AbsPageFragment implements View.OnClickLi
             case R.id.requestVerifyCodeBtn:
                 break;
             case R.id.submitToRegisteredBun:
-                
+                // TODO Api
+                MainActivity.bottomMenuTabLayout.setVisibility(View.VISIBLE);
+                FRAGMENT_TAG = PageType.REGISTERED.name();
+                getFragmentManager().beginTransaction().remove(this).replace(R.id.frameContainer, PageFragmentFactory.of(PageType.REGISTERED, null)).commit();
                 break;
         }
     }
