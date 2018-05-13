@@ -1,18 +1,14 @@
-package com.melonltd.naberc.view.page.impl;
+package com.melonltd.naberc.view.user.page.impl;
 
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.melonltd.naberc.R;
-import com.melonltd.naberc.view.BaseCore;
-import com.melonltd.naberc.view.page.abs.AbsPageFragment;
-import com.melonltd.naberc.view.page.factory.PageFragmentFactory;
-import com.melonltd.naberc.view.page.type.PageType;
+import com.melonltd.naberc.view.user.page.abs.AbsPageFragment;
 
 public class RestaurantFragment extends AbsPageFragment {
     private static final String TAG = RestaurantFragment.class.getSimpleName();

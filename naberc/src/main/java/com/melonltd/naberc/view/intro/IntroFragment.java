@@ -9,8 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.melonltd.naberc.R;
-import com.melonltd.naberc.view.page.abs.AbsPageFragment;
-import com.melonltd.naberc.view.page.impl.HomeFragment;
 
 public class IntroFragment extends Fragment {
 

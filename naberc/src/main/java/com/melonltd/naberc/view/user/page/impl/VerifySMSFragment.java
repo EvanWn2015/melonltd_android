@@ -1,21 +1,20 @@
-package com.melonltd.naberc.view.page.impl;
+package com.melonltd.naberc.view.user.page.impl;
 
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.melonltd.naberc.R;
-import com.melonltd.naberc.view.MainActivity;
-import com.melonltd.naberc.view.page.abs.AbsPageFragment;
-import com.melonltd.naberc.view.page.factory.PageFragmentFactory;
-import com.melonltd.naberc.view.page.intf.PageFragment;
-import com.melonltd.naberc.view.page.type.PageType;
+import com.melonltd.naberc.view.user.MainActivity;
+import com.melonltd.naberc.view.user.page.abs.AbsPageFragment;
+import com.melonltd.naberc.view.user.page.factory.PageFragmentFactory;
+import com.melonltd.naberc.view.user.page.intf.PageFragment;
+import com.melonltd.naberc.view.user.page.type.PageType;
 
-import static com.melonltd.naberc.view.BaseCore.FRAGMENT_TAG;
+import static com.melonltd.naberc.view.user.BaseCore.FRAGMENT_TAG;
 
 
 public class VerifySMSFragment extends AbsPageFragment implements View.OnClickListener {
@@ -27,7 +26,7 @@ public class VerifySMSFragment extends AbsPageFragment implements View.OnClickLi
     }
 
     @Override
-    public PageFragment getInstance(Bundle bundle) {
+    public VerifySMSFragment getInstance(Bundle bundle) {
         if (FRAGMENT == null) {
             FRAGMENT = new VerifySMSFragment();
             FRAGMENT.setArguments(bundle);
@@ -36,7 +35,7 @@ public class VerifySMSFragment extends AbsPageFragment implements View.OnClickLi
     }
 
     @Override
-    public PageFragment newInstance(Object... o) {
+    public VerifySMSFragment newInstance(Object... o) {
         return new VerifySMSFragment();
     }
 

@@ -1,4 +1,4 @@
-package com.melonltd.naberc.view;
+package com.melonltd.naberc.view.user;
 
 
 import android.content.Context;
@@ -14,9 +14,10 @@ import android.widget.FrameLayout;
 
 import com.google.common.collect.Lists;
 import com.melonltd.naberc.R;
-import com.melonltd.naberc.view.page.abs.AbsPageFragment;
-import com.melonltd.naberc.view.page.factory.PageFragmentFactory;
-import com.melonltd.naberc.view.page.type.PageType;
+import com.melonltd.naberc.view.user.page.abs.AbsPageFragment;
+import com.melonltd.naberc.view.user.page.factory.PageFragmentFactory;
+import com.melonltd.naberc.view.user.page.type.PageType;
+import com.youth.banner.loader.ImageLoader;
 
 import java.util.List;
 
@@ -35,7 +36,7 @@ public class MainActivity extends BaseCore implements View.OnClickListener, TabL
         getView();
         setSupportActionBar(toolbar);
         serTab();
-        bottomMenuTabLayout.setVisibility(View.GONE);
+//        bottomMenuTabLayout.setVisibility(View.GONE);
 
         if (currentUser != null) {
             Log.d(TAG, currentUser.getEmail());
@@ -72,9 +73,9 @@ public class MainActivity extends BaseCore implements View.OnClickListener, TabL
         super.onResume();
 
         AbsPageFragment fragment = null;
-        bottomMenuTabLayout.setVisibility(View.GONE);
-        fragment = PageFragmentFactory.of(PageType.LOGIN, null);
-        fragmentManager.beginTransaction().replace(R.id.frameContainer, fragment).commit();
+//        bottomMenuTabLayout.setVisibility(View.GONE);
+        fragment = PageFragmentFactory.of(PageType.HOME, null);
+        fragmentManager.beginTransaction().replace(R.id.frameContainer, fragment).addToBackStack(fragment.toString()).commit();
 
 //        if (SharedPreferencesService.isFirstUse()) {
 //            fragmentManager.beginTransaction().replace(R.id.frameContainer, new IntroFragment()).commit();
@@ -115,7 +116,8 @@ public class MainActivity extends BaseCore implements View.OnClickListener, TabL
         tab.getIcon().setColorFilter(ContextCompat.getColor(context, R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
         AbsPageFragment fragment = PageFragmentFactory.of(PageType.ofId(Integer.parseInt(tab.getTag().toString())), null);
         FRAGMENT_TAG = PageType.ofId(Integer.parseInt(tab.getTag().toString())).name();
-        fragmentManager.beginTransaction().replace(R.id.frameContainer, fragment).commit();
+        fragmentManager.beginTransaction().addToBackStack(fragment.toString()).replace(R.id.frameContainer, fragment).commit();
+//        fragmentManager.beginTransaction().replace(R.id.frameContainer, fragment).commit();
     }
 
     @Override

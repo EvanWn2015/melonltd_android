@@ -1,4 +1,4 @@
-package com.melonltd.naberc.view.page.impl;
+package com.melonltd.naberc.view.user.page.impl;
 
 
 import android.os.Bundle;
@@ -7,8 +7,8 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.melonltd.naberc.R;
-import com.melonltd.naberc.view.page.abs.AbsPageFragment;
-import com.melonltd.naberc.view.page.intf.PageFragment;
+import com.melonltd.naberc.view.user.page.abs.AbsPageFragment;
+import com.melonltd.naberc.view.user.page.intf.PageFragment;
 
 public class ShoppingCartFragment extends AbsPageFragment {
     private static final String TAG = ShoppingCartFragment.class.getSimpleName();
@@ -18,7 +18,7 @@ public class ShoppingCartFragment extends AbsPageFragment {
     }
 
     @Override
-    public PageFragment getInstance(Bundle bundle) {
+    public AbsPageFragment getInstance(Bundle bundle) {
         if (FRAGMENT == null){
             FRAGMENT = new ShoppingCartFragment();
             FRAGMENT.setArguments(bundle);
@@ -27,7 +27,7 @@ public class ShoppingCartFragment extends AbsPageFragment {
     }
 
     @Override
-    public PageFragment newInstance(Object... o) {
+    public AbsPageFragment newInstance(Object... o) {
         return new ShoppingCartFragment();
     }
 

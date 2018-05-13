@@ -8,7 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.FragmentManager;
 
-import com.melonltd.naberc.view.BaseCore;
+import com.melonltd.naberc.view.user.BaseCore;
 
 public class PopUpDialog extends DialogFragment {
 

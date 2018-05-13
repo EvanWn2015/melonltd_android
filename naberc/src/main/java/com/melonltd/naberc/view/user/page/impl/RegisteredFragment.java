@@ -1,4 +1,4 @@
-package com.melonltd.naberc.view.page.impl;
+package com.melonltd.naberc.view.user.page.impl;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.melonltd.naberc.R;
-import com.melonltd.naberc.view.page.abs.AbsPageFragment;
+import com.melonltd.naberc.view.user.page.abs.AbsPageFragment;
 
 public class RegisteredFragment extends AbsPageFragment {
     private static final String TAG = RegisteredFragment.class.getSimpleName();

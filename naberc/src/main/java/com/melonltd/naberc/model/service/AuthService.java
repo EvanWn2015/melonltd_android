@@ -11,14 +11,14 @@ import com.google.firebase.auth.AuthResult;
 import com.melonltd.naberc.R;
 import com.melonltd.naberc.model.preferences.SharedPreferencesService;
 import com.melonltd.naberc.util.VerifyUtil;
-import com.melonltd.naberc.view.BaseCore;
-import com.melonltd.naberc.view.MainActivity;
-import com.melonltd.naberc.view.page.factory.PageFragmentFactory;
-import com.melonltd.naberc.view.page.type.PageType;
+import com.melonltd.naberc.view.user.BaseCore;
+import com.melonltd.naberc.view.user.MainActivity;
+import com.melonltd.naberc.view.user.page.factory.PageFragmentFactory;
+import com.melonltd.naberc.view.user.page.type.PageType;
 
 public class AuthService {
 
-    public static void signInWithEmailAndPassword(String mail, String password, FragmentManager fm, OnCompleteListener<AuthResult> listener) {
+    public static void signInWithEmailAndPassword(String mail, String password, final FragmentManager fm, OnCompleteListener<AuthResult> listener) {
         // 驗證Email不為空
         if (Strings.isNullOrEmpty(mail)) {
             BaseCore.POPUP.show(R.string.mail_wrong_format);

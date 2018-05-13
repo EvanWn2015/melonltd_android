@@ -1,6 +1,7 @@
-package com.melonltd.naberc.view.page.impl;
+package com.melonltd.naberc.view.user.page.impl;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -13,13 +14,13 @@ import android.widget.TextView;
 
 import com.melonltd.naberc.R;
 import com.melonltd.naberc.model.service.AuthService;
-import com.melonltd.naberc.view.BaseCore;
-import com.melonltd.naberc.view.MainActivity;
-import com.melonltd.naberc.view.page.abs.AbsPageFragment;
-import com.melonltd.naberc.view.page.factory.PageFragmentFactory;
-import com.melonltd.naberc.view.page.type.PageType;
+import com.melonltd.naberc.view.seller.SellerActivity;
+import com.melonltd.naberc.view.user.MainActivity;
+import com.melonltd.naberc.view.user.page.abs.AbsPageFragment;
+import com.melonltd.naberc.view.user.page.factory.PageFragmentFactory;
+import com.melonltd.naberc.view.user.page.type.PageType;
 
-import static com.melonltd.naberc.view.BaseCore.FRAGMENT_TAG;
+import static com.melonltd.naberc.view.user.BaseCore.FRAGMENT_TAG;
 
 public class LoginFragment extends AbsPageFragment implements View.OnClickListener {
     private static final String TAG = LoginFragment.class.getSimpleName();
@@ -88,7 +89,8 @@ public class LoginFragment extends AbsPageFragment implements View.OnClickListen
             case R.id.toVerifySMSBtn:
                 MainActivity.bottomMenuTabLayout.setVisibility(View.VISIBLE);
                 FRAGMENT_TAG = PageType.VERIFY_SMS.name();
-                getFragmentManager().beginTransaction().remove(this).replace(R.id.frameContainer, PageFragmentFactory.of(PageType.VERIFY_SMS, null)).commit();
+                AbsPageFragment fragment =PageFragmentFactory.of(PageType.VERIFY_SMS, null);
+                getFragmentManager().beginTransaction().remove(this).replace(R.id.frameContainer, fragment).addToBackStack(fragment.toString()).commit();
                 break;
             case R.id.recoverPasswordText:
                 Log.d(TAG, "找回密碼");

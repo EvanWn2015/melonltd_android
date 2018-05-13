@@ -14,7 +14,7 @@ public abstract class AbstractService {
 //        callback.onSuccess(dataSnapshot);
 //    }
 
-    public static ValueEventListener getValueEventListener(@NonNull ThreadCallback callback) {
+    public static ValueEventListener getValueEventListener(@NonNull final ThreadCallback callback) {
         return new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

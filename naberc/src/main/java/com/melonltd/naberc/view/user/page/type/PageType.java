@@ -1,15 +1,15 @@
-package com.melonltd.naberc.view.page.type;
+package com.melonltd.naberc.view.user.page.type;
 
 import com.melonltd.naberc.R;
-import com.melonltd.naberc.view.page.abs.AbsPageFragment;
-import com.melonltd.naberc.view.page.impl.HistoryFragment;
-import com.melonltd.naberc.view.page.impl.HomeFragment;
-import com.melonltd.naberc.view.page.impl.LoginFragment;
-import com.melonltd.naberc.view.page.impl.RegisteredFragment;
-import com.melonltd.naberc.view.page.impl.RestaurantFragment;
-import com.melonltd.naberc.view.page.impl.SetUpFragment;
-import com.melonltd.naberc.view.page.impl.ShoppingCartFragment;
-import com.melonltd.naberc.view.page.impl.VerifySMSFragment;
+import com.melonltd.naberc.view.user.page.abs.AbsPageFragment;
+import com.melonltd.naberc.view.user.page.impl.HistoryFragment;
+import com.melonltd.naberc.view.user.page.impl.HomeFragment;
+import com.melonltd.naberc.view.user.page.impl.LoginFragment;
+import com.melonltd.naberc.view.user.page.impl.RegisteredFragment;
+import com.melonltd.naberc.view.user.page.impl.RestaurantFragment;
+import com.melonltd.naberc.view.user.page.impl.SetUpFragment;
+import com.melonltd.naberc.view.user.page.impl.ShoppingCartFragment;
+import com.melonltd.naberc.view.user.page.impl.VerifySMSFragment;
 
 /**
  * LOGIN 登入 100

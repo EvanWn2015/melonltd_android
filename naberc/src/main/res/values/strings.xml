@@ -11,4 +11,5 @@
     <string name="menu_shopping_cart_btn">購物車</string>
     <string name="menu_history_btn">紀錄</string>
     <string name="menu_set_up_btn">設定</string>
+    <string name="title_activity_seller">SellerActivity</string>
 </resources>

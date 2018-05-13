@@ -1,4 +1,4 @@
-package com.melonltd.naberc.view.page.intf;
+package com.melonltd.naberc.view.user.page.intf;
 
 import android.os.Bundle;
 

@@ -1,20 +1,14 @@
-package com.melonltd.naberc.view;
+package com.melonltd.naberc.view.user;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
-import android.app.ActionBar;
-import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
-import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.PersistableBundle;
@@ -26,9 +20,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 
-import com.google.android.gms.common.ConnectionResult;
-import com.google.android.gms.common.GoogleApiAvailability;
-import com.google.android.gms.common.GooglePlayServicesUtil;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.melonltd.naberc.R;
@@ -36,7 +27,7 @@ import com.melonltd.naberc.model.preferences.SharedPreferencesService;
 import com.melonltd.naberc.util.Tools;
 import com.melonltd.naberc.view.customize.LoadingBar;
 import com.melonltd.naberc.view.customize.PopUpDialog;
-import com.melonltd.naberc.view.page.type.PageType;
+import com.melonltd.naberc.view.user.page.type.PageType;
 
 public abstract class BaseCore extends AppCompatActivity implements LocationListener {
     private static final String TAG = BaseCore.class.getSimpleName();

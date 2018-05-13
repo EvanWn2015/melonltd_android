@@ -4,7 +4,7 @@ xmlns:tools="http://schemas.android.com/tools"
 android:layout_width="match_parent"
 android:background="@android:color/transparent"
 android:layout_height="match_parent"
-tools:context=".view.page.impl.HomeFragment">
+tools:context=".view.user.page.impl.HomeFragment">
 
 <!-- TODO: Update blank fragment layout -->
 <TextView

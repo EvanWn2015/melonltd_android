@@ -1,18 +1,17 @@
-package com.melonltd.naberc.view.page.impl;
+package com.melonltd.naberc.view.user.page.impl;
 
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.melonltd.naberc.R;
-import com.melonltd.naberc.view.BaseCore;
-import com.melonltd.naberc.view.page.abs.AbsPageFragment;
-import com.melonltd.naberc.view.page.factory.PageFragmentFactory;
-import com.melonltd.naberc.view.page.intf.PageFragment;
-import com.melonltd.naberc.view.page.type.PageType;
+import com.melonltd.naberc.view.user.BaseCore;
+import com.melonltd.naberc.view.user.page.abs.AbsPageFragment;
+import com.melonltd.naberc.view.user.page.factory.PageFragmentFactory;
+import com.melonltd.naberc.view.user.page.intf.PageFragment;
+import com.melonltd.naberc.view.user.page.type.PageType;
 
 
 public class SetUpFragment extends AbsPageFragment {
@@ -23,7 +22,7 @@ public class SetUpFragment extends AbsPageFragment {
     }
 
     @Override
-    public PageFragment getInstance(Bundle bundle) {
+    public AbsPageFragment getInstance(Bundle bundle) {
         if (FRAGMENT == null) {
             FRAGMENT = new SetUpFragment();
             FRAGMENT.setArguments(bundle);
@@ -32,7 +31,7 @@ public class SetUpFragment extends AbsPageFragment {
     }
 
     @Override
-    public PageFragment newInstance(Object... o) {
+    public AbsPageFragment newInstance(Object... o) {
         return new SetUpFragment();
     }
 

@@ -1,9 +1,9 @@
-package com.melonltd.naberc.view.page.abs;
+package com.melonltd.naberc.view.user.page.abs;
 
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 
-import com.melonltd.naberc.view.page.intf.PageFragment;
+import com.melonltd.naberc.view.user.page.intf.PageFragment;
 
 public abstract class AbsPageFragment extends Fragment implements PageFragment {
 
