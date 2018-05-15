@@ -20,7 +20,7 @@ public class GlideImageLoader extends ImageLoader {
 
     @Override
     public ImageView createImageView(Context context) {
-        SimpleDraweeView simpleDraweeView =new SimpleDraweeView(context);
+        SimpleDraweeView simpleDraweeView = new SimpleDraweeView(context);
         return simpleDraweeView;
     }
 }

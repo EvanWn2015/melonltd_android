@@ -17,7 +17,7 @@ import com.melonltd.naberc.R;
 import com.melonltd.naberc.view.user.page.abs.AbsPageFragment;
 import com.melonltd.naberc.view.user.page.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.user.page.type.PageType;
-import com.youth.banner.loader.ImageLoader;
+//import com.youth.banner.loader.ImageLoader;
 
 import java.util.List;
 
@@ -74,7 +74,7 @@ public class MainActivity extends BaseCore implements View.OnClickListener, TabL
 
         AbsPageFragment fragment = null;
 //        bottomMenuTabLayout.setVisibility(View.GONE);
-        fragment = PageFragmentFactory.of(PageType.HOME, null);
+        fragment = PageFragmentFactory.of(PageType.REGISTERED, null);
         fragmentManager.beginTransaction().replace(R.id.frameContainer, fragment).addToBackStack(fragment.toString()).commit();
 
 //        if (SharedPreferencesService.isFirstUse()) {
