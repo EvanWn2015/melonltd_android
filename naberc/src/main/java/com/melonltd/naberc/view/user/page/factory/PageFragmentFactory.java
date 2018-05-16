@@ -2,8 +2,8 @@ package com.melonltd.naberc.view.user.page.factory;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
+import com.melonltd.naberc.view.user.page.impl.RegisteredSellerFragment;
 import com.melonltd.naberc.view.user.page.abs.AbsPageFragment;
 import com.melonltd.naberc.view.user.page.impl.HistoryFragment;
 import com.melonltd.naberc.view.user.page.impl.HomeFragment;
@@ -37,6 +37,8 @@ public class PageFragmentFactory {
                 return new VerifySMSFragment().getInstance(bundle);
             case SHOPPING_CART:
                 return new ShoppingCartFragment().getInstance(bundle);
+            case REGISTERED_SELLER:
+                return new RegisteredSellerFragment().getInstance(bundle);
             default:
                 return new HomeFragment().getInstance(bundle);
         }

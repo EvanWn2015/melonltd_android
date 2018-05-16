@@ -1,6 +1,7 @@
 package com.melonltd.naberc.view.user.page.type;
 
 import com.melonltd.naberc.R;
+import com.melonltd.naberc.view.user.page.impl.RegisteredSellerFragment;
 import com.melonltd.naberc.view.user.page.abs.AbsPageFragment;
 import com.melonltd.naberc.view.user.page.impl.HistoryFragment;
 import com.melonltd.naberc.view.user.page.impl.HomeFragment;
@@ -13,7 +14,8 @@ import com.melonltd.naberc.view.user.page.impl.VerifySMSFragment;
 
 /**
  * LOGIN 登入 100
- * REGISTERED 註冊 4
+ * REGISTERED 註冊 101
+ * REGISTERED_SELLER 賣家註冊 102
  * VERIFY_SMS 驗證短訊 4
  * HOME 首頁 0
  * RESTAURANT 餐館 1
@@ -25,7 +27,8 @@ import com.melonltd.naberc.view.user.page.impl.VerifySMSFragment;
 public enum PageType {
 
     LOGIN(R.id.loginBtn, 100, LoginFragment.class),
-    REGISTERED(R.id.submitToRegisteredBun, 4, RegisteredFragment.class),
+    REGISTERED(R.id.submitToRegisteredBun, 101, RegisteredFragment.class),
+    REGISTERED_SELLER(R.id.toRegisteredSellerBtn, 101, RegisteredSellerFragment.class),
     VERIFY_SMS(R.id.toVerifySMSBtn, 4, VerifySMSFragment.class),
     HOME(R.string.menu_home_btn, 0, HomeFragment.class),
     RESTAURANT(R.string.menu_restaurant_btn, 1, RestaurantFragment.class),

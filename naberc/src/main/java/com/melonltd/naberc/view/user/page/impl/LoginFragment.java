@@ -21,12 +21,13 @@ import com.melonltd.naberc.view.user.page.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.user.page.type.PageType;
 
 import static com.melonltd.naberc.view.user.BaseCore.FRAGMENT_TAG;
+import static com.melonltd.naberc.view.user.BaseCore.context;
 
 public class LoginFragment extends AbsPageFragment implements View.OnClickListener {
     private static final String TAG = LoginFragment.class.getSimpleName();
     private static LoginFragment FRAGMENT = null;
     private EditText accountEdit, passwordEdit;
-    private Button loginBtn, registeredBtn;
+    private Button loginBtn, toVerifySMSBtn, toRegisteredSellerBtn;
     private TextView recoverPasswordText;
 
     public LoginFragment() {
@@ -63,13 +64,15 @@ public class LoginFragment extends AbsPageFragment implements View.OnClickListen
         accountEdit = v.findViewById(R.id.accountEdit);
         passwordEdit = v.findViewById(R.id.passwordEdit);
         loginBtn = v.findViewById(R.id.loginBtn);
-        registeredBtn = v.findViewById(R.id.toVerifySMSBtn);
+        toVerifySMSBtn = v.findViewById(R.id.toVerifySMSBtn);
+        toRegisteredSellerBtn = v.findViewById(R.id.toRegisteredSellerBtn);
         recoverPasswordText = v.findViewById(R.id.recoverPasswordText);
     }
 
     private void setListener() {
         loginBtn.setOnClickListener(this);
-        registeredBtn.setOnClickListener(this);
+        toVerifySMSBtn.setOnClickListener(this);
+        toRegisteredSellerBtn.setOnClickListener(this);
         recoverPasswordText.setOnClickListener(this);
     }
 
@@ -80,6 +83,7 @@ public class LoginFragment extends AbsPageFragment implements View.OnClickListen
 
     @Override
     public void onClick(View v) {
+        AbsPageFragment fragment = null;
         switch (v.getId()) {
             case R.id.loginBtn:
                 String mail = accountEdit.getText().toString();
@@ -87,9 +91,14 @@ public class LoginFragment extends AbsPageFragment implements View.OnClickListen
                 AuthService.signInWithEmailAndPassword(mail, password, getFragmentManager(), null);
                 break;
             case R.id.toVerifySMSBtn:
-                MainActivity.bottomMenuTabLayout.setVisibility(View.VISIBLE);
+//                MainActivity.bottomMenuTabLayout.setVisibility(View.VISIBLE);
                 FRAGMENT_TAG = PageType.VERIFY_SMS.name();
-                AbsPageFragment fragment =PageFragmentFactory.of(PageType.VERIFY_SMS, null);
+                fragment = PageFragmentFactory.of(PageType.VERIFY_SMS, null);
+                getFragmentManager().beginTransaction().remove(this).replace(R.id.frameContainer, fragment).addToBackStack(fragment.toString()).commit();
+                break;
+            case R.id.toRegisteredSellerBtn:
+                FRAGMENT_TAG = PageType.VERIFY_SMS.name();
+                fragment = PageFragmentFactory.of(PageType.REGISTERED_SELLER, null);
                 getFragmentManager().beginTransaction().remove(this).replace(R.id.frameContainer, fragment).addToBackStack(fragment.toString()).commit();
                 break;
             case R.id.recoverPasswordText:

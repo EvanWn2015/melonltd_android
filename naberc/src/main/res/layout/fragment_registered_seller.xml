@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
-    tools:context=".view.user.page.impl.RegisteredFragment">
+    tools:context=".view.user.page.impl.RegisteredSellerFragment">
 
 
     <EditText
@@ -121,109 +121,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/birthdayEditText" />
-
-
-    <Button
-        android:id="@+id/backToLoginBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="@android:color/transparent"
-        android:text="已有帳號"
-        android:textColor="@android:color/holo_orange_light"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/submitBtn" />
-
-    <TextView
-        android:id="@+id/textView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="4dp"
-        android:text="身份"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/nameEditText"
-        app:layout_constraintStart_toStartOf="@+id/identityEditText"
-        app:layout_constraintTop_toTopOf="@+id/identityEditText" />
-
-    <TextView
-        android:id="@+id/textView4"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="4dp"
-        android:text="姓名"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/addressEditText"
-        app:layout_constraintStart_toStartOf="@+id/nameEditText"
-        app:layout_constraintTop_toTopOf="@+id/nameEditText" />
-
-    <TextView
-        android:id="@+id/textView5"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="4dp"
-        android:text="地址"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/emailEditText"
-        app:layout_constraintStart_toStartOf="@+id/addressEditText"
-        app:layout_constraintTop_toTopOf="@+id/addressEditText" />
-
-    <TextView
-        android:id="@+id/textView6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="4dp"
-        android:text="Email"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/passwordEditText"
-        app:layout_constraintStart_toStartOf="@+id/emailEditText"
-        app:layout_constraintTop_toTopOf="@+id/emailEditText" />
-
-    <TextView
-        android:id="@+id/textView7"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="4dp"
-        android:text="密碼"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/chackPasswordEditText"
-        app:layout_constraintStart_toStartOf="@+id/passwordEditText"
-        app:layout_constraintTop_toTopOf="@+id/passwordEditText" />
-
-    <TextView
-        android:id="@+id/textView8"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="4dp"
-        android:text="確認密碼"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/birthdayEditText"
-        app:layout_constraintStart_toStartOf="@+id/chackPasswordEditText"
-        app:layout_constraintTop_toTopOf="@+id/chackPasswordEditText" />
-
-    <TextView
-        android:id="@+id/textView9"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="4dp"
-        android:text="生日"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toBottomOf="@+id/birthdayEditText"
-        app:layout_constraintStart_toStartOf="@+id/birthdayEditText"
-        app:layout_constraintTop_toTopOf="@+id/birthdayEditText" />
 
 </android.support.constraint.ConstraintLayout>

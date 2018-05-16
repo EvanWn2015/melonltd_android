@@ -65,7 +65,7 @@ public class VerifySMSFragment extends AbsPageFragment implements View.OnClickLi
                 break;
             case R.id.submitToRegisteredBun:
                 // TODO Api
-                MainActivity.bottomMenuTabLayout.setVisibility(View.VISIBLE);
+//                MainActivity.bottomMenuTabLayout.setVisibility(View.VISIBLE);
                 FRAGMENT_TAG = PageType.REGISTERED.name();
                 getFragmentManager().beginTransaction().remove(this).replace(R.id.frameContainer, PageFragmentFactory.of(PageType.REGISTERED, null)).commit();
                 break;

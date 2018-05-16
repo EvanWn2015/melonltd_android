@@ -73,8 +73,8 @@ public class MainActivity extends BaseCore implements View.OnClickListener, TabL
         super.onResume();
 
         AbsPageFragment fragment = null;
-//        bottomMenuTabLayout.setVisibility(View.GONE);
-        fragment = PageFragmentFactory.of(PageType.REGISTERED, null);
+        bottomMenuTabLayout.setVisibility(View.GONE);
+        fragment = PageFragmentFactory.of(PageType.LOGIN, null);
         fragmentManager.beginTransaction().replace(R.id.frameContainer, fragment).addToBackStack(fragment.toString()).commit();
 
 //        if (SharedPreferencesService.isFirstUse()) {

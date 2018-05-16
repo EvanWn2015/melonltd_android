@@ -97,7 +97,6 @@
         android:id="@+id/loginBtn"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
@@ -105,7 +104,6 @@
         android:text="登入"
         android:textColor="@android:color/black"
         android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/toVerifySMSBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/passwordEdit" />
@@ -113,17 +111,34 @@
     <Button
         android:id="@+id/toVerifySMSBtn"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="30dp"
+        android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:background="@android:color/background_light"
+        android:background="@drawable/reverse_button_style"
+        android:includeFontPadding="false"
+        android:padding="0dp"
         android:text="註冊"
+        android:textAllCaps="false"
         android:textColor="@android:color/holo_orange_light"
         android:textSize="18sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/loginBtn" />
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintEnd_toStartOf="@+id/toRegisteredSellerBtn" />
+
+    <Button
+        android:id="@+id/toRegisteredSellerBtn"
+        android:layout_width="0dp"
+        android:layout_height="30dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="16dp"
+        android:background="@drawable/reverse_button_style"
+        android:includeFontPadding="false"
+        android:padding="0dp"
+        android:text="商家註冊"
+        android:textAllCaps="false"
+        android:textColor="@android:color/holo_orange_light"
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
         android:id="@+id/recoverPasswordText"
@@ -139,6 +154,7 @@
         app:layout_constraintTop_toTopOf="@+id/passwordEdit" />
 
     <LinearLayout
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
