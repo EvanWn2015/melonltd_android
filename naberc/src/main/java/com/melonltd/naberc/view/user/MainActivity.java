@@ -13,6 +13,9 @@ import android.view.View;
 import android.widget.FrameLayout;
 
 import com.google.common.collect.Lists;
+import com.jzxiang.pickerview.TimePickerDialog;
+import com.jzxiang.pickerview.data.Type;
+import com.jzxiang.pickerview.listener.OnDateSetListener;
 import com.melonltd.naberc.R;
 import com.melonltd.naberc.view.user.page.abs.AbsPageFragment;
 import com.melonltd.naberc.view.user.page.factory.PageFragmentFactory;
@@ -21,7 +24,7 @@ import com.melonltd.naberc.view.user.page.type.PageType;
 
 import java.util.List;
 
-public class MainActivity extends BaseCore implements View.OnClickListener, TabLayout.OnTabSelectedListener, View.OnLayoutChangeListener {
+public class MainActivity extends BaseCore implements View.OnClickListener, TabLayout.OnTabSelectedListener, View.OnLayoutChangeListener, OnDateSetListener {
     private static final String TAG = MainActivity.class.getSimpleName();
     private Context context;
     private Toolbar toolbar;
@@ -41,6 +44,30 @@ public class MainActivity extends BaseCore implements View.OnClickListener, TabL
         if (currentUser != null) {
             Log.d(TAG, currentUser.getEmail());
         }
+
+
+        TimePickerDialog dialog = new TimePickerDialog.Builder()
+                .setCallBack(this)
+                .setCancelStringId("Cancel")
+                .setSureStringId("Sure")
+                .setTitleStringId("TimePicker")
+                .setYearText("Year")
+                .setMonthText("Month")
+                .setDayText("Day")
+                .setHourText("Hour")
+                .setMinuteText("Minute")
+                .setCyclic(false)
+                .setMinMillseconds(System.currentTimeMillis())
+                .setMaxMillseconds(System.currentTimeMillis())
+                .setCurrentMillseconds(System.currentTimeMillis())
+                .setThemeColor(getResources().getColor(R.color.timepicker_dialog_bg))
+                .setType(Type.ALL)
+                .setWheelItemTextNormalColor(getResources().getColor(R.color.timetimepicker_default_text_color))
+                .setWheelItemTextSelectorColor(getResources().getColor(R.color.timepicker_toolbar_bg))
+                .setWheelItemTextSize(12)
+                .build();
+        
+
     }
 
     private void getView() {
@@ -127,5 +154,17 @@ public class MainActivity extends BaseCore implements View.OnClickListener, TabL
 
     @Override
     public void onTabReselected(TabLayout.Tab tab) {
+    }
+
+
+    // TODO DateTimePicker
+    @Override
+    public void onDateSet(TimePickerDialog timePickerView, long millseconds) {
+
+    }
+
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+
     }
 }
