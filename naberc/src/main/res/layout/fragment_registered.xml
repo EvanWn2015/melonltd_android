@@ -8,57 +8,64 @@
     tools:context=".view.user.page.impl.RegisteredFragment">
 
     <EditText
-        android:id="@+id/storeNameEditText"
+        android:id="@+id/identityEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:maxLines="1"
         android:paddingStart="100dp"
         android:singleLine="true"
-        app:layout_constraintBottom_toTopOf="@+id/storeAddressEditText"
+        app:layout_constraintBottom_toTopOf="@+id/nameEditText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/storeAddressEditText"
+        android:id="@+id/nameEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
         android:maxLines="1"
         android:paddingStart="100dp"
         android:singleLine="true"
-        app:layout_constraintBottom_toTopOf="@+id/sellerContactPersonEditText"
+        app:layout_constraintBottom_toTopOf="@+id/addressEditText"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/storeNameEditText" />
+        app:layout_constraintTop_toBottomOf="@+id/identityEditText" />
 
     <EditText
-        android:id="@+id/sellerContactPersonEditText"
+        android:id="@+id/addressEditText"
         android:layout_width="match_parent"
-        android:singleLine="true"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
         android:hint="@string/registered_address_hint_text"
         android:maxLines="1"
         android:paddingStart="100dp"
-        app:layout_constraintBottom_toTopOf="@+id/sellerContactPersonEditText"
+        android:singleLine="true"
+        app:layout_constraintBottom_toTopOf="@+id/emailEditText"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/storeAddressEditText" />
+        app:layout_constraintTop_toBottomOf="@+id/nameEditText" />
 
     <EditText
-        android:id="@+id/sellerContactPersonEditText"
+        android:id="@+id/emailEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
         android:hint="@string/registered_birthday_hint_text"
         android:inputType="textEmailAddress"
         android:maxLines="1"
@@ -66,37 +73,43 @@
         android:singleLine="true"
         app:layout_constraintBottom_toTopOf="@+id/passwordEditText"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sellerContactPersonEditText" />
+        app:layout_constraintTop_toBottomOf="@+id/addressEditText" />
 
     <EditText
         android:id="@+id/passwordEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
         android:digits="0123456789abcdefghigklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
         android:inputType="textPassword"
         android:maxLines="1"
         android:paddingStart="100dp"
         android:singleLine="true"
+        app:layout_constraintBottom_toTopOf="@+id/confirmPasswordEditText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/sellerContactPersonEditText" />
+        app:layout_constraintTop_toBottomOf="@+id/emailEditText" />
 
     <EditText
         android:id="@+id/confirmPasswordEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
         android:digits="0123456789abcdefghigklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
         android:inputType="textPassword"
         android:maxLines="1"
         android:paddingStart="100dp"
         android:singleLine="true"
+        app:layout_constraintBottom_toTopOf="@+id/birthdayEditText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
@@ -110,17 +123,17 @@
         android:layout_marginBottom="32dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="4dp"
         android:focusable="true"
         android:focusableInTouchMode="true"
         android:maxLines="1"
         android:paddingStart="100dp"
         android:singleLine="true"
-        app:layout_constraintBottom_toTopOf="@+id/loginBtn"
+        app:layout_constraintBottom_toTopOf="@+id/submit"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/confirmPasswordEditText" />
-
 
     <Button
         android:id="@+id/submit"
@@ -152,64 +165,64 @@
         android:id="@+id/textView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp"
+        android:layout_marginBottom="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="8dp"
         android:text="@string/registered_identity_text"
         android:textSize="14sp"
-        app:layout_constraintBottom_toTopOf="@+id/storeAddressEditText"
-        app:layout_constraintStart_toStartOf="@+id/storeNameEditText"
-        app:layout_constraintTop_toTopOf="@+id/storeNameEditText" />
+        app:layout_constraintBottom_toBottomOf="@+id/identityEditText"
+        app:layout_constraintStart_toStartOf="@+id/identityEditText"
+        app:layout_constraintTop_toTopOf="@+id/identityEditText" />
 
     <TextView
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp"
+        android:layout_marginBottom="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="8dp"
         android:text="@string/registered_names_text"
         android:textSize="14sp"
-        app:layout_constraintBottom_toTopOf="@+id/sellerContactPersonEditText"
-        app:layout_constraintStart_toStartOf="@+id/storeAddressEditText"
-        app:layout_constraintTop_toTopOf="@+id/storeAddressEditText" />
+        app:layout_constraintBottom_toBottomOf="@+id/nameEditText"
+        app:layout_constraintStart_toStartOf="@+id/nameEditText"
+        app:layout_constraintTop_toTopOf="@+id/nameEditText" />
 
     <TextView
         android:id="@+id/textView5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp"
+        android:layout_marginBottom="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="8dp"
         android:text="@string/registered_address_text"
         android:textSize="14sp"
-        app:layout_constraintBottom_toTopOf="@+id/sellerContactPersonEditText"
-        app:layout_constraintStart_toStartOf="@+id/sellerContactPersonEditText"
-        app:layout_constraintTop_toTopOf="@+id/sellerContactPersonEditText" />
+        app:layout_constraintBottom_toBottomOf="@+id/addressEditText"
+        app:layout_constraintStart_toStartOf="@+id/addressEditText"
+        app:layout_constraintTop_toTopOf="@+id/addressEditText" />
 
     <TextView
         android:id="@+id/textView6"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp"
+        android:layout_marginBottom="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="8dp"
         android:text="@string/registered_email_text"
         android:textSize="14sp"
-        app:layout_constraintBottom_toTopOf="@+id/passwordEditText"
-        app:layout_constraintStart_toStartOf="@+id/sellerContactPersonEditText"
-        app:layout_constraintTop_toTopOf="@+id/sellerContactPersonEditText" />
+        app:layout_constraintBottom_toBottomOf="@+id/emailEditText"
+        app:layout_constraintStart_toStartOf="@+id/emailEditText"
+        app:layout_constraintTop_toTopOf="@+id/emailEditText" />
 
     <TextView
         android:id="@+id/textView7"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp"
+        android:layout_marginBottom="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="8dp"
         android:text="@string/registered_password_text"
         android:textSize="14sp"
-        app:layout_constraintBottom_toTopOf="@+id/confirmPasswordEditText"
+        app:layout_constraintBottom_toBottomOf="@+id/passwordEditText"
         app:layout_constraintStart_toStartOf="@+id/passwordEditText"
         app:layout_constraintTop_toTopOf="@+id/passwordEditText" />
 
@@ -217,12 +230,12 @@
         android:id="@+id/textView8"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="12dp"
+        android:layout_marginBottom="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="4dp"
+        android:layout_marginTop="8dp"
         android:text="@string/registered_confirm_password_text"
         android:textSize="14sp"
-        app:layout_constraintBottom_toTopOf="@+id/birthdayEditText"
+        app:layout_constraintBottom_toBottomOf="@+id/confirmPasswordEditText"
         app:layout_constraintStart_toStartOf="@+id/confirmPasswordEditText"
         app:layout_constraintTop_toTopOf="@+id/confirmPasswordEditText" />
 
@@ -247,9 +260,9 @@
         android:layout_marginEnd="16dp"
         android:layout_marginTop="8dp"
         android:background="@drawable/shape_reverse_triangle"
-        app:layout_constraintBottom_toBottomOf="@+id/storeNameEditText"
-        app:layout_constraintEnd_toEndOf="@+id/storeNameEditText"
-        app:layout_constraintTop_toTopOf="@+id/storeNameEditText" />
+        app:layout_constraintBottom_toBottomOf="@+id/identityEditText"
+        app:layout_constraintEnd_toEndOf="@+id/identityEditText"
+        app:layout_constraintTop_toTopOf="@+id/identityEditText" />
 
     <ImageView
         android:id="@+id/imageView2"

@@ -6,19 +6,15 @@
     android:layout_height="match_parent"
     android:background="@android:color/white"
     tools:context=".view.user.page.impl.RegisteredSellerFragment">
-    <!--Store name-->
-    <!--Store address-->
-    <!--Contact person-->
-    <!--Contact phone number-->
 
     <EditText
         android:id="@+id/storeNameEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="4dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         android:maxLines="1"
         android:paddingStart="100dp"
         android:singleLine="true"
@@ -31,10 +27,10 @@
         android:id="@+id/storeAddressEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="4dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="4dp"
         android:maxLines="1"
         android:paddingStart="100dp"
         android:singleLine="true"
@@ -44,15 +40,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/storeNameEditText" />
 
-
     <EditText
         android:id="@+id/sellerContactPersonEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="4dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="4dp"
         android:maxLines="1"
         android:paddingStart="100dp"
         android:singleLine="true"
@@ -62,7 +57,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/storeAddressEditText" />
 
-
     <EditText
         android:id="@+id/sellerContactPhoneEditText"
         android:layout_width="match_parent"
@@ -70,7 +64,8 @@
         android:layout_marginBottom="32dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="4dp"
+        android:inputType="number"
         android:maxLines="1"
         android:paddingStart="100dp"
         android:singleLine="true"
@@ -79,7 +74,6 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sellerContactPersonEditText" />
-
 
     <Button
         android:id="@+id/sellerSubmitBun"
@@ -109,5 +103,53 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/sellerSubmitBun" />
+
+    <TextView
+        android:id="@+id/textView23"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="商家名稱"
+        app:layout_constraintBottom_toBottomOf="@+id/storeNameEditText"
+        app:layout_constraintStart_toStartOf="@+id/storeNameEditText"
+        app:layout_constraintTop_toTopOf="@+id/storeNameEditText" />
+
+    <TextView
+        android:id="@+id/textView24"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="商家地址"
+        app:layout_constraintBottom_toBottomOf="@+id/storeAddressEditText"
+        app:layout_constraintStart_toStartOf="@+id/storeAddressEditText"
+        app:layout_constraintTop_toTopOf="@+id/storeAddressEditText" />
+
+    <TextView
+        android:id="@+id/textView31"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="連路人姓名"
+        app:layout_constraintBottom_toBottomOf="@+id/sellerContactPersonEditText"
+        app:layout_constraintStart_toStartOf="@+id/sellerContactPersonEditText"
+        app:layout_constraintTop_toTopOf="@+id/sellerContactPersonEditText" />
+
+    <TextView
+        android:id="@+id/textView32"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="連絡電話"
+        app:layout_constraintBottom_toBottomOf="@+id/sellerContactPhoneEditText"
+        app:layout_constraintStart_toStartOf="@+id/sellerContactPhoneEditText"
+        app:layout_constraintTop_toTopOf="@+id/sellerContactPhoneEditText" />
 
 </android.support.constraint.ConstraintLayout>

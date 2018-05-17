@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <ImageView
+        android:id="@+id/imageView3"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:src="@drawable/icon_logo_reverse"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:src="@drawable/icon_clock"
+        app:layout_constraintStart_toEndOf="@+id/imageView3"
+        app:layout_constraintTop_toBottomOf="@+id/restaurantNameText" />
+
+    <TextView
+        android:id="@+id/restaurantNameText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="8dp"
+        android:paddingStart="8dp"
+        android:text="民族店"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/imageView3"
+        app:layout_constraintTop_toTopOf="@+id/imageView3" />
+
+    <TextView
+        android:id="@+id/addressText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="48dp"
+        android:layout_marginTop="8dp"
+        android:maxLines="1"
+        android:text="大學甄選入學委員會"
+        app:layout_constraintBottom_toTopOf="@+id/businessTimeText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imageView4"
+        app:layout_constraintTop_toBottomOf="@+id/restaurantNameText" />
+
+    <TextView
+        android:id="@+id/businessTimeText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="48dp"
+        android:maxLines="1"
+        android:text="107學年度個人申請招生統一分發結果，今年個人申請共有5萬9510個名"
+        app:layout_constraintBottom_toTopOf="@+id/getTypeText"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/addressText"
+        app:layout_constraintTop_toBottomOf="@+id/addressText" />
+
+    <TextView
+        android:id="@+id/getTypeText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/reverse_gary_button_style"
+        android:paddingEnd="4dp"
+        android:paddingStart="4dp"
+        android:text="自取"
+        android:textSize="12sp"
+        app:layout_constraintStart_toStartOf="@+id/businessTimeText"
+        app:layout_constraintTop_toBottomOf="@+id/businessTimeText" />
+
+    <TextView
+        android:id="@+id/distanceText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+        android:text="距離 16M"
+        android:textSize="12sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/imageView3" />
+
+    <TextView
+        android:id="@+id/warningText"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:text="今日已結束訂單"
+        android:textColor="@color/naber_basis_red"
+        android:textSize="12sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/restaurantNameText"
+        app:layout_constraintStart_toEndOf="@+id/restaurantNameText"
+        app:layout_constraintTop_toTopOf="@+id/restaurantNameText" />
+</android.support.constraint.ConstraintLayout>

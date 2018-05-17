@@ -44,30 +44,6 @@ public class MainActivity extends BaseCore implements View.OnClickListener, TabL
         if (currentUser != null) {
             Log.d(TAG, currentUser.getEmail());
         }
-
-
-//        TimePickerDialog dialog = new TimePickerDialog.Builder()
-//                .setCallBack(this)
-//                .setCancelStringId("Cancel")
-//                .setSureStringId("Sure")
-//                .setTitleStringId("TimePicker")
-//                .setYearText("Year")
-//                .setMonthText("Month")
-//                .setDayText("Day")
-//                .setHourText("Hour")
-//                .setMinuteText("Minute")
-//                .setCyclic(false)
-//                .setMinMillseconds(System.currentTimeMillis())
-//                .setMaxMillseconds(System.currentTimeMillis())
-//                .setCurrentMillseconds(System.currentTimeMillis())
-//                .setThemeColor(getResources().getColor(R.color.timepicker_dialog_bg))
-//                .setType(Type.ALL)
-//                .setWheelItemTextNormalColor(getResources().getColor(R.color.timetimepicker_default_text_color))
-//                .setWheelItemTextSelectorColor(getResources().getColor(R.color.timepicker_toolbar_bg))
-//                .setWheelItemTextSize(12)
-//                .build();
-        
-
     }
 
     private void getView() {
@@ -81,15 +57,12 @@ public class MainActivity extends BaseCore implements View.OnClickListener, TabL
     private static void serTab() {
         bottomMenuTabLayout.removeAllTabs();
         if (IS_USER) {
-            List<TabLayout.Tab> userTabs = Lists.newArrayList(
-                    bottomMenuTabLayout.newTab().setText(R.string.menu_home_btn).setIcon(R.drawable.ic_launcher_background).setTag(R.string.menu_home_btn),
-                    bottomMenuTabLayout.newTab().setText(R.string.menu_restaurant_btn).setIcon(R.drawable.ic_launcher_background).setTag(R.string.menu_restaurant_btn),
-                    bottomMenuTabLayout.newTab().setText(R.string.menu_shopping_cart_btn).setIcon(R.drawable.ic_launcher_background).setTag(R.string.menu_shopping_cart_btn),
-                    bottomMenuTabLayout.newTab().setText(R.string.menu_history_btn).setIcon(R.drawable.ic_launcher_background).setTag(R.string.menu_history_btn),
-                    bottomMenuTabLayout.newTab().setText(R.string.menu_set_up_btn).setIcon(R.drawable.ic_launcher_background).setTag(R.string.menu_set_up_btn));
-            for (TabLayout.Tab t : userTabs) {
-                bottomMenuTabLayout.addTab(t, true);
-            }
+            bottomMenuTabLayout.addTab(bottomMenuTabLayout.newTab().setText(R.string.menu_home_btn).setIcon(R.drawable.ic_launcher_background).setTag(R.string.menu_home_btn),true);
+            bottomMenuTabLayout.addTab(bottomMenuTabLayout.newTab().setText(R.string.menu_restaurant_btn).setIcon(R.drawable.ic_launcher_background).setTag(R.string.menu_restaurant_btn),true);
+            bottomMenuTabLayout.addTab(bottomMenuTabLayout.newTab().setText(R.string.menu_shopping_cart_btn).setIcon(R.drawable.ic_launcher_background).setTag(R.string.menu_shopping_cart_btn),true);
+            bottomMenuTabLayout.addTab(bottomMenuTabLayout.newTab().setText(R.string.menu_history_btn).setIcon(R.drawable.ic_launcher_background).setTag(R.string.menu_history_btn),true);
+            bottomMenuTabLayout.addTab(bottomMenuTabLayout.newTab().setText(R.string.menu_set_up_btn).setIcon(R.drawable.ic_launcher_background).setTag(R.string.menu_set_up_btn),true);
+            bottomMenuTabLayout.getTabAt(0).select();
         } else {
             bottomMenuTabLayout.setVisibility(View.GONE);
         }
@@ -131,16 +104,16 @@ public class MainActivity extends BaseCore implements View.OnClickListener, TabL
 
     @Override
     public void onLayoutChange(View view, int i, int i1, int i2, int i3, int i4, int i5, int i6, int i7) {
-        TabLayout.Tab tab = bottomMenuTabLayout.getTabAt(PageType.equalsPositionByName(FRAGMENT_TAG, true));
-        if (tab != null) {
-            FRAGMENT_TAG = PageType.ofName(FRAGMENT_TAG).name();
-            tab.select();
-        }
+//        TabLayout.Tab tab = bottomMenuTabLayout.getTabAt(PageType.equalsPositionByName(FRAGMENT_TAG, true));
+//        if (tab != null) {
+//            FRAGMENT_TAG = PageType.ofName(FRAGMENT_TAG).name();
+//            tab.select();
+//        }
     }
 
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
-        tab.getIcon().setColorFilter(ContextCompat.getColor(context, R.color.colorPrimary), PorterDuff.Mode.SRC_IN);
+        tab.getIcon().setColorFilter(ContextCompat.getColor(context, R.color.naber_basis), PorterDuff.Mode.SRC_IN);
         AbsPageFragment fragment = PageFragmentFactory.of(PageType.ofId(Integer.parseInt(tab.getTag().toString())), null);
         FRAGMENT_TAG = PageType.ofId(Integer.parseInt(tab.getTag().toString())).name();
         fragmentManager.beginTransaction().addToBackStack(fragment.toString()).replace(R.id.frameContainer, fragment).commit();
@@ -149,7 +122,7 @@ public class MainActivity extends BaseCore implements View.OnClickListener, TabL
 
     @Override
     public void onTabUnselected(TabLayout.Tab tab) {
-        tab.getIcon().setColorFilter(ContextCompat.getColor(context, R.color.colorAccent), PorterDuff.Mode.SRC_IN);
+        tab.getIcon().setColorFilter(ContextCompat.getColor(context, R.color.cardview_dark_background), PorterDuff.Mode.SRC_IN);
     }
 
     @Override

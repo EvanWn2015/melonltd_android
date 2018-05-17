@@ -30,7 +30,6 @@ public class LoadingBar extends Activity {
         RelativeLayout.LayoutParams params = new
                 RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
         AVI.hide();
-
         RL = new RelativeLayout(context);
         RL.setBackgroundColor(Color.argb(0, 0, 0, 0));
         RL.setClickable(false);

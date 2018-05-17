@@ -20,6 +20,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 
+import com.bigkoo.alertview.AlertView;
+import com.bigkoo.alertview.OnDismissListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.melonltd.naberc.R;

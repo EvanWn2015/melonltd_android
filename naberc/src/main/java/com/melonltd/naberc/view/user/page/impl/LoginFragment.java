@@ -13,11 +13,15 @@ import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.bigkoo.alertview.AlertView;
+import com.google.common.base.Strings;
 import com.jzxiang.pickerview.TimePickerDialog;
 import com.jzxiang.pickerview.data.Type;
 import com.jzxiang.pickerview.listener.OnDateSetListener;
 import com.melonltd.naberc.R;
 import com.melonltd.naberc.model.service.AuthService;
+import com.melonltd.naberc.util.VerifyUtil;
+import com.melonltd.naberc.view.user.BaseCore;
 import com.melonltd.naberc.view.user.page.abs.AbsPageFragment;
 import com.melonltd.naberc.view.user.page.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.user.page.type.PageType;
@@ -91,7 +95,9 @@ public class LoginFragment extends AbsPageFragment implements View.OnClickListen
             case R.id.loginBtn:
                 String mail = accountEdit.getText().toString();
                 String password = passwordEdit.getText().toString();
-                AuthService.signInWithEmailAndPassword(mail, password, getFragmentManager(), null);
+                if (verifyInput()){
+                    AuthService.signInWithEmailAndPassword(mail, password, getFragmentManager(), null);
+                }
                 break;
             case R.id.toVerifySMSBtn:
 //                MainActivity.bottomMenuTabLayout.setVisibility(View.VISIBLE);
@@ -111,8 +117,40 @@ public class LoginFragment extends AbsPageFragment implements View.OnClickListen
         }
     }
 
+    private boolean verifyInput() {
+        boolean result = true;
+        String message = "";
+        // 驗證Email不為空
+        if (Strings.isNullOrEmpty(accountEdit.getText().toString())) {
+            message = BaseCore.context.getString(R.string.mail_wrong_format);
+            result = false;
+        }
+        // 驗證Email錯誤格式
+        if (!VerifyUtil.email(accountEdit.getText().toString())) {
+            message = BaseCore.context.getString(R.string.mail_wrong_format);
+            result = false;
+        }
+        // 驗證密碼不為空
+        if (Strings.isNullOrEmpty(passwordEdit.getText().toString())) {
+            message = BaseCore.context.getString(R.string.mail_wrong_format);
+            result = false;
+        }
+        if (!result) {
+            new AlertView.Builder()
+                    .setTitle("")
+                    .setMessage(message)
+                    .setContext(getContext())
+                    .setStyle(AlertView.Style.Alert)
+                    .setCancelText("取消")
+                    .build()
+                    .setCancelable(true)
+                    .show();
+        }
+        return result;
+    }
+
     @Override
     public void onDateSet(TimePickerDialog timePickerView, long millseconds) {
-        Log.d(TAG, "TimePickerDialog  onDateSet" );
+        Log.d(TAG, "TimePickerDialog  onDateSet");
     }
 }

@@ -12,6 +12,8 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.bigkoo.alertview.AlertView;
+import com.bigkoo.alertview.OnDismissListener;
 import com.google.common.base.Strings;
 import com.jzxiang.pickerview.TimePickerDialog;
 import com.jzxiang.pickerview.data.Type;
@@ -66,10 +68,10 @@ public class RegisteredFragment extends AbsPageFragment implements View.OnClickL
     }
 
     private void getViews(View v) {
-        identityEditText = v.findViewById(R.id.storeNameEditText);
-        nameEditText = v.findViewById(R.id.storeAddressEditText);
-        addressEditText = v.findViewById(R.id.sellerContactPersonEditText);
-        emailEditText = v.findViewById(R.id.sellerContactPersonEditText);
+        identityEditText = v.findViewById(R.id.identityEditText);
+        nameEditText = v.findViewById(R.id.nameEditText);
+        addressEditText = v.findViewById(R.id.addressEditText);
+        emailEditText = v.findViewById(R.id.emailEditText);
         passwordEditText = v.findViewById(R.id.passwordEditText);
         confirmPasswordEditText = v.findViewById(R.id.confirmPasswordEditText);
         birthdayEditText = v.findViewById(R.id.birthdayEditText);
@@ -111,7 +113,7 @@ public class RegisteredFragment extends AbsPageFragment implements View.OnClickL
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.submit:
-                if (verifyInput()){
+                if (verifyInput()) {
                     backToLoginPage();
                 }
                 break;
@@ -156,48 +158,61 @@ public class RegisteredFragment extends AbsPageFragment implements View.OnClickL
 
 
     private boolean verifyInput() {
+        boolean result = true;
+        String message = "";
         // 驗證身份不為空
         if (Strings.isNullOrEmpty(identityEditText.getText().toString())) {
-            BaseCore.POPUP.show(R.string.mail_wrong_format);
-            return false;
+            message = BaseCore.context.getString(R.string.mail_wrong_format);
+            result = false;
         }
         // 驗證姓名不為空
         if (Strings.isNullOrEmpty(nameEditText.getText().toString())) {
-            BaseCore.POPUP.show(R.string.mail_wrong_format);
-            return false;
+            message = BaseCore.context.getString(R.string.mail_wrong_format);
+            result = false;
         }
         // 驗證姓名長度大於二
         if (nameEditText.getText().toString().length() <= 4) {
-            BaseCore.POPUP.show(R.string.mail_wrong_format);
-            return false;
+            message = BaseCore.context.getString(R.string.mail_wrong_format);
+            result = false;
         }
         // 驗證Email不為空
         if (Strings.isNullOrEmpty(emailEditText.getText().toString())) {
-            BaseCore.POPUP.show(R.string.mail_wrong_format);
-            return false;
+            message = BaseCore.context.getString(R.string.mail_wrong_format);
+            result = false;
         }
         // 驗證Email錯誤格式
         if (!VerifyUtil.email(emailEditText.getText().toString())) {
-            BaseCore.POPUP.show(R.string.mail_wrong_format);
-            return false;
+            message = BaseCore.context.getString(R.string.mail_wrong_format);
+            result = false;
         }
         // 驗證密碼不為空 並需要英文大小寫數字 6 ~ 20
         if (!VerifyUtil.password(passwordEditText.getText().toString())) {
-            BaseCore.POPUP.show(R.string.password_wrong_format);
-            return false;
+            message = BaseCore.context.getString(R.string.mail_wrong_format);
+            result = false;
         }
         // 驗證密碼與確認密碼一致
         if (!passwordEditText.getText().toString().equals(confirmPasswordEditText.getText().toString())) {
-            BaseCore.POPUP.show(R.string.password_wrong_format);
-            return false;
+            message = BaseCore.context.getString(R.string.mail_wrong_format);
+            result = false;
         }
         // 驗證生日不為空
         if (Strings.isNullOrEmpty(birthdayEditText.getText().toString())) {
-            BaseCore.POPUP.show(R.string.password_wrong_format);
-            return false;
+            message = BaseCore.context.getString(R.string.mail_wrong_format);
+            result = false;
         }
-        return true;
 
+        if (!result) {
+            new AlertView.Builder()
+                    .setTitle("")
+                    .setMessage(message)
+                    .setContext(getContext())
+                    .setStyle(AlertView.Style.Alert)
+                    .setCancelText("取消")
+                    .build()
+                    .setCancelable(true)
+                    .show();
+        }
+        return result;
     }
 }
 
