@@ -1,7 +1,7 @@
 package com.melonltd.naberc.view.user.page.impl;
 
 
-import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -9,21 +9,22 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.jzxiang.pickerview.TimePickerDialog;
+import com.jzxiang.pickerview.data.Type;
+import com.jzxiang.pickerview.listener.OnDateSetListener;
 import com.melonltd.naberc.R;
 import com.melonltd.naberc.model.service.AuthService;
-import com.melonltd.naberc.view.seller.SellerActivity;
-import com.melonltd.naberc.view.user.MainActivity;
 import com.melonltd.naberc.view.user.page.abs.AbsPageFragment;
 import com.melonltd.naberc.view.user.page.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.user.page.type.PageType;
 
 import static com.melonltd.naberc.view.user.BaseCore.FRAGMENT_TAG;
-import static com.melonltd.naberc.view.user.BaseCore.context;
 
-public class LoginFragment extends AbsPageFragment implements View.OnClickListener {
+public class LoginFragment extends AbsPageFragment implements View.OnClickListener, OnDateSetListener {
     private static final String TAG = LoginFragment.class.getSimpleName();
     private static LoginFragment FRAGMENT = null;
     private EditText accountEdit, passwordEdit;
@@ -79,6 +80,8 @@ public class LoginFragment extends AbsPageFragment implements View.OnClickListen
     @Override
     public void onResume() {
         super.onResume();
+
+
     }
 
     @Override
@@ -102,9 +105,14 @@ public class LoginFragment extends AbsPageFragment implements View.OnClickListen
                 getFragmentManager().beginTransaction().remove(this).replace(R.id.frameContainer, fragment).addToBackStack(fragment.toString()).commit();
                 break;
             case R.id.recoverPasswordText:
+
                 Log.d(TAG, "找回密碼");
                 break;
         }
     }
 
+    @Override
+    public void onDateSet(TimePickerDialog timePickerView, long millseconds) {
+        Log.d(TAG, "TimePickerDialog  onDateSet" );
+    }
 }

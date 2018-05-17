@@ -3,7 +3,8 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_main2">Main2Activity</string>
+    <string name="title_activity_main">MainActivity</string>
+    <string name="title_activity_seller">SellerActivity</string>
 
     <!-- bottom menu name-->
     <string name="menu_home_btn">首頁</string>
@@ -11,5 +12,15 @@
     <string name="menu_shopping_cart_btn">購物車</string>
     <string name="menu_history_btn">紀錄</string>
     <string name="menu_set_up_btn">設定</string>
-    <string name="title_activity_seller">SellerActivity</string>
+
+
+
+    <!-- data time picker msg-->
+    <string name="data_time_picker_years_text">  年</string>
+    <string name="data_time_picker_month_text">  月</string>
+    <string name="data_time_picker_day_text">  日</string>
+    <string name="data_time_picker_hour_text">  時</string>
+    <string name="data_time_picker_minuter_text">  分</string>
+
+
 </resources>

@@ -5,5 +5,5 @@
     <corners android:radius="0dip" />
     <stroke
         android:width="2px"
-        android:color="@color/naber_basis" />
+        android:color="@color/naber_dividing_line_gray" />
 </shape>

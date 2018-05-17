@@ -24,7 +24,7 @@ import com.melonltd.naberc.view.user.page.type.PageType;
 
 import java.util.List;
 
-public class MainActivity extends BaseCore implements View.OnClickListener, TabLayout.OnTabSelectedListener, View.OnLayoutChangeListener, OnDateSetListener {
+public class MainActivity extends BaseCore implements View.OnClickListener, TabLayout.OnTabSelectedListener, View.OnLayoutChangeListener {
     private static final String TAG = MainActivity.class.getSimpleName();
     private Context context;
     private Toolbar toolbar;
@@ -46,26 +46,26 @@ public class MainActivity extends BaseCore implements View.OnClickListener, TabL
         }
 
 
-        TimePickerDialog dialog = new TimePickerDialog.Builder()
-                .setCallBack(this)
-                .setCancelStringId("Cancel")
-                .setSureStringId("Sure")
-                .setTitleStringId("TimePicker")
-                .setYearText("Year")
-                .setMonthText("Month")
-                .setDayText("Day")
-                .setHourText("Hour")
-                .setMinuteText("Minute")
-                .setCyclic(false)
-                .setMinMillseconds(System.currentTimeMillis())
-                .setMaxMillseconds(System.currentTimeMillis())
-                .setCurrentMillseconds(System.currentTimeMillis())
-                .setThemeColor(getResources().getColor(R.color.timepicker_dialog_bg))
-                .setType(Type.ALL)
-                .setWheelItemTextNormalColor(getResources().getColor(R.color.timetimepicker_default_text_color))
-                .setWheelItemTextSelectorColor(getResources().getColor(R.color.timepicker_toolbar_bg))
-                .setWheelItemTextSize(12)
-                .build();
+//        TimePickerDialog dialog = new TimePickerDialog.Builder()
+//                .setCallBack(this)
+//                .setCancelStringId("Cancel")
+//                .setSureStringId("Sure")
+//                .setTitleStringId("TimePicker")
+//                .setYearText("Year")
+//                .setMonthText("Month")
+//                .setDayText("Day")
+//                .setHourText("Hour")
+//                .setMinuteText("Minute")
+//                .setCyclic(false)
+//                .setMinMillseconds(System.currentTimeMillis())
+//                .setMaxMillseconds(System.currentTimeMillis())
+//                .setCurrentMillseconds(System.currentTimeMillis())
+//                .setThemeColor(getResources().getColor(R.color.timepicker_dialog_bg))
+//                .setType(Type.ALL)
+//                .setWheelItemTextNormalColor(getResources().getColor(R.color.timetimepicker_default_text_color))
+//                .setWheelItemTextSelectorColor(getResources().getColor(R.color.timepicker_toolbar_bg))
+//                .setWheelItemTextSize(12)
+//                .build();
         
 
     }
@@ -101,7 +101,7 @@ public class MainActivity extends BaseCore implements View.OnClickListener, TabL
 
         AbsPageFragment fragment = null;
         bottomMenuTabLayout.setVisibility(View.GONE);
-        fragment = PageFragmentFactory.of(PageType.LOGIN, null);
+        fragment = PageFragmentFactory.of(PageType.REGISTERED, null);
         fragmentManager.beginTransaction().replace(R.id.frameContainer, fragment).addToBackStack(fragment.toString()).commit();
 
 //        if (SharedPreferencesService.isFirstUse()) {
@@ -156,15 +156,4 @@ public class MainActivity extends BaseCore implements View.OnClickListener, TabL
     public void onTabReselected(TabLayout.Tab tab) {
     }
 
-
-    // TODO DateTimePicker
-    @Override
-    public void onDateSet(TimePickerDialog timePickerView, long millseconds) {
-
-    }
-
-    @Override
-    public void onPointerCaptureChanged(boolean hasCapture) {
-
-    }
 }

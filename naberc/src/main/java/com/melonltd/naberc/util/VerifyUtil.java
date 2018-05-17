@@ -2,6 +2,8 @@ package com.melonltd.naberc.util;
 
 import com.google.common.base.Strings;
 
+import java.util.regex.Pattern;
+
 public class VerifyUtil {
 
     public static boolean email(String mail) {
@@ -16,5 +18,12 @@ public class VerifyUtil {
             return false;
         }
         return android.util.Patterns.PHONE.matcher(number).matches();
+    }
+
+    public static boolean password(String password) {
+        if (Strings.isNullOrEmpty(password)) {
+            return false;
+        }
+        return Pattern.compile("^(?=.*[a-zA-Z]+)(?=.*\\d+)[a-zA-Z0-9]{6,20}$").matcher(password).matches();
     }
 }

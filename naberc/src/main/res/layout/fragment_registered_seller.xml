@@ -6,120 +6,108 @@
     android:layout_height="match_parent"
     android:background="@android:color/white"
     tools:context=".view.user.page.impl.RegisteredSellerFragment">
-
+    <!--Store name-->
+    <!--Store address-->
+    <!--Contact person-->
+    <!--Contact phone number-->
 
     <EditText
-        android:id="@+id/identityEditText"
+        android:id="@+id/storeNameEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:maxLines="1"
         android:paddingStart="100dp"
-        app:layout_constraintBottom_toTopOf="@+id/nameEditText"
+        android:singleLine="true"
+        app:layout_constraintBottom_toTopOf="@+id/storeAddressEditText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/nameEditText"
+        android:id="@+id/storeAddressEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:maxLines="1"
         android:paddingStart="100dp"
-        app:layout_constraintBottom_toTopOf="@+id/addressEditText"
+        android:singleLine="true"
+        app:layout_constraintBottom_toTopOf="@+id/sellerContactPersonEditText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/identityEditText" />
+        app:layout_constraintTop_toBottomOf="@+id/storeNameEditText" />
 
 
     <EditText
-        android:id="@+id/addressEditText"
+        android:id="@+id/sellerContactPersonEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
-        android:hint="往後紅利兌換寄送使用"
+        android:layout_marginTop="8dp"
+        android:maxLines="1"
         android:paddingStart="100dp"
-        app:layout_constraintBottom_toTopOf="@+id/emailEditText"
+        android:singleLine="true"
+        app:layout_constraintBottom_toTopOf="@+id/sellerContactPhoneEditText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/nameEditText" />
+        app:layout_constraintTop_toBottomOf="@+id/storeAddressEditText" />
 
 
     <EditText
-        android:id="@+id/emailEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:hint="找回密碼使用"
-        android:paddingStart="100dp"
-        app:layout_constraintBottom_toTopOf="@+id/passwordEditText"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/addressEditText" />
-
-
-    <EditText
-        android:id="@+id/passwordEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:paddingStart="100dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/emailEditText" />
-
-
-    <EditText
-        android:id="@+id/chackPasswordEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:paddingStart="100dp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/passwordEditText" />
-
-
-    <EditText
-        android:id="@+id/birthdayEditText"
+        android:id="@+id/sellerContactPhoneEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="32dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:maxLines="1"
         android:paddingStart="100dp"
-        app:layout_constraintBottom_toTopOf="@+id/loginBtn"
+        android:singleLine="true"
+        app:layout_constraintBottom_toTopOf="@+id/sellerSubmitBun"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/chackPasswordEditText" />
+        app:layout_constraintTop_toBottomOf="@+id/sellerContactPersonEditText" />
 
 
     <Button
-        android:id="@+id/submitBtn"
+        android:id="@+id/sellerSubmitBun"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
+        android:layout_marginBottom="8dp"
         android:layout_marginTop="32dp"
-        android:background="@android:color/holo_orange_light"
+        android:background="@color/naber_basis"
         android:text="註冊"
+        android:textAllCaps="false"
         android:textColor="@android:color/black"
-        android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/backToLoginBtn"
+        app:layout_constraintBottom_toTopOf="@+id/sellerBackToLoginBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sellerContactPhoneEditText" />
+
+    <Button
+        android:id="@+id/sellerBackToLoginBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="30dp"
+        android:layout_marginTop="8dp"
+        android:background="@android:color/transparent"
+        android:text="@string/registered_existing_account_btn_text"
+        android:textColor="@color/naber_basis"
+        android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/birthdayEditText" />
+        app:layout_constraintTop_toBottomOf="@+id/sellerSubmitBun" />
 
 </android.support.constraint.ConstraintLayout>
