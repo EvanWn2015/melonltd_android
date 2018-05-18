@@ -1,7 +1,6 @@
 package com.melonltd.naberc.view.user.page.impl;
 
 
-import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -9,26 +8,23 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.bigkoo.alertview.AlertView;
 import com.google.common.base.Strings;
-import com.jzxiang.pickerview.TimePickerDialog;
-import com.jzxiang.pickerview.data.Type;
-import com.jzxiang.pickerview.listener.OnDateSetListener;
 import com.melonltd.naberc.R;
 import com.melonltd.naberc.model.service.AuthService;
 import com.melonltd.naberc.util.VerifyUtil;
 import com.melonltd.naberc.view.user.BaseCore;
+import com.melonltd.naberc.view.user.MainActivity;
 import com.melonltd.naberc.view.user.page.abs.AbsPageFragment;
 import com.melonltd.naberc.view.user.page.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.user.page.type.PageType;
 
 import static com.melonltd.naberc.view.user.BaseCore.FRAGMENT_TAG;
 
-public class LoginFragment extends AbsPageFragment implements View.OnClickListener, OnDateSetListener {
+public class LoginFragment extends AbsPageFragment implements View.OnClickListener {
     private static final String TAG = LoginFragment.class.getSimpleName();
     private static LoginFragment FRAGMENT = null;
     private EditText accountEdit, passwordEdit;
@@ -84,8 +80,6 @@ public class LoginFragment extends AbsPageFragment implements View.OnClickListen
     @Override
     public void onResume() {
         super.onResume();
-
-
     }
 
     @Override
@@ -95,8 +89,13 @@ public class LoginFragment extends AbsPageFragment implements View.OnClickListen
             case R.id.loginBtn:
                 String mail = accountEdit.getText().toString();
                 String password = passwordEdit.getText().toString();
-                if (verifyInput()){
-                    AuthService.signInWithEmailAndPassword(mail, password, getFragmentManager(), null);
+                if (verifyInput()) {
+                    FRAGMENT_TAG = PageType.HOME.name();
+                    getFragmentManager().beginTransaction().replace(R.id.frameContainer, PageFragmentFactory.of(PageType.HOME, null)).commit();
+                    if (MainActivity.bottomMenuTabLayout != null) {
+                        MainActivity.bottomMenuTabLayout.setVisibility(View.VISIBLE);
+                    }
+//                    AuthService.signInWithEmailAndPassword(mail, password, getFragmentManager(), null);
                 }
                 break;
             case R.id.toVerifySMSBtn:
@@ -106,12 +105,11 @@ public class LoginFragment extends AbsPageFragment implements View.OnClickListen
                 getFragmentManager().beginTransaction().remove(this).replace(R.id.frameContainer, fragment).addToBackStack(fragment.toString()).commit();
                 break;
             case R.id.toRegisteredSellerBtn:
-                FRAGMENT_TAG = PageType.VERIFY_SMS.name();
+                FRAGMENT_TAG = PageType.REGISTERED_SELLER.name();
                 fragment = PageFragmentFactory.of(PageType.REGISTERED_SELLER, null);
                 getFragmentManager().beginTransaction().remove(this).replace(R.id.frameContainer, fragment).addToBackStack(fragment.toString()).commit();
                 break;
             case R.id.recoverPasswordText:
-
                 Log.d(TAG, "找回密碼");
                 break;
         }
@@ -149,8 +147,8 @@ public class LoginFragment extends AbsPageFragment implements View.OnClickListen
         return result;
     }
 
-    @Override
-    public void onDateSet(TimePickerDialog timePickerView, long millseconds) {
-        Log.d(TAG, "TimePickerDialog  onDateSet");
-    }
+//    @Override
+//    public void onDateSet(TimePickerDialog timePickerView, long millseconds) {
+//        Log.d(TAG, "TimePickerDialog  onDateSet");
+//    }
 }

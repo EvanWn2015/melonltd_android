@@ -3,6 +3,8 @@ package com.melonltd.naberc.view.user.page.factory;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 
+import com.melonltd.naberc.view.user.page.impl.AccountDetailFragment;
+import com.melonltd.naberc.view.user.page.impl.OrderDetailFragment;
 import com.melonltd.naberc.view.user.page.impl.RegisteredSellerFragment;
 import com.melonltd.naberc.view.user.page.abs.AbsPageFragment;
 import com.melonltd.naberc.view.user.page.impl.HistoryFragment;
@@ -27,8 +29,12 @@ public class PageFragmentFactory {
                 return new LoginFragment().getInstance(bundle);
             case SET_UP:
                 return new SetUpFragment().getInstance(bundle);
+            case ACCOUNT_DETAIL:
+                return new AccountDetailFragment().getInstance(bundle);
             case HISTORY:
                 return new HistoryFragment().getInstance(bundle);
+            case ORDER_DETAIL:
+                return new OrderDetailFragment().getInstance(bundle);
             case REGISTERED:
                 return new RegisteredFragment().getInstance(bundle);
             case RESTAURANT:

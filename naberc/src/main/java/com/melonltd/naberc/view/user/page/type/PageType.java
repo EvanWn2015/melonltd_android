@@ -1,6 +1,8 @@
 package com.melonltd.naberc.view.user.page.type;
 
 import com.melonltd.naberc.R;
+import com.melonltd.naberc.view.user.page.impl.AccountDetailFragment;
+import com.melonltd.naberc.view.user.page.impl.OrderDetailFragment;
 import com.melonltd.naberc.view.user.page.impl.RegisteredSellerFragment;
 import com.melonltd.naberc.view.user.page.abs.AbsPageFragment;
 import com.melonltd.naberc.view.user.page.impl.HistoryFragment;
@@ -22,19 +24,21 @@ import com.melonltd.naberc.view.user.page.impl.VerifySMSFragment;
  * SHOPPING_CART 購物車 2
  * HISTORY 紀錄 3
  * SET_UP 設定 4
+ * ACCOUNT_DETAIL 帳號細節與編輯
  * (int id or tag , int positionByPageTab, Class<T> zlass)
  */
 public enum PageType {
-
     LOGIN(R.id.loginBtn, 100, LoginFragment.class),
     REGISTERED(R.id.submitToRegisteredBun, 101, RegisteredFragment.class),
-    REGISTERED_SELLER(R.id.toRegisteredSellerBtn, 101, RegisteredSellerFragment.class),
-    VERIFY_SMS(R.id.toVerifySMSBtn, 4, VerifySMSFragment.class),
+    REGISTERED_SELLER(R.id.toRegisteredSellerBtn, 102, RegisteredSellerFragment.class),
+    VERIFY_SMS(R.id.toVerifySMSBtn, 103, VerifySMSFragment.class),
     HOME(R.string.menu_home_btn, 0, HomeFragment.class),
     RESTAURANT(R.string.menu_restaurant_btn, 1, RestaurantFragment.class),
     SHOPPING_CART(R.string.menu_shopping_cart_btn, 2, ShoppingCartFragment.class),
     HISTORY(R.string.menu_history_btn, 3, HistoryFragment.class),
-    SET_UP(R.string.menu_set_up_btn, 4, SetUpFragment.class);
+    ORDER_DETAIL(0,3, OrderDetailFragment.class),
+    SET_UP(R.string.menu_set_up_btn, 4, SetUpFragment.class),
+    ACCOUNT_DETAIL(0,4, AccountDetailFragment.class);
 
     private final int id;
     private final int position;
@@ -94,6 +98,15 @@ public enum PageType {
             }
         }
         return HOME.position;
+    }
+
+    public static int equalsPositionByName(String name) {
+        for (PageType entity : values()) {
+            if (entity.name().equals(name)) {
+                return entity.position;
+            }
+        }
+        return 100;
     }
 
     public static boolean isMainPage(String name) {
