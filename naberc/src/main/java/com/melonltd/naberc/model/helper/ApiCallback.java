@@ -1,8 +1,11 @@
 package com.melonltd.naberc.model.helper;
 
+import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+
+import com.melonltd.naberc.view.customize.LoadingBar;
 
 import java.io.IOException;
 
@@ -12,10 +15,13 @@ import okhttp3.Response;
 
 public abstract class ApiCallback implements Callback {
     private static final String TAG = ApiCallback.class.getSimpleName();
-
+    private LoadingBar loadingBar;
+    abstract public void onSuccess(final String responseBody);
     abstract public void onFail(final Exception error);
 
-    abstract public void onSuccess(final String responseBody);
+    public ApiCallback(Context context) {
+        this.loadingBar = new LoadingBar(context, true);
+    }
 
     @Override
     public void onFailure(Call call, final IOException e) {
@@ -28,6 +34,7 @@ public abstract class ApiCallback implements Callback {
                 } else {
                     onFail(e);
                 }
+                loadingBar.hide();
             }
         });
     }
@@ -38,7 +45,6 @@ public abstract class ApiCallback implements Callback {
             onFailure(call, new IOException("Failed"));
             return;
         }
-
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
@@ -48,6 +54,7 @@ public abstract class ApiCallback implements Callback {
                     Log.e(TAG, "fail", e);
                     onFailure(call, new IOException("Failed"));
                 }
+                loadingBar.hide();
             }
         });
     }

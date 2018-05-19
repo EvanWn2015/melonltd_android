@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
-    tools:context=".view.user.page.impl.LoginFragment">
+    tools:context=".view.common.page.impl.LoginFragment">
 
     <ImageView
         android:id="@+id/logoImage"
@@ -54,6 +54,7 @@
 
 
     <EditText
+        android:text="abc@abc.abc"
         android:id="@+id/accountEdit"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -74,6 +75,7 @@
     <!--android:text="NER-18X1X11@melonltd.com.tw"-->
 
     <EditText
+        android:text="123456"
         android:id="@+id/passwordEdit"
         android:layout_width="0dp"
         android:layout_height="wrap_content"

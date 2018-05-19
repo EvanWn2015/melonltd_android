@@ -35,8 +35,6 @@ public class ApiManager {
     public static <T> void test(ApiCallback callback) {
 
         HttpUrl url = HttpUrl.parse(ApiUrl.test).newBuilder()
-                .addQueryParameter("user_id", "ecadmin")
-                .addQueryParameter("apsystem", "ECA")
                 .build();
 
         Log.d(TAG, url.toString());

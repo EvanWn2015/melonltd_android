@@ -1,223 +1,244 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/user_account_detail_page"
     android:layout_width="match_parent"
+    android:overScrollMode="never"
     android:layout_height="match_parent"
     tools:context=".view.user.page.impl.AccountDetailFragment">
 
-    <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="0dp"
-        android:layout_height="160dp"
-        android:layout_marginBottom="8dp"
-        android:background="@color/naber_basis"
-        android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/textView53"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"></LinearLayout>
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@android:color/transparent">
 
-    <com.melonltd.naberc.view.customize.CircleImageView
-        android:id="@+id/avatarImage"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        android:layout_centerInParent="true"
-        android:layout_marginBottom="32dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="32dp"
-        android:scaleType="centerCrop"
-        android:src="@drawable/icon_logo"
-        app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
-        app:layout_constraintEnd_toEndOf="@+id/linearLayout"
-        app:layout_constraintStart_toStartOf="@+id/linearLayout"
-        app:layout_constraintTop_toTopOf="@+id/linearLayout" />
+        <!--</ScrollView>-->
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="0dp"
+            android:layout_height="160dp"
+            android:layout_marginBottom="8dp"
+            android:background="@color/naber_basis"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toTopOf="@+id/textView53"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"></LinearLayout>
 
-    <TextView
-        android:id="@+id/textView53"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/naber_text_base_line"
-        android:padding="8dp"
-        android:text="姓名"
-        app:layout_constraintBottom_toTopOf="@+id/textView63"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+        <com.melonltd.naberc.view.customize.CircleImageView
+            android:id="@+id/avatarImage"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_centerInParent="true"
+            android:layout_marginBottom="32dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="32dp"
+            android:scaleType="centerCrop"
+            android:src="@drawable/icon_logo"
+            app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
+            app:layout_constraintEnd_toEndOf="@+id/linearLayout"
+            app:layout_constraintStart_toStartOf="@+id/linearLayout"
+            app:layout_constraintTop_toTopOf="@+id/linearLayout" />
 
-    <TextView
-        android:id="@+id/textView63"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/naber_text_base_line"
-        android:padding="8dp"
-        android:text="手機"
-        app:layout_constraintBottom_toTopOf="@+id/textView64"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView53" />
+        <TextView
+            android:id="@+id/textView53"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/naber_text_base_line"
+            android:padding="8dp"
+            android:text="姓名"
+            app:layout_constraintBottom_toTopOf="@+id/textView63"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
-    <TextView
-        android:id="@+id/textView64"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/naber_text_base_line"
-        android:padding="8dp"
-        android:text="Email"
-        app:layout_constraintBottom_toTopOf="@+id/textView65"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView63" />
+        <TextView
+            android:id="@+id/textView63"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/naber_text_base_line"
+            android:padding="8dp"
+            android:text="手機"
+            app:layout_constraintBottom_toTopOf="@+id/textView64"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView53" />
 
-    <TextView
-        android:id="@+id/textView65"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/naber_text_base_line"
-        android:padding="8dp"
-        android:text="生日"
-        app:layout_constraintBottom_toTopOf="@+id/textView66"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView64" />
+        <TextView
+            android:id="@+id/textView64"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/naber_text_base_line"
+            android:padding="8dp"
+            android:text="Email"
+            app:layout_constraintBottom_toTopOf="@+id/textView65"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView63" />
 
-    <TextView
-        android:id="@+id/textView66"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/naber_text_base_line"
-        android:padding="8dp"
-        android:text="身份"
-        app:layout_constraintBottom_toTopOf="@+id/textView67"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView65" />
+        <TextView
+            android:id="@+id/textView65"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/naber_text_base_line"
+            android:padding="8dp"
+            android:text="生日"
+            app:layout_constraintBottom_toTopOf="@+id/textView66"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView64" />
 
-    <TextView
-        android:id="@+id/textView67"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="32dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/naber_text_base_line"
-        android:padding="8dp"
-        android:text="紅利點數"
-        app:layout_constraintBottom_toTopOf="@+id/button"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView66" />
+        <TextView
+            android:id="@+id/textView66"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/naber_text_base_line"
+            android:padding="8dp"
+            android:text="身份"
+            app:layout_constraintBottom_toTopOf="@+id/textView67"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView65" />
 
-    <Button
-        android:id="@+id/button"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginTop="32dp"
-        android:background="@color/naber_basis"
-        android:text="登出"
-        app:layout_constraintBottom_toTopOf="@+id/button2"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView67" />
+        <TextView
+            android:id="@+id/textView67"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="32dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/naber_text_base_line"
+            android:padding="8dp"
+            android:text="紅利點數"
+            app:layout_constraintBottom_toTopOf="@+id/logoutBtn"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView66" />
 
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="wrap_content"
-        android:layout_height="30dp"
-        android:layout_marginEnd="162dp"
-        android:layout_marginStart="161dp"
-        android:layout_marginTop="8dp"
-        android:background="@android:color/transparent"
-        android:text="修改密碼"
-        android:textColor="@color/naber_basis"
-        android:textSize="12sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button" />
+        <Button
+            android:id="@+id/logoutBtn"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="32dp"
+            android:background="@color/naber_basis"
+            android:text="登出"
+            app:layout_constraintBottom_toTopOf="@+id/toResetPasswordBtn"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView67" />
 
-    <TextView
-        android:id="@+id/textView68"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginStart="100dp"
-        android:layout_marginTop="8dp"
-        android:text="某某某"
-        app:layout_constraintBottom_toBottomOf="@+id/textView53"
-        app:layout_constraintStart_toStartOf="@+id/textView53"
-        app:layout_constraintTop_toTopOf="@+id/textView53"
-        app:layout_constraintVertical_bias="0.0" />
+        <Button
+            android:id="@+id/toResetPasswordBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="162dp"
+            android:layout_marginStart="161dp"
+            android:layout_marginTop="8dp"
+            android:background="@android:color/transparent"
+            android:text="修改密碼"
+            android:textColor="@color/naber_basis"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toTopOf="@+id/view"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/logoutBtn" />
 
-    <TextView
-        android:id="@+id/textView69"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginStart="100dp"
-        android:layout_marginTop="8dp"
-        android:text="xxx- xxxx- xxxx"
-        app:layout_constraintBottom_toBottomOf="@+id/textView63"
-        app:layout_constraintStart_toStartOf="@+id/textView63"
-        app:layout_constraintTop_toTopOf="@+id/textView63"
-        app:layout_constraintVertical_bias="0.0" />
+        <View
+            android:id="@+id/view"
+            android:layout_width="wrap_content"
+            android:layout_height="100dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/toResetPasswordBtn" />
 
-    <TextView
-        android:id="@+id/textView70"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginStart="100dp"
-        android:layout_marginTop="8dp"
-        android:text="abc@gggg.com"
-        app:layout_constraintBottom_toBottomOf="@+id/textView64"
-        app:layout_constraintStart_toStartOf="@+id/textView64"
-        app:layout_constraintTop_toTopOf="@+id/textView64"
-        app:layout_constraintVertical_bias="0.0" />
+        <TextView
+            android:id="@+id/textView68"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginStart="100dp"
+            android:layout_marginTop="8dp"
+            android:text="某某某"
+            app:layout_constraintBottom_toBottomOf="@+id/textView53"
+            app:layout_constraintStart_toStartOf="@+id/textView53"
+            app:layout_constraintTop_toTopOf="@+id/textView53"
+            app:layout_constraintVertical_bias="0.0" />
 
-    <TextView
-        android:id="@+id/textView71"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginStart="100dp"
-        android:layout_marginTop="8dp"
-        android:text="2018-01-01"
-        app:layout_constraintBottom_toBottomOf="@+id/textView65"
-        app:layout_constraintStart_toStartOf="@+id/textView65"
-        app:layout_constraintTop_toTopOf="@+id/textView65"
-        app:layout_constraintVertical_bias="0.0" />
+        <TextView
+            android:id="@+id/textView69"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginStart="100dp"
+            android:layout_marginTop="8dp"
+            android:text="xxx- xxxx- xxxx"
+            app:layout_constraintBottom_toBottomOf="@+id/textView63"
+            app:layout_constraintStart_toStartOf="@+id/textView63"
+            app:layout_constraintTop_toTopOf="@+id/textView63"
+            app:layout_constraintVertical_bias="0.0" />
 
-    <TextView
-        android:id="@+id/textView72"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginStart="100dp"
-        android:layout_marginTop="8dp"
-        android:text="身份"
-        app:layout_constraintBottom_toBottomOf="@+id/textView66"
-        app:layout_constraintStart_toStartOf="@+id/textView66"
-        app:layout_constraintTop_toTopOf="@+id/textView66"
-        app:layout_constraintVertical_bias="0.0" />
+        <TextView
+            android:id="@+id/textView70"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginStart="100dp"
+            android:layout_marginTop="8dp"
+            android:text="abc@gggg.com"
+            app:layout_constraintBottom_toBottomOf="@+id/textView64"
+            app:layout_constraintStart_toStartOf="@+id/textView64"
+            app:layout_constraintTop_toTopOf="@+id/textView64"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/textView71"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginStart="100dp"
+            android:layout_marginTop="8dp"
+            android:text="2018-01-01"
+            app:layout_constraintBottom_toBottomOf="@+id/textView65"
+            app:layout_constraintStart_toStartOf="@+id/textView65"
+            app:layout_constraintTop_toTopOf="@+id/textView65"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <TextView
+            android:id="@+id/textView72"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginStart="100dp"
+            android:layout_marginTop="8dp"
+            android:text="身份"
+            app:layout_constraintBottom_toBottomOf="@+id/textView66"
+            app:layout_constraintStart_toStartOf="@+id/textView66"
+            app:layout_constraintTop_toTopOf="@+id/textView66"
+            app:layout_constraintVertical_bias="0.0" />
 
 
-</android.support.constraint.ConstraintLayout>
+    </android.support.constraint.ConstraintLayout>
+
+</ScrollView>

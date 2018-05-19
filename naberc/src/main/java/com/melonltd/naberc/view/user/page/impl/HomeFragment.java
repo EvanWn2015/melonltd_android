@@ -4,43 +4,47 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AbsListView;
 import android.widget.BaseAdapter;
-import android.widget.LinearLayout;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.ScrollView;
-import android.widget.SimpleAdapter;
 import android.widget.TextView;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.google.common.collect.Lists;
 import com.melonltd.naberc.R;
+import com.melonltd.naberc.model.helper.ApiCallback;
+import com.melonltd.naberc.model.helper.ApiManager;
 import com.melonltd.naberc.util.UiUtil;
 import com.melonltd.naberc.view.customize.GlideImageLoader;
+import com.melonltd.naberc.view.customize.OnLoadLayout;
 import com.melonltd.naberc.view.user.BaseCore;
 import com.melonltd.naberc.view.user.page.abs.AbsPageFragment;
-import com.melonltd.naberc.view.user.page.type.PageType;
 import com.youth.banner.Banner;
 import com.youth.banner.listener.OnBannerListener;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
-/**
- * getArguments(); get this Bundle
- */
+import in.srain.cube.views.ptr.PtrDefaultHandler;
+import in.srain.cube.views.ptr.PtrFrameLayout;
+import in.srain.cube.views.ptr.PtrHandler;
+
+
 public class HomeFragment extends AbsPageFragment {
     private static final String TAG = HomeFragment.class.getSimpleName();
     private static HomeFragment FRAGMENT = null;
-
+    private OnLoadLayout contentLoadLayout;
+    private ListView top30ListView;
+    private Top30Adapter top30Adapter;
     private ArrayList<String> list = Lists.newArrayList();
     private List<String> images = Lists.newArrayList();
+    private Banner banner;
 
     public HomeFragment() {
     }
@@ -70,9 +74,8 @@ public class HomeFragment extends AbsPageFragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (container.getTag(R.id.user_home_page) == null) {
             View v = inflater.inflate(R.layout.fragment_home, container, false);
-            getData();
+            setUpLoadLayout(v);
             setUpBanner(v);
-            // TODO 線程問題待解決 計算ListView高度
             setUpTop30ListView(v);
             container.setTag(R.id.user_home_page, v);
             return v;
@@ -86,8 +89,41 @@ public class HomeFragment extends AbsPageFragment {
         super.onActivityCreated(savedInstanceState);
     }
 
-    private void setUpBanner(View v) {
-        Banner banner = v.findViewById(R.id.banner);
+    private void setUpLoadLayout(final View v) {
+        contentLoadLayout = v.findViewById(R.id.contentLoadLayout);
+        contentLoadLayout.setPtrHandler(new PtrHandler() {
+            @Override
+            public void onRefreshBegin(PtrFrameLayout frame) {
+//                BaseCore.LOADING_BAR.show();
+                doLoadData();
+//                new Handler().postDelayed(new Runnable() {
+//                    @Override
+//                    public void run() {
+//                        contentLoadLayout.refreshComplete();
+//                        doLoadData();
+//                    }
+//                }, 300);
+            }
+
+            @Override
+            public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
+                // 默认实现，根据实际情况做改动
+//                return ((OnLoadLayout) frame).isTop();
+//                return false;
+                    return PtrDefaultHandler.checkContentCanBePulledDown(frame, content, header);
+            }
+        });
+
+//            contentLoadLayout.setOnLoadListener(new OnLoadLayout.OnLoadListener() {
+//                @Override
+//                public void onLoad() {
+//                    Log.d(TAG, "setOnLoadListener");
+//                }
+//            });
+    }
+
+    private void setUpBanner(final View v) {
+        banner = v.findViewById(R.id.banner);
         banner.setImages(images).setImageLoader(new GlideImageLoader()).start();
         banner.setOnBannerListener(new OnBannerListener() {
             @Override
@@ -98,21 +134,46 @@ public class HomeFragment extends AbsPageFragment {
     }
 
     private void setUpTop30ListView(View v) {
-        ListView top30ListView = v.findViewById(R.id.top30ListView);
-        Top30Adapter top30Adapter = new Top30Adapter(getContext(), list);
+        list.clear();
+        top30ListView = v.findViewById(R.id.top30ListView);
+        top30Adapter = new Top30Adapter(getContext(), list);
         top30ListView.setAdapter(top30Adapter);
-        UiUtil.setListViewHeightBasedOnChildren(top30ListView);
     }
 
-    private void getData() {
-//        for (int i = 0; i < 100; i++) {
-//            list.add("" + i);
-//        }
-        new Top30Thread().start();
+    private void doLoadData() {
+        images.clear();
+        top30Adapter.notifyDataSetChanged();
         for (int i = 1; i < 5; i++) {
             images.add("http://f.hiphotos.baidu.com/image/h%3D200/sign=1478eb74d5a20cf45990f9df460b4b0c/d058ccbf6c81800a5422e5fdb43533fa838b4779.jpg");
         }
+        banner.setImages(images).setImageLoader(new GlideImageLoader()).start();
+
+        ApiManager.test(new ApiCallback(getContext()) {
+            @Override
+            public void onSuccess(String responseBody) {
+                list.clear();
+                for (int i = 0; i < 30; i++) {
+                    list.add("" + i);
+                }
+                UiUtil.setListViewHeightBasedOnChildren(top30ListView);
+                top30Adapter.notifyDataSetChanged();
+                contentLoadLayout.refreshComplete();
+//                BaseCore.LOADING_BAR.hide();
+            }
+
+            @Override
+            public void onFail(Exception error) {
+
+            }
+
+        });
     }
+
+//    private void getData() {
+//        for (int i = 1; i < 5; i++) {
+//            images.add("http://f.hiphotos.baidu.com/image/h%3D200/sign=1478eb74d5a20cf45990f9df460b4b0c/d058ccbf6c81800a5422e5fdb43533fa838b4779.jpg");
+//        }
+//    }
 
     @Override
     public void onStart() {
@@ -122,6 +183,7 @@ public class HomeFragment extends AbsPageFragment {
     @Override
     public void onResume() {
         super.onResume();
+        doLoadData();
     }
 
     @Override
@@ -190,32 +252,5 @@ public class HomeFragment extends AbsPageFragment {
         }
     }
 
-
-
-
-    class Top30Thread extends Thread {
-
-        Top30Thread() {
-        }
-
-        @Override
-        public void run() {
-            Log.d(TAG, "Top30Thread.run");
-            for (int i = 0; i < 10; i++) {
-                list.add("" + i);
-            }
-            r.run();
-        }
-
-        Runnable r = new Runnable() {
-            @Override
-            public void run() {
-                Log.d(TAG, "Runnable.run");
-//                for (int i = 0; i < 100; i++) {
-//                    list.add("" + i);
-//                }
-            }
-        };
-    }
 
 }

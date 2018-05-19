@@ -8,23 +8,23 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.google.common.collect.Lists;
-import com.jzxiang.pickerview.TimePickerDialog;
-import com.jzxiang.pickerview.data.Type;
-import com.jzxiang.pickerview.listener.OnDateSetListener;
 import com.melonltd.naberc.R;
+import com.melonltd.naberc.view.customize.NaberTab;
 import com.melonltd.naberc.view.user.page.abs.AbsPageFragment;
 import com.melonltd.naberc.view.user.page.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.user.page.type.PageType;
-//import com.youth.banner.loader.ImageLoader;
 
 import java.util.List;
+
+//import com.youth.banner.loader.ImageLoader;
 
 public class MainActivity extends BaseCore implements View.OnClickListener, TabLayout.OnTabSelectedListener, View.OnLayoutChangeListener {
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -58,14 +58,26 @@ public class MainActivity extends BaseCore implements View.OnClickListener, TabL
         frameContainer.addOnLayoutChangeListener(this);
     }
 
-    private static void serTab() {
+    private void serTab() {
         bottomMenuTabLayout.removeAllTabs();
+        // TODO icon size & text size
         if (IS_USER) {
-            bottomMenuTabLayout.addTab(bottomMenuTabLayout.newTab().setText(R.string.menu_home_btn).setIcon(R.drawable.ic_launcher_background).setTag(R.string.menu_home_btn), false);
-            bottomMenuTabLayout.addTab(bottomMenuTabLayout.newTab().setText(R.string.menu_restaurant_btn).setIcon(R.drawable.ic_launcher_background).setTag(R.string.menu_restaurant_btn), false);
-            bottomMenuTabLayout.addTab(bottomMenuTabLayout.newTab().setText(R.string.menu_shopping_cart_btn).setIcon(R.drawable.ic_launcher_background).setTag(R.string.menu_shopping_cart_btn), false);
-            bottomMenuTabLayout.addTab(bottomMenuTabLayout.newTab().setText(R.string.menu_history_btn).setIcon(R.drawable.ic_launcher_background).setTag(R.string.menu_history_btn), false);
-            bottomMenuTabLayout.addTab(bottomMenuTabLayout.newTab().setText(R.string.menu_set_up_btn).setIcon(R.drawable.ic_launcher_background).setTag(R.string.menu_set_up_btn), false);
+            View v0 = new NaberTab(context).Builder().setIcon(R.drawable.naber_tab_home_icon).setTitle(R.string.menu_home_btn).build();
+            View v1 = new NaberTab(context).Builder().setIcon(R.drawable.naber_tab_restaurant_icon).setTitle(R.string.menu_restaurant_btn).build();
+            View v2 = new NaberTab(context).Builder().setIcon(R.drawable.naber_tab_shopping_cart_icon).setTitle(R.string.menu_shopping_cart_btn).build();
+            View v3 = new NaberTab(context).Builder().setIcon(R.drawable.naber_tab_history_icon).setTitle(R.string.menu_history_btn).build();
+            View v4 = new NaberTab(context).Builder().setIcon(R.drawable.naber_tab_set_up_icon).setTitle(R.string.menu_set_up_btn).build();
+
+            bottomMenuTabLayout.addTab(bottomMenuTabLayout.newTab().setCustomView(v0).setTag(R.string.menu_home_btn), false);
+            bottomMenuTabLayout.addTab(bottomMenuTabLayout.newTab().setCustomView(v1).setTag(R.string.menu_restaurant_btn), false);
+            bottomMenuTabLayout.addTab(bottomMenuTabLayout.newTab().setCustomView(v2).setTag(R.string.menu_shopping_cart_btn), false);
+            bottomMenuTabLayout.addTab(bottomMenuTabLayout.newTab().setCustomView(v3).setTag(R.string.menu_history_btn), false);
+            bottomMenuTabLayout.addTab(bottomMenuTabLayout.newTab().setCustomView(v4).setTag(R.string.menu_set_up_btn), false);
+//            bottomMenuTabLayout.addTab(bottomMenuTabLayout.newTab().setText(R.string.menu_home_btn).setIcon(R.drawable.naber_tab_home_icon).setTag(R.string.menu_home_btn), false);
+//            bottomMenuTabLayout.addTab(bottomMenuTabLayout.newTab().setText(R.string.menu_restaurant_btn).setIcon(R.drawable.naber_tab_restaurant_icon).setTag(R.string.menu_restaurant_btn), false);
+//            bottomMenuTabLayout.addTab(bottomMenuTabLayout.newTab().setText(R.string.menu_shopping_cart_btn).setIcon(R.drawable.naber_tab_shopping_cart_icon).setTag(R.string.menu_shopping_cart_btn), false);
+//            bottomMenuTabLayout.addTab(bottomMenuTabLayout.newTab().setText(R.string.menu_history_btn).setIcon(R.drawable.naber_tab_history_icon).setTag(R.string.menu_history_btn), false);
+//            bottomMenuTabLayout.addTab(bottomMenuTabLayout.newTab().setText(R.string.menu_set_up_btn).setIcon(R.drawable.naber_tab_set_up_icon).setTag(R.string.menu_set_up_btn), false);
 //            bottomMenuTabLayout.getTabAt(0).select();
         } else {
             bottomMenuTabLayout.setVisibility(View.GONE);
@@ -78,7 +90,7 @@ public class MainActivity extends BaseCore implements View.OnClickListener, TabL
 
         AbsPageFragment fragment = null;
         bottomMenuTabLayout.setVisibility(View.GONE);
-        fragment = PageFragmentFactory.of(PageType.REGISTERED, null);
+        fragment = PageFragmentFactory.of(PageType.LOGIN, null);
         fragmentManager.beginTransaction().replace(R.id.frameContainer, fragment).addToBackStack(fragment.toString()).commit();
 
 //        if (SharedPreferencesService.isFirstUse()) {
@@ -118,12 +130,33 @@ public class MainActivity extends BaseCore implements View.OnClickListener, TabL
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
         int index = Integer.parseInt(tab.getTag().toString());
+
         if (MAIN_PAGE.contains(PageType.ofId(index))) {
-            tab.getIcon().setColorFilter(ContextCompat.getColor(context, R.color.naber_basis), PorterDuff.Mode.SRC_IN);
+//            tab.getIcon().setColorFilter(ContextCompat.getColor(context, R.color.naber_basis), PorterDuff.Mode.SRC_IN);
             AbsPageFragment fragment = PageFragmentFactory.of(PageType.ofId(Integer.parseInt(tab.getTag().toString())), null);
             FRAGMENT_TAG = PageType.ofId(Integer.parseInt(tab.getTag().toString())).name();
             fragmentManager.beginTransaction().addToBackStack(fragment.toString()).replace(R.id.frameContainer, fragment).commit();
         }
+
+        View v = tab.getCustomView();
+        ImageView icon = v.findViewById(R.id.tabIcon);
+        TextView text = v.findViewById(R.id.tabTitle);
+        icon.setColorFilter(getResources().getColor(R.color.naber_basis));
+        text.setTextColor(getResources().getColor(R.color.naber_basis));
+
+//        for (int i = 0; i < bottomMenuTabLayout.getTabCount(); i++) {
+//            View view = bottomMenuTabLayout.getTabAt(i).getCustomView();
+//            ImageView icon = view.findViewById(R.id.tabIcon);
+//            TextView text =  view.findViewById(R.id.tabTitle);
+//            if(i == tab.getPosition()){ // 选中状态
+//                icon.setColorFilter(getResources().getColor(R.color.naber_basis));
+//                text.setTextColor(getResources().getColor(R.color.naber_basis));
+//            }else{
+//                icon.setColorFilter(getResources().getColor(android.R.color.black));
+//                text.setTextColor(getResources().getColor(android.R.color.black));
+//            }
+//
+//        }
 //        tab.getIcon().setColorFilter(ContextCompat.getColor(context, R.color.naber_basis), PorterDuff.Mode.SRC_IN);
 //        AbsPageFragment fragment = PageFragmentFactory.of(PageType.ofId(Integer.parseInt(tab.getTag().toString())), null);
 //        FRAGMENT_TAG = PageType.ofId(Integer.parseInt(tab.getTag().toString())).name();
@@ -133,7 +166,12 @@ public class MainActivity extends BaseCore implements View.OnClickListener, TabL
 
     @Override
     public void onTabUnselected(TabLayout.Tab tab) {
-        tab.getIcon().setColorFilter(ContextCompat.getColor(context, R.color.cardview_dark_background), PorterDuff.Mode.SRC_IN);
+        View v = tab.getCustomView();
+        ImageView icon = v.findViewById(R.id.tabIcon);
+        TextView text = v.findViewById(R.id.tabTitle);
+        icon.setColorFilter(getResources().getColor(android.R.color.black));
+        text.setTextColor(getResources().getColor(android.R.color.black));
+//        tab.getIcon().setColorFilter(ContextCompat.getColor(context, R.color.cardview_dark_background), PorterDuff.Mode.SRC_IN);
     }
 
     @Override

@@ -1,35 +1,37 @@
-package com.melonltd.naberc.view.user.page.impl;
+package com.melonltd.naberc.view.common.page.impl;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 
 import com.melonltd.naberc.R;
 import com.melonltd.naberc.model.helper.ApiCallback;
 import com.melonltd.naberc.model.helper.ApiManager;
+import com.melonltd.naberc.util.VerifyUtil;
+import com.melonltd.naberc.view.customize.LoadingBar;
 import com.melonltd.naberc.view.user.MainActivity;
 import com.melonltd.naberc.view.user.page.abs.AbsPageFragment;
 import com.melonltd.naberc.view.user.page.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.user.page.type.PageType;
 
-public class AccountDetailFragment extends AbsPageFragment implements View.OnClickListener {
-    private static final String TAG = HomeFragment.class.getSimpleName();
-    private static AccountDetailFragment FRAGMENT = null;
-    private Button logoutBtn, toResetPasswordBtn;
-    public static int TO_RESET_PASSWORD_INDEX = -1;
+public class RecoverPasswordFragment extends AbsPageFragment implements View.OnClickListener {
+    private static final String TAG = RecoverPasswordFragment.class.getSimpleName();
+    private static RecoverPasswordFragment FRAGMENT = null;
+    private Button submitBtn;
+    private EditText mailEdit;
+    private LoadingBar LOADING_BAR;
 
-    public AccountDetailFragment() {
+    public RecoverPasswordFragment() {
     }
 
     @Override
     public AbsPageFragment getInstance(Bundle bundle) {
         if (FRAGMENT == null) {
-            FRAGMENT = new AccountDetailFragment();
+            FRAGMENT = new RecoverPasswordFragment();
             FRAGMENT.setArguments(bundle);
         }
         return FRAGMENT;
@@ -37,9 +39,8 @@ public class AccountDetailFragment extends AbsPageFragment implements View.OnCli
 
     @Override
     public AbsPageFragment newInstance(Object... o) {
-        return new AccountDetailFragment();
+        return new RecoverPasswordFragment();
     }
-
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -48,41 +49,35 @@ public class AccountDetailFragment extends AbsPageFragment implements View.OnCli
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        if (container.getTag(R.id.user_account_detail_page) == null) {
-            View v = inflater.inflate(R.layout.fragment_account_detail, container, false);
+//        LOADING_BAR = new LoadingBar(getContext());
+        if (container.getTag(R.id.user_recover_password_page) == null) {
+            View v = inflater.inflate(R.layout.fragment_recover_password, container, false);
             getView(v);
-            setListener();
-            container.setTag(R.id.user_account_detail_page, v);
+            container.setTag(R.id.user_recover_password_page, v);
             return v;
-        } else {
-            return (View) container.getTag(R.id.user_account_detail_page);
         }
+        return (View) container.getTag(R.id.user_recover_password_page);
     }
 
     private void getView(View v) {
-        logoutBtn = v.findViewById(R.id.logoutBtn);
-        toResetPasswordBtn = v.findViewById(R.id.toResetPasswordBtn);
-    }
-
-    private void setListener() {
-        logoutBtn.setOnClickListener(this);
-        toResetPasswordBtn.setOnClickListener(this);
+        submitBtn = v.findViewById(R.id.submitRecoverPasswordBtn);
+        mailEdit = v.findViewById(R.id.recoverEmailEdit);
+        submitBtn.setOnClickListener(this);
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        mailEdit.setText("");
+        MainActivity.bottomMenuTabLayout.setVisibility(View.GONE);
         if (MainActivity.toolbar != null) {
             MainActivity.navigationIconDisplay(true, new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    backToSetUpPage();
+                    backToLoginPage();
                     MainActivity.navigationIconDisplay(false, null);
                 }
             });
-        }
-        if (TO_RESET_PASSWORD_INDEX >= 0) {
-            toResetPassword(1);
         }
     }
 
@@ -92,21 +87,22 @@ public class AccountDetailFragment extends AbsPageFragment implements View.OnCli
         MainActivity.navigationIconDisplay(false, null);
     }
 
-    private void backToSetUpPage() {
-        MainActivity.FRAGMENT_TAG = PageType.SET_UP.name();
-        SetUpFragment.TO_ACCOUNT_DETAIL_INDEX = -1;
-        AbsPageFragment f = PageFragmentFactory.of(PageType.SET_UP, null);
-        getFragmentManager().beginTransaction().remove(this).replace(R.id.frameContainer, f).commit();
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+//        LOADING_BAR = null;
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.logoutBtn:
+        if (v.getId() == R.id.submitRecoverPasswordBtn) {
+            if (VerifyUtil.email(mailEdit.getText().toString())) {
+//                LOADING_BAR.show();
                 ApiManager.test(new ApiCallback(getContext()) {
                     @Override
                     public void onSuccess(String responseBody) {
-                        toLoginPage();
+//                        LOADING_BAR.hide();
+                        backToLoginPage();
                     }
 
                     @Override
@@ -114,25 +110,13 @@ public class AccountDetailFragment extends AbsPageFragment implements View.OnCli
 
                     }
                 });
-                break;
-            case R.id.toResetPasswordBtn:
-                toResetPassword(1);
-                break;
-
+            }
         }
     }
 
-
-    private void toLoginPage() {
+    private void backToLoginPage() {
         MainActivity.FRAGMENT_TAG = PageType.LOGIN.name();
         AbsPageFragment f = PageFragmentFactory.of(PageType.LOGIN, null);
-        getFragmentManager().beginTransaction().remove(this).replace(R.id.frameContainer, f).commit();
-    }
-
-    private void toResetPassword(int i) {
-        TO_RESET_PASSWORD_INDEX = i;
-        MainActivity.FRAGMENT_TAG = PageType.RESET_PASSWORD.name();
-        AbsPageFragment f = PageFragmentFactory.of(PageType.RESET_PASSWORD, null);
         getFragmentManager().beginTransaction().remove(this).replace(R.id.frameContainer, f).commit();
     }
 }

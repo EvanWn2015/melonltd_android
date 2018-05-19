@@ -36,7 +36,7 @@ public abstract class BaseCore extends AppCompatActivity implements LocationList
     public static Context context;
     private static ConnectivityManager cm;
     private LocationManager locationManager;
-    public static LoadingBar LOADING_BAR;
+//    public static LoadingBar LOADING_BAR;
     public static String FRAGMENT_TAG = PageType.LOGIN.name();
 
     private Handler handler;
@@ -62,7 +62,7 @@ public abstract class BaseCore extends AppCompatActivity implements LocationList
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = this;
-        LOADING_BAR = new LoadingBar(this);
+//        LOADING_BAR = new LoadingBar(this);
 
 
 //        try {

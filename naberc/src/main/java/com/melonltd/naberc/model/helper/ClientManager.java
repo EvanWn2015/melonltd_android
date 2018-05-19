@@ -42,7 +42,7 @@ public class ClientManager {
             .readTimeout(25, TimeUnit.SECONDS)
             .writeTimeout(25, TimeUnit.SECONDS)
             .addInterceptor(LOGGING)
-            .connectionPool(CONNECTION_POOL)
+//            .connectionPool(CONNECTION_POOL)
             .hostnameVerifier(new TrustAllHostnameVerifier())
             .sslSocketFactory(createSSLSocketFactory(), new TrustAllManager())
             .build();

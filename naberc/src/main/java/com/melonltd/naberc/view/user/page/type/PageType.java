@@ -3,15 +3,18 @@ package com.melonltd.naberc.view.user.page.type;
 import com.melonltd.naberc.R;
 import com.melonltd.naberc.view.user.page.impl.AccountDetailFragment;
 import com.melonltd.naberc.view.user.page.impl.OrderDetailFragment;
+import com.melonltd.naberc.view.common.page.impl.RecoverPasswordFragment;
 import com.melonltd.naberc.view.user.page.impl.RegisteredSellerFragment;
 import com.melonltd.naberc.view.user.page.abs.AbsPageFragment;
 import com.melonltd.naberc.view.user.page.impl.HistoryFragment;
 import com.melonltd.naberc.view.user.page.impl.HomeFragment;
-import com.melonltd.naberc.view.user.page.impl.LoginFragment;
+import com.melonltd.naberc.view.common.page.impl.LoginFragment;
 import com.melonltd.naberc.view.user.page.impl.RegisteredFragment;
+import com.melonltd.naberc.view.common.page.impl.ResetPasswordFragment;
 import com.melonltd.naberc.view.user.page.impl.RestaurantFragment;
 import com.melonltd.naberc.view.user.page.impl.SetUpFragment;
 import com.melonltd.naberc.view.user.page.impl.ShoppingCartFragment;
+import com.melonltd.naberc.view.user.page.impl.SimpleInformationFragment;
 import com.melonltd.naberc.view.user.page.impl.VerifySMSFragment;
 
 /**
@@ -28,17 +31,23 @@ import com.melonltd.naberc.view.user.page.impl.VerifySMSFragment;
  * (int id or tag , int positionByPageTab, Class<T> zlass)
  */
 public enum PageType {
-    LOGIN(R.id.loginBtn, 100, LoginFragment.class),
-    REGISTERED(R.id.submitToRegisteredBun, 101, RegisteredFragment.class),
-    REGISTERED_SELLER(R.id.toRegisteredSellerBtn, 102, RegisteredSellerFragment.class),
-    VERIFY_SMS(R.id.toVerifySMSBtn, 103, VerifySMSFragment.class),
+    // common
+    LOGIN(R.string.common_page_login_title, 100, LoginFragment.class),
+    RECOVER_PASSWORD(R.string.common_page_reset_password_title, 101, RecoverPasswordFragment.class),
+    RESET_PASSWORD(R.string.common_page_reset_password_title,102,ResetPasswordFragment.class),
+    // user
+    REGISTERED(R.string.user_page_registered_title, 103, RegisteredFragment.class),
+    VERIFY_SMS(R.string.user_page_verify_sms_title, 105, VerifySMSFragment.class),
     HOME(R.string.menu_home_btn, 0, HomeFragment.class),
     RESTAURANT(R.string.menu_restaurant_btn, 1, RestaurantFragment.class),
     SHOPPING_CART(R.string.menu_shopping_cart_btn, 2, ShoppingCartFragment.class),
     HISTORY(R.string.menu_history_btn, 3, HistoryFragment.class),
-    ORDER_DETAIL(0,3, OrderDetailFragment.class),
+    ORDER_DETAIL(R.string.user_page_order_detail_title, 3, OrderDetailFragment.class),
     SET_UP(R.string.menu_set_up_btn, 4, SetUpFragment.class),
-    ACCOUNT_DETAIL(0,4, AccountDetailFragment.class);
+    ACCOUNT_DETAIL(R.string.user_page_account_detail_title, 4, AccountDetailFragment.class),
+    SIMPLE_INFO(R.string.user_page_simple_info_title, 4, SimpleInformationFragment.class),
+    // seller
+    REGISTERED_SELLER(R.string.seller_page_registered_title, 104, RegisteredSellerFragment.class);
 
     private final int id;
     private final int position;

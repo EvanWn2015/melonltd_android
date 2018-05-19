@@ -61,10 +61,14 @@ public class RegisteredFragment extends AbsPageFragment implements View.OnClickL
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_registered, container, false);
-        getViews(v);
-        setListener();
-        return v;
+        if (container.getTag(R.id.user_registered_page) == null) {
+            View v = inflater.inflate(R.layout.fragment_registered, container, false);
+            getViews(v);
+            setListener();
+            container.setTag(R.id.user_registered_page, v);
+            return v;
+        }
+        return (View) container.getTag(R.id.user_registered_page);
     }
 
     private void getViews(View v) {

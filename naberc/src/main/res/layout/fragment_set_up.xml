@@ -5,6 +5,7 @@
     android:id="@+id/user_set_up_page"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:overScrollMode="never"
     tools:context=".view.user.page.impl.SetUpFragment">
 
     <android.support.constraint.ConstraintLayout
@@ -39,7 +40,6 @@
             app:layout_constraintEnd_toEndOf="@+id/linearLayout"
             app:layout_constraintStart_toStartOf="@+id/linearLayout"
             app:layout_constraintTop_toTopOf="@+id/linearLayout" />
-
 
         <TextView
             android:id="@+id/textView44"
@@ -136,7 +136,7 @@
             app:layout_constraintTop_toBottomOf="@+id/textView57" />
 
         <TextView
-            android:id="@+id/textView59"
+            android:id="@+id/toAboutUsText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -149,7 +149,7 @@
             app:layout_constraintTop_toBottomOf="@+id/textView58" />
 
         <TextView
-            android:id="@+id/textView60"
+            android:id="@+id/toHelpText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -160,10 +160,10 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView59" />
+            app:layout_constraintTop_toBottomOf="@+id/toAboutUsText" />
 
         <TextView
-            android:id="@+id/textView61"
+            android:id="@+id/toTeachingText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -174,7 +174,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView60" />
+            app:layout_constraintTop_toBottomOf="@+id/toHelpText" />
 
         <TextView
             android:id="@+id/textView62"
@@ -187,8 +187,17 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView61" />
+            app:layout_constraintTop_toBottomOf="@+id/toTeachingText" />
 
+        <View
+            android:id="@+id/view2"
+            android:layout_width="wrap_content"
+            android:layout_height="100dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView62" />
 
         <TextView
             android:id="@+id/accountNumberText"
@@ -247,27 +256,39 @@
             android:layout_height="16dp"
             android:layout_marginEnd="8dp"
             android:background="@drawable/naber_arrow_right"
-            app:layout_constraintBottom_toBottomOf="@+id/textView59"
-            app:layout_constraintEnd_toEndOf="@+id/textView59"
-            app:layout_constraintTop_toTopOf="@+id/textView59" />
+            app:layout_constraintBottom_toBottomOf="@+id/toAboutUsText"
+            app:layout_constraintEnd_toEndOf="@+id/toAboutUsText"
+            app:layout_constraintTop_toTopOf="@+id/toAboutUsText" />
 
         <ImageView
             android:layout_width="16dp"
             android:layout_height="16dp"
             android:layout_marginEnd="8dp"
             android:background="@drawable/naber_arrow_right"
-            app:layout_constraintBottom_toBottomOf="@+id/textView60"
-            app:layout_constraintEnd_toEndOf="@+id/textView60"
-            app:layout_constraintTop_toTopOf="@+id/textView60" />
+            app:layout_constraintBottom_toBottomOf="@+id/toHelpText"
+            app:layout_constraintEnd_toEndOf="@+id/toHelpText"
+            app:layout_constraintTop_toTopOf="@+id/toHelpText" />
 
         <ImageView
             android:layout_width="16dp"
             android:layout_height="16dp"
+            android:layout_marginBottom="8dp"
             android:layout_marginEnd="8dp"
+            android:layout_marginTop="8dp"
             android:background="@drawable/naber_arrow_right"
-            app:layout_constraintBottom_toBottomOf="@+id/textView61"
-            app:layout_constraintEnd_toEndOf="@+id/textView61"
-            app:layout_constraintTop_toTopOf="@+id/textView61" />
+            app:layout_constraintBottom_toBottomOf="@+id/toTeachingText"
+            app:layout_constraintEnd_toEndOf="@+id/toTeachingText"
+            app:layout_constraintTop_toTopOf="@+id/toTeachingText" />
+
+        <TextView
+            android:id="@+id/textView59"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:text="V1.0.10"
+            app:layout_constraintBottom_toBottomOf="@+id/textView62"
+            app:layout_constraintEnd_toEndOf="@+id/textView62"
+            app:layout_constraintTop_toTopOf="@+id/textView62" />
 
     </android.support.constraint.ConstraintLayout>
 </ScrollView>

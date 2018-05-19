@@ -6,12 +6,7 @@
     <string name="title_activity_main">MainActivity</string>
     <string name="title_activity_seller">SellerActivity</string>
 
-    <!-- bottom menu name-->
-    <string name="menu_home_btn">首頁</string>
-    <string name="menu_restaurant_btn">餐館</string>
-    <string name="menu_shopping_cart_btn">購物車</string>
-    <string name="menu_history_btn">紀錄</string>
-    <string name="menu_set_up_btn">設定</string>
+
 
 
     <!-- data time picker msg-->

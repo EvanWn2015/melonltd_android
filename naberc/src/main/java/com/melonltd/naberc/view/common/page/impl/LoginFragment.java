@@ -1,9 +1,8 @@
-package com.melonltd.naberc.view.user.page.impl;
+package com.melonltd.naberc.view.common.page.impl;
 
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,7 +13,8 @@ import android.widget.TextView;
 import com.bigkoo.alertview.AlertView;
 import com.google.common.base.Strings;
 import com.melonltd.naberc.R;
-import com.melonltd.naberc.model.service.AuthService;
+import com.melonltd.naberc.model.helper.ApiCallback;
+import com.melonltd.naberc.model.helper.ApiManager;
 import com.melonltd.naberc.util.VerifyUtil;
 import com.melonltd.naberc.view.user.BaseCore;
 import com.melonltd.naberc.view.user.MainActivity;
@@ -80,6 +80,7 @@ public class LoginFragment extends AbsPageFragment implements View.OnClickListen
     @Override
     public void onResume() {
         super.onResume();
+        MainActivity.bottomMenuTabLayout.setVisibility(View.GONE);
     }
 
     @Override
@@ -87,14 +88,25 @@ public class LoginFragment extends AbsPageFragment implements View.OnClickListen
         AbsPageFragment fragment = null;
         switch (v.getId()) {
             case R.id.loginBtn:
-                String mail = accountEdit.getText().toString();
-                String password = passwordEdit.getText().toString();
                 if (verifyInput()) {
-                    FRAGMENT_TAG = PageType.HOME.name();
-                    getFragmentManager().beginTransaction().replace(R.id.frameContainer, PageFragmentFactory.of(PageType.HOME, null)).commit();
-                    if (MainActivity.bottomMenuTabLayout != null) {
-                        MainActivity.bottomMenuTabLayout.setVisibility(View.VISIBLE);
-                    }
+//                    BaseCore.LOADING_BAR.show();
+                    ApiManager.test(new ApiCallback(getContext()) {
+                        @Override
+                        public void onSuccess(String responseBody) {
+                            FRAGMENT_TAG = PageType.HOME.name();
+                            getFragmentManager().beginTransaction().replace(R.id.frameContainer, PageFragmentFactory.of(PageType.HOME, null)).commit();
+                            if (MainActivity.bottomMenuTabLayout != null) {
+                                MainActivity.bottomMenuTabLayout.setVisibility(View.VISIBLE);
+//                                BaseCore.LOADING_BAR.hide();
+                            }
+                        }
+
+                        @Override
+                        public void onFail(Exception error) {
+
+                        }
+                    });
+
 //                    AuthService.signInWithEmailAndPassword(mail, password, getFragmentManager(), null);
                 }
                 break;
@@ -110,7 +122,9 @@ public class LoginFragment extends AbsPageFragment implements View.OnClickListen
                 getFragmentManager().beginTransaction().remove(this).replace(R.id.frameContainer, fragment).addToBackStack(fragment.toString()).commit();
                 break;
             case R.id.recoverPasswordText:
-                Log.d(TAG, "找回密碼");
+                FRAGMENT_TAG = PageType.RECOVER_PASSWORD.name();
+                fragment = PageFragmentFactory.of(PageType.RECOVER_PASSWORD, null);
+                getFragmentManager().beginTransaction().remove(this).replace(R.id.frameContainer, fragment).addToBackStack(fragment.toString()).commit();
                 break;
         }
     }

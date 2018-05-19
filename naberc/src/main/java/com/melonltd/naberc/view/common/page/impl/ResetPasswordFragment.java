@@ -1,10 +1,7 @@
-package com.melonltd.naberc.view.user.page.impl;
-
+package com.melonltd.naberc.view.common.page.impl;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,34 +10,29 @@ import com.melonltd.naberc.R;
 import com.melonltd.naberc.view.user.MainActivity;
 import com.melonltd.naberc.view.user.page.abs.AbsPageFragment;
 import com.melonltd.naberc.view.user.page.factory.PageFragmentFactory;
+import com.melonltd.naberc.view.user.page.impl.AccountDetailFragment;
+import com.melonltd.naberc.view.user.page.impl.SetUpFragment;
 import com.melonltd.naberc.view.user.page.type.PageType;
 
+public class ResetPasswordFragment extends AbsPageFragment {
+    private static final String TAG = ResetPasswordFragment.class.getSimpleName();
+    private static ResetPasswordFragment FRAGMENT = null;
 
-/**
- * A simple {@link Fragment} subclass.
- */
-public class OrderDetailFragment extends AbsPageFragment {
-    private static final String TAG = OrderDetailFragment.class.getSimpleName();
-    private static OrderDetailFragment FRAGMENT = null;
-
-
-    public OrderDetailFragment() {
-    }
-
-    @Override
-    public AbsPageFragment newInstance(Object... o) {
-        return new HomeFragment();
+    public ResetPasswordFragment() {
     }
 
     @Override
     public AbsPageFragment getInstance(Bundle bundle) {
         if (FRAGMENT == null) {
-            FRAGMENT = new OrderDetailFragment();
+            FRAGMENT = new ResetPasswordFragment();
+            FRAGMENT.setArguments(bundle);
         }
-        FRAGMENT.setArguments(bundle);
-        Bundle b = FRAGMENT.getArguments();
-        Log.d(TAG, b.get("test").toString());
         return FRAGMENT;
+    }
+
+    @Override
+    public AbsPageFragment newInstance(Object... o) {
+        return new ResetPasswordFragment();
     }
 
     @Override
@@ -50,13 +42,8 @@ public class OrderDetailFragment extends AbsPageFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        if (container.getTag(R.id.user_order_detail_page) == null) {
-            View v = inflater.inflate(R.layout.fragment_order_detail, container, false);
-            container.setTag(R.id.user_order_detail_page, v);
-            return v;
-        } else {
-            return (View) container.getTag(R.id.user_order_detail_page);
-        }
+
+        return inflater.inflate(R.layout.fragment_reset_password, container, false);
     }
 
     @Override
@@ -66,7 +53,7 @@ public class OrderDetailFragment extends AbsPageFragment {
             MainActivity.navigationIconDisplay(true, new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    backToHistoryPage();
+                    backToAccountDetailPage();
                     MainActivity.navigationIconDisplay(false, null);
                 }
             });
@@ -76,20 +63,18 @@ public class OrderDetailFragment extends AbsPageFragment {
     @Override
     public void onStop() {
         super.onStop();
-        Log.d(TAG, "stop");
         MainActivity.navigationIconDisplay(false, null);
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.d(TAG, "destroy");
     }
 
-    private void backToHistoryPage() {
-        HistoryFragment.TO_ORDER_DETAIL_INDEX = -1;
-        AbsPageFragment f = PageFragmentFactory.of(PageType.HISTORY, null);
+    private void backToAccountDetailPage() {
+        MainActivity.FRAGMENT_TAG = PageType.ACCOUNT_DETAIL.name();
+        AccountDetailFragment.TO_RESET_PASSWORD_INDEX = -1;
+        AbsPageFragment f = PageFragmentFactory.of(PageType.ACCOUNT_DETAIL, null);
         getFragmentManager().beginTransaction().remove(this).replace(R.id.frameContainer, f).commit();
     }
-
 }

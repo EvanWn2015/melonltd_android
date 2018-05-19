@@ -19,9 +19,11 @@ import com.melonltd.naberc.view.user.page.type.PageType;
 public class SetUpFragment extends AbsPageFragment implements View.OnClickListener {
     private static final String TAG = HomeFragment.class.getSimpleName();
     private static SetUpFragment FRAGMENT = null;
-    private TextView toAccountEdit, accountNumberText, dividendText;
+    private TextView accountNumberText, dividendText;
+    private TextView toAccountEdit, toAboutUsText, toHelpText, toTeachingText;
     private Switch soundSwitch, shakeSwitch;
     public static int TO_ACCOUNT_DETAIL_INDEX = -1;
+    public static int TO_SIMPLE_INFO_INDEX = -1;
 
     public SetUpFragment() {
     }
@@ -55,6 +57,10 @@ public class SetUpFragment extends AbsPageFragment implements View.OnClickListen
 
     private void getViews(View v) {
         toAccountEdit = v.findViewById(R.id.toAccountEdit);
+        toAboutUsText = v.findViewById(R.id.toAboutUsText);
+        toHelpText = v.findViewById(R.id.toHelpText);
+        toTeachingText = v.findViewById(R.id.toTeachingText);
+
         accountNumberText = v.findViewById(R.id.accountNumberText);
         dividendText = v.findViewById(R.id.dividendText);
         soundSwitch = v.findViewById(R.id.soundSwitch);
@@ -63,14 +69,19 @@ public class SetUpFragment extends AbsPageFragment implements View.OnClickListen
 
     private void setListener() {
         toAccountEdit.setOnClickListener(this);
+        toAboutUsText.setOnClickListener(this);
+        toHelpText.setOnClickListener(this);
+        toTeachingText.setOnClickListener(this);
     }
 
 
     @Override
     public void onResume() {
         super.onResume();
-        if (TO_ACCOUNT_DETAIL_INDEX >= 0){
+        if (TO_ACCOUNT_DETAIL_INDEX >= 0) {
             toAccountDetail(1);
+        } else if (TO_SIMPLE_INFO_INDEX >= 0) {
+            toSimpleInfo(1);
         }
     }
 
@@ -83,12 +94,26 @@ public class SetUpFragment extends AbsPageFragment implements View.OnClickListen
         getFragmentManager().beginTransaction().replace(R.id.frameContainer, f).commit();
     }
 
+    private void toSimpleInfo(int i) {
+        Bundle b = new Bundle();
+        b.putString("user detail", "");
+        TO_SIMPLE_INFO_INDEX = i;
+        MainActivity.FRAGMENT_TAG = PageType.SIMPLE_INFO.name();
+        AbsPageFragment f = PageFragmentFactory.of(PageType.SIMPLE_INFO, b);
+        getFragmentManager().beginTransaction().replace(R.id.frameContainer, f).commit();
+    }
+
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.toAccountEdit:
                 Log.d(TAG, "toAccoutEdit");
                 toAccountDetail(1);
+                break;
+            case R.id.toAboutUsText:
+            case R.id.toHelpText:
+            case R.id.toTeachingText:
+                toSimpleInfo(1);
                 break;
         }
     }

@@ -5,8 +5,8 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:visibility="visible"
-    app:indicatorColor="#000000"
-    app:indicatorName="BallClipRotateIndicator" />
+    app:indicatorColor="#212121"
+    app:indicatorName="BallSpinFadeLoaderIndicator" />
 
 
     <!--row.1-->
