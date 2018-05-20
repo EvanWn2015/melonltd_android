@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.melonltd.naberc.R;
-import com.melonltd.naberc.view.user.MainActivity;
+import com.melonltd.naberc.view.user.UserMainActivity;
 import com.melonltd.naberc.view.user.page.abs.AbsPageFragment;
 import com.melonltd.naberc.view.user.page.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.user.page.type.PageType;
@@ -52,12 +52,12 @@ public class SimpleInformationFragment extends AbsPageFragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (MainActivity.toolbar != null) {
-            MainActivity.navigationIconDisplay(true, new View.OnClickListener() {
+        if (UserMainActivity.toolbar != null) {
+            UserMainActivity.navigationIconDisplay(true, new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     backToSetUpPage();
-                    MainActivity.navigationIconDisplay(false, null);
+                    UserMainActivity.navigationIconDisplay(false, null);
                 }
             });
         }
@@ -66,11 +66,11 @@ public class SimpleInformationFragment extends AbsPageFragment {
     @Override
     public void onStop() {
         super.onStop();
-        MainActivity.navigationIconDisplay(false, null);
+        UserMainActivity.navigationIconDisplay(false, null);
     }
 
     private void backToSetUpPage() {
-        MainActivity.FRAGMENT_TAG = PageType.SET_UP.name();
+        UserMainActivity.FRAGMENT_TAG = PageType.SET_UP.name();
         SetUpFragment.TO_SIMPLE_INFO_INDEX = -1;
         AbsPageFragment f = PageFragmentFactory.of(PageType.SET_UP, null);
         getFragmentManager().beginTransaction().remove(this).replace(R.id.frameContainer, f).commit();

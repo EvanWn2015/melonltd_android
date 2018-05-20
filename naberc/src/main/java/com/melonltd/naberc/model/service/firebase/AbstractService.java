@@ -1,4 +1,4 @@
-package com.melonltd.naberc.model.service;
+package com.melonltd.naberc.model.service.firebase;
 
 import android.support.annotation.NonNull;
 

@@ -10,7 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.melonltd.naberc.R;
-import com.melonltd.naberc.view.user.MainActivity;
+import com.melonltd.naberc.view.user.UserMainActivity;
 import com.melonltd.naberc.view.user.page.abs.AbsPageFragment;
 import com.melonltd.naberc.view.user.page.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.user.page.type.PageType;
@@ -62,12 +62,12 @@ public class OrderDetailFragment extends AbsPageFragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (MainActivity.toolbar != null) {
-            MainActivity.navigationIconDisplay(true, new View.OnClickListener() {
+        if (UserMainActivity.toolbar != null) {
+            UserMainActivity.navigationIconDisplay(true, new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     backToHistoryPage();
-                    MainActivity.navigationIconDisplay(false, null);
+                    UserMainActivity.navigationIconDisplay(false, null);
                 }
             });
         }
@@ -77,7 +77,7 @@ public class OrderDetailFragment extends AbsPageFragment {
     public void onStop() {
         super.onStop();
         Log.d(TAG, "stop");
-        MainActivity.navigationIconDisplay(false, null);
+        UserMainActivity.navigationIconDisplay(false, null);
     }
 
     @Override

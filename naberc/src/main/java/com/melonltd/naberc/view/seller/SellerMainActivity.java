@@ -9,7 +9,7 @@ import android.view.View;
 
 import com.melonltd.naberc.R;
 
-public class SellerActivity extends AppCompatActivity {
+public class SellerMainActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -13,14 +13,13 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.bigkoo.alertview.AlertView;
-import com.bigkoo.alertview.OnDismissListener;
 import com.google.common.base.Strings;
 import com.jzxiang.pickerview.TimePickerDialog;
 import com.jzxiang.pickerview.data.Type;
 import com.jzxiang.pickerview.listener.OnDateSetListener;
 import com.melonltd.naberc.R;
 import com.melonltd.naberc.util.VerifyUtil;
-import com.melonltd.naberc.view.user.BaseCore;
+import com.melonltd.naberc.view.common.page.impl.BaseCore;
 import com.melonltd.naberc.view.user.page.abs.AbsPageFragment;
 import com.melonltd.naberc.view.user.page.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.user.page.type.PageType;

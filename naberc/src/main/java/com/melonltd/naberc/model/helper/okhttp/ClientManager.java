@@ -1,4 +1,4 @@
-package com.melonltd.naberc.model.helper;
+package com.melonltd.naberc.model.helper.okhttp;
 
 import android.annotation.SuppressLint;
 import android.util.Log;

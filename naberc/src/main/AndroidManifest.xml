@@ -21,7 +21,7 @@
         android:roundIcon="@mipmap/ic_launcher"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
-        <activity android:name=".view.user.MainActivity">
+        <activity android:name=".view.user.UserMainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -30,12 +30,12 @@
         </activity>
         <activity android:name=".view.intro.IntroActivity" />
 
-        <service android:name=".model.service.MyFirebaseMessagingService">
+        <service android:name=".model.service.fcm.MyFirebaseMessagingService">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-        <service android:name=".model.service.MyFirebaseInstanceIDService">
+        <service android:name=".model.service.fcm.MyFirebaseInstanceIDService">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />
             </intent-filter>
@@ -46,7 +46,7 @@
             android:value="@integer/google_play_services_version" />
 
         <activity
-            android:name=".view.seller.SellerActivity"
+            android:name=".view.seller.SellerMainActivity"
             android:label="@string/title_activity_seller"
             android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>

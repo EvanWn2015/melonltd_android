@@ -1,10 +1,8 @@
 package com.melonltd.naberc.view.user.page.impl;
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,7 +13,7 @@ import android.widget.TextView;
 
 import com.google.common.collect.Lists;
 import com.melonltd.naberc.R;
-import com.melonltd.naberc.view.user.MainActivity;
+import com.melonltd.naberc.view.user.UserMainActivity;
 import com.melonltd.naberc.view.user.page.abs.AbsPageFragment;
 import com.melonltd.naberc.view.user.page.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.user.page.type.PageType;
@@ -94,7 +92,7 @@ public class HistoryFragment extends AbsPageFragment {
     private void toDetail(int resultIndex) {
         Bundle b = new Bundle();
         b.putString("test", list.get(resultIndex));
-        MainActivity.FRAGMENT_TAG = PageType.ORDER_DETAIL.name();
+        UserMainActivity.FRAGMENT_TAG = PageType.ORDER_DETAIL.name();
         AbsPageFragment f = PageFragmentFactory.of(PageType.ORDER_DETAIL, b);
         getFragmentManager().beginTransaction().replace(R.id.frameContainer, f).commit();
     }

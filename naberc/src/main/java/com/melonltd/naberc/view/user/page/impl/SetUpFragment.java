@@ -10,7 +10,7 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import com.melonltd.naberc.R;
-import com.melonltd.naberc.view.user.MainActivity;
+import com.melonltd.naberc.view.user.UserMainActivity;
 import com.melonltd.naberc.view.user.page.abs.AbsPageFragment;
 import com.melonltd.naberc.view.user.page.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.user.page.type.PageType;
@@ -89,7 +89,7 @@ public class SetUpFragment extends AbsPageFragment implements View.OnClickListen
         Bundle b = new Bundle();
         b.putString("user detail", "");
         TO_ACCOUNT_DETAIL_INDEX = i;
-        MainActivity.FRAGMENT_TAG = PageType.ACCOUNT_DETAIL.name();
+        UserMainActivity.FRAGMENT_TAG = PageType.ACCOUNT_DETAIL.name();
         AbsPageFragment f = PageFragmentFactory.of(PageType.ACCOUNT_DETAIL, b);
         getFragmentManager().beginTransaction().replace(R.id.frameContainer, f).commit();
     }
@@ -98,7 +98,7 @@ public class SetUpFragment extends AbsPageFragment implements View.OnClickListen
         Bundle b = new Bundle();
         b.putString("user detail", "");
         TO_SIMPLE_INFO_INDEX = i;
-        MainActivity.FRAGMENT_TAG = PageType.SIMPLE_INFO.name();
+        UserMainActivity.FRAGMENT_TAG = PageType.SIMPLE_INFO.name();
         AbsPageFragment f = PageFragmentFactory.of(PageType.SIMPLE_INFO, b);
         getFragmentManager().beginTransaction().replace(R.id.frameContainer, f).commit();
     }

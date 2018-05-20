@@ -1,4 +1,4 @@
-package com.melonltd.naberc.model.service;
+package com.melonltd.naberc.model.service.firebase;
 
 import android.support.v4.app.FragmentManager;
 import android.view.View;
@@ -6,7 +6,7 @@ import android.view.View;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.firebase.auth.AuthResult;
 import com.melonltd.naberc.R;
-import com.melonltd.naberc.view.user.MainActivity;
+import com.melonltd.naberc.view.user.UserMainActivity;
 import com.melonltd.naberc.view.user.page.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.user.page.type.PageType;
 
@@ -14,8 +14,8 @@ public class AuthService {
 
     public static void signInWithEmailAndPassword(String mail, String password, final FragmentManager fm, OnCompleteListener<AuthResult> listener) {
         fm.beginTransaction().replace(R.id.frameContainer, PageFragmentFactory.of(PageType.HOME, null)).commit();
-        if (MainActivity.bottomMenuTabLayout != null) {
-            MainActivity.bottomMenuTabLayout.setVisibility(View.VISIBLE);
+        if (UserMainActivity.bottomMenuTabLayout != null) {
+            UserMainActivity.bottomMenuTabLayout.setVisibility(View.VISIBLE);
         }
 //        if (listener != null) {
 //            BaseCore.auth.signInWithEmailAndPassword(mail, password).addOnCompleteListener(listener);
@@ -28,8 +28,8 @@ public class AuthService {
 //                                BaseCore.currentUser = BaseCore.auth.getCurrentUser();
 //                                String uid = BaseCore.currentUser.getUid();
 //                                SharedPreferencesService.setUserUID(uid);
-//                                if (MainActivity.bottomMenuTabLayout != null) {
-//                                    MainActivity.bottomMenuTabLayout.setVisibility(View.VISIBLE);
+//                                if (UserMainActivity.bottomMenuTabLayout != null) {
+//                                    UserMainActivity.bottomMenuTabLayout.setVisibility(View.VISIBLE);
 //                                }
 //                                fm.beginTransaction().replace(R.id.frameContainer, PageFragmentFactory.of(PageType.HOME, null)).commit();
 //                            } else {

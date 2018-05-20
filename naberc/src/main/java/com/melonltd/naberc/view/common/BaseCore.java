@@ -1,4 +1,4 @@
-package com.melonltd.naberc.view.user;
+package com.melonltd.naberc.view.common;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
@@ -20,15 +20,11 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 
-import com.bigkoo.alertview.AlertView;
-import com.bigkoo.alertview.OnDismissListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.melonltd.naberc.R;
 import com.melonltd.naberc.model.preferences.SharedPreferencesService;
 import com.melonltd.naberc.util.Tools;
-import com.melonltd.naberc.view.customize.LoadingBar;
-import com.melonltd.naberc.view.customize.PopUpDialog;
 import com.melonltd.naberc.view.user.page.type.PageType;
 
 public abstract class BaseCore extends AppCompatActivity implements LocationListener {
@@ -36,10 +32,10 @@ public abstract class BaseCore extends AppCompatActivity implements LocationList
     public static Context context;
     private static ConnectivityManager cm;
     private LocationManager locationManager;
-//    public static LoadingBar LOADING_BAR;
+
     public static String FRAGMENT_TAG = PageType.LOGIN.name();
 
-    private Handler handler;
+
 
     private static final int CAMERA_CODE = 8765;
     private static final String[] CAMERA = new String[]{Manifest.permission.CAMERA};
@@ -54,7 +50,7 @@ public abstract class BaseCore extends AppCompatActivity implements LocationList
     public static FirebaseUser currentUser = auth.getCurrentUser();
 
     public FragmentManager fragmentManager = getSupportFragmentManager();
-    public static PopUpDialog POPUP = PopUpDialog.getInstance();
+//    public static PopUpDialog POPUP = PopUpDialog.getInstance();
     public static boolean IS_USER = true;
     public static boolean IS_HAS_ACC = false;
 
@@ -62,8 +58,6 @@ public abstract class BaseCore extends AppCompatActivity implements LocationList
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = this;
-//        LOADING_BAR = new LoadingBar(this);
-
 
 //        try {
 //            int v = getPackageManager().getPackageInfo("com.google.android.gms", 0 ).versionCode;
@@ -83,7 +77,7 @@ public abstract class BaseCore extends AppCompatActivity implements LocationList
 //        startService(intent);
 
         // TODO init PopUp
-        POPUP.setTransaction(fragmentManager);
+//        POPUP.setTransaction(fragmentManager);
         // TODO init Manager
         cm = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
 

@@ -1,4 +1,4 @@
-package com.melonltd.naberc.model.service;
+package com.melonltd.naberc.model.service.firebase;
 
 import com.google.firebase.database.DatabaseReference;
 import com.melonltd.naberc.model.helper.ConnectHelper;

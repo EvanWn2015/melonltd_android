@@ -12,14 +12,14 @@ import android.widget.TextView;
 import com.bigkoo.alertview.AlertView;
 import com.bigkoo.alertview.OnDismissListener;
 import com.melonltd.naberc.R;
-import com.melonltd.naberc.model.helper.ApiCallback;
-import com.melonltd.naberc.model.helper.ApiManager;
-import com.melonltd.naberc.view.user.MainActivity;
+import com.melonltd.naberc.model.helper.okhttp.ApiCallback;
+import com.melonltd.naberc.model.helper.okhttp.ApiManager;
+import com.melonltd.naberc.view.user.UserMainActivity;
 import com.melonltd.naberc.view.user.page.abs.AbsPageFragment;
 import com.melonltd.naberc.view.user.page.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.user.page.type.PageType;
 
-import static com.melonltd.naberc.view.user.BaseCore.FRAGMENT_TAG;
+import static com.melonltd.naberc.view.common.page.impl.BaseCore.FRAGMENT_TAG;
 
 public class VerifySMSFragment extends AbsPageFragment implements View.OnClickListener {
     private static final String TAG = VerifySMSFragment.class.getSimpleName();
@@ -59,12 +59,12 @@ public class VerifySMSFragment extends AbsPageFragment implements View.OnClickLi
     @Override
     public void onResume() {
         super.onResume();
-        if (MainActivity.toolbar != null) {
-            MainActivity.navigationIconDisplay(true, new View.OnClickListener() {
+        if (UserMainActivity.toolbar != null) {
+            UserMainActivity.navigationIconDisplay(true, new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     backToLoginPage();
-                    MainActivity.navigationIconDisplay(false, null);
+                    UserMainActivity.navigationIconDisplay(false, null);
                 }
             });
         }
@@ -73,7 +73,7 @@ public class VerifySMSFragment extends AbsPageFragment implements View.OnClickLi
     @Override
     public void onStop() {
         super.onStop();
-        MainActivity.navigationIconDisplay(false, null);
+        UserMainActivity.navigationIconDisplay(false, null);
     }
 
     private void getView(View v) {
@@ -91,7 +91,7 @@ public class VerifySMSFragment extends AbsPageFragment implements View.OnClickLi
     }
 
     private void backToLoginPage() {
-        MainActivity.FRAGMENT_TAG = PageType.LOGIN.name();
+        UserMainActivity.FRAGMENT_TAG = PageType.LOGIN.name();
         AbsPageFragment f = PageFragmentFactory.of(PageType.LOGIN, null);
         getFragmentManager().beginTransaction().remove(this).replace(R.id.frameContainer, f).commit();
     }

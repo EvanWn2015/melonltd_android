@@ -7,11 +7,10 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.melonltd.naberc.R;
-import com.melonltd.naberc.view.user.MainActivity;
+import com.melonltd.naberc.view.user.UserMainActivity;
 import com.melonltd.naberc.view.user.page.abs.AbsPageFragment;
 import com.melonltd.naberc.view.user.page.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.user.page.impl.AccountDetailFragment;
-import com.melonltd.naberc.view.user.page.impl.SetUpFragment;
 import com.melonltd.naberc.view.user.page.type.PageType;
 
 public class ResetPasswordFragment extends AbsPageFragment {
@@ -49,12 +48,12 @@ public class ResetPasswordFragment extends AbsPageFragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (MainActivity.toolbar != null) {
-            MainActivity.navigationIconDisplay(true, new View.OnClickListener() {
+        if (UserMainActivity.toolbar != null) {
+            UserMainActivity.navigationIconDisplay(true, new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     backToAccountDetailPage();
-                    MainActivity.navigationIconDisplay(false, null);
+                    UserMainActivity.navigationIconDisplay(false, null);
                 }
             });
         }
@@ -63,7 +62,7 @@ public class ResetPasswordFragment extends AbsPageFragment {
     @Override
     public void onStop() {
         super.onStop();
-        MainActivity.navigationIconDisplay(false, null);
+        UserMainActivity.navigationIconDisplay(false, null);
     }
 
     @Override
@@ -72,7 +71,7 @@ public class ResetPasswordFragment extends AbsPageFragment {
     }
 
     private void backToAccountDetailPage() {
-        MainActivity.FRAGMENT_TAG = PageType.ACCOUNT_DETAIL.name();
+        UserMainActivity.FRAGMENT_TAG = PageType.ACCOUNT_DETAIL.name();
         AccountDetailFragment.TO_RESET_PASSWORD_INDEX = -1;
         AbsPageFragment f = PageFragmentFactory.of(PageType.ACCOUNT_DETAIL, null);
         getFragmentManager().beginTransaction().remove(this).replace(R.id.frameContainer, f).commit();

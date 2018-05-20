@@ -2,12 +2,10 @@ package com.melonltd.naberc.view.user;
 
 
 import android.content.Context;
-import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -17,6 +15,7 @@ import android.widget.TextView;
 
 import com.google.common.collect.Lists;
 import com.melonltd.naberc.R;
+import com.melonltd.naberc.view.common.page.impl.BaseCore;
 import com.melonltd.naberc.view.customize.NaberTab;
 import com.melonltd.naberc.view.user.page.abs.AbsPageFragment;
 import com.melonltd.naberc.view.user.page.factory.PageFragmentFactory;
@@ -26,8 +25,8 @@ import java.util.List;
 
 //import com.youth.banner.loader.ImageLoader;
 
-public class MainActivity extends BaseCore implements View.OnClickListener, TabLayout.OnTabSelectedListener, View.OnLayoutChangeListener {
-    private static final String TAG = MainActivity.class.getSimpleName();
+public class UserMainActivity extends BaseCore implements View.OnClickListener, TabLayout.OnTabSelectedListener, View.OnLayoutChangeListener {
+    private static final String TAG = UserMainActivity.class.getSimpleName();
     private Context context;
     public static Toolbar toolbar;
     public static TabLayout bottomMenuTabLayout;

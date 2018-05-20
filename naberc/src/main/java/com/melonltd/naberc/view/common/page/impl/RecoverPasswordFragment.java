@@ -9,11 +9,11 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.melonltd.naberc.R;
-import com.melonltd.naberc.model.helper.ApiCallback;
-import com.melonltd.naberc.model.helper.ApiManager;
+import com.melonltd.naberc.model.helper.okhttp.ApiCallback;
+import com.melonltd.naberc.model.helper.okhttp.ApiManager;
 import com.melonltd.naberc.util.VerifyUtil;
 import com.melonltd.naberc.view.customize.LoadingBar;
-import com.melonltd.naberc.view.user.MainActivity;
+import com.melonltd.naberc.view.user.UserMainActivity;
 import com.melonltd.naberc.view.user.page.abs.AbsPageFragment;
 import com.melonltd.naberc.view.user.page.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.user.page.type.PageType;
@@ -69,13 +69,13 @@ public class RecoverPasswordFragment extends AbsPageFragment implements View.OnC
     public void onResume() {
         super.onResume();
         mailEdit.setText("");
-        MainActivity.bottomMenuTabLayout.setVisibility(View.GONE);
-        if (MainActivity.toolbar != null) {
-            MainActivity.navigationIconDisplay(true, new View.OnClickListener() {
+        UserMainActivity.bottomMenuTabLayout.setVisibility(View.GONE);
+        if (UserMainActivity.toolbar != null) {
+            UserMainActivity.navigationIconDisplay(true, new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     backToLoginPage();
-                    MainActivity.navigationIconDisplay(false, null);
+                    UserMainActivity.navigationIconDisplay(false, null);
                 }
             });
         }
@@ -84,7 +84,7 @@ public class RecoverPasswordFragment extends AbsPageFragment implements View.OnC
     @Override
     public void onStop() {
         super.onStop();
-        MainActivity.navigationIconDisplay(false, null);
+        UserMainActivity.navigationIconDisplay(false, null);
     }
 
     @Override
@@ -115,7 +115,7 @@ public class RecoverPasswordFragment extends AbsPageFragment implements View.OnC
     }
 
     private void backToLoginPage() {
-        MainActivity.FRAGMENT_TAG = PageType.LOGIN.name();
+        UserMainActivity.FRAGMENT_TAG = PageType.LOGIN.name();
         AbsPageFragment f = PageFragmentFactory.of(PageType.LOGIN, null);
         getFragmentManager().beginTransaction().remove(this).replace(R.id.frameContainer, f).commit();
     }

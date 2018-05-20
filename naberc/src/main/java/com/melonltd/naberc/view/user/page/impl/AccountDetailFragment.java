@@ -2,17 +2,15 @@ package com.melonltd.naberc.view.user.page.impl;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
-import android.support.v7.widget.CardView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 
 import com.melonltd.naberc.R;
-import com.melonltd.naberc.model.helper.ApiCallback;
-import com.melonltd.naberc.model.helper.ApiManager;
-import com.melonltd.naberc.view.user.MainActivity;
+import com.melonltd.naberc.model.helper.okhttp.ApiCallback;
+import com.melonltd.naberc.model.helper.okhttp.ApiManager;
+import com.melonltd.naberc.view.user.UserMainActivity;
 import com.melonltd.naberc.view.user.page.abs.AbsPageFragment;
 import com.melonltd.naberc.view.user.page.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.user.page.type.PageType;
@@ -72,12 +70,12 @@ public class AccountDetailFragment extends AbsPageFragment implements View.OnCli
     @Override
     public void onResume() {
         super.onResume();
-        if (MainActivity.toolbar != null) {
-            MainActivity.navigationIconDisplay(true, new View.OnClickListener() {
+        if (UserMainActivity.toolbar != null) {
+            UserMainActivity.navigationIconDisplay(true, new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     backToSetUpPage();
-                    MainActivity.navigationIconDisplay(false, null);
+                    UserMainActivity.navigationIconDisplay(false, null);
                 }
             });
         }
@@ -89,11 +87,11 @@ public class AccountDetailFragment extends AbsPageFragment implements View.OnCli
     @Override
     public void onStop() {
         super.onStop();
-        MainActivity.navigationIconDisplay(false, null);
+        UserMainActivity.navigationIconDisplay(false, null);
     }
 
     private void backToSetUpPage() {
-        MainActivity.FRAGMENT_TAG = PageType.SET_UP.name();
+        UserMainActivity.FRAGMENT_TAG = PageType.SET_UP.name();
         SetUpFragment.TO_ACCOUNT_DETAIL_INDEX = -1;
         AbsPageFragment f = PageFragmentFactory.of(PageType.SET_UP, null);
         getFragmentManager().beginTransaction().remove(this).replace(R.id.frameContainer, f).commit();
@@ -124,14 +122,14 @@ public class AccountDetailFragment extends AbsPageFragment implements View.OnCli
 
 
     private void toLoginPage() {
-        MainActivity.FRAGMENT_TAG = PageType.LOGIN.name();
+        UserMainActivity.FRAGMENT_TAG = PageType.LOGIN.name();
         AbsPageFragment f = PageFragmentFactory.of(PageType.LOGIN, null);
         getFragmentManager().beginTransaction().remove(this).replace(R.id.frameContainer, f).commit();
     }
 
     private void toResetPassword(int i) {
         TO_RESET_PASSWORD_INDEX = i;
-        MainActivity.FRAGMENT_TAG = PageType.RESET_PASSWORD.name();
+        UserMainActivity.FRAGMENT_TAG = PageType.RESET_PASSWORD.name();
         AbsPageFragment f = PageFragmentFactory.of(PageType.RESET_PASSWORD, null);
         getFragmentManager().beginTransaction().remove(this).replace(R.id.frameContainer, f).commit();
     }

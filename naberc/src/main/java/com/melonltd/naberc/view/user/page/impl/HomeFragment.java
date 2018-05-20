@@ -2,34 +2,29 @@ package com.melonltd.naberc.view.user.page.impl;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.google.common.collect.Lists;
 import com.melonltd.naberc.R;
-import com.melonltd.naberc.model.helper.ApiCallback;
-import com.melonltd.naberc.model.helper.ApiManager;
+import com.melonltd.naberc.model.helper.okhttp.ApiCallback;
+import com.melonltd.naberc.model.helper.okhttp.ApiManager;
 import com.melonltd.naberc.util.UiUtil;
 import com.melonltd.naberc.view.customize.GlideImageLoader;
 import com.melonltd.naberc.view.customize.OnLoadLayout;
-import com.melonltd.naberc.view.user.BaseCore;
 import com.melonltd.naberc.view.user.page.abs.AbsPageFragment;
 import com.youth.banner.Banner;
 import com.youth.banner.listener.OnBannerListener;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 import in.srain.cube.views.ptr.PtrDefaultHandler;
 import in.srain.cube.views.ptr.PtrFrameLayout;
