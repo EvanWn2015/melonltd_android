@@ -35,8 +35,6 @@ public abstract class BaseCore extends AppCompatActivity implements LocationList
 
     public static String FRAGMENT_TAG = PageType.LOGIN.name();
 
-
-
     private static final int CAMERA_CODE = 8765;
     private static final String[] CAMERA = new String[]{Manifest.permission.CAMERA};
 

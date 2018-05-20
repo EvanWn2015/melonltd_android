@@ -10,9 +10,9 @@
         android:layout_height="100dp"
         android:layout_marginBottom="8dp"
         android:layout_marginStart="8dp"
-        android:padding="8dp"
         android:layout_marginTop="8dp"
         android:background="@drawable/reverse_gary_button_style"
+        android:padding="8dp"
         android:src="@drawable/icon_logo_reverse"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -31,10 +31,10 @@
     <TextView
         android:id="@+id/restaurantNameText"
         android:layout_width="0dp"
-        android:paddingTop="4dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="4dp"
         android:paddingStart="8dp"
+        android:paddingTop="4dp"
         android:text="民族店"
         android:textSize="18sp"
         android:textStyle="bold"
@@ -103,4 +103,5 @@
         app:layout_constraintBottom_toBottomOf="@+id/restaurantNameText"
         app:layout_constraintStart_toEndOf="@+id/restaurantNameText"
         app:layout_constraintTop_toTopOf="@+id/restaurantNameText" />
+
 </android.support.constraint.ConstraintLayout>

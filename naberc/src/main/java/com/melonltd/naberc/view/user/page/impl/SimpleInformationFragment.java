@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.melonltd.naberc.R;
+import com.melonltd.naberc.view.common.BaseCore;
 import com.melonltd.naberc.view.user.UserMainActivity;
 import com.melonltd.naberc.view.user.page.abs.AbsPageFragment;
 import com.melonltd.naberc.view.user.page.factory.PageFragmentFactory;
@@ -70,7 +71,7 @@ public class SimpleInformationFragment extends AbsPageFragment {
     }
 
     private void backToSetUpPage() {
-        UserMainActivity.FRAGMENT_TAG = PageType.SET_UP.name();
+        BaseCore.FRAGMENT_TAG = PageType.SET_UP.name();
         SetUpFragment.TO_SIMPLE_INFO_INDEX = -1;
         AbsPageFragment f = PageFragmentFactory.of(PageType.SET_UP, null);
         getFragmentManager().beginTransaction().remove(this).replace(R.id.frameContainer, f).commit();

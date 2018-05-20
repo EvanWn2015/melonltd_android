@@ -15,7 +15,7 @@ import android.widget.TextView;
 
 import com.google.common.collect.Lists;
 import com.melonltd.naberc.R;
-import com.melonltd.naberc.view.common.page.impl.BaseCore;
+import com.melonltd.naberc.view.common.BaseCore;
 import com.melonltd.naberc.view.customize.NaberTab;
 import com.melonltd.naberc.view.user.page.abs.AbsPageFragment;
 import com.melonltd.naberc.view.user.page.factory.PageFragmentFactory;

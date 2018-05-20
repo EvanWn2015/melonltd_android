@@ -12,6 +12,7 @@ import com.melonltd.naberc.R;
 import com.melonltd.naberc.model.helper.okhttp.ApiCallback;
 import com.melonltd.naberc.model.helper.okhttp.ApiManager;
 import com.melonltd.naberc.util.VerifyUtil;
+import com.melonltd.naberc.view.common.BaseCore;
 import com.melonltd.naberc.view.customize.LoadingBar;
 import com.melonltd.naberc.view.user.UserMainActivity;
 import com.melonltd.naberc.view.user.page.abs.AbsPageFragment;
@@ -98,7 +99,7 @@ public class RecoverPasswordFragment extends AbsPageFragment implements View.OnC
         if (v.getId() == R.id.submitRecoverPasswordBtn) {
             if (VerifyUtil.email(mailEdit.getText().toString())) {
 //                LOADING_BAR.show();
-                ApiManager.test(new ApiCallback(getContext()) {
+                ApiManager.test(new ApiCallback(getActivity()) {
                     @Override
                     public void onSuccess(String responseBody) {
 //                        LOADING_BAR.hide();
@@ -115,7 +116,7 @@ public class RecoverPasswordFragment extends AbsPageFragment implements View.OnC
     }
 
     private void backToLoginPage() {
-        UserMainActivity.FRAGMENT_TAG = PageType.LOGIN.name();
+        BaseCore.FRAGMENT_TAG = PageType.LOGIN.name();
         AbsPageFragment f = PageFragmentFactory.of(PageType.LOGIN, null);
         getFragmentManager().beginTransaction().remove(this).replace(R.id.frameContainer, f).commit();
     }

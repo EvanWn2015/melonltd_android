@@ -10,6 +10,7 @@ import android.widget.Button;
 import com.melonltd.naberc.R;
 import com.melonltd.naberc.model.helper.okhttp.ApiCallback;
 import com.melonltd.naberc.model.helper.okhttp.ApiManager;
+import com.melonltd.naberc.view.common.BaseCore;
 import com.melonltd.naberc.view.user.UserMainActivity;
 import com.melonltd.naberc.view.user.page.abs.AbsPageFragment;
 import com.melonltd.naberc.view.user.page.factory.PageFragmentFactory;
@@ -91,7 +92,7 @@ public class AccountDetailFragment extends AbsPageFragment implements View.OnCli
     }
 
     private void backToSetUpPage() {
-        UserMainActivity.FRAGMENT_TAG = PageType.SET_UP.name();
+        BaseCore.FRAGMENT_TAG = PageType.SET_UP.name();
         SetUpFragment.TO_ACCOUNT_DETAIL_INDEX = -1;
         AbsPageFragment f = PageFragmentFactory.of(PageType.SET_UP, null);
         getFragmentManager().beginTransaction().remove(this).replace(R.id.frameContainer, f).commit();
@@ -101,7 +102,7 @@ public class AccountDetailFragment extends AbsPageFragment implements View.OnCli
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.logoutBtn:
-                ApiManager.test(new ApiCallback(getContext()) {
+                ApiManager.test(new ApiCallback(getActivity()) {
                     @Override
                     public void onSuccess(String responseBody) {
                         toLoginPage();

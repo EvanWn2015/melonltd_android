@@ -109,12 +109,28 @@ public class HomeFragment extends AbsPageFragment {
             }
         });
 
-//            contentLoadLayout.setOnLoadListener(new OnLoadLayout.OnLoadListener() {
-//                @Override
-//                public void onLoad() {
-//                    Log.d(TAG, "setOnLoadListener");
-//                }
-//            });
+            contentLoadLayout.setOnLoadListener(new OnLoadLayout.OnLoadListener() {
+                @Override
+                public void onLoad() {
+                    ApiManager.test(new ApiCallback(getActivity()) {
+                        @Override
+                        public void onSuccess(String responseBody) {
+
+                            for (int i = 0; i < 10; i++) {
+                                list.add("" + i);
+                            }
+                            top30Adapter.notifyDataSetChanged();
+                            UiUtil.setListViewHeightBasedOnChildren(getActivity(), top30ListView);
+                            contentLoadLayout.refreshComplete();
+                        }
+
+                        @Override
+                        public void onFail(Exception error) {
+
+                        }
+                    });
+                }
+            });
     }
 
     private void setUpBanner(final View v) {
@@ -143,26 +159,26 @@ public class HomeFragment extends AbsPageFragment {
         }
         banner.setImages(images).setImageLoader(new GlideImageLoader()).start();
 
-        ApiManager.test(new ApiCallback(getContext()) {
+        list.clear();
+        ApiManager.test(new ApiCallback(getActivity()) {
             @Override
             public void onSuccess(String responseBody) {
-                list.clear();
-                for (int i = 0; i < 30; i++) {
+
+                for (int i = 0; i < 10; i++) {
                     list.add("" + i);
                 }
-                UiUtil.setListViewHeightBasedOnChildren(top30ListView);
                 top30Adapter.notifyDataSetChanged();
+                UiUtil.setListViewHeightBasedOnChildren(getActivity(), top30ListView);
                 contentLoadLayout.refreshComplete();
-//                BaseCore.LOADING_BAR.hide();
             }
 
             @Override
             public void onFail(Exception error) {
 
             }
-
         });
     }
+
 
 //    private void getData() {
 //        for (int i = 1; i < 5; i++) {
@@ -241,7 +257,6 @@ public class HomeFragment extends AbsPageFragment {
 
     static class RestaurantItem {
         TextView title;
-
         public static RestaurantItem valueOf() {
             return new RestaurantItem();
         }

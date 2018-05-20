@@ -1,5 +1,6 @@
 package com.melonltd.naberc.model.helper.okhttp;
 
+import android.app.Activity;
 import android.content.Context;
 import android.os.Handler;
 import android.os.Looper;
@@ -16,27 +17,45 @@ import okhttp3.Response;
 public abstract class ApiCallback implements Callback {
     private static final String TAG = ApiCallback.class.getSimpleName();
     private LoadingBar loadingBar;
+
     abstract public void onSuccess(final String responseBody);
+
     abstract public void onFail(final Exception error);
 
-    public ApiCallback(Context context) {
-        this.loadingBar = new LoadingBar(context, true);
+    private Activity activity;
+
+    public ApiCallback(Activity activity) {
+        this.activity = activity;
+        this.loadingBar = new LoadingBar(activity, true);
     }
 
     @Override
     public void onFailure(Call call, final IOException e) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                e.printStackTrace();
-                if (e.getMessage().contains("Canceled") || e.getMessage().contains("Socket closed")) {
-                    Log.e(TAG, "fail", e);
-                } else {
-                    onFail(e);
-                }
-                loadingBar.hide();
-            }
-        });
+//        runOnUiThread(new Runnable() {
+//            @Override
+//            public void run() {
+//                e.printStackTrace();
+//                if (e.getMessage().contains("Canceled") || e.getMessage().contains("Socket closed")) {
+//                    Log.e(TAG, "fail", e);
+//                } else {
+//                    onFail(e);
+//                }
+//                loadingBar.hide();
+//            }
+//        });
+        this.activity.runOnUiThread(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        e.printStackTrace();
+                        if (e.getMessage().contains("Canceled") || e.getMessage().contains("Socket closed")) {
+                            Log.e(TAG, "fail", e);
+                        } else {
+                            onFail(e);
+                        }
+                        loadingBar.hide();
+                    }
+                });
     }
 
     @Override
@@ -45,22 +64,35 @@ public abstract class ApiCallback implements Callback {
             onFailure(call, new IOException("Failed"));
             return;
         }
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    onSuccess(response.body().string());
-                } catch (IOException e) {
-                    Log.e(TAG, "fail", e);
-                    onFailure(call, new IOException("Failed"));
-                }
-                loadingBar.hide();
-            }
-        });
+        this.activity.runOnUiThread(
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        try {
+                            onSuccess(response.body().string());
+                        } catch (IOException e) {
+                            Log.e(TAG, "fail", e);
+                            onFailure(call, new IOException("Failed"));
+                        }
+                        loadingBar.hide();
+                    }
+                });
+//        runOnUiThread(new Runnable() {
+//            @Override
+//            public void run() {
+//                try {
+//                    onSuccess(response.body().string());
+//                } catch (IOException e) {
+//                    Log.e(TAG, "fail", e);
+//                    onFailure(call, new IOException("Failed"));
+//                }
+//                loadingBar.hide();
+//            }
+//        });
     }
 
-    private void runOnUiThread(Runnable task) {
-        new Handler(Looper.getMainLooper()).post(task);
-    }
+//    private void runOnUiThread(Runnable task) {
+//        new Handler(Looper.getMainLooper()).post(task);
+//    }
 
 }

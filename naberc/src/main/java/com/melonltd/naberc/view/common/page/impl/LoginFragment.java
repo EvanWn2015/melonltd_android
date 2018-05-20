@@ -16,12 +16,13 @@ import com.melonltd.naberc.R;
 import com.melonltd.naberc.model.helper.okhttp.ApiCallback;
 import com.melonltd.naberc.model.helper.okhttp.ApiManager;
 import com.melonltd.naberc.util.VerifyUtil;
+import com.melonltd.naberc.view.common.BaseCore;
 import com.melonltd.naberc.view.user.UserMainActivity;
 import com.melonltd.naberc.view.user.page.abs.AbsPageFragment;
 import com.melonltd.naberc.view.user.page.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.user.page.type.PageType;
 
-import static com.melonltd.naberc.view.common.page.impl.BaseCore.FRAGMENT_TAG;
+//import static com.melonltd.naberc.view.common.page.impl.BaseCore.FRAGMENT_TAG;
 
 public class LoginFragment extends AbsPageFragment implements View.OnClickListener {
     private static final String TAG = LoginFragment.class.getSimpleName();
@@ -89,10 +90,10 @@ public class LoginFragment extends AbsPageFragment implements View.OnClickListen
             case R.id.loginBtn:
                 if (verifyInput()) {
 //                    BaseCore.LOADING_BAR.show();
-                    ApiManager.test(new ApiCallback(getContext()) {
+                    ApiManager.test(new ApiCallback(getActivity()) {
                         @Override
                         public void onSuccess(String responseBody) {
-                            FRAGMENT_TAG = PageType.HOME.name();
+                            BaseCore.FRAGMENT_TAG = PageType.HOME.name();
                             getFragmentManager().beginTransaction().replace(R.id.frameContainer, PageFragmentFactory.of(PageType.HOME, null)).commit();
                             if (UserMainActivity.bottomMenuTabLayout != null) {
                                 UserMainActivity.bottomMenuTabLayout.setVisibility(View.VISIBLE);
@@ -111,17 +112,17 @@ public class LoginFragment extends AbsPageFragment implements View.OnClickListen
                 break;
             case R.id.toVerifySMSBtn:
 //                UserMainActivity.bottomMenuTabLayout.setVisibility(View.VISIBLE);
-                FRAGMENT_TAG = PageType.VERIFY_SMS.name();
+                BaseCore.FRAGMENT_TAG = PageType.VERIFY_SMS.name();
                 fragment = PageFragmentFactory.of(PageType.VERIFY_SMS, null);
                 getFragmentManager().beginTransaction().remove(this).replace(R.id.frameContainer, fragment).addToBackStack(fragment.toString()).commit();
                 break;
             case R.id.toRegisteredSellerBtn:
-                FRAGMENT_TAG = PageType.REGISTERED_SELLER.name();
+                BaseCore.FRAGMENT_TAG = PageType.REGISTERED_SELLER.name();
                 fragment = PageFragmentFactory.of(PageType.REGISTERED_SELLER, null);
                 getFragmentManager().beginTransaction().remove(this).replace(R.id.frameContainer, fragment).addToBackStack(fragment.toString()).commit();
                 break;
             case R.id.recoverPasswordText:
-                FRAGMENT_TAG = PageType.RECOVER_PASSWORD.name();
+                BaseCore.FRAGMENT_TAG = PageType.RECOVER_PASSWORD.name();
                 fragment = PageFragmentFactory.of(PageType.RECOVER_PASSWORD, null);
                 getFragmentManager().beginTransaction().remove(this).replace(R.id.frameContainer, fragment).addToBackStack(fragment.toString()).commit();
                 break;

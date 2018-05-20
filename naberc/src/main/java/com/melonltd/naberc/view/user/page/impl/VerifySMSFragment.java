@@ -14,12 +14,12 @@ import com.bigkoo.alertview.OnDismissListener;
 import com.melonltd.naberc.R;
 import com.melonltd.naberc.model.helper.okhttp.ApiCallback;
 import com.melonltd.naberc.model.helper.okhttp.ApiManager;
+import com.melonltd.naberc.view.common.BaseCore;
 import com.melonltd.naberc.view.user.UserMainActivity;
 import com.melonltd.naberc.view.user.page.abs.AbsPageFragment;
 import com.melonltd.naberc.view.user.page.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.user.page.type.PageType;
 
-import static com.melonltd.naberc.view.common.page.impl.BaseCore.FRAGMENT_TAG;
 
 public class VerifySMSFragment extends AbsPageFragment implements View.OnClickListener {
     private static final String TAG = VerifySMSFragment.class.getSimpleName();
@@ -91,7 +91,7 @@ public class VerifySMSFragment extends AbsPageFragment implements View.OnClickLi
     }
 
     private void backToLoginPage() {
-        UserMainActivity.FRAGMENT_TAG = PageType.LOGIN.name();
+        BaseCore.FRAGMENT_TAG = PageType.LOGIN.name();
         AbsPageFragment f = PageFragmentFactory.of(PageType.LOGIN, null);
         getFragmentManager().beginTransaction().remove(this).replace(R.id.frameContainer, f).commit();
     }
@@ -100,7 +100,7 @@ public class VerifySMSFragment extends AbsPageFragment implements View.OnClickLi
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.requestVerifyCodeBtn:
-                ApiManager.test(new ApiCallback(getContext()) {
+                ApiManager.test(new ApiCallback(getActivity()) {
                     @Override
                     public void onSuccess(String responseBody) {
 
@@ -131,7 +131,7 @@ public class VerifySMSFragment extends AbsPageFragment implements View.OnClickLi
                         .show();
                 break;
             case R.id.submitToRegisteredBun:
-                ApiManager.test(new ApiCallback(getContext()) {
+                ApiManager.test(new ApiCallback(getActivity()) {
                     @Override
                     public void onSuccess(String responseBody) {
                         toRegisteredPage();
@@ -147,7 +147,7 @@ public class VerifySMSFragment extends AbsPageFragment implements View.OnClickLi
     }
 
     private void toRegisteredPage() {
-        FRAGMENT_TAG = PageType.REGISTERED.name();
+        BaseCore.FRAGMENT_TAG = PageType.REGISTERED.name();
         getFragmentManager().beginTransaction().remove(this).replace(R.id.frameContainer, PageFragmentFactory.of(PageType.REGISTERED, null)).commit();
     }
 }
