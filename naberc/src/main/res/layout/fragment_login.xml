@@ -2,7 +2,7 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/loginConstraintLayout"
+    android:id="@+id/common_login_page"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@android:color/white"
@@ -75,7 +75,6 @@
     <!--android:text="NER-18X1X11@melonltd.com.tw"-->
 
     <EditText
-        android:text="123456"
         android:id="@+id/passwordEdit"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -86,6 +85,7 @@
         android:inputType="textPassword"
         android:maxLines="1"
         android:singleLine="true"
+        android:text="123456"
         android:textColor="@android:color/black"
         android:textColorHint="@android:color/darker_gray"
         app:layout_constraintBottom_toTopOf="@+id/loginBtn"

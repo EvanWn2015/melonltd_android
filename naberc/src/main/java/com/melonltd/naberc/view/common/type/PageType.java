@@ -1,11 +1,12 @@
-package com.melonltd.naberc.view.user.page.type;
+package com.melonltd.naberc.view.common.type;
 
 import com.melonltd.naberc.R;
+import com.melonltd.naberc.view.user.page.impl.RestaurantDetailFragment;
 import com.melonltd.naberc.view.user.page.impl.AccountDetailFragment;
 import com.melonltd.naberc.view.user.page.impl.OrderDetailFragment;
 import com.melonltd.naberc.view.common.page.impl.RecoverPasswordFragment;
 import com.melonltd.naberc.view.user.page.impl.RegisteredSellerFragment;
-import com.melonltd.naberc.view.user.page.abs.AbsPageFragment;
+import com.melonltd.naberc.view.common.abs.AbsPageFragment;
 import com.melonltd.naberc.view.user.page.impl.HistoryFragment;
 import com.melonltd.naberc.view.user.page.impl.HomeFragment;
 import com.melonltd.naberc.view.common.page.impl.LoginFragment;
@@ -40,12 +41,14 @@ public enum PageType {
     VERIFY_SMS(R.string.user_page_verify_sms_title, 105, VerifySMSFragment.class),
     HOME(R.string.menu_home_btn, 0, HomeFragment.class),
     RESTAURANT(R.string.menu_restaurant_btn, 1, RestaurantFragment.class),
+    RESTAURANT_DETAIL(R.string.user_page_restaurant_detail_title, 1, RestaurantDetailFragment.class),
     SHOPPING_CART(R.string.menu_shopping_cart_btn, 2, ShoppingCartFragment.class),
     HISTORY(R.string.menu_history_btn, 3, HistoryFragment.class),
     ORDER_DETAIL(R.string.user_page_order_detail_title, 3, OrderDetailFragment.class),
     SET_UP(R.string.menu_set_up_btn, 4, SetUpFragment.class),
     ACCOUNT_DETAIL(R.string.user_page_account_detail_title, 4, AccountDetailFragment.class),
     SIMPLE_INFO(R.string.user_page_simple_info_title, 4, SimpleInformationFragment.class),
+
     // seller
     REGISTERED_SELLER(R.string.seller_page_registered_title, 104, RegisteredSellerFragment.class);
 

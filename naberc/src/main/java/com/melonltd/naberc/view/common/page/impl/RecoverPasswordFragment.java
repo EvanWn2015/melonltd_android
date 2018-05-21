@@ -13,18 +13,16 @@ import com.melonltd.naberc.model.helper.okhttp.ApiCallback;
 import com.melonltd.naberc.model.helper.okhttp.ApiManager;
 import com.melonltd.naberc.util.VerifyUtil;
 import com.melonltd.naberc.view.common.BaseCore;
-import com.melonltd.naberc.view.customize.LoadingBar;
 import com.melonltd.naberc.view.user.UserMainActivity;
-import com.melonltd.naberc.view.user.page.abs.AbsPageFragment;
-import com.melonltd.naberc.view.user.page.factory.PageFragmentFactory;
-import com.melonltd.naberc.view.user.page.type.PageType;
+import com.melonltd.naberc.view.common.abs.AbsPageFragment;
+import com.melonltd.naberc.view.common.factory.PageFragmentFactory;
+import com.melonltd.naberc.view.common.type.PageType;
 
 public class RecoverPasswordFragment extends AbsPageFragment implements View.OnClickListener {
     private static final String TAG = RecoverPasswordFragment.class.getSimpleName();
     private static RecoverPasswordFragment FRAGMENT = null;
     private Button submitBtn;
     private EditText mailEdit;
-    private LoadingBar LOADING_BAR;
 
     public RecoverPasswordFragment() {
     }
@@ -50,14 +48,13 @@ public class RecoverPasswordFragment extends AbsPageFragment implements View.OnC
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-//        LOADING_BAR = new LoadingBar(getContext());
-        if (container.getTag(R.id.user_recover_password_page) == null) {
+        if (container.getTag(R.id.common_recover_password_page) == null) {
             View v = inflater.inflate(R.layout.fragment_recover_password, container, false);
             getView(v);
-            container.setTag(R.id.user_recover_password_page, v);
+            container.setTag(R.id.common_recover_password_page, v);
             return v;
         }
-        return (View) container.getTag(R.id.user_recover_password_page);
+        return (View) container.getTag(R.id.common_recover_password_page);
     }
 
     private void getView(View v) {
@@ -91,18 +88,15 @@ public class RecoverPasswordFragment extends AbsPageFragment implements View.OnC
     @Override
     public void onDestroy() {
         super.onDestroy();
-//        LOADING_BAR = null;
     }
 
     @Override
     public void onClick(View v) {
         if (v.getId() == R.id.submitRecoverPasswordBtn) {
             if (VerifyUtil.email(mailEdit.getText().toString())) {
-//                LOADING_BAR.show();
                 ApiManager.test(new ApiCallback(getActivity()) {
                     @Override
                     public void onSuccess(String responseBody) {
-//                        LOADING_BAR.hide();
                         backToLoginPage();
                     }
 

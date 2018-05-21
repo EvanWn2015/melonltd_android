@@ -18,9 +18,9 @@ import com.melonltd.naberc.model.helper.okhttp.ApiManager;
 import com.melonltd.naberc.util.VerifyUtil;
 import com.melonltd.naberc.view.common.BaseCore;
 import com.melonltd.naberc.view.user.UserMainActivity;
-import com.melonltd.naberc.view.user.page.abs.AbsPageFragment;
-import com.melonltd.naberc.view.user.page.factory.PageFragmentFactory;
-import com.melonltd.naberc.view.user.page.type.PageType;
+import com.melonltd.naberc.view.common.abs.AbsPageFragment;
+import com.melonltd.naberc.view.common.factory.PageFragmentFactory;
+import com.melonltd.naberc.view.common.type.PageType;
 
 //import static com.melonltd.naberc.view.common.page.impl.BaseCore.FRAGMENT_TAG;
 

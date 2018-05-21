@@ -16,6 +16,7 @@
     <!-- page names -->
     <string name="user_page_simple_info_title">資訊</string>
     <string name="user_page_account_detail_title">帳號設定</string>
+    <string name="user_page_restaurant_detail_title">餐館詳情</string>
     <string name="user_page_registered_title">註冊</string>
     <string name="user_page_verify_sms_title">電話驗證</string>
     <string name="user_page_order_detail_title">訂單詳情</string>

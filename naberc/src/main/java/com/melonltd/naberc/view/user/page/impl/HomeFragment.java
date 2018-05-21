@@ -9,7 +9,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -18,17 +17,18 @@ import com.google.common.collect.Lists;
 import com.melonltd.naberc.R;
 import com.melonltd.naberc.model.helper.okhttp.ApiCallback;
 import com.melonltd.naberc.model.helper.okhttp.ApiManager;
-import com.melonltd.naberc.util.UiUtil;
+import com.melonltd.naberc.view.common.BaseCore;
+import com.melonltd.naberc.view.common.factory.PageFragmentFactory;
+import com.melonltd.naberc.view.common.type.PageType;
 import com.melonltd.naberc.view.customize.GlideImageLoader;
 import com.melonltd.naberc.view.customize.OnLoadLayout;
-import com.melonltd.naberc.view.user.page.abs.AbsPageFragment;
+import com.melonltd.naberc.view.common.abs.AbsPageFragment;
 import com.youth.banner.Banner;
 import com.youth.banner.listener.OnBannerListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import in.srain.cube.views.ptr.PtrDefaultHandler;
 import in.srain.cube.views.ptr.PtrFrameLayout;
 import in.srain.cube.views.ptr.PtrHandler;
 
@@ -42,6 +42,8 @@ public class HomeFragment extends AbsPageFragment {
     private ArrayList<String> list = Lists.newArrayList();
     private List<String> images = Lists.newArrayList();
     private Banner banner;
+
+//    public static int TO_RESTAURANT_DETAIL_INDEX = -1;
 
     public HomeFragment() {
     }
@@ -65,17 +67,15 @@ public class HomeFragment extends AbsPageFragment {
         super.onCreate(savedInstanceState);
         // 圖片異步加載初始
         Fresco.initialize(getContext());
+        top30Adapter = new Top30Adapter(getContext(), list);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (container.getTag(R.id.user_home_page) == null) {
-//            View v = inflater.inflate(R.layout.fragment_home, container, false);
             View v = inflater.inflate(R.layout.fragment_home, container, false);
-            setUpLoadLayout(v);
-
-            setUpTop30ListView(v);
-            setUpBanner(v);
+            getViews(v);
+            setListener();
             container.setTag(R.id.user_home_page, v);
             return v;
         } else {
@@ -83,13 +83,17 @@ public class HomeFragment extends AbsPageFragment {
         }
     }
 
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
+
+    private void getViews(View v) {
+        contentLoadLayout = v.findViewById(R.id.contentLoadLayout);
+        top30ListView = v.findViewById(R.id.top30ListView);
+        top30ListView.setAdapter(top30Adapter);
+        top30ListView.addHeaderView(LayoutInflater.from(getContext()).inflate(R.layout.fragment_user_home_banner, null), null, false);
+        banner = v.findViewById(R.id.banner);
     }
 
-    private void setUpLoadLayout(final View v) {
-        contentLoadLayout = v.findViewById(R.id.contentLoadLayout);
+
+    private void setListener() {
         contentLoadLayout.setPtrHandler(new PtrHandler() {
             @Override
             public void onRefreshBegin(PtrFrameLayout frame) {
@@ -102,33 +106,18 @@ public class HomeFragment extends AbsPageFragment {
             }
         });
 
-//            contentLoadLayout.setOnLoadListener(new OnLoadLayout.OnLoadListener() {
-//                @Override
-//                public void onLoad() {
-//                    ApiManager.test(new ApiCallback(getActivity()) {
-//                        @Override
-//                        public void onSuccess(String responseBody) {
-//
-//                            for (int i = 0; i < 10; i++) {
-//                                list.add("" + i);
-//                            }
-//                            top30Adapter.notifyDataSetChanged();
-////                            UiUtil.setListViewHeightBasedOnChildren(getActivity(), top30ListView);
-//                            contentLoadLayout.refreshComplete();
-//                        }
-//
-//                        @Override
-//                        public void onFail(Exception error) {
-//
-//                        }
-//                    });
-//                }
-//            });
-    }
+        top30ListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                RestaurantFragment.TO_RESTAURANT_DETAIL_INDEX = i;
+                BaseCore.FRAGMENT_TAG = PageType.RESTAURANT_DETAIL.name();
+                Bundle b = new Bundle();
+                b.putString("where", "HOME");
+                AbsPageFragment f = PageFragmentFactory.of(PageType.RESTAURANT_DETAIL, b);
+                getFragmentManager().beginTransaction().replace(R.id.frameContainer, f).commit();
+            }
+        });
 
-    private void setUpBanner(final View v) {
-        banner = v.findViewById(R.id.banner);
-        banner.setImages(images).setImageLoader(new GlideImageLoader()).start();
         banner.setOnBannerListener(new OnBannerListener() {
             @Override
             public void OnBannerClick(int position) {
@@ -137,20 +126,6 @@ public class HomeFragment extends AbsPageFragment {
         });
     }
 
-    private void setUpTop30ListView(View v) {
-        list.clear();
-        top30ListView = v.findViewById(R.id.top30ListView);
-        top30Adapter = new Top30Adapter(getContext(), list);
-        top30ListView.setAdapter(top30Adapter);
-        top30ListView.addHeaderView(LayoutInflater.from(getContext()).inflate(R.layout.fragment_user_home_banner, null), null, false);
-        top30ListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                Log.d(TAG,"list count ::  " + top30Adapter.getCount());
-                Log.d(TAG, "index ~>>" + i);
-            }
-        });
-    }
 
     private void doLoadData() {
         images.clear();
@@ -180,13 +155,6 @@ public class HomeFragment extends AbsPageFragment {
         });
     }
 
-
-//    private void getData() {
-//        for (int i = 1; i < 5; i++) {
-//            images.add("http://f.hiphotos.baidu.com/image/h%3D200/sign=1478eb74d5a20cf45990f9df460b4b0c/d058ccbf6c81800a5422e5fdb43533fa838b4779.jpg");
-//        }
-//    }
-
     @Override
     public void onStart() {
         super.onStart();
@@ -195,7 +163,16 @@ public class HomeFragment extends AbsPageFragment {
     @Override
     public void onResume() {
         super.onResume();
-        doLoadData();
+
+//        if ( RestaurantFragment.TO_RESTAURANT_DETAIL_INDEX >= 0) {
+//            Bundle b = new Bundle();
+//            b.putString("where", "RESTAURANT");
+//            BaseCore.FRAGMENT_TAG = PageType.RESTAURANT_DETAIL.name();
+//            AbsPageFragment f = PageFragmentFactory.of(PageType.RESTAURANT_DETAIL, b);
+//            getFragmentManager().beginTransaction().replace(R.id.frameContainer, f).commit();
+//        }else {
+            doLoadData();
+//        }
     }
 
     @Override
@@ -214,7 +191,6 @@ public class HomeFragment extends AbsPageFragment {
 
         @Override
         public int getCount() {
-//            UiUtil.setListViewHeightBasedOnChildren(getActivity(), top30ListView);
             return list.size();
         }
 

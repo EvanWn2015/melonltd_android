@@ -21,9 +21,9 @@ import com.melonltd.naberc.R;
 import com.melonltd.naberc.util.VerifyUtil;
 
 import com.melonltd.naberc.view.common.BaseCore;
-import com.melonltd.naberc.view.user.page.abs.AbsPageFragment;
-import com.melonltd.naberc.view.user.page.factory.PageFragmentFactory;
-import com.melonltd.naberc.view.user.page.type.PageType;
+import com.melonltd.naberc.view.common.abs.AbsPageFragment;
+import com.melonltd.naberc.view.common.factory.PageFragmentFactory;
+import com.melonltd.naberc.view.common.type.PageType;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -105,6 +105,7 @@ public class RegisteredFragment extends AbsPageFragment implements View.OnClickL
     @Override
     public void onResume() {
         super.onResume();
+
 
     }
 

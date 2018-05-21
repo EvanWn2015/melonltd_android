@@ -1,37 +1,39 @@
-package com.melonltd.naberc.view.common.page.impl;
+package com.melonltd.naberc.view.user.page.impl;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.melonltd.naberc.R;
-import com.melonltd.naberc.view.user.UserMainActivity;
+import com.melonltd.naberc.view.common.BaseCore;
 import com.melonltd.naberc.view.common.abs.AbsPageFragment;
 import com.melonltd.naberc.view.common.factory.PageFragmentFactory;
-import com.melonltd.naberc.view.user.page.impl.AccountDetailFragment;
 import com.melonltd.naberc.view.common.type.PageType;
+import com.melonltd.naberc.view.user.UserMainActivity;
 
-public class ResetPasswordFragment extends AbsPageFragment {
-    private static final String TAG = ResetPasswordFragment.class.getSimpleName();
-    private static ResetPasswordFragment FRAGMENT = null;
+public class RestaurantDetailFragment extends AbsPageFragment {
+    private static final String TAG = RestaurantDetailFragment.class.getSimpleName();
+    private static RestaurantDetailFragment FRAGMENT = null;
 
-    public ResetPasswordFragment() {
+    public RestaurantDetailFragment() {
+    }
+
+    @Override
+    public AbsPageFragment newInstance(Object... o) {
+        return new RestaurantDetailFragment();
     }
 
     @Override
     public AbsPageFragment getInstance(Bundle bundle) {
         if (FRAGMENT == null) {
-            FRAGMENT = new ResetPasswordFragment();
-            FRAGMENT.setArguments(bundle);
+            FRAGMENT = new RestaurantDetailFragment();
         }
+        FRAGMENT.setArguments(null);
+        FRAGMENT.setArguments(bundle);
         return FRAGMENT;
-    }
-
-    @Override
-    public AbsPageFragment newInstance(Object... o) {
-        return new ResetPasswordFragment();
     }
 
     @Override
@@ -41,26 +43,30 @@ public class ResetPasswordFragment extends AbsPageFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        if (container.getTag(R.id.common_reset_password_page) == null) {
-            View v = inflater.inflate(R.layout.fragment_reset_password, container, false);
-            container.setTag(R.id.common_reset_password_page, v);
-            return v;
-        }
-        return (View) container.getTag(R.id.common_reset_password_page);
+        return inflater.inflate(R.layout.fragment_restaurant_detail, container, false);
     }
 
     @Override
     public void onResume() {
         super.onResume();
+//        final String where = getArguments().getString("where");
+//        Log.d(TAG, where);
         if (UserMainActivity.toolbar != null) {
             UserMainActivity.navigationIconDisplay(true, new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    backToAccountDetailPage();
+                    backToRegisteredPage();
                     UserMainActivity.navigationIconDisplay(false, null);
                 }
             });
         }
+    }
+
+    private void backToRegisteredPage() {
+        BaseCore.FRAGMENT_TAG = PageType.RESTAURANT.name();
+        RestaurantFragment.TO_RESTAURANT_DETAIL_INDEX = -1;
+        AbsPageFragment f = PageFragmentFactory.of(PageType.RESTAURANT, null);
+        getFragmentManager().beginTransaction().remove(this).replace(R.id.frameContainer, f).commit();
     }
 
     @Override
@@ -72,12 +78,5 @@ public class ResetPasswordFragment extends AbsPageFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-    }
-
-    private void backToAccountDetailPage() {
-        UserMainActivity.FRAGMENT_TAG = PageType.ACCOUNT_DETAIL.name();
-        AccountDetailFragment.TO_RESET_PASSWORD_INDEX = -1;
-        AbsPageFragment f = PageFragmentFactory.of(PageType.ACCOUNT_DETAIL, null);
-        getFragmentManager().beginTransaction().remove(this).replace(R.id.frameContainer, f).commit();
     }
 }

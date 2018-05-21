@@ -19,13 +19,13 @@
         android:padding="8dp"
         android:text="filter result"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/fliterCategoryBtn"
-        app:layout_constraintEnd_toStartOf="@+id/fliterCategoryBtn"
+        app:layout_constraintBottom_toBottomOf="@+id/filterCategoryBtn"
+        app:layout_constraintEnd_toStartOf="@+id/filterCategoryBtn"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/fliterCategoryBtn" />
+        app:layout_constraintTop_toTopOf="@+id/filterCategoryBtn" />
 
     <Button
-        android:id="@+id/fliterCategoryBtn"
+        android:id="@+id/filterCategoryBtn"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -34,23 +34,23 @@
         android:layout_marginTop="8dp"
         android:background="@drawable/reverse_gary_button_style"
         android:text="依照類別"
-        app:layout_constraintBottom_toTopOf="@+id/onLoadLayout"
-        app:layout_constraintEnd_toStartOf="@+id/fliterAreaBtn"
+        app:layout_constraintBottom_toTopOf="@+id/view6"
+        app:layout_constraintEnd_toStartOf="@+id/filterAreaBtn"
         app:layout_constraintStart_toEndOf="@+id/filterTypeText"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/fliterAreaBtn"
+        android:id="@+id/filterAreaBtn"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:background="@drawable/reverse_gary_button_style"
         android:text="依照區域"
-        app:layout_constraintBottom_toBottomOf="@+id/fliterCategoryBtn"
+        app:layout_constraintBottom_toBottomOf="@+id/filterCategoryBtn"
         app:layout_constraintEnd_toStartOf="@+id/filterDistanceBtn"
-        app:layout_constraintStart_toEndOf="@+id/fliterCategoryBtn"
-        app:layout_constraintTop_toTopOf="@+id/fliterCategoryBtn" />
+        app:layout_constraintStart_toEndOf="@+id/filterCategoryBtn"
+        app:layout_constraintTop_toTopOf="@+id/filterCategoryBtn" />
 
     <Button
         android:id="@+id/filterDistanceBtn"
@@ -60,20 +60,29 @@
         android:layout_marginStart="8dp"
         android:background="@drawable/reverse_gary_button_style"
         android:text="依照距離"
-        app:layout_constraintBottom_toBottomOf="@+id/fliterCategoryBtn"
+        app:layout_constraintBottom_toBottomOf="@+id/filterCategoryBtn"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/fliterAreaBtn"
-        app:layout_constraintTop_toTopOf="@+id/fliterCategoryBtn" />
+        app:layout_constraintStart_toEndOf="@+id/filterAreaBtn"
+        app:layout_constraintTop_toTopOf="@+id/filterCategoryBtn" />
+
+    <View
+        android:id="@+id/view6"
+        android:layout_width="wrap_content"
+        android:layout_height="1dp"
+        android:background="@color/colorAccent"
+        app:layout_constraintBottom_toTopOf="@+id/restaurantOnLoadLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/filterCategoryBtn" />
 
     <com.melonltd.naberc.view.customize.OnLoadLayout
-        android:id="@+id/onLoadLayout"
+        android:id="@+id/restaurantOnLoadLayout"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
-        android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/fliterCategoryBtn"
+        app:layout_constraintTop_toBottomOf="@+id/view6"
         app:ptr_duration_to_close="100"
         app:ptr_duration_to_close_header="1000"
         app:ptr_keep_header_when_refresh="false"
@@ -91,9 +100,13 @@
                 android:orientation="vertical">
 
                 <ListView
+                    android:id="@+id/restaurantListView"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
+                    android:focusable="false"
+                    android:fadeScrollbars="false"
                     android:overScrollMode="never"
+                    android:descendantFocusability="blocksDescendants"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent">
 

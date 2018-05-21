@@ -10,7 +10,6 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -25,7 +24,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.melonltd.naberc.R;
 import com.melonltd.naberc.model.preferences.SharedPreferencesService;
 import com.melonltd.naberc.util.Tools;
-import com.melonltd.naberc.view.user.page.type.PageType;
+import com.melonltd.naberc.view.common.type.PageType;
 
 public abstract class BaseCore extends AppCompatActivity implements LocationListener {
     private static final String TAG = BaseCore.class.getSimpleName();

@@ -16,9 +16,9 @@ import com.google.common.base.Strings;
 import com.melonltd.naberc.R;
 //import com.melonltd.naberc.view.common.page.impl.BaseCore;
 import com.melonltd.naberc.view.common.BaseCore;
-import com.melonltd.naberc.view.user.page.abs.AbsPageFragment;
-import com.melonltd.naberc.view.user.page.factory.PageFragmentFactory;
-import com.melonltd.naberc.view.user.page.type.PageType;
+import com.melonltd.naberc.view.common.abs.AbsPageFragment;
+import com.melonltd.naberc.view.common.factory.PageFragmentFactory;
+import com.melonltd.naberc.view.common.type.PageType;
 
 
 /**

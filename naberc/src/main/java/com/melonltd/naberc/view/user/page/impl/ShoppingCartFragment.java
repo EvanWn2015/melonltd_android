@@ -7,8 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.melonltd.naberc.R;
-import com.melonltd.naberc.view.user.page.abs.AbsPageFragment;
-import com.melonltd.naberc.view.user.page.intf.PageFragment;
+import com.melonltd.naberc.view.common.abs.AbsPageFragment;
 
 public class ShoppingCartFragment extends AbsPageFragment {
     private static final String TAG = ShoppingCartFragment.class.getSimpleName();

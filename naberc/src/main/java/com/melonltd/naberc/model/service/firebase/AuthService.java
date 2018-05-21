@@ -7,8 +7,8 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.firebase.auth.AuthResult;
 import com.melonltd.naberc.R;
 import com.melonltd.naberc.view.user.UserMainActivity;
-import com.melonltd.naberc.view.user.page.factory.PageFragmentFactory;
-import com.melonltd.naberc.view.user.page.type.PageType;
+import com.melonltd.naberc.view.common.factory.PageFragmentFactory;
+import com.melonltd.naberc.view.common.type.PageType;
 
 public class AuthService {
 

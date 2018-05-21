@@ -1,14 +1,15 @@
-package com.melonltd.naberc.view.user.page.factory;
+package com.melonltd.naberc.view.common.factory;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 
+import com.melonltd.naberc.view.user.page.impl.RestaurantDetailFragment;
 import com.melonltd.naberc.view.common.page.impl.ResetPasswordFragment;
 import com.melonltd.naberc.view.user.page.impl.AccountDetailFragment;
 import com.melonltd.naberc.view.user.page.impl.OrderDetailFragment;
 import com.melonltd.naberc.view.common.page.impl.RecoverPasswordFragment;
 import com.melonltd.naberc.view.user.page.impl.RegisteredSellerFragment;
-import com.melonltd.naberc.view.user.page.abs.AbsPageFragment;
+import com.melonltd.naberc.view.common.abs.AbsPageFragment;
 import com.melonltd.naberc.view.user.page.impl.HistoryFragment;
 import com.melonltd.naberc.view.user.page.impl.HomeFragment;
 import com.melonltd.naberc.view.common.page.impl.LoginFragment;
@@ -18,7 +19,7 @@ import com.melonltd.naberc.view.user.page.impl.SetUpFragment;
 import com.melonltd.naberc.view.user.page.impl.ShoppingCartFragment;
 import com.melonltd.naberc.view.user.page.impl.SimpleInformationFragment;
 import com.melonltd.naberc.view.user.page.impl.VerifySMSFragment;
-import com.melonltd.naberc.view.user.page.type.PageType;
+import com.melonltd.naberc.view.common.type.PageType;
 
 public class PageFragmentFactory {
     private final static String TAG = PageFragmentFactory.class.getSimpleName();
@@ -42,6 +43,8 @@ public class PageFragmentFactory {
                 return new RegisteredFragment().getInstance(bundle);
             case RESTAURANT:
                 return new RestaurantFragment().getInstance(bundle);
+            case RESTAURANT_DETAIL:
+                return new RestaurantDetailFragment().getInstance(bundle);
             case VERIFY_SMS:
                 return new VerifySMSFragment().getInstance(bundle);
             case SHOPPING_CART:

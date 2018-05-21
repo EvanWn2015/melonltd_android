@@ -11,10 +11,9 @@ import android.widget.TextView;
 
 import com.melonltd.naberc.R;
 import com.melonltd.naberc.view.common.BaseCore;
-import com.melonltd.naberc.view.user.UserMainActivity;
-import com.melonltd.naberc.view.user.page.abs.AbsPageFragment;
-import com.melonltd.naberc.view.user.page.factory.PageFragmentFactory;
-import com.melonltd.naberc.view.user.page.type.PageType;
+import com.melonltd.naberc.view.common.abs.AbsPageFragment;
+import com.melonltd.naberc.view.common.factory.PageFragmentFactory;
+import com.melonltd.naberc.view.common.type.PageType;
 
 
 public class SetUpFragment extends AbsPageFragment implements View.OnClickListener {

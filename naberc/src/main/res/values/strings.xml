@@ -7,8 +7,6 @@
     <string name="title_activity_seller">SellerActivity</string>
 
 
-
-
     <!-- data time picker msg-->
     <string name="data_time_picker_years_text">  年</string>
     <string name="data_time_picker_month_text">  月</string>
