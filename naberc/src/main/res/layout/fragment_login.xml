@@ -9,6 +9,7 @@
     tools:context=".view.common.page.impl.LoginFragment">
 
     <ScrollView
+        android:scrollbars="none"
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
         android:layout_height="0dp"
