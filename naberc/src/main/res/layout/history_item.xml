@@ -45,7 +45,7 @@
         app:layout_constraintTop_toTopOf="@+id/textView33" />
 
     <TextView
-        android:id="@+id/textView37"
+        android:id="@+id/getOrderTimeText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -54,16 +54,16 @@
         app:layout_constraintTop_toBottomOf="@+id/restaurantNameText" />
 
     <TextView
-        android:id="@+id/textView38"
+        android:id="@+id/totalAmountText "
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="＄340"
-        app:layout_constraintStart_toStartOf="@+id/textView37"
-        app:layout_constraintTop_toBottomOf="@+id/textView37" />
+        app:layout_constraintStart_toStartOf="@+id/getOrderTimeText"
+        app:layout_constraintTop_toBottomOf="@+id/getOrderTimeText" />
 
     <TextView
-        android:id="@+id/textView39"
+        android:id="@+id/orderStatusText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"

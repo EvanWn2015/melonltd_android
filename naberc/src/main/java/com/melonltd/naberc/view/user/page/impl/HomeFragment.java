@@ -1,6 +1,5 @@
 package com.melonltd.naberc.view.user.page.impl;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -8,9 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.BaseAdapter;
 import android.widget.ListView;
-import android.widget.TextView;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.google.common.collect.Lists;
@@ -18,11 +15,12 @@ import com.melonltd.naberc.R;
 import com.melonltd.naberc.model.helper.okhttp.ApiCallback;
 import com.melonltd.naberc.model.helper.okhttp.ApiManager;
 import com.melonltd.naberc.view.common.BaseCore;
+import com.melonltd.naberc.view.common.abs.AbsPageFragment;
 import com.melonltd.naberc.view.common.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.common.type.PageType;
 import com.melonltd.naberc.view.customize.GlideImageLoader;
 import com.melonltd.naberc.view.customize.OnLoadLayout;
-import com.melonltd.naberc.view.common.abs.AbsPageFragment;
+import com.melonltd.naberc.view.user.adapter.RestaurantAdapter;
 import com.youth.banner.Banner;
 import com.youth.banner.listener.OnBannerListener;
 
@@ -37,13 +35,11 @@ public class HomeFragment extends AbsPageFragment {
     private static final String TAG = HomeFragment.class.getSimpleName();
     private static HomeFragment FRAGMENT = null;
     private OnLoadLayout contentLoadLayout;
-    private ListView top30ListView;
-    private Top30Adapter top30Adapter;
+    private ListView top30RestaurantListView;
+    private RestaurantAdapter adapter;
     private ArrayList<String> list = Lists.newArrayList();
     private List<String> images = Lists.newArrayList();
     private Banner banner;
-
-//    public static int TO_RESTAURANT_DETAIL_INDEX = -1;
 
     public HomeFragment() {
     }
@@ -67,7 +63,7 @@ public class HomeFragment extends AbsPageFragment {
         super.onCreate(savedInstanceState);
         // 圖片異步加載初始
         Fresco.initialize(getContext());
-        top30Adapter = new Top30Adapter(getContext(), list);
+        adapter = new RestaurantAdapter(getContext(), list);
     }
 
     @Override
@@ -86,9 +82,9 @@ public class HomeFragment extends AbsPageFragment {
 
     private void getViews(View v) {
         contentLoadLayout = v.findViewById(R.id.contentLoadLayout);
-        top30ListView = v.findViewById(R.id.top30ListView);
-        top30ListView.setAdapter(top30Adapter);
-        top30ListView.addHeaderView(LayoutInflater.from(getContext()).inflate(R.layout.fragment_user_home_banner, null), null, false);
+        top30RestaurantListView = v.findViewById(R.id.top30ListView);
+        top30RestaurantListView.setAdapter(adapter);
+        top30RestaurantListView.addHeaderView(LayoutInflater.from(getContext()).inflate(R.layout.fragment_user_home_banner, null), null, false);
         banner = v.findViewById(R.id.banner);
     }
 
@@ -106,7 +102,7 @@ public class HomeFragment extends AbsPageFragment {
             }
         });
 
-        top30ListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        top30RestaurantListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 RestaurantFragment.TO_RESTAURANT_DETAIL_INDEX = i;
@@ -129,7 +125,7 @@ public class HomeFragment extends AbsPageFragment {
 
     private void doLoadData() {
         images.clear();
-        top30Adapter.notifyDataSetChanged();
+        adapter.notifyDataSetChanged();
         for (int i = 1; i < 5; i++) {
             images.add("http://f.hiphotos.baidu.com/image/h%3D200/sign=1478eb74d5a20cf45990f9df460b4b0c/d058ccbf6c81800a5422e5fdb43533fa838b4779.jpg");
         }
@@ -143,8 +139,7 @@ public class HomeFragment extends AbsPageFragment {
                 for (int i = 0; i < 30; i++) {
                     list.add("" + i);
                 }
-                top30Adapter.notifyDataSetChanged();
-//                UiUtil.setListViewHeightBasedOnChildren(getActivity(), top30ListView);
+                adapter.notifyDataSetChanged();
                 contentLoadLayout.refreshComplete();
             }
 
@@ -171,7 +166,7 @@ public class HomeFragment extends AbsPageFragment {
 //            AbsPageFragment f = PageFragmentFactory.of(PageType.RESTAURANT_DETAIL, b);
 //            getFragmentManager().beginTransaction().replace(R.id.frameContainer, f).commit();
 //        }else {
-            doLoadData();
+        doLoadData();
 //        }
     }
 
@@ -180,65 +175,9 @@ public class HomeFragment extends AbsPageFragment {
         super.onStop();
     }
 
-    class Top30Adapter extends BaseAdapter {
-        private LayoutInflater inflater = null;
-        private ArrayList<String> list;
 
-        public Top30Adapter(Context context, ArrayList list) {
-            this.list = list;
-            this.inflater = LayoutInflater.from(context);
-        }
-
-        @Override
-        public int getCount() {
-            return list.size();
-        }
-
-        @Override
-        public Object getItem(int i) {
-            return list.get(i);
-        }
-
-        @Override
-        public long getItemId(int i) {
-            return i;
-        }
-
-        @Override
-        public View getView(int i, View view, ViewGroup viewGroup) {
-            RestaurantItem item = null;
-            if (view == null) {
-                item = RestaurantItem.valueOf();
-                view = inflater.inflate(R.layout.restaurant_item, null);
-                item.title = view.findViewById(R.id.addressText);
-                view.setTag(item);
-            } else {
-                item = (RestaurantItem) view.getTag();
-            }
-
-            // TODO item view
-            item.title.setText("營業時間 10:00~ 11:0" + list.get(i));
-            return view;
-        }
-
-        @Nullable
-        @Override
-        public CharSequence[] getAutofillOptions() {
-            return new CharSequence[0];
-        }
-
-        public void setData(ArrayList<String> list) {
-            this.list = list;
-            this.notifyDataSetChanged();
-        }
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
     }
-
-    static class RestaurantItem {
-        TextView title;
-
-        public static RestaurantItem valueOf() {
-            return new RestaurantItem();
-        }
-    }
-
 }

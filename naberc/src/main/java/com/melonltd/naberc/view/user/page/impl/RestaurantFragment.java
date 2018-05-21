@@ -1,7 +1,6 @@
 package com.melonltd.naberc.view.user.page.impl;
 
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -9,7 +8,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -21,10 +19,11 @@ import com.melonltd.naberc.R;
 import com.melonltd.naberc.model.helper.okhttp.ApiCallback;
 import com.melonltd.naberc.model.helper.okhttp.ApiManager;
 import com.melonltd.naberc.view.common.BaseCore;
+import com.melonltd.naberc.view.common.abs.AbsPageFragment;
 import com.melonltd.naberc.view.common.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.common.type.PageType;
 import com.melonltd.naberc.view.customize.OnLoadLayout;
-import com.melonltd.naberc.view.common.abs.AbsPageFragment;
+import com.melonltd.naberc.view.user.adapter.RestaurantAdapter;
 
 import java.util.ArrayList;
 
@@ -167,7 +166,7 @@ public class RestaurantFragment extends AbsPageFragment implements View.OnClickL
             BaseCore.FRAGMENT_TAG = PageType.RESTAURANT_DETAIL.name();
             AbsPageFragment f = PageFragmentFactory.of(PageType.RESTAURANT_DETAIL, b);
             getFragmentManager().beginTransaction().replace(R.id.frameContainer, f).commit();
-        }else{
+        } else {
             if (list.size() == 0) {
                 doLoadData(true);
             }
@@ -236,66 +235,6 @@ public class RestaurantFragment extends AbsPageFragment implements View.OnClickL
         }
     }
 
-    class RestaurantAdapter extends BaseAdapter {
-        private LayoutInflater inflater = null;
-        private ArrayList<String> list;
-
-        RestaurantAdapter(Context context, ArrayList list) {
-            this.list = list;
-            this.inflater = LayoutInflater.from(context);
-        }
-
-        @Override
-        public int getCount() {
-            return list.size();
-        }
-
-        @Override
-        public Object getItem(int i) {
-            return list.get(i);
-        }
-
-        @Override
-        public long getItemId(int i) {
-            return i;
-        }
-
-        @Override
-        public View getView(int i, View view, ViewGroup viewGroup) {
-            RestaurantItem item = null;
-            if (view == null) {
-                item = RestaurantItem.valueOf();
-                view = inflater.inflate(R.layout.restaurant_item, null);
-                item.title = view.findViewById(R.id.addressText);
-                view.setTag(item);
-            } else {
-                item = (RestaurantItem) view.getTag();
-            }
-
-            // TODO item view
-            item.title.setText("營業時間 10:00~ 11:0" + list.get(i));
-            return view;
-        }
-
-        @Nullable
-        @Override
-        public CharSequence[] getAutofillOptions() {
-            return new CharSequence[0];
-        }
-
-        public void setData(ArrayList<String> list) {
-            this.list = list;
-            this.notifyDataSetChanged();
-        }
-    }
-
-    static class RestaurantItem {
-        TextView title;
-
-        public static RestaurantItem valueOf() {
-            return new RestaurantItem();
-        }
-    }
 }
 
 
