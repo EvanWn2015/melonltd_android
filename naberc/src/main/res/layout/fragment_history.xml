@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/user_history_page"
     android:layout_width="match_parent"
@@ -7,11 +8,38 @@
     android:background="@android:color/transparent"
     tools:context=".view.user.page.impl.HistoryFragment">
 
-    <ListView
-        android:id="@+id/historyListView"
+    <com.melonltd.naberc.view.customize.OnLoadLayout
+        android:id="@+id/historyOnLoadLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:overScrollMode="never">
-    </ListView>
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:ptr_duration_to_close="100"
+        app:ptr_duration_to_close_header="1000"
+        app:ptr_keep_header_when_refresh="false"
+        app:ptr_pull_to_fresh="false"
+        app:ptr_ratio_of_header_height_to_refresh="1.0"
+        app:ptr_resistance="1.0">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <ListView
+                    android:id="@+id/historyListView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:overScrollMode="never"></ListView>
+
+            </LinearLayout>
+        </FrameLayout>
+    </com.melonltd.naberc.view.customize.OnLoadLayout>
 
 </android.support.constraint.ConstraintLayout>
