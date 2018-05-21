@@ -54,7 +54,6 @@
 
 
     <EditText
-        android:text="abc@abc.abc"
         android:id="@+id/accountEdit"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -63,9 +62,10 @@
         android:layout_marginTop="8dp"
         android:digits="0123456789abcdefghigklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ@._-"
         android:hint="@string/account_edit_hint_text"
-        android:inputType="textAutoCorrect|textMultiLine|textEmailAddress"
+        android:inputType="number"
         android:maxLines="1"
         android:singleLine="true"
+        android:text="0987654321"
         android:textColor="@android:color/black"
         android:textColorHint="@android:color/darker_gray"
         app:layout_constraintBottom_toTopOf="@+id/passwordEdit"
@@ -110,8 +110,8 @@
         android:id="@+id/toVerifySMSBtn"
         android:layout_width="0dp"
         android:layout_height="30dp"
-        android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
+        android:layout_marginTop="32dp"
         android:background="@drawable/reverse_button_style"
         android:includeFontPadding="false"
         android:padding="0dp"
@@ -119,15 +119,15 @@
         android:textAllCaps="false"
         android:textColor="@color/naber_basis"
         android:textSize="14sp"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
-        app:layout_constraintEnd_toStartOf="@+id/toRegisteredSellerBtn" />
+        app:layout_constraintEnd_toStartOf="@+id/toRegisteredSellerBtn"
+        app:layout_constraintTop_toBottomOf="@+id/loginBtn" />
 
     <Button
         android:id="@+id/toRegisteredSellerBtn"
         android:layout_width="0dp"
         android:layout_height="30dp"
-        android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
+        android:layout_marginTop="32dp"
         android:background="@drawable/reverse_button_style"
         android:includeFontPadding="false"
         android:padding="0dp"
@@ -135,8 +135,8 @@
         android:textAllCaps="false"
         android:textColor="@color/naber_basis"
         android:textSize="14sp"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/loginBtn" />
 
     <TextView
         android:id="@+id/recoverPasswordText"
@@ -151,13 +151,25 @@
         app:layout_constraintEnd_toEndOf="@+id/passwordEdit"
         app:layout_constraintTop_toTopOf="@+id/passwordEdit" />
 
+    <CheckBox
+        android:id="@+id/rememberMeCheckBox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="8dp"
+        android:text="記住帳號"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="@+id/accountEdit"
+        app:layout_constraintEnd_toEndOf="@+id/accountEdit"
+        app:layout_constraintTop_toTopOf="@+id/accountEdit" />
+
     <LinearLayout
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:gravity="center"
         android:background="@color/naber_dividing_gray"
+        android:gravity="center"
         android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

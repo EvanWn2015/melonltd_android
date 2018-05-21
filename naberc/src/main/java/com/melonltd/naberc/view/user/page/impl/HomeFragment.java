@@ -7,7 +7,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -68,10 +70,12 @@ public class HomeFragment extends AbsPageFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (container.getTag(R.id.user_home_page) == null) {
+//            View v = inflater.inflate(R.layout.fragment_home, container, false);
             View v = inflater.inflate(R.layout.fragment_home, container, false);
             setUpLoadLayout(v);
-            setUpBanner(v);
+
             setUpTop30ListView(v);
+            setUpBanner(v);
             container.setTag(R.id.user_home_page, v);
             return v;
         } else {
@@ -89,48 +93,37 @@ public class HomeFragment extends AbsPageFragment {
         contentLoadLayout.setPtrHandler(new PtrHandler() {
             @Override
             public void onRefreshBegin(PtrFrameLayout frame) {
-//                BaseCore.LOADING_BAR.show();
                 doLoadData();
-//                new Handler().postDelayed(new Runnable() {
-//                    @Override
-//                    public void run() {
-//                        contentLoadLayout.refreshComplete();
-//                        doLoadData();
-//                    }
-//                }, 300);
             }
 
             @Override
             public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
-                // 默认实现，根据实际情况做改动
-//                return ((OnLoadLayout) frame).isTop();
-//                return false;
-                    return PtrDefaultHandler.checkContentCanBePulledDown(frame, content, header);
+                return ((OnLoadLayout) frame).isTop();
             }
         });
 
-            contentLoadLayout.setOnLoadListener(new OnLoadLayout.OnLoadListener() {
-                @Override
-                public void onLoad() {
-                    ApiManager.test(new ApiCallback(getActivity()) {
-                        @Override
-                        public void onSuccess(String responseBody) {
-
-                            for (int i = 0; i < 10; i++) {
-                                list.add("" + i);
-                            }
-                            top30Adapter.notifyDataSetChanged();
-                            UiUtil.setListViewHeightBasedOnChildren(getActivity(), top30ListView);
-                            contentLoadLayout.refreshComplete();
-                        }
-
-                        @Override
-                        public void onFail(Exception error) {
-
-                        }
-                    });
-                }
-            });
+//            contentLoadLayout.setOnLoadListener(new OnLoadLayout.OnLoadListener() {
+//                @Override
+//                public void onLoad() {
+//                    ApiManager.test(new ApiCallback(getActivity()) {
+//                        @Override
+//                        public void onSuccess(String responseBody) {
+//
+//                            for (int i = 0; i < 10; i++) {
+//                                list.add("" + i);
+//                            }
+//                            top30Adapter.notifyDataSetChanged();
+////                            UiUtil.setListViewHeightBasedOnChildren(getActivity(), top30ListView);
+//                            contentLoadLayout.refreshComplete();
+//                        }
+//
+//                        @Override
+//                        public void onFail(Exception error) {
+//
+//                        }
+//                    });
+//                }
+//            });
     }
 
     private void setUpBanner(final View v) {
@@ -149,6 +142,14 @@ public class HomeFragment extends AbsPageFragment {
         top30ListView = v.findViewById(R.id.top30ListView);
         top30Adapter = new Top30Adapter(getContext(), list);
         top30ListView.setAdapter(top30Adapter);
+        top30ListView.addHeaderView(LayoutInflater.from(getContext()).inflate(R.layout.fragment_user_home_banner, null), null, false);
+        top30ListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Log.d(TAG,"list count ::  " + top30Adapter.getCount());
+                Log.d(TAG, "index ~>>" + i);
+            }
+        });
     }
 
     private void doLoadData() {
@@ -164,11 +165,11 @@ public class HomeFragment extends AbsPageFragment {
             @Override
             public void onSuccess(String responseBody) {
 
-                for (int i = 0; i < 10; i++) {
+                for (int i = 0; i < 30; i++) {
                     list.add("" + i);
                 }
                 top30Adapter.notifyDataSetChanged();
-                UiUtil.setListViewHeightBasedOnChildren(getActivity(), top30ListView);
+//                UiUtil.setListViewHeightBasedOnChildren(getActivity(), top30ListView);
                 contentLoadLayout.refreshComplete();
             }
 
@@ -213,6 +214,7 @@ public class HomeFragment extends AbsPageFragment {
 
         @Override
         public int getCount() {
+//            UiUtil.setListViewHeightBasedOnChildren(getActivity(), top30ListView);
             return list.size();
         }
 
@@ -257,10 +259,10 @@ public class HomeFragment extends AbsPageFragment {
 
     static class RestaurantItem {
         TextView title;
+
         public static RestaurantItem valueOf() {
             return new RestaurantItem();
         }
     }
-
 
 }

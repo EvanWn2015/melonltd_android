@@ -89,7 +89,6 @@ public class LoginFragment extends AbsPageFragment implements View.OnClickListen
         switch (v.getId()) {
             case R.id.loginBtn:
                 if (verifyInput()) {
-//                    BaseCore.LOADING_BAR.show();
                     ApiManager.test(new ApiCallback(getActivity()) {
                         @Override
                         public void onSuccess(String responseBody) {
@@ -97,7 +96,6 @@ public class LoginFragment extends AbsPageFragment implements View.OnClickListen
                             getFragmentManager().beginTransaction().replace(R.id.frameContainer, PageFragmentFactory.of(PageType.HOME, null)).commit();
                             if (UserMainActivity.bottomMenuTabLayout != null) {
                                 UserMainActivity.bottomMenuTabLayout.setVisibility(View.VISIBLE);
-//                                BaseCore.LOADING_BAR.hide();
                             }
                         }
 
@@ -132,13 +130,13 @@ public class LoginFragment extends AbsPageFragment implements View.OnClickListen
     private boolean verifyInput() {
         boolean result = true;
         String message = "";
-        // 驗證Email不為空
+        // 驗證帳號不為空
         if (Strings.isNullOrEmpty(accountEdit.getText().toString())) {
             message = BaseCore.context.getString(R.string.mail_wrong_format);
             result = false;
         }
-        // 驗證Email錯誤格式
-        if (!VerifyUtil.email(accountEdit.getText().toString())) {
+        // 驗證帳號格式
+        if (!VerifyUtil.phoneNumber(accountEdit.getText().toString())) {
             message = BaseCore.context.getString(R.string.mail_wrong_format);
             result = false;
         }

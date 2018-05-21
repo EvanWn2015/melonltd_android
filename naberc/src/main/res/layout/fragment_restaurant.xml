@@ -1,16 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:id="@+id/user_restaurant_page"
     android:layout_height="match_parent"
     tools:context=".view.user.page.impl.RestaurantFragment">
 
 
     <TextView
+        android:id="@+id/filterTypeText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="RestaurantFragment"
-        android:textColor="@android:color/black"
-        android:textSize="50dp" />
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:padding="8dp"
+        android:text="filter result"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/fliterCategoryBtn"
+        app:layout_constraintEnd_toStartOf="@+id/fliterCategoryBtn"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/fliterCategoryBtn" />
+
+    <Button
+        android:id="@+id/fliterCategoryBtn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/reverse_gary_button_style"
+        android:text="依照類別"
+        app:layout_constraintBottom_toTopOf="@+id/onLoadLayout"
+        app:layout_constraintEnd_toStartOf="@+id/fliterAreaBtn"
+        app:layout_constraintStart_toEndOf="@+id/filterTypeText"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/fliterAreaBtn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:background="@drawable/reverse_gary_button_style"
+        android:text="依照區域"
+        app:layout_constraintBottom_toBottomOf="@+id/fliterCategoryBtn"
+        app:layout_constraintEnd_toStartOf="@+id/filterDistanceBtn"
+        app:layout_constraintStart_toEndOf="@+id/fliterCategoryBtn"
+        app:layout_constraintTop_toTopOf="@+id/fliterCategoryBtn" />
+
+    <Button
+        android:id="@+id/filterDistanceBtn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:background="@drawable/reverse_gary_button_style"
+        android:text="依照距離"
+        app:layout_constraintBottom_toBottomOf="@+id/fliterCategoryBtn"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/fliterAreaBtn"
+        app:layout_constraintTop_toTopOf="@+id/fliterCategoryBtn" />
+
+    <com.melonltd.naberc.view.customize.OnLoadLayout
+        android:id="@+id/onLoadLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="0dp"
+        android:layout_marginTop="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/fliterCategoryBtn"
+        app:ptr_duration_to_close="100"
+        app:ptr_duration_to_close_header="1000"
+        app:ptr_keep_header_when_refresh="false"
+        app:ptr_pull_to_fresh="false"
+        app:ptr_ratio_of_header_height_to_refresh="1.0"
+        app:ptr_resistance="1.0">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <ListView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:overScrollMode="never"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent">
+
+                </ListView>
+
+            </LinearLayout>
+        </FrameLayout>
+
+    </com.melonltd.naberc.view.customize.OnLoadLayout>
 
 </android.support.constraint.ConstraintLayout>

@@ -10,7 +10,7 @@ import android.view.ViewGroup;
 import com.melonltd.naberc.R;
 import com.melonltd.naberc.view.user.page.abs.AbsPageFragment;
 
-public class RestaurantFragment extends AbsPageFragment {
+public class RestaurantFragment extends AbsPageFragment implements View.OnClickListener{
     private static final String TAG = RestaurantFragment.class.getSimpleName();
     private static RestaurantFragment FRAGMENT = null;
 
@@ -38,7 +38,12 @@ public class RestaurantFragment extends AbsPageFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_restaurant, container, false);
+        if (container.getTag(R.id.user_restaurant_page) == null) {
+            View v = inflater.inflate(R.layout.fragment_restaurant, container, false);
+            container.setTag(R.id.user_restaurant_page, v);
+            return v;
+        }
+        return (View) container.getTag(R.id.user_restaurant_page);
     }
 
     @Override
@@ -47,6 +52,21 @@ public class RestaurantFragment extends AbsPageFragment {
 
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+    }
+
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
+
+    @Override
+    public void onClick(View view) {
+
+    }
 }
 
 
