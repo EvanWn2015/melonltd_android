@@ -119,7 +119,6 @@ public class HistoryFragment extends AbsPageFragment {
         if (isRefresh) {
             list.clear();
         }
-
         ApiManager.test(new ApiCallback(getActivity()) {
             @Override
             public void onSuccess(String responseBody) {
