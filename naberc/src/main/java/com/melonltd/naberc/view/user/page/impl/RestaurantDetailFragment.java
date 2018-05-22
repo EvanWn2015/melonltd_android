@@ -1,13 +1,11 @@
 package com.melonltd.naberc.view.user.page.impl;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -22,8 +20,10 @@ import com.melonltd.naberc.view.common.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.common.type.PageType;
 import com.melonltd.naberc.view.customize.OnLoadLayout;
 import com.melonltd.naberc.view.user.UserMainActivity;
+import com.melonltd.naberc.view.user.adapter.CategoryAdapter;
 
 import java.util.List;
+import java.util.Random;
 
 import in.srain.cube.views.ptr.PtrDefaultHandler;
 import in.srain.cube.views.ptr.PtrFrameLayout;
@@ -37,6 +37,7 @@ public class RestaurantDetailFragment extends AbsPageFragment {
     private CategoryAdapter adapter;
     private ListView categoryListView;
 
+    public static int TO_CATEGORY_MENU_INDEX = -1;
     private List<String> categoryList = Lists.newArrayList();
 
     public RestaurantDetailFragment() {
@@ -80,6 +81,7 @@ public class RestaurantDetailFragment extends AbsPageFragment {
         restaurantBulletinText = v.findViewById(R.id.restaurantDetailBulletinText);
         categoryOnLoadLayout = v.findViewById(R.id.restaurantDetailOnLoadLayout);
         categoryListView = v.findViewById(R.id.restaurantDetailCategoryListView);
+        categoryListView.addHeaderView(LayoutInflater.from(getContext()).inflate(R.layout.user_restaurant_detail_header_view, null), null, false);
         categoryListView.setAdapter(adapter);
         // find include views
         restaurantIcon = v.findViewById(R.id.restaurantImageView);
@@ -103,17 +105,10 @@ public class RestaurantDetailFragment extends AbsPageFragment {
             }
         });
 
-        categoryOnLoadLayout.setOnLoadListener(new OnLoadLayout.OnLoadListener() {
-            @Override
-            public void onLoad() {
-                doLoadData(false);
-            }
-        });
-
         categoryListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-
+                toCategoryMenuPage(i);
             }
         });
     }
@@ -121,7 +116,8 @@ public class RestaurantDetailFragment extends AbsPageFragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (categoryList.size() == 0){
+        // 回到此畫面即時更新種類列表
+        if (categoryList.size() == 0) {
             doLoadData(true);
         }
 
@@ -134,6 +130,19 @@ public class RestaurantDetailFragment extends AbsPageFragment {
                 }
             });
         }
+
+        if (TO_CATEGORY_MENU_INDEX >= 0) {
+            toCategoryMenuPage(TO_CATEGORY_MENU_INDEX);
+        }
+    }
+
+    private void toCategoryMenuPage(int i) {
+        TO_CATEGORY_MENU_INDEX = i;
+        BaseCore.FRAGMENT_TAG = PageType.CATEGORY_MENU.name();
+        Bundle b = new Bundle();
+        b.putString("categoryName", "XXX " + (Integer.parseInt(categoryList.get(i)) - 1));
+        AbsPageFragment f = PageFragmentFactory.of(PageType.CATEGORY_MENU, b);
+        getFragmentManager().beginTransaction().replace(R.id.frameContainer, f).commit();
     }
 
     private void doLoadData(boolean isRefresh) {
@@ -143,7 +152,7 @@ public class RestaurantDetailFragment extends AbsPageFragment {
         ApiManager.test(new ApiCallback(getActivity()) {
             @Override
             public void onSuccess(String responseBody) {
-                for (int i = 0; i < 5; i++) {
+                for (int i = 0; i < 10; i++) {
                     categoryList.add("" + i);
                 }
                 adapter.notifyDataSetChanged();
@@ -175,36 +184,4 @@ public class RestaurantDetailFragment extends AbsPageFragment {
         super.onDestroy();
     }
 
-
-    class CategoryAdapter extends BaseAdapter {
-        private LayoutInflater inflater;
-        private List<String> list;
-
-        public CategoryAdapter(Context context, List list) {
-            this.inflater = LayoutInflater.from(context);
-            this.list = list;
-        }
-
-        @Override
-        public int getCount() {
-            return list.size();
-        }
-
-        @Override
-        public Object getItem(int i) {
-            return list.get(i);
-        }
-
-        @Override
-        public long getItemId(int i) {
-            return i;
-        }
-
-        @Override
-        public View getView(int i, View view, ViewGroup viewGroup) {
-            TextView tv = (TextView) inflater.inflate(android.R.layout.simple_dropdown_item_1line, null);
-            tv.setText(list.get(i));
-            return tv;
-        }
-    }
 }

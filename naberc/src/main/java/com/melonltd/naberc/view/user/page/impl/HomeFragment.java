@@ -84,7 +84,7 @@ public class HomeFragment extends AbsPageFragment {
         contentLoadLayout = v.findViewById(R.id.contentLoadLayout);
         top30RestaurantListView = v.findViewById(R.id.top30ListView);
         top30RestaurantListView.setAdapter(adapter);
-        top30RestaurantListView.addHeaderView(LayoutInflater.from(getContext()).inflate(R.layout.fragment_user_home_banner, null), null, false);
+        top30RestaurantListView.addHeaderView(LayoutInflater.from(getContext()).inflate(R.layout.user_home_banner_header_view, null), null, false);
         banner = v.findViewById(R.id.banner);
     }
 
@@ -93,7 +93,7 @@ public class HomeFragment extends AbsPageFragment {
         contentLoadLayout.setPtrHandler(new PtrHandler() {
             @Override
             public void onRefreshBegin(PtrFrameLayout frame) {
-                doLoadData();
+                doLoadData(true);
             }
 
             @Override
@@ -106,6 +106,7 @@ public class HomeFragment extends AbsPageFragment {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
                 RestaurantFragment.TO_RESTAURANT_DETAIL_INDEX = i;
+                RestaurantDetailFragment.TO_CATEGORY_MENU_INDEX = -1;
                 BaseCore.FRAGMENT_TAG = PageType.RESTAURANT_DETAIL.name();
                 Bundle b = new Bundle();
                 b.putString("where", "HOME");
@@ -123,19 +124,22 @@ public class HomeFragment extends AbsPageFragment {
     }
 
 
-    private void doLoadData() {
-        images.clear();
+    private void doLoadData(boolean isRefresh) {
+        if (isRefresh){
+            images.clear();
+            list.clear();
+        }
+
         adapter.notifyDataSetChanged();
         for (int i = 1; i < 5; i++) {
             images.add("http://f.hiphotos.baidu.com/image/h%3D200/sign=1478eb74d5a20cf45990f9df460b4b0c/d058ccbf6c81800a5422e5fdb43533fa838b4779.jpg");
         }
         banner.setImages(images).setImageLoader(new GlideImageLoader()).start();
 
-        list.clear();
+
         ApiManager.test(new ApiCallback(getActivity()) {
             @Override
             public void onSuccess(String responseBody) {
-
                 for (int i = 0; i < 30; i++) {
                     list.add("" + i);
                 }
@@ -166,7 +170,10 @@ public class HomeFragment extends AbsPageFragment {
 //            AbsPageFragment f = PageFragmentFactory.of(PageType.RESTAURANT_DETAIL, b);
 //            getFragmentManager().beginTransaction().replace(R.id.frameContainer, f).commit();
 //        }else {
-        doLoadData();
+        if (list.size() == 0){
+            doLoadData(true);
+        }
+
 //        }
     }
 

@@ -42,7 +42,7 @@ public class RestaurantAdapter extends BaseAdapter {
     public View getView(int i, View view, ViewGroup viewGroup) {
         RestaurantItem item = null;
         if (view == null) {
-            view = inflater.inflate(R.layout.restaurant_item, null);
+            view = inflater.inflate(R.layout.user_restaurant_item, null);
             item = RestaurantItem.valueOf(view);
             view.setTag(item);
         } else {

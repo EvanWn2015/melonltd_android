@@ -45,6 +45,8 @@ public class RestaurantFragment extends AbsPageFragment implements View.OnClickL
 
     public static int TO_RESTAURANT_DETAIL_INDEX = -1;
 
+    public static int HOME_TO_RESTAURANT_DETAIL_INDEX = -1;
+
     public RestaurantFragment() {
     }
 
@@ -65,6 +67,7 @@ public class RestaurantFragment extends AbsPageFragment implements View.OnClickL
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        adapter = new RestaurantAdapter(getContext(), list);
     }
 
     @Override
@@ -91,7 +94,6 @@ public class RestaurantFragment extends AbsPageFragment implements View.OnClickL
         restaurantOnLoadLayout = v.findViewById(R.id.restaurantOnLoadLayout);
         restaurantListView = v.findViewById(R.id.restaurantListView);
 //        restaurantListView.setItemsCanFocus(true);
-        adapter = new RestaurantAdapter(getContext(), list);
         restaurantListView.setAdapter(adapter);
     }
 
@@ -160,12 +162,14 @@ public class RestaurantFragment extends AbsPageFragment implements View.OnClickL
     public void onResume() {
         super.onResume();
         // TODO Bundle check where to detail page HOME or this
-        if (TO_RESTAURANT_DETAIL_INDEX >= 0) {
+        if (TO_RESTAURANT_DETAIL_INDEX >= 0 ) {
             Bundle b = new Bundle();
 //            b.putString("where", "RESTAURANT");
             BaseCore.FRAGMENT_TAG = PageType.RESTAURANT_DETAIL.name();
             AbsPageFragment f = PageFragmentFactory.of(PageType.RESTAURANT_DETAIL, b);
             getFragmentManager().beginTransaction().replace(R.id.frameContainer, f).commit();
+//        } else if (HOME_TO_RESTAURANT_DETAIL_INDEX >=0){
+//            Log.d(TAG, "home to this ");
         } else {
             if (list.size() == 0) {
                 doLoadData(true);

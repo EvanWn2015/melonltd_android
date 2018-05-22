@@ -35,7 +35,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="32dp"
             android:scaleType="centerCrop"
-            android:src="@drawable/icon_logo"
+            android:src="@drawable/naber_icon_logo"
             app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
             app:layout_constraintEnd_toEndOf="@+id/linearLayout"
             app:layout_constraintStart_toStartOf="@+id/linearLayout"

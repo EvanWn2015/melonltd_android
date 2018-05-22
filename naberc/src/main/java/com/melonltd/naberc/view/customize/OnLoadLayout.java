@@ -12,6 +12,9 @@ import android.widget.ListView;
 
 import in.srain.cube.views.ptr.PtrClassicDefaultHeader;
 import in.srain.cube.views.ptr.PtrFrameLayout;
+import in.srain.cube.views.ptr.PtrHandler;
+import in.srain.cube.views.ptr.PtrUIHandler;
+import in.srain.cube.views.ptr.PtrUIHandlerHook;
 
 public class OnLoadLayout extends PtrFrameLayout implements AbsListView.OnScrollListener {
     private static final String TAG = OnLoadLayout.class.getSimpleName();
@@ -39,7 +42,8 @@ public class OnLoadLayout extends PtrFrameLayout implements AbsListView.OnScroll
     }
 
     private void initViews() {
-        mPtrClassicHeader = new PtrClassicDefaultHeader(getContext());
+//        mPtrClassicHeader = new PtrClassicDefaultHeader(getContext());
+        mPtrClassicHeader = new OnLoadLayoutHeader(getContext());
         setHeaderView(mPtrClassicHeader);
         addPtrUIHandler(mPtrClassicHeader);
     }
@@ -118,10 +122,12 @@ public class OnLoadLayout extends PtrFrameLayout implements AbsListView.OnScroll
         return isBottom() && !isLoading && isPullUp();
     }
 
-    public boolean isTop(){
-        if (mListView != null && mListView.getAdapter() != null) {
+    public boolean isTop() {
+        if (mListView != null && mListView.getAdapter() != null && mListView.getChildAt(0) != null) {
 //            Log.d(TAG, "FirstVisiblePosition ::::" + mListView.getFirstVisiblePosition());
-            return mListView.getFirstVisiblePosition() == 0;
+            if (mListView.getChildCount() > 0 && mListView.getFirstVisiblePosition() == 0 && mListView.getChildAt(0).getTop() >= 0) {
+                return true;
+            }
         }
         return false;
     }

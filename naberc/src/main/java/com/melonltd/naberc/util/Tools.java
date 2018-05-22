@@ -38,13 +38,13 @@ import java.util.Locale;
 
 public class Tools {
     public static final String TAG = Tools.class.getSimpleName();
-    public static Parse parse = new Parse();
-    public static Format format = new Format();
+    public static Parse PARSE = new Parse();
+    public static Format FORMAT = new Format();
     //    public static GCM gcm = new GCM();
-    public static Network network = new Network();
-    public static Longitude longitude = new Longitude();
-    public static Bitmaps bitmaps = new Bitmaps();
-
+    public static Network NETWORK = new Network();
+    public static Longitude LONGITUDE = new Longitude();
+    public static Bitmaps BITMAPS = new Bitmaps();
+    public static Gson GSON = new Gson();
 
     public static class Format {
         private static DecimalFormat decimal = new DecimalFormat();
@@ -114,7 +114,6 @@ public class Tools {
                 int networkType = activeNetwork.getType();
                 return networkType == ConnectivityManager.TYPE_WIFI || networkType == ConnectivityManager.TYPE_MOBILE;
             } else {
-                Log.e(TAG, "not network");
                 return false;
             }
         }

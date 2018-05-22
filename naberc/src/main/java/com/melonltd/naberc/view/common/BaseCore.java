@@ -119,9 +119,9 @@ public abstract class BaseCore extends AppCompatActivity implements LocationList
         super.onResume();
 
         // TODO check mobile has net work
-        if (!Tools.network.hasNetWork(cm)) {
+        if (!Tools.NETWORK.hasNetWork(cm)) {
             // TODO show Dialog
-            Log.d(TAG, "no network? ???");
+            Log.d(TAG, "no NETWORK? ???");
         }else {
             // TODO check google service version
             // Tools.GoogleVersion.checkVersion(context, this);

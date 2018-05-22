@@ -1,6 +1,8 @@
 package com.melonltd.naberc.view.common.type;
 
 import com.melonltd.naberc.R;
+import com.melonltd.naberc.view.user.page.impl.CategoryMenuFragment;
+import com.melonltd.naberc.view.user.page.impl.MenuDetailFragment;
 import com.melonltd.naberc.view.user.page.impl.RestaurantDetailFragment;
 import com.melonltd.naberc.view.user.page.impl.AccountDetailFragment;
 import com.melonltd.naberc.view.user.page.impl.OrderDetailFragment;
@@ -35,13 +37,15 @@ public enum PageType {
     // common
     LOGIN(R.string.common_page_login_title, 100, LoginFragment.class),
     RECOVER_PASSWORD(R.string.common_page_reset_password_title, 101, RecoverPasswordFragment.class),
-    RESET_PASSWORD(R.string.common_page_reset_password_title,102,ResetPasswordFragment.class),
+    RESET_PASSWORD(R.string.common_page_reset_password_title, 102, ResetPasswordFragment.class),
     // user
     REGISTERED(R.string.user_page_registered_title, 103, RegisteredFragment.class),
     VERIFY_SMS(R.string.user_page_verify_sms_title, 105, VerifySMSFragment.class),
     HOME(R.string.menu_home_btn, 0, HomeFragment.class),
     RESTAURANT(R.string.menu_restaurant_btn, 1, RestaurantFragment.class),
     RESTAURANT_DETAIL(R.string.user_page_restaurant_detail_title, 1, RestaurantDetailFragment.class),
+    CATEGORY_MENU(R.string.user_page_category_menu_title, 1, CategoryMenuFragment.class),
+    MENU_DETAIL(R.string.user_page_menu_detail_title, 1, MenuDetailFragment.class),
     SHOPPING_CART(R.string.menu_shopping_cart_btn, 2, ShoppingCartFragment.class),
     HISTORY(R.string.menu_history_btn, 3, HistoryFragment.class),
     ORDER_DETAIL(R.string.user_page_order_detail_title, 3, OrderDetailFragment.class),

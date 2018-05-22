@@ -2,10 +2,14 @@ package com.melonltd.naberc.model.helper.okhttp;
 
 import android.app.Activity;
 import android.content.Context;
+import android.net.ConnectivityManager;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
 
+import com.bigkoo.alertview.AlertView;
+import com.bigkoo.alertview.OnItemClickListener;
+import com.melonltd.naberc.util.Tools;
 import com.melonltd.naberc.view.customize.LoadingBar;
 
 import java.io.IOException;
@@ -16,7 +20,7 @@ import okhttp3.Response;
 
 public abstract class ApiCallback implements Callback {
     private static final String TAG = ApiCallback.class.getSimpleName();
-    private LoadingBar loadingBar;
+    private static LoadingBar loadingBar;
 
     abstract public void onSuccess(final String responseBody);
 
@@ -31,22 +35,16 @@ public abstract class ApiCallback implements Callback {
 
     @Override
     public void onFailure(Call call, final IOException e) {
-//        runOnUiThread(new Runnable() {
-//            @Override
-//            public void run() {
-//                e.printStackTrace();
-//                if (e.getMessage().contains("Canceled") || e.getMessage().contains("Socket closed")) {
-//                    Log.e(TAG, "fail", e);
-//                } else {
-//                    onFail(e);
-//                }
-//                loadingBar.hide();
-//            }
-//        });
         this.activity.runOnUiThread(
                 new Runnable() {
                     @Override
                     public void run() {
+                        // 如果是 network 錯誤
+                        if (checkNetWork()) {
+                            loadingBar.hide();
+                            getAlertView().show();
+                            return;
+                        }
                         e.printStackTrace();
                         if (e.getMessage().contains("Canceled") || e.getMessage().contains("Socket closed")) {
                             Log.e(TAG, "fail", e);
@@ -77,22 +75,25 @@ public abstract class ApiCallback implements Callback {
                         loadingBar.hide();
                     }
                 });
-//        runOnUiThread(new Runnable() {
-//            @Override
-//            public void run() {
-//                try {
-//                    onSuccess(response.body().string());
-//                } catch (IOException e) {
-//                    Log.e(TAG, "fail", e);
-//                    onFailure(call, new IOException("Failed"));
-//                }
-//                loadingBar.hide();
-//            }
-//        });
     }
 
+
+    public boolean checkNetWork() {
+        ConnectivityManager cm = (ConnectivityManager) this.activity.getSystemService(Context.CONNECTIVITY_SERVICE);
+        return !Tools.NETWORK.hasNetWork(cm);
+    }
 //    private void runOnUiThread(Runnable task) {
 //        new Handler(Looper.getMainLooper()).post(task);
 //    }
 
+    private AlertView getAlertView() {
+        return new AlertView.Builder()
+                .setContext(this.activity)
+                .setStyle(AlertView.Style.Alert)
+                .setTitle("網路連線錯誤")
+                .setMessage("請檢查 Wi-Fi 或 4G是否已連接。")
+                .setDestructive("確定")
+                .build()
+                .setCancelable(true);
+    }
 }

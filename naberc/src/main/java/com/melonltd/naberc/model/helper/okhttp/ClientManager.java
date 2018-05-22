@@ -3,7 +3,7 @@ package com.melonltd.naberc.model.helper.okhttp;
 import android.annotation.SuppressLint;
 import android.util.Log;
 
-import com.melonltd.naberc.util.GsonUtil;
+import com.melonltd.naberc.util.Tools;
 
 import java.io.IOException;
 import java.net.URL;
@@ -42,7 +42,7 @@ public class ClientManager {
             .readTimeout(25, TimeUnit.SECONDS)
             .writeTimeout(25, TimeUnit.SECONDS)
             .addInterceptor(LOGGING)
-//            .connectionPool(CONNECTION_POOL)
+            .connectionPool(CONNECTION_POOL)
             .hostnameVerifier(new TrustAllHostnameVerifier())
             .sslSocketFactory(createSSLSocketFactory(), new TrustAllManager())
             .build();
@@ -89,13 +89,6 @@ public class ClientManager {
                 .url(url)
                 .get()
                 .build();
-//        try {
-//            Response response = CLIENT.newCall(request).execute();
-//            return response;
-//        } catch (IOException e) {
-//            Log.e(TAG, "error", e);
-//            return null;
-//        }
 
         return CLIENT.newCall(request);
     }
@@ -127,7 +120,7 @@ public class ClientManager {
     }
 
     private static Response post(String url, Object object) {
-        RequestBody body = RequestBody.create(JSON, GsonUtil.toJson(object));
+        RequestBody body = RequestBody.create(JSON, Tools.GSON.toJson(object));
         Request request = new Request.Builder()
 //                .header(HEADER_KEY, Preference.headervalue)
                 .url(url)
@@ -162,7 +155,7 @@ public class ClientManager {
     }
 
     public static Response put(String url, Object object) {
-        RequestBody body = RequestBody.create(JSON, GsonUtil.toJson(object));
+        RequestBody body = RequestBody.create(JSON, Tools.GSON.toJson(object));
         Request request = new Request.Builder()
 //                .header(HEADER_KEY, Preference.headervalue)
                 .url(url)

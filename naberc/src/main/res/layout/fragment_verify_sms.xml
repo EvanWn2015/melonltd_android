@@ -103,7 +103,7 @@
         android:layout_height="30dp"
         android:layout_marginBottom="12dp"
         android:layout_marginEnd="4dp"
-        android:background="@drawable/reverse_gary_button_style"
+        android:background="@drawable/naber_reverse_gary_button_style"
         android:text="@string/send_verify_code_btn"
         android:textSize="12dp"
         app:layout_constraintBottom_toBottomOf="@+id/phoneNamberEdit"

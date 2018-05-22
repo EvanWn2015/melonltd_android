@@ -43,6 +43,5 @@
 
             </LinearLayout>
         </FrameLayout>
-
     </com.melonltd.naberc.view.customize.OnLoadLayout>
 </android.support.constraint.ConstraintLayout>

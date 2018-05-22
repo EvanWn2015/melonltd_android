@@ -4,6 +4,9 @@ import android.util.Log;
 
 import com.melonltd.naberc.model.api.ApiUrl;
 
+import java.io.IOException;
+import java.net.ConnectException;
+
 import okhttp3.Call;
 import okhttp3.HttpUrl;
 
@@ -33,16 +36,10 @@ public class ApiManager {
     }
 
     public static <T> void test(ApiCallback callback) {
-
         HttpUrl url = HttpUrl.parse(ApiUrl.test).newBuilder()
                 .build();
-
         Log.d(TAG, url.toString());
-        try {
-            Call call = getClient().get(url);
-            call.enqueue(callback);
-        } catch (RuntimeException e) {
-            callback.onFail(e);
-        }
+        Call call = getClient().get(url);
+        call.enqueue(callback);
     }
 }

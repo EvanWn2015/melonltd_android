@@ -20,6 +20,7 @@ import com.melonltd.naberc.view.customize.NaberTab;
 import com.melonltd.naberc.view.common.abs.AbsPageFragment;
 import com.melonltd.naberc.view.common.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.common.type.PageType;
+import com.melonltd.naberc.view.user.page.impl.RestaurantFragment;
 
 import java.util.List;
 
@@ -119,17 +120,26 @@ public class UserMainActivity extends BaseCore implements View.OnClickListener, 
 
     @Override
     public void onLayoutChange(View view, int i, int i1, int i2, int i3, int i4, int i5, int i6, int i7) {
-        Log.d(TAG, "LayoutChange ->> " + FRAGMENT_TAG);
         int position = PageType.equalsPositionByName(FRAGMENT_TAG);
-        if (position <= 4) {
-            bottomMenuTabLayout.getTabAt(position).select();
+        for (int index = 0; index < bottomMenuTabLayout.getTabCount(); index++) {
+            onTabUnselected(bottomMenuTabLayout.getTabAt(index));
+        }
+
+        if (bottomMenuTabLayout.getTabAt(position) != null) {
+            View v = bottomMenuTabLayout.getTabAt(position).getCustomView();
+            ImageView icon = v.findViewById(R.id.tabIcon);
+            TextView text = v.findViewById(R.id.tabTitle);
+            icon.setColorFilter(getResources().getColor(R.color.naber_basis));
+            text.setTextColor(getResources().getColor(R.color.naber_basis));
         }
     }
 
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
+        Object o = tab.getTag();
+        Log.d(TAG, o.toString());
         int index = Integer.parseInt(tab.getTag().toString());
-
+//&& RestaurantFragment.HOME_TO_RESTAURANT_DETAIL_INDEX < 0
         if (MAIN_PAGE.contains(PageType.ofId(index))) {
 //            tab.getIcon().setColorFilter(ContextCompat.getColor(context, R.color.naber_basis), PorterDuff.Mode.SRC_IN);
             AbsPageFragment fragment = PageFragmentFactory.of(PageType.ofId(Integer.parseInt(tab.getTag().toString())), null);
@@ -175,6 +185,21 @@ public class UserMainActivity extends BaseCore implements View.OnClickListener, 
 
     @Override
     public void onTabReselected(TabLayout.Tab tab) {
+
+        int index = Integer.parseInt(tab.getTag().toString());
+        if (!FRAGMENT_TAG.equals(PageType.ofId(index).name())) {
+            if (MAIN_PAGE.contains(PageType.ofId(index))) {
+//            tab.getIcon().setColorFilter(ContextCompat.getColor(context, R.color.naber_basis), PorterDuff.Mode.SRC_IN);
+                AbsPageFragment fragment = PageFragmentFactory.of(PageType.ofId(Integer.parseInt(tab.getTag().toString())), null);
+                FRAGMENT_TAG = PageType.ofId(Integer.parseInt(tab.getTag().toString())).name();
+                fragmentManager.beginTransaction().addToBackStack(fragment.toString()).replace(R.id.frameContainer, fragment).commit();
+            }
+            View v = tab.getCustomView();
+            ImageView icon = v.findViewById(R.id.tabIcon);
+            TextView text = v.findViewById(R.id.tabTitle);
+            icon.setColorFilter(getResources().getColor(R.color.naber_basis));
+            text.setTextColor(getResources().getColor(R.color.naber_basis));
+        }
     }
 
 

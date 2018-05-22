@@ -9,7 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="240dp"
         android:layout_marginBottom="8dp"
-        app:banner_default_image="@drawable/icon_logo"
+        app:banner_default_image="@drawable/naber_icon_logo"
         app:indicator_height="10dp"
         app:indicator_margin="5dp"
         app:indicator_width="10dp"

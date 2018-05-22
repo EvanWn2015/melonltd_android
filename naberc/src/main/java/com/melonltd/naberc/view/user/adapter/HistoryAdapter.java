@@ -40,7 +40,7 @@ public class HistoryAdapter extends BaseAdapter {
     public View getView(int i, View view, ViewGroup viewGroup) {
         HistoryItem item = null;
         if (view == null) {
-            view = inflater.inflate(R.layout.history_item, null);
+            view = inflater.inflate(R.layout.user_history_item, null);
             item = HistoryItem.valueOf(view);
             view.setTag(item);
         } else {

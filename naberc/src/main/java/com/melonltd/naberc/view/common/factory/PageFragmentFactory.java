@@ -3,6 +3,8 @@ package com.melonltd.naberc.view.common.factory;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 
+import com.melonltd.naberc.view.user.page.impl.CategoryMenuFragment;
+import com.melonltd.naberc.view.user.page.impl.MenuDetailFragment;
 import com.melonltd.naberc.view.user.page.impl.RestaurantDetailFragment;
 import com.melonltd.naberc.view.common.page.impl.ResetPasswordFragment;
 import com.melonltd.naberc.view.user.page.impl.AccountDetailFragment;
@@ -45,6 +47,8 @@ public class PageFragmentFactory {
                 return new RestaurantFragment().getInstance(bundle);
             case RESTAURANT_DETAIL:
                 return new RestaurantDetailFragment().getInstance(bundle);
+            case CATEGORY_MENU:
+                return new CategoryMenuFragment().getInstance(bundle);
             case VERIFY_SMS:
                 return new VerifySMSFragment().getInstance(bundle);
             case SHOPPING_CART:
@@ -57,6 +61,8 @@ public class PageFragmentFactory {
                 return new RecoverPasswordFragment().getInstance(bundle);
             case RESET_PASSWORD:
                 return new ResetPasswordFragment().getInstance(bundle);
+            case MENU_DETAIL:
+                return new MenuDetailFragment().getInstance(bundle);
             default:
                 return new HomeFragment().getInstance(bundle);
         }

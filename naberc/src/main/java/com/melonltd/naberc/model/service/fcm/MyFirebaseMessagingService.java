@@ -4,13 +4,13 @@ import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
-import com.melonltd.naberc.util.GsonUtil;
+import com.melonltd.naberc.util.Tools;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-        Log.d("FCM", "onMessageReceived:" + GsonUtil.toJson(remoteMessage));
+        Log.d("FCM", "onMessageReceived:" + Tools.GSON.toJson(remoteMessage));
     }
 
 }
