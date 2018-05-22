@@ -10,34 +10,28 @@
         android:id="@+id/scrollView111"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:orientation="vertical"
         android:overScrollMode="never"
+        app:layout_constraintBottom_toTopOf="@+id/linearLayout9"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-        <!--app:layout_constraintBottom_toTopOf="@+id/linearLayout9"-->
 
         <LinearLayout
-            android:id="@+id/linearLayout8"
+            android:id="@+id/menuDetailContentLinearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
+            android:padding="16dp"
+            android:paddingBottom="16dp"
             app:layout_constraintBottom_toTopOf="@+id/linearLayout9"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
-            <include layout="@layout/menu_detail_scope" />
-
-            <include layout="@layout/menu_detail_demand" />
-
-            <include layout="@layout/menu_detail_demand" />
-
-            <include layout="@layout/menu_detail_optional" />
-
         </LinearLayout>
 
     </ScrollView>
-    <!--android:background="@drawable/naber_menu_detail_foot_bar"-->
 
     <LinearLayout
         android:id="@+id/linearLayout9"
@@ -84,7 +78,7 @@
                 android:gravity="center"
                 android:orientation="horizontal"
                 app:layout_constraintBottom_toBottomOf="@+id/textView39"
-                app:layout_constraintEnd_toStartOf="@+id/button"
+                app:layout_constraintEnd_toStartOf="@+id/addToShopCartBtn"
                 app:layout_constraintStart_toEndOf="@+id/textView39"
                 app:layout_constraintTop_toTopOf="@+id/textView39">
 
@@ -101,17 +95,22 @@
                     android:src="@drawable/naber_remove_icon"
                     tools:layout_editor_absoluteY="13dp" />
 
-                <TextView
-                    android:id="@+id/textView38"
+                <EditText
+                    android:id="@+id/amountEditText"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="4dp"
                     android:layout_marginTop="4dp"
                     android:layout_weight="1"
+                    android:background="@android:color/transparent"
+                    android:inputType="number"
                     android:paddingEnd="16dp"
                     android:paddingStart="16dp"
-                    android:text="0"
+                    android:singleLine="true"
+                    android:text="1"
                     android:textAlignment="center"
+                    android:textSize="16sp"
+                    android:textStyle="bold"
                     tools:layout_editor_absoluteY="16dp" />
 
                 <ImageButton
@@ -126,12 +125,10 @@
                     android:paddingStart="8dp"
                     android:src="@drawable/naber_add_icon"
                     tools:layout_editor_absoluteY="13dp" />
-
             </LinearLayout>
 
-
             <Button
-                android:id="@+id/button"
+                android:id="@+id/addToShopCartBtn"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_margin="1dp"
