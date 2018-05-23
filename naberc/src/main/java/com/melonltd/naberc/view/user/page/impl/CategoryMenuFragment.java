@@ -36,6 +36,7 @@ public class CategoryMenuFragment extends AbsPageFragment {
     private MenuAdapter adapter;
     private ListView menuListView;
     private List<String> list = Lists.newArrayList();
+    public static int TO_MENU_DETAIL_INDEX = -1;
 
 
     public CategoryMenuFragment() {
@@ -104,7 +105,7 @@ public class CategoryMenuFragment extends AbsPageFragment {
         menuListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                toMenuDetailPage();
+                toMenuDetailPage(i);
             }
         });
     }
@@ -136,9 +137,10 @@ public class CategoryMenuFragment extends AbsPageFragment {
         super.onResume();
         if (list.size() == 0) {
             doLoadData(true);
+            String categoryName = getArguments().getString("categoryName");
+            categoryNameText.setText(categoryName);
         }
-        String categoryName = getArguments().getString("categoryName");
-        categoryNameText.setText(categoryName);
+
         if (UserMainActivity.toolbar != null) {
             UserMainActivity.navigationIconDisplay(true, new View.OnClickListener() {
                 @Override
@@ -148,9 +150,13 @@ public class CategoryMenuFragment extends AbsPageFragment {
                 }
             });
         }
+        if (TO_MENU_DETAIL_INDEX >=0 ){
+            toMenuDetailPage(TO_MENU_DETAIL_INDEX);
+        }
     }
 
-    private void toMenuDetailPage(){
+    private void toMenuDetailPage(int index) {
+        TO_MENU_DETAIL_INDEX = index;
         BaseCore.FRAGMENT_TAG = PageType.MENU_DETAIL.name();
         AbsPageFragment f = PageFragmentFactory.of(PageType.MENU_DETAIL, null);
         getFragmentManager().beginTransaction().remove(this).replace(R.id.frameContainer, f).commit();

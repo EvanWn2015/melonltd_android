@@ -1,6 +1,7 @@
 package com.melonltd.naberc.view.user.adapter;
 
 import android.content.Context;
+import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,6 +48,12 @@ public class CategoryAdapter extends BaseAdapter {
         }
         item.categoryText.setText("XXX " + i);
         return view;
+    }
+
+    @Nullable
+    @Override
+    public CharSequence[] getAutofillOptions() {
+        return new CharSequence[0];
     }
 
     static class CategoryItem {

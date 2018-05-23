@@ -36,8 +36,8 @@ import com.melonltd.naberc.view.user.page.impl.VerifySMSFragment;
 public enum PageType {
     // common
     LOGIN(R.string.common_page_login_title, 100, LoginFragment.class),
-    RECOVER_PASSWORD(R.string.common_page_reset_password_title, 101, RecoverPasswordFragment.class),
-    RESET_PASSWORD(R.string.common_page_reset_password_title, 102, ResetPasswordFragment.class),
+    RECOVER_PASSWORD(R.string.common_page_recover_password_title, 101, RecoverPasswordFragment.class),
+    RESET_PASSWORD(R.string.common_page_reset_password_title, 4, ResetPasswordFragment.class),
     // user
     REGISTERED(R.string.user_page_registered_title, 103, RegisteredFragment.class),
     VERIFY_SMS(R.string.user_page_verify_sms_title, 105, VerifySMSFragment.class),

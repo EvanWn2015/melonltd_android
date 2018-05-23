@@ -1,29 +1,33 @@
 package com.melonltd.naberc.view.customize;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.CheckBox;
+import android.widget.CompoundButton;
 
+import com.google.common.base.Strings;
 import com.melonltd.naberc.R;
+import com.melonltd.naberc.util.Tools;
 
+
+/**
+ * 半形空白字元（\u0020）
+ */
 public class NaberCheckButton {
+    private static final String TAG = NaberCheckButton.class.getSimpleName();
     private CheckBox box;
-    private String title = "", price = "";
+    private String title = "\u0020", price = "\u0020", symbol = "\u0020";
     private String text = "";
 
     public NaberCheckButton() {
 
     }
 
-    private NaberCheckButton setParameter(CheckBox box, String title, String price) {
+    private NaberCheckButton setParameter(CheckBox box, String title, String price, String symbol) {
         this.box = box;
-        this.title = title;
-        this.price = price;
-        this.text = title + "\u3000\u3000\u3000\u3000" + price + "$";
-        this.box.setText(this.text);
+        setTitleAndPriceAndSymbol(title, price, symbol);
         return this;
     }
 
@@ -31,10 +35,11 @@ public class NaberCheckButton {
         return new Builder(context);
     }
 
-    private void setTitleAndPrice(String title, String price) {
-        this.title = title;
-        this.price = price;
-        this.text = title + "\u3000\u3000\u3000\u3000" + price + "$";
+    private void setTitleAndPriceAndSymbol(String title, String price, String symbol) {
+        this.title = Tools.MAKEUP.makeUpCharacter(title, 24, Tools.MakeUp.Direction.RIGHT);
+        this.price = Tools.MAKEUP.makeUpCharacter(price, 10, Tools.MakeUp.Direction.LEFT);
+        this.symbol = Tools.MAKEUP.makeUpCharacter(symbol, 2, Tools.MakeUp.Direction.LEFT);
+        this.text = this.title + Tools.MAKEUP.makeUpCharacter("", 10, Tools.MakeUp.Direction.RIGHT) + this.price + this.symbol;
         this.box.setText(this.text);
     }
 
@@ -45,7 +50,7 @@ public class NaberCheckButton {
     public static class Builder {
         private CheckBox box;
         private NaberCheckButton naberCheckBox;
-        private String title = "", price = "";
+        private String title = "\u0020", price = "\u0020", symbol = "\u0020";
 
         Builder(Context context) {
             this.naberCheckBox = new NaberCheckButton();
@@ -55,7 +60,7 @@ public class NaberCheckButton {
             this.box.setText("");
             this.box.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_START);
             this.box.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
-            this.box.setPaddingRelative(0, 0, 0, 0);
+            this.box.setPaddingRelative(50, 12, 0, 0);
         }
 
         public Builder setChecked(boolean checked) {
@@ -98,8 +103,19 @@ public class NaberCheckButton {
             return this;
         }
 
+        public Builder setSymbol(String symbol) {
+            this.symbol = symbol;
+            return this;
+        }
+
+        public Builder setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener listener) {
+            this.box.setOnCheckedChangeListener(listener);
+            return this;
+        }
+
         public CheckBox build() {
-            return this.naberCheckBox.setParameter(this.box, this.title, this.price).getView();
+            return this.naberCheckBox.setParameter(this.box, this.title, this.price, this.symbol).getView();
         }
     }
+
 }

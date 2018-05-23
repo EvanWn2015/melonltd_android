@@ -1,26 +1,28 @@
 package com.melonltd.naberc.view.customize;
 
 import android.content.Context;
+import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.RadioButton;
 
+import com.google.common.base.Strings;
+import com.melonltd.naberc.util.Tools;
+
 public class NaberRadioButton {
+    private static final String TAG = NaberRadioButton.class.getSimpleName();
     private RadioButton radio;
-    private String title = "", price = "";
+    private String title = "\u0020", price = "\u0020", symbol = "\u0020";
     private String text = "";
 
     public NaberRadioButton() {
 
     }
 
-    private NaberRadioButton setParameter(RadioButton radio, String title, String price) {
+    private NaberRadioButton setParameter(RadioButton radio, String title, String price, String symbol) {
         this.radio = radio;
-        this.title = title;
-        this.price = price;
-        this.text = title + "\u3000\u3000\u3000\u3000" + price + "$";
-        this.radio.setText(this.text);
+        setTitleAndPriceAndSymbol(title, price, symbol);
         return this;
     }
 
@@ -28,10 +30,11 @@ public class NaberRadioButton {
         return new Builder(context);
     }
 
-    private void setTitleAndPrice(String title, String price){
-        this.title = title;
-        this.price = price;
-        this.text = title + "\u3000\u3000\u3000\u3000" + price + "$";
+    private void setTitleAndPriceAndSymbol(String title, String price, String symbol) {
+        this.title = Tools.MAKEUP.makeUpCharacter(title, 20, Tools.MakeUp.Direction.RIGHT);
+        this.price = Tools.MAKEUP.makeUpCharacter(price, 10, Tools.MakeUp.Direction.LEFT);
+        this.symbol = Tools.MAKEUP.makeUpCharacter(symbol, 2, Tools.MakeUp.Direction.LEFT);
+        this.text = this.title + Tools.MAKEUP.makeUpCharacter("", 10, Tools.MakeUp.Direction.RIGHT) + this.price + this.symbol;
         this.radio.setText(this.text);
     }
 
@@ -42,7 +45,7 @@ public class NaberRadioButton {
     public static class Builder {
         private RadioButton radio;
         private NaberRadioButton naberRadio;
-        private String title = "", price = "";
+        private String title = "\u0020", price = "\u0020", symbol = "\u0020";
 
         Builder(Context context) {
             this.naberRadio = new NaberRadioButton();
@@ -52,7 +55,7 @@ public class NaberRadioButton {
             this.radio.setText("");
             this.radio.setTextAlignment(View.TEXT_ALIGNMENT_TEXT_START);
             this.radio.setLayoutDirection(View.LAYOUT_DIRECTION_RTL);
-            this.radio.setPaddingRelative(0, 0, 0, 0);
+            this.radio.setPaddingRelative(50, 12, 0, 0);
         }
 
         public Builder setChecked(boolean checked) {
@@ -90,13 +93,20 @@ public class NaberRadioButton {
             return this;
         }
 
+        public Builder setSymbol(String symbol) {
+            this.symbol = symbol;
+            return this;
+        }
+
         public Builder setTag(Object o) {
             this.radio.setTag(o);
             return this;
         }
 
         public RadioButton build() {
-            return this.naberRadio.setParameter(this.radio, this.title, this.price).getView();
+            return this.naberRadio.setParameter(this.radio, this.title, this.price, this.symbol).getView();
         }
     }
+
+
 }

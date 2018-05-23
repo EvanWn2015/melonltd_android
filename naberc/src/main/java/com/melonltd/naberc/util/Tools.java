@@ -20,6 +20,7 @@ import android.view.KeyEvent;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
+import com.google.common.base.Strings;
 import com.google.gson.Gson;
 
 import java.io.ByteArrayOutputStream;
@@ -45,6 +46,7 @@ public class Tools {
     public static Longitude LONGITUDE = new Longitude();
     public static Bitmaps BITMAPS = new Bitmaps();
     public static Gson GSON = new Gson();
+    public static MakeUp MAKEUP = new MakeUp();
 
     public static class Format {
         private static DecimalFormat decimal = new DecimalFormat();
@@ -208,6 +210,30 @@ public class Tools {
                 dialog.show();
             }
             return false;
+        }
+    }
+
+
+    public static class MakeUp {
+        public enum Direction {RIGHT, LEFT}
+
+        public static String makeUpCharacter(String src, int min, Direction direction) {
+            String result = "";
+            if (Strings.isNullOrEmpty(src)) {
+                for (int i = 0; i < min; i++) {
+//                    result = result + "\u3000";
+                    result = result + "\u0020";
+                }
+            } else if (src.toCharArray().length - min < 0) {
+                for (int i = 0; i < min - src.toCharArray().length; i++) {
+                    result = result + "\u0020";
+//                    result = result + "\u3000";
+                }
+                result = direction.equals(Direction.RIGHT) ? src + result : result + src;
+            } else {
+                result = src;
+            }
+            return result;
         }
     }
 }
