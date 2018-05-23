@@ -63,8 +63,8 @@ public class MenuAdapter extends BaseAdapter {
 
         public static MenuItem valueOf(View v) {
             MenuItem item = new MenuItem();
-            item.itemIconImageView = v.findViewById(R.id.itemIconImageView);
-            item.itemNameText = v.findViewById(R.id.itemNameText);
+            item.itemIconImageView = v.findViewById(R.id.ordersItemIconImageView);
+            item.itemNameText = v.findViewById(R.id.ordersItemNameText);
             item.itemPriceText = v.findViewById(R.id.itemPriceText);
             return item;
         }

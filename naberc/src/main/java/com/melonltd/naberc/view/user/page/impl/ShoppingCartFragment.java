@@ -4,6 +4,7 @@ package com.melonltd.naberc.view.user.page.impl;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import com.google.common.collect.Lists;
 import com.melonltd.naberc.R;
 import com.melonltd.naberc.view.common.abs.AbsPageFragment;
 import com.melonltd.naberc.view.customize.OnLoadLayout;
+import com.melonltd.naberc.view.customize.ShoppingDetailItem;
 
 import java.util.List;
 
@@ -109,12 +111,18 @@ public class ShoppingCartFragment extends AbsPageFragment {
     }
 
 
+
+
+
+
+
+
     class ShoppingCartAdapter extends BaseAdapter {
-        private LayoutInflater inflater = null;
+        private Context context;
         private List<String> list;
 
         ShoppingCartAdapter(Context context, List<String> list) {
-            this.inflater = LayoutInflater.from(context);
+            this.context = context;
             this.list = list;
         }
 
@@ -141,9 +149,42 @@ public class ShoppingCartFragment extends AbsPageFragment {
 
         @Override
         public View getView(int i, View view, ViewGroup viewGroup) {
-            //layout/user_shopping_detail_item
-            view = inflater.inflate(R.layout.user_shopping_detail_item, null);
+            ShoppingHolder holder = null;
+            if (view == null) {
+                ShoppingDetailItem shoppingDetailItem = new ShoppingDetailItem().Builder(this.context)
+                        .setName("Test Name" + list.get(i))
+                        .setTotalAmount(4000 + i)
+                        .setBonus("400")
+                        .setDeleteListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Log.d(TAG, "delete");
+                            }
+                        })
+                        .setSubmitListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                Log.d(TAG, "submit");
+                            }
+                        }).build();
+                holder = ShoppingHolder.valueOf(shoppingDetailItem);
+                // TODO add Orders Item View
+                shoppingDetailItem.addOrdersItemsViews(null);
+                view = shoppingDetailItem.getView();
+                view.setTag(holder);
+            } else {
+                holder = (ShoppingHolder) view.getTag();
+            }
             return view;
+        }
+    }
+
+    public static class ShoppingHolder {
+        private ShoppingDetailItem item;
+        public static ShoppingHolder valueOf(ShoppingDetailItem item) {
+            ShoppingHolder holder = new ShoppingHolder();
+            holder.item = item;
+            return holder;
         }
     }
 }

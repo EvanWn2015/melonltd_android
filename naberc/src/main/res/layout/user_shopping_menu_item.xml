@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <ImageView
-        android:id="@+id/itemIconImageView"
+        android:id="@+id/ordersItemIconImageView"
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:layout_marginBottom="8dp"
@@ -19,33 +18,33 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/itemNameText"
+        android:id="@+id/ordersItemNameText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:text="珍珠奶茶"
         android:textColor="@android:color/black"
         android:textSize="14sp"
-        app:layout_constraintStart_toEndOf="@+id/itemIconImageView"
-        app:layout_constraintTop_toTopOf="@+id/itemIconImageView" />
+        app:layout_constraintStart_toEndOf="@+id/ordersItemIconImageView"
+        app:layout_constraintTop_toTopOf="@+id/ordersItemIconImageView" />
 
     <TextView
-        android:id="@+id/textView39"
+        android:id="@+id/ordersItemScopeText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="中杯，正常甜，正常冰"
         android:textSize="10sp"
-        app:layout_constraintStart_toStartOf="@+id/itemNameText"
-        app:layout_constraintTop_toBottomOf="@+id/itemNameText" />
+        app:layout_constraintStart_toStartOf="@+id/ordersItemNameText"
+        app:layout_constraintTop_toBottomOf="@+id/ordersItemNameText" />
 
     <TextView
-        android:id="@+id/textView76"
+        android:id="@+id/ordersItemOptText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="加：仙草，布丁"
         android:textSize="10sp"
-        app:layout_constraintStart_toStartOf="@+id/itemNameText"
-        app:layout_constraintTop_toBottomOf="@+id/textView39" />
+        app:layout_constraintStart_toStartOf="@+id/ordersItemNameText"
+        app:layout_constraintTop_toBottomOf="@+id/ordersItemScopeText" />
 
     <LinearLayout
         android:id="@+id/linearLayout100"
@@ -54,11 +53,11 @@
         android:background="@drawable/naber_reverse_gary_button_style"
         android:gravity="center"
         android:orientation="horizontal"
-        app:layout_constraintBottom_toBottomOf="@+id/itemIconImageView"
-        app:layout_constraintStart_toStartOf="@+id/itemNameText">
+        app:layout_constraintBottom_toBottomOf="@+id/ordersItemIconImageView"
+        app:layout_constraintStart_toStartOf="@+id/ordersItemNameText">
 
         <ImageButton
-            android:id="@+id/minusBtn"
+            android:id="@+id/ordersItemMinusBtn"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginBottom="0dp"
@@ -70,7 +69,7 @@
             android:src="@drawable/naber_remove_icon" />
 
         <EditText
-            android:id="@+id/quantityEditText"
+            android:id="@+id/ordersItemQuantityEditText"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginBottom="0dp"
@@ -87,7 +86,7 @@
             android:textStyle="bold" />
 
         <ImageButton
-            android:id="@+id/addBtn"
+            android:id="@+id/ordersItemAddBtn"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:layout_marginBottom="0dp"
@@ -100,19 +99,31 @@
     </LinearLayout>
 
     <TextView
-        android:id="@+id/textView77"
+        android:id="@+id/textView39"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="$"
+        android:textColor="@android:color/black"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="@+id/ordersItemPriceText"
+        app:layout_constraintEnd_toStartOf="@+id/ordersItemPriceText"
+        app:layout_constraintTop_toTopOf="@+id/ordersItemPriceText" />
+
+    <TextView
+        android:id="@+id/ordersItemPriceText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
         android:layout_weight="1"
-        android:text="$40"
+        android:text="40"
         android:textColor="@android:color/black"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/linearLayout100"
-        app:layout_constraintEnd_toStartOf="@+id/imageButton" />
+        app:layout_constraintEnd_toStartOf="@+id/ordersItemDeleteBtn"
+        app:layout_constraintTop_toTopOf="@+id/ordersItemDeleteBtn" />
 
     <ImageButton
-        android:id="@+id/imageButton"
+        android:id="@+id/ordersItemDeleteBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"

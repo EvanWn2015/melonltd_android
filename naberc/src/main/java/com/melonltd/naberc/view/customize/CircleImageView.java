@@ -1,6 +1,5 @@
 package com.melonltd.naberc.view.customize;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapShader;
@@ -11,16 +10,16 @@ import android.graphics.Shader;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
-import android.widget.ImageView;
 
 
 public class CircleImageView extends android.support.v7.widget.AppCompatImageView {
 
-    private Paint mPaint; //画笔
+    private Paint mPaint; //畫筆
 
-    private int mRadius; //圆形图片的半径
+    private int mRadius; //圓形圖片的半徑
 
-    private float mScale; //图片的缩放比例
+    private float mScale; //圖片的縮放比例
+
 
     public CircleImageView(Context context) {
         super(context);

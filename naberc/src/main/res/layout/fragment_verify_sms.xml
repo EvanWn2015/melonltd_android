@@ -39,6 +39,7 @@
         android:digits="0123456789"
         android:hint="@string/phone_number_edit_hint_text"
         android:inputType="number"
+        android:textSize="14sp"
         app:layout_constraintBottom_toTopOf="@+id/verifySMSEdit"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -55,6 +56,7 @@
         android:digits="0123456789"
         android:hint="@string/verify_number_edit_hint_text"
         android:inputType="number"
+        android:textSize="14sp"
         app:layout_constraintBottom_toTopOf="@+id/haveReadCheckBox"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -93,6 +95,7 @@
         android:background="@color/naber_basis"
         android:text="@string/submit_verify_btn"
         android:textColor="@android:color/black"
+        android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/haveReadCheckBox" />
@@ -100,7 +103,7 @@
     <Button
         android:id="@+id/requestVerifyCodeBtn"
         android:layout_width="wrap_content"
-        android:layout_height="30dp"
+        android:layout_height="24dp"
         android:layout_marginBottom="12dp"
         android:layout_marginEnd="4dp"
         android:background="@drawable/naber_reverse_gary_button_style"
