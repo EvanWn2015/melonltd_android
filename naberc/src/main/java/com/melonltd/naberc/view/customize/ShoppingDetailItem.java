@@ -1,6 +1,7 @@
 package com.melonltd.naberc.view.customize;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
@@ -9,7 +10,12 @@ import android.widget.TextView;
 
 import com.melonltd.naberc.R;
 
-public class ShoppingDetailItem {
+import java.io.Serializable;
+import java.util.List;
+
+public class ShoppingDetailItem implements Serializable {
+    private static final long serialVersionUID = -1306198949110745297L;
+    private static final String TAG = ShoppingDetailItem.class.getSimpleName();
     private View view;
     private TextView nameText, totalAmountText, bonusText;
     private LinearLayout layout;
@@ -26,7 +32,12 @@ public class ShoppingDetailItem {
         return new Builder(context);
     }
 
-    public void addOrdersItemsViews(View view) {
+    public void addOrdersItemsViews(@NonNull List<View> views) {
+        for(View view :views){
+            this.layout.addView(view);
+        }
+    }
+    public void addOrdersItemsView(@NonNull View view) {
         this.layout.addView(view);
     }
 
@@ -52,6 +63,7 @@ public class ShoppingDetailItem {
         }
 
         public Builder setName(String name) {
+            this.name = name;
             return this;
         }
 
@@ -85,8 +97,13 @@ public class ShoppingDetailItem {
             return this;
         }
 
-        public Builder addOrdersItemsViews(View view) {
-            this.item.layout.addView(view);
+        public Builder addOrdersItemsView(@NonNull View view) {
+            this.item.addOrdersItemsView(view);
+            return this;
+        }
+
+        public Builder addOrdersItemsViews(@NonNull List<View> views) {
+            this.item.addOrdersItemsViews(views);
             return this;
         }
 

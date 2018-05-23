@@ -59,42 +59,39 @@
         <ImageButton
             android:id="@+id/ordersItemMinusBtn"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="0dp"
             android:layout_marginTop="0dp"
             android:layout_weight="1"
             android:background="@android:color/transparent"
-            android:paddingEnd="4dp"
-            android:paddingStart="4dp"
+            android:paddingEnd="2dp"
+            android:paddingStart="2dp"
             android:src="@drawable/naber_remove_icon" />
 
-        <EditText
-            android:id="@+id/ordersItemQuantityEditText"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
+        <TextView
+            android:id="@+id/ordersItemQuantityText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="0dp"
             android:layout_marginTop="0dp"
             android:layout_weight="1"
             android:background="@android:color/transparent"
-            android:inputType="number"
             android:paddingEnd="0dp"
             android:paddingStart="0dp"
-            android:singleLine="true"
-            android:text="1"
+            android:text="100"
             android:textAlignment="center"
-            android:textSize="14sp"
-            android:textStyle="bold" />
+            android:textSize="14sp" />
 
         <ImageButton
             android:id="@+id/ordersItemAddBtn"
             android:layout_width="0dp"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
             android:layout_marginBottom="0dp"
             android:layout_marginTop="0dp"
             android:layout_weight="1"
             android:background="@android:color/transparent"
-            android:paddingEnd="4dp"
-            android:paddingStart="4dp"
+            android:paddingEnd="2dp"
+            android:paddingStart="2dp"
             android:src="@drawable/naber_add_icon" />
     </LinearLayout>
 

@@ -11,12 +11,15 @@ import com.google.common.base.Strings;
 import com.melonltd.naberc.R;
 import com.melonltd.naberc.util.Tools;
 
+import java.io.Serializable;
+
 
 /**
  * 半形空白字元（\u0020）
  */
-public class NaberCheckButton {
+public class NaberCheckButton implements Serializable {
     private static final String TAG = NaberCheckButton.class.getSimpleName();
+    private static final long serialVersionUID = 7025169341980168427L;
     private CheckBox box;
     private String title = "\u0020", price = "\u0020", symbol = "\u0020";
     private String text = "";

@@ -111,12 +111,6 @@ public class ShoppingCartFragment extends AbsPageFragment {
     }
 
 
-
-
-
-
-
-
     class ShoppingCartAdapter extends BaseAdapter {
         private Context context;
         private List<String> list;
@@ -167,20 +161,34 @@ public class ShoppingCartFragment extends AbsPageFragment {
                                 Log.d(TAG, "submit");
                             }
                         }).build();
+
+                if (i % 2 == 0){
+                    shoppingDetailItem.addOrdersItemsView(LayoutInflater.from(this.context).inflate(R.layout.user_shopping_order_item, null));
+                }else {
+                    shoppingDetailItem.addOrdersItemsView(LayoutInflater.from(this.context).inflate(R.layout.user_shopping_order_item, null));
+                    shoppingDetailItem.addOrdersItemsView(LayoutInflater.from(this.context).inflate(R.layout.user_shopping_order_item, null));
+                }
+
                 holder = ShoppingHolder.valueOf(shoppingDetailItem);
-                // TODO add Orders Item View
-                shoppingDetailItem.addOrdersItemsViews(null);
                 view = shoppingDetailItem.getView();
                 view.setTag(holder);
             } else {
                 holder = (ShoppingHolder) view.getTag();
             }
+
+            // TODO add Orders Item View
+//            for (int index = 0; i < index; index++) {
+//                View ov = LayoutInflater.from(this.context).inflate(R.layout.user_shopping_order_item, null);
+//                holder.item.addOrdersItemsViews(ov);
+//            }
+
             return view;
         }
     }
 
     public static class ShoppingHolder {
         private ShoppingDetailItem item;
+
         public static ShoppingHolder valueOf(ShoppingDetailItem item) {
             ShoppingHolder holder = new ShoppingHolder();
             holder.item = item;

@@ -10,8 +10,11 @@ import android.widget.RadioButton;
 import com.google.common.base.Strings;
 import com.melonltd.naberc.util.Tools;
 
-public class NaberRadioButton {
+import java.io.Serializable;
+
+public class NaberRadioButton implements Serializable {
     private static final String TAG = NaberRadioButton.class.getSimpleName();
+    private static final long serialVersionUID = -395093075821576420L;
     private RadioButton radio;
     private String title = "\u0020", price = "\u0020", symbol = "\u0020";
     private String text = "";

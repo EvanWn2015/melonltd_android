@@ -11,7 +11,10 @@ import android.widget.TextView;
 
 import com.melonltd.naberc.R;
 
-public class NaberTab {
+import java.io.Serializable;
+
+public class NaberTab implements Serializable {
+    private static final long serialVersionUID = -595086961009546689L;
     View view;
     ImageView icon;
     TextView titel;
