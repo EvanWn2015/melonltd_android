@@ -10,18 +10,17 @@ import android.widget.TextView;
 
 import com.melonltd.naberc.R;
 
-import java.io.Serializable;
 import java.util.List;
 
-public class ShoppingDetailItem implements Serializable {
-    private static final long serialVersionUID = -1306198949110745297L;
-    private static final String TAG = ShoppingDetailItem.class.getSimpleName();
+public class ShoppingDetailItemTest {
+//    private static final long serialVersionUID = -1306198949110745297L;
+    private static final String TAG = ShoppingDetailItemTest.class.getSimpleName();
     private View view;
     private TextView nameText, totalAmountText, bonusText;
     private LinearLayout layout;
     private Button deleteBtn, submitBtn;
 
-    private ShoppingDetailItem setParameter(String name, String totalAmount, String bonus) {
+    private ShoppingDetailItemTest setParameter(String name, String totalAmount, String bonus) {
         nameText.setText(name);
         totalAmountText.setText(totalAmount);
         bonusText.setText(bonus);
@@ -47,11 +46,11 @@ public class ShoppingDetailItem implements Serializable {
 
 
     public static class Builder {
-        private ShoppingDetailItem item;
+        private ShoppingDetailItemTest item;
         private String name = "", totalAmount = "", bonus = "";
 
         public Builder(Context context) {
-            item = new ShoppingDetailItem();
+            item = new ShoppingDetailItemTest();
             View v = LayoutInflater.from(context).inflate(R.layout.user_shopping_detail_item, null);
             this.item.nameText = v.findViewById(R.id.restaurantNameText);
             this.item.totalAmountText = v.findViewById(R.id.ordersTotalAmountText);
@@ -107,7 +106,7 @@ public class ShoppingDetailItem implements Serializable {
             return this;
         }
 
-        public ShoppingDetailItem build() {
+        public ShoppingDetailItemTest build() {
             return this.item.setParameter(this.name, this.totalAmount, this.bonus);
         }
 

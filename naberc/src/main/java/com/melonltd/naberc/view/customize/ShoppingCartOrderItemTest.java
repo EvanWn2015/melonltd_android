@@ -8,58 +8,61 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.melonltd.naberc.R;
-
-import java.io.Serializable;
 //shoppingDetailItem.addOrdersItemsView(LayoutInflater.from(this.context).inflate(R.layout.user_shopping_order_item, null));
 
-public class ShoppingCartOrderItem implements Serializable {
-    private static final long serialVersionUID = -8136368397118297325L;
-    private static final String TAG = ShoppingCartOrderItem.class.getSimpleName();
+public class ShoppingCartOrderItemTest {
+    private static final String TAG = ShoppingCartOrderItemTest.class.getSimpleName();
     private View view;
     private ImageView iconImageView;
     private TextView nameText, scopeText, optText;
     private ImageButton minusBtn, addBtn, deleteBtn;
     private TextView quantityText, priceText;
-    private int quantity = 0, price = 0;
+    public int quantity = 0, price = 0;
 
-    private void setAddAndMinusListener() {
-        this.minusBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (quantity <= 0) {
-                    quantity = 1;
-                }
-                quantityText.setText("" + quantity);
-                setPrice();
-            }
-        });
-
+    public void setAddAndMinusListener() {
         this.addBtn.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onClick(View v) {
+                quantity++;
                 if (quantity > 50) {
                     quantity = 50;
                 }
-                quantityText.setText("" + quantity);
+                setPrice();
+            }
+        });
+        this.minusBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                quantity--;
+                if (quantity <= 0) {
+                    quantity = 1;
+                }
                 setPrice();
             }
         });
     }
 
-    private void setPrice() {
+    public void setPrice() {
         int sun = this.price * this.quantity;
+        this.quantityText.setText(this.quantity + "");
         this.priceText.setText(sun + "");
     }
 
-    public ShoppingCartOrderItem setParameter(String name, String scope, String opt, int quantity, int price) {
+    public ShoppingCartOrderItemTest setParameter(String name, String scope, String opt, int quantity, int price) {
         this.quantity = quantity;
         this.price = price;
+//        this.nameText.setId();
         this.nameText.setText(name);
         this.scopeText.setText(scope);
         this.optText.setText(opt);
+        this.quantityText.setText(quantity + "");
         setAddAndMinusListener();
         setPrice();
         return this;
+    }
+
+    public Builder Builder(Context context) {
+        return new Builder(context);
     }
 
     public View getView() {
@@ -68,12 +71,13 @@ public class ShoppingCartOrderItem implements Serializable {
 
 
     public static class Builder {
-        private ShoppingCartOrderItem item;
+        private ShoppingCartOrderItemTest item;
         private String name = "", scope = "", opt = "";
         private int quantity = 1, price = 0;
+        private int id;
 
         public Builder(Context context) {
-            this.item = new ShoppingCartOrderItem();
+            this.item = new ShoppingCartOrderItemTest();
             View v = LayoutInflater.from(context).inflate(R.layout.user_shopping_order_item, null);
             this.item.iconImageView = v.findViewById(R.id.ordersItemIconImageView);
             this.item.nameText = v.findViewById(R.id.ordersItemNameText);
@@ -117,7 +121,13 @@ public class ShoppingCartOrderItem implements Serializable {
             return this;
         }
 
-        public ShoppingCartOrderItem build() {
+
+        public Builder setId(int id) {
+            this.id = id;
+            return this;
+        }
+
+        public ShoppingCartOrderItemTest build() {
             return this.item.setParameter(this.name, this.scope, this.opt, this.quantity, this.price);
         }
     }
