@@ -17,7 +17,7 @@ import com.melonltd.naberc.view.common.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.common.type.PageType;
 
 public class AccountDetailFragment extends AbsPageFragment implements View.OnClickListener {
-    private static final String TAG = HomeFragment.class.getSimpleName();
+    private static final String TAG = AccountDetailFragment.class.getSimpleName();
     private static AccountDetailFragment FRAGMENT = null;
     private Button logoutBtn, toResetPasswordBtn;
     public static int TO_RESET_PASSWORD_INDEX = -1;

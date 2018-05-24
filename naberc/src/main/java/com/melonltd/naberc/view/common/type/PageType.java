@@ -1,6 +1,10 @@
 package com.melonltd.naberc.view.common.type;
 
 import com.melonltd.naberc.R;
+import com.melonltd.naberc.view.seller.page.impl.SellerOrdersFragment;
+import com.melonltd.naberc.view.seller.page.impl.SellerRestaurantFragment;
+import com.melonltd.naberc.view.seller.page.impl.SellerSetUpFragment;
+import com.melonltd.naberc.view.seller.page.impl.SellerStatFragment;
 import com.melonltd.naberc.view.user.page.impl.CategoryMenuFragment;
 import com.melonltd.naberc.view.user.page.impl.MenuDetailFragment;
 import com.melonltd.naberc.view.user.page.impl.RestaurantDetailFragment;
@@ -50,13 +54,18 @@ public enum PageType {
     SHOPPING_CART(R.string.menu_shopping_cart_btn, 2, ShoppingCartFragment.class),
     HISTORY(R.string.menu_history_btn, 3, HistoryFragment.class),
     ORDER_DETAIL(R.string.user_page_order_detail_title, 3, OrderDetailFragment.class),
-    SUBMIT_ORDER(R.string.user_page_submit_order_title,3, SubmitOrdersFragment.class),
+    SUBMIT_ORDER(R.string.user_page_submit_order_title, 3, SubmitOrdersFragment.class),
     SET_UP(R.string.menu_set_up_btn, 4, SetUpFragment.class),
     ACCOUNT_DETAIL(R.string.user_page_account_detail_title, 4, AccountDetailFragment.class),
     SIMPLE_INFO(R.string.user_page_simple_info_title, 4, SimpleInformationFragment.class),
 
     // seller
+    SELLER_ORDERS(R.string.seller_menu_orders_btn, 0, SellerOrdersFragment.class),
+    SELLER_STAT(R.string.seller_menu_stat_btn, 1, SellerStatFragment.class),
+    SELLER_RESTAURANT(R.string.seller_menu_menu_btn, 2, SellerRestaurantFragment.class),
+    SELLER_SET_UP(R.string.seller_menu_set_up_btn, 3, SellerSetUpFragment.class),
     REGISTERED_SELLER(R.string.seller_page_registered_title, 104, RegisteredSellerFragment.class);
+
 
     private final int id;
     private final int position;

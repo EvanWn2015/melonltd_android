@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -19,21 +18,52 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:background="@color/naber_dividing_gray"
-        android:fitsSystemWindows="true"
+        android:fitsSystemWindows="false"
         android:paddingLeft="-1dp"
         android:paddingRight="-1dp"
         android:theme="@style/ThemeOverlay.AppCompat.navTheme"
         android:visibility="visible">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/sellerRecyclerView"
+        <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingBottom="8dp"
-            android:paddingStart="8dp"
-            android:paddingTop="30dp">
+            android:layout_height="match_parent">
 
-        </android.support.v7.widget.RecyclerView>
+            <TextView
+                android:theme="@style/AppTheme.NoActionBar.AppBarOverlay"
+                android:id="@+id/textView76"
+                android:layout_width="match_parent"
+                android:layout_height="?attr/actionBarSize"
+                android:background="?attr/colorPrimary"
+                android:gravity="center"
+                android:text="接單開關"
+                android:textAlignment="center"
+                android:textColor="@android:color/black"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toTopOf="@+id/sellerRecyclerView"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/sellerRecyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_marginBottom="8dp"
+                android:paddingBottom="8dp"
+                android:paddingStart="8dp"
+                android:paddingTop="4dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView76">
+
+            </android.support.v7.widget.RecyclerView>
+
+
+        </android.support.constraint.ConstraintLayout>
+
+
     </android.support.design.widget.NavigationView>
 </android.support.v4.widget.DrawerLayout>
 

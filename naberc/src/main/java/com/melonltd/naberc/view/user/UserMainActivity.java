@@ -22,7 +22,6 @@ import com.melonltd.naberc.view.common.abs.AbsPageFragment;
 import com.melonltd.naberc.view.common.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.common.type.PageType;
 import com.melonltd.naberc.view.seller.SellerMainActivity;
-import com.melonltd.naberc.view.user.page.impl.RestaurantFragment;
 
 import java.util.List;
 
@@ -40,7 +39,7 @@ public class UserMainActivity extends BaseCore implements View.OnClickListener, 
     @Override
     protected void onCreate(@NonNull Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_user);
         context = this;
         navigationIcon = getResources().getDrawable(R.drawable.naber_back_icon);
         getView();
@@ -141,8 +140,7 @@ public class UserMainActivity extends BaseCore implements View.OnClickListener, 
 
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
-        Object o = tab.getTag();
-        Log.d(TAG, o.toString());
+
         int index = Integer.parseInt(tab.getTag().toString());
 //&& RestaurantFragment.HOME_TO_RESTAURANT_DETAIL_INDEX < 0
         if (MAIN_PAGE.contains(PageType.ofId(index))) {

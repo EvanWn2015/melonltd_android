@@ -27,7 +27,7 @@
 
     <!-- seller page -->
     <string name="seller_menu_orders_btn">訂單</string>
-    <string name="seller_menu_stat_btn">統計</string>
+    <string name="seller_menu_stat_btn">營運概況</string>
     <string name="seller_menu_menu_btn">菜單</string>
     <string name="seller_menu_set_up_btn">設定</string>
     <string name="seller_page_registered_title">註冊</string>
