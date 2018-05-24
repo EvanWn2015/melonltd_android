@@ -8,4 +8,55 @@
     tools:context=".view.seller.SellerMainActivity"
     tools:showIn="@layout/activity_seller">
 
+
+    <android.support.design.widget.AppBarLayout
+        android:id="@+id/appBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:theme="@style/AppTheme.NoActionBar.AppBarOverlay"
+        app:layout_constraintBottom_toTopOf="@+id/sellerFrameContainer"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            android:background="?attr/colorPrimary"
+            app:popupTheme="@style/AppTheme.NoActionBar.PopupOverlay" />
+    </android.support.design.widget.AppBarLayout>
+
+    <FrameLayout
+        android:id="@+id/sellerFrameContainer"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        app:layout_constraintBottom_toTopOf="@+id/sellerMenuTabLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/appBarLayout" />
+
+    <android.support.design.widget.TabLayout
+        android:id="@+id/sellerMenuTabLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#92bcbcbc"
+        android:paddingTop="4dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sellerFrameContainer"
+        app:tabIndicatorColor="@android:color/transparent"
+        app:tabIndicatorHeight="@dimen/fab_margin"
+        app:tabMode="fixed"
+        app:tabPaddingTop="0dp"
+        app:tabSelectedTextColor="@color/colorPrimary"
+        app:tabTextAppearance="@style/MineCustomTabText"
+        app:tabTextColor="@android:color/black">
+
+    </android.support.design.widget.TabLayout>
+
 </android.support.constraint.ConstraintLayout>

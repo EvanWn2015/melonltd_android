@@ -2,6 +2,7 @@ package com.melonltd.naberc.view.user;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -20,6 +21,7 @@ import com.melonltd.naberc.view.customize.NaberTab;
 import com.melonltd.naberc.view.common.abs.AbsPageFragment;
 import com.melonltd.naberc.view.common.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.common.type.PageType;
+import com.melonltd.naberc.view.seller.SellerMainActivity;
 import com.melonltd.naberc.view.user.page.impl.RestaurantFragment;
 
 import java.util.List;
@@ -88,10 +90,13 @@ public class UserMainActivity extends BaseCore implements View.OnClickListener, 
     protected void onResume() {
         super.onResume();
 
-        AbsPageFragment fragment = null;
+        // TODO Seller page
+        startActivity(new Intent(context, SellerMainActivity.class));
+        // TODO user page
+//        AbsPageFragment fragment = null;
 //        bottomMenuTabLayout.setVisibility(View.GONE);
-        fragment = PageFragmentFactory.of(PageType.SUBMIT_ORDER, null);
-        fragmentManager.beginTransaction().replace(R.id.frameContainer, fragment).addToBackStack(fragment.toString()).commit();
+//        fragment = PageFragmentFactory.of(PageType.LOGIN, null);
+//        fragmentManager.beginTransaction().replace(R.id.frameContainer, fragment).addToBackStack(fragment.toString()).commit();
 
 //        if (SharedPreferencesService.isFirstUse()) {
 //            fragmentManager.beginTransaction().replace(R.id.frameContainer, new IntroFragment()).commit();

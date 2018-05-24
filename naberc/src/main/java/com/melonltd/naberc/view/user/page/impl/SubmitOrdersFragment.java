@@ -2,8 +2,8 @@ package com.melonltd.naberc.view.user.page.impl;
 
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,8 +18,9 @@ import com.jzxiang.pickerview.TimePickerDialog;
 import com.jzxiang.pickerview.data.Type;
 import com.jzxiang.pickerview.listener.OnDateSetListener;
 import com.melonltd.naberc.R;
+import com.melonltd.naberc.model.helper.okhttp.ApiCallback;
+import com.melonltd.naberc.model.helper.okhttp.ApiManager;
 import com.melonltd.naberc.view.common.abs.AbsPageFragment;
-import com.melonltd.naberc.view.common.intf.PageFragment;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -28,7 +29,6 @@ import java.util.Date;
 public class SubmitOrdersFragment extends AbsPageFragment implements View.OnClickListener {
     private static final String TAG = SubmitOrdersFragment.class.getSimpleName();
     private static SubmitOrdersFragment FRAGMENT = null;
-
     private TextView selectDateText, userNameText, userPhoneNumberText, ordersPriceText, ordersBonusText;
     private EditText remarkText;
     private Button submitOrdersBtn;
@@ -54,6 +54,7 @@ public class SubmitOrdersFragment extends AbsPageFragment implements View.OnClic
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
     }
 
     @Override
@@ -108,6 +109,30 @@ public class SubmitOrdersFragment extends AbsPageFragment implements View.OnClic
                 .show(getFragmentManager(), "MONTH_DAY_HOUR_MIN");
     }
 
+    Handler h = new Handler();
+    Runnable showSubmitAlertUrn = new Runnable() {
+        @Override
+        public void run() {
+            ApiManager.test(new ApiCallback(getActivity()) {
+                @Override
+                public void onSuccess(String responseBody) {
+                    new AlertView.Builder()
+                            .setTitle("")
+                            .setMessage("商家看到你囉，請準時拿餐\n你可以到訂單頁面中，查看商品狀態")
+                            .setContext(getContext())
+                            .setStyle(AlertView.Style.Alert)
+                            .setOthers(new String[]{"我知道了"})
+                            .build().show();
+                }
+
+                @Override
+                public void onFail(Exception error) {
+
+                }
+            });
+
+        }
+    };
 
     private void showSubmitAlert() {
         new AlertView.Builder()
@@ -120,19 +145,11 @@ public class SubmitOrdersFragment extends AbsPageFragment implements View.OnClic
                     @Override
                     public void onItemClick(Object o, int position) {
                         if (position == 0) {
-                            // TODO submit
-                        } else {
-
+                            h.postDelayed(showSubmitAlertUrn, 300);
                         }
                     }
                 })
-                .build()
-                .setCancelable(true)
-                .show();
-    }
-
-    private void showSubmitSuccessAlert(){
-
+                .build().show();
     }
 
     @Override

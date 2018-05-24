@@ -30,4 +30,13 @@
 
     <style name="AppTheme.NoActionBar.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 
+
+    <style name="ThemeOverlay.AppCompat.navTheme">
+        <!--<item name="colorPrimary">@color/menu_item_default</item>-->
+        <!--<item name="colorControlHighlight">@color/menu_item_activated</item>-->
+        <item name="android:textSize">21dp</item><!-- text size in menu-->
+        <item name="android:listPreferredItemHeightSmall">51dp</item><!-- item size in menu-->
+        <item name="listPreferredItemHeightSmall">51dp</item><!-- item size in menu-->
+    </style>
+
 </resources>

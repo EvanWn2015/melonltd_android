@@ -47,8 +47,8 @@
 
         <activity
             android:name=".view.seller.SellerMainActivity"
-            android:label="@string/title_activity_seller"
             android:theme="@style/AppTheme.NoActionBar"></activity>
+
     </application>
 
 </manifest>
