@@ -33,6 +33,15 @@ public abstract class ApiCallback implements Callback {
         this.loadingBar = new LoadingBar(activity, true);
     }
 
+    public ApiCallback(Context context) {
+        this.activity = (Activity) context;
+        if (context instanceof Activity){
+            Log.d(TAG, "");
+        }
+        this.loadingBar = new LoadingBar(activity, true);
+    }
+
+
     @Override
     public void onFailure(Call call, final IOException e) {
         this.activity.runOnUiThread(

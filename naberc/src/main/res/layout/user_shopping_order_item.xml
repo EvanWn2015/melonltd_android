@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/user_shopping_odr_items"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
@@ -38,16 +40,16 @@
         app:layout_constraintStart_toStartOf="@+id/ordersItemNameText"
         app:layout_constraintTop_toBottomOf="@+id/ordersItemNameText" />
 
-    <TextView
-        android:id="@+id/ordersItemOptText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="加：仙草，布丁"
-        android:textSize="10sp"
-        app:layout_constraintStart_toStartOf="@+id/ordersItemNameText"
-        app:layout_constraintTop_toBottomOf="@+id/ordersItemScopeText" />
+    <!--<TextView-->
+        <!--android:id="@+id/ordersItemOptText"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:text="加：仙草，布丁"-->
+        <!--android:textSize="10sp"-->
+        <!--app:layout_constraintStart_toStartOf="@+id/ordersItemNameText"-->
+        <!--app:layout_constraintTop_toBottomOf="@+id/ordersItemScopeText" />-->
 
-    <LinearLayout
+    <android.support.constraint.ConstraintLayout
         android:id="@+id/linearLayout100"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -59,53 +61,51 @@
 
         <ImageButton
             android:id="@+id/ordersItemMinusBtn"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="0dp"
-            android:layout_marginTop="0dp"
             android:layout_weight="1"
             android:background="@android:color/transparent"
             android:paddingEnd="2dp"
             android:paddingStart="2dp"
-            android:src="@drawable/naber_remove_icon" />
+            android:src="@drawable/naber_remove_icon"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/ordersItemQuantityText"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/ordersItemQuantityText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="0dp"
-            android:layout_marginTop="0dp"
             android:layout_weight="1"
             android:background="@android:color/transparent"
             android:paddingEnd="0dp"
             android:paddingStart="0dp"
             android:text="100"
             android:textAlignment="center"
-            android:textSize="14sp" />
+            android:textSize="14sp"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/ordersItemAddBtn"
+            app:layout_constraintStart_toEndOf="@+id/ordersItemMinusBtn"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.6" />
 
         <ImageButton
             android:id="@+id/ordersItemAddBtn"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="0dp"
-            android:layout_marginTop="0dp"
             android:layout_weight="1"
             android:background="@android:color/transparent"
             android:paddingEnd="2dp"
             android:paddingStart="2dp"
-            android:src="@drawable/naber_add_icon" />
-    </LinearLayout>
-
-    <TextView
-        android:id="@+id/textView39"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="$"
-        android:textColor="@android:color/black"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/ordersItemPriceText"
-        app:layout_constraintEnd_toStartOf="@+id/ordersItemPriceText"
-        app:layout_constraintTop_toTopOf="@+id/ordersItemPriceText" />
+            android:src="@drawable/naber_add_icon"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toEndOf="@+id/ordersItemQuantityText"
+            app:layout_constraintTop_toTopOf="parent" />
+    </android.support.constraint.ConstraintLayout>
 
     <TextView
         android:id="@+id/ordersItemPriceText"

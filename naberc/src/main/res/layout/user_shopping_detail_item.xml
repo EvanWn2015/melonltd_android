@@ -6,15 +6,16 @@
 
 
     <TextView
-        android:background="@drawable/naber_background_gradient_gray_top"
         android:id="@+id/restaurantNameText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:background="@drawable/naber_background_gradient_gray_top"
         android:padding="8dp"
         android:text="商家： XXX 店"
         android:textColor="@android:color/black"
         android:textSize="14sp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/ordersItemsLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -25,29 +26,16 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/view10"
+        app:layout_constraintBottom_toTopOf="@+id/submitOrdersBtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/restaurantNameText">
 
         <!--<include layout="@layout/user_shopping_order_item" />-->
-
         <!--<include layout="@layout/user_shopping_order_item" />-->
-
         <!--<include layout="@layout/user_shopping_order_item" />-->
-
     </LinearLayout>
 
-    <View
-        android:id="@+id/view10"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:layout_marginBottom="8dp"
-        android:background="#e1e1e1"
-        app:layout_constraintBottom_toTopOf="@+id/submitOrdersBtn"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ordersItemsLayout"></View>
 
     <Button
         android:id="@+id/deleteOrdersBtn"
@@ -88,16 +76,6 @@
         app:layout_constraintTop_toTopOf="@+id/submitOrdersBtn" />
 
     <TextView
-        android:id="@+id/textView81"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="應得紅利"
-        android:textColor="@android:color/holo_red_dark"
-        android:textSize="12sp"
-        app:layout_constraintEnd_toStartOf="@+id/bonusText"
-        app:layout_constraintTop_toTopOf="@+id/bonusText" />
-
-    <TextView
         android:id="@+id/bonusText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -114,7 +92,7 @@
         android:layout_height="40dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="8dp"
         android:background="@color/naber_basis_red"
         android:text="送出訂單"
         android:textAllCaps="false"
@@ -122,7 +100,7 @@
         android:textSize="14sp"
         app:layout_constraintBottom_toTopOf="@+id/view7"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view10" />
+        app:layout_constraintTop_toBottomOf="@+id/ordersItemsLayout" />
 
     <View
         android:id="@+id/view7"

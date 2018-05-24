@@ -18,6 +18,7 @@ import com.melonltd.naberc.view.user.page.impl.RestaurantFragment;
 import com.melonltd.naberc.view.user.page.impl.SetUpFragment;
 import com.melonltd.naberc.view.user.page.impl.ShoppingCartFragment;
 import com.melonltd.naberc.view.user.page.impl.SimpleInformationFragment;
+import com.melonltd.naberc.view.user.page.impl.SubmitOrdersFragment;
 import com.melonltd.naberc.view.user.page.impl.VerifySMSFragment;
 
 /**
@@ -49,6 +50,7 @@ public enum PageType {
     SHOPPING_CART(R.string.menu_shopping_cart_btn, 2, ShoppingCartFragment.class),
     HISTORY(R.string.menu_history_btn, 3, HistoryFragment.class),
     ORDER_DETAIL(R.string.user_page_order_detail_title, 3, OrderDetailFragment.class),
+    SUBMIT_ORDER(R.string.user_page_submit_order_title,3, SubmitOrdersFragment.class),
     SET_UP(R.string.menu_set_up_btn, 4, SetUpFragment.class),
     ACCOUNT_DETAIL(R.string.user_page_account_detail_title, 4, AccountDetailFragment.class),
     SIMPLE_INFO(R.string.user_page_simple_info_title, 4, SimpleInformationFragment.class),

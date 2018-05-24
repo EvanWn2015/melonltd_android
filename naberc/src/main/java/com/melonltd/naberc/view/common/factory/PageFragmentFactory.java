@@ -20,6 +20,7 @@ import com.melonltd.naberc.view.user.page.impl.RestaurantFragment;
 import com.melonltd.naberc.view.user.page.impl.SetUpFragment;
 import com.melonltd.naberc.view.user.page.impl.ShoppingCartFragment;
 import com.melonltd.naberc.view.user.page.impl.SimpleInformationFragment;
+import com.melonltd.naberc.view.user.page.impl.SubmitOrdersFragment;
 import com.melonltd.naberc.view.user.page.impl.VerifySMSFragment;
 import com.melonltd.naberc.view.common.type.PageType;
 
@@ -55,6 +56,8 @@ public class PageFragmentFactory {
                 return new ShoppingCartFragment().getInstance(bundle);
             case REGISTERED_SELLER:
                 return new RegisteredSellerFragment().getInstance(bundle);
+            case SUBMIT_ORDER:
+                return new SubmitOrdersFragment().getInstance(bundle);
             case SIMPLE_INFO:
                 return new SimpleInformationFragment().getInstance(bundle);
             case RECOVER_PASSWORD:

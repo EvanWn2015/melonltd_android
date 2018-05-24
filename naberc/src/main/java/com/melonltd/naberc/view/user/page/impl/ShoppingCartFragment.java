@@ -4,18 +4,25 @@ package com.melonltd.naberc.view.user.page.impl;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewStub;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
@@ -71,7 +78,17 @@ public class ShoppingCartFragment extends AbsPageFragment {
             View v = inflater.inflate(R.layout.fragment_shopping_cart, container, false);
             getViews(v);
             setListener();
-            testLoadData(true);
+            ApiManager.test(new ApiCallback(getActivity()) {
+                @Override
+                public void onSuccess(String responseBody) {
+                    testLoadData(true);
+                }
+
+                @Override
+                public void onFail(Exception error) {
+
+                }
+            });
             container.setTag(R.id.user_shopping_cart_page, v);
             return v;
         }
@@ -83,8 +100,9 @@ public class ShoppingCartFragment extends AbsPageFragment {
     private void testLoadData(boolean isRefresh) {
         if (isRefresh) {
             list.clear();
+            adapter.notifyDataSetChanged();
         }
-        for (int i = 0; i < 100; i++) {
+        for (int i = 0; i < 15; i++) {
             list.add("" + i);
         }
         adapter.notifyDataSetChanged();
@@ -100,7 +118,6 @@ public class ShoppingCartFragment extends AbsPageFragment {
         onLoadLayout.setPtrHandler(new PtrHandler() {
             @Override
             public void onRefreshBegin(PtrFrameLayout frame) {
-
                 ApiManager.test(new ApiCallback(getActivity()) {
                     @Override
                     public void onSuccess(String responseBody) {
@@ -114,31 +131,11 @@ public class ShoppingCartFragment extends AbsPageFragment {
 
                     }
                 });
-
             }
 
             @Override
             public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
                 return ((OnLoadLayout) frame).isTop();
-            }
-        });
-
-        onLoadLayout.setOnLoadListener(new OnLoadLayout.OnLoadListener() {
-            @Override
-            public void onLoad() {
-                ApiManager.test(new ApiCallback(getActivity()) {
-                    @Override
-                    public void onSuccess(String responseBody) {
-                        testLoadData(false);
-                        onLoadLayout.refreshComplete();
-                        adapter.notifyDataSetChanged();
-                    }
-
-                    @Override
-                    public void onFail(Exception error) {
-
-                    }
-                });
             }
         });
     }
@@ -162,7 +159,6 @@ public class ShoppingCartFragment extends AbsPageFragment {
     class ShoppingCartAdapter extends BaseAdapter {
         private Context context;
         private List<String> list;
-        private List<ShoppingDetailItem> items = Lists.newArrayList();
 
         ShoppingCartAdapter(Context context, List<String> list) {
             this.context = context;
@@ -192,240 +188,208 @@ public class ShoppingCartFragment extends AbsPageFragment {
 
         @Override
         public View getView(int i, View view, ViewGroup viewGroup) {
-            ShoppingDetailItem item = null;
+            ShoppingDetailItemHolder holder = null;
             if (view == null) {
                 view = LayoutInflater.from(context).inflate(R.layout.user_shopping_detail_item, null);
-                item = new ShoppingDetailItem().Builder(view).build();
-                view.setTag(item);
+                holder = new ShoppingDetailItemHolder(view);
+                view.setTag(holder);
             } else {
-                item = (ShoppingDetailItem) view.getTag();
+                holder = (ShoppingDetailItemHolder) view.getTag();
             }
 
-            List<View> ordersItems = Lists.newArrayList();
-            for (int j = 0; j <= i; j++) {
-                View subV = LayoutInflater.from(context).inflate(R.layout.user_shopping_order_item, null);
-                new ShoppingCartOrderItem()
-                        .Builder(subV)
-                        .setIconPath("http://i3fresh.tw/upload/product/f_a8f0cd10efd5efe21fad620302e5a30f.jpg")
-                        .setName("test Order" + j)
-                        .setOpt("追加")
-                        .setScope("規格")
-                        .setQuantity(1)
-                        .setPrice((j + 1) * 20)
-                        .setDeleteListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Log.d(TAG, "Delete");
-                            }
-                        }).build();
-                ordersItems.add(subV);
-            }
-
-//            item.addOrdersItemsViews(OrdersItems);
-            item.setName("Test name" + i)
-                    .setBonus(200 * i)
-                    .addOrdersItemsViews(ordersItems)
-                    .setTotalAmount(400 * i)
-                    .setSubmitListener(new View.OnClickListener() {
+            holder.setName("test name" + i)
+                    .setTotalAmount(200 * (1 + i))
+                    .setBonus(20 * (1 + i))
+                    .setSubView()
+                    .setDeleteListener(new View.OnClickListener() {
                         @Override
-                        public void onClick(View v) {
+                        public void onClick(View view) {
 
                         }
                     })
-                    .setDeleteListener(new View.OnClickListener() {
+                    .setSubmitListener(new View.OnClickListener() {
                         @Override
-                        public void onClick(View v) {
+                        public void onClick(View view) {
 
                         }
                     }).build();
 
 
-            // TODO 要做的事
             return view;
         }
-    }
 
+        class ShoppingDetailItemHolder {
+            private TextView nameText, totalAmountText, bonusText;
+            private LinearLayout layout;
+            private Button deleteBtn, submitBtn;
+            private String name = "", totalAmount = "", bonus = "";
+            private View sebView;
 
-    static class ShoppingDetailItem {
-        private TextView nameText, totalAmountText, bonusText;
-        private LinearLayout layout;
-        private Button deleteBtn, submitBtn;
-        private String name = "", totalAmount = "", bonus = "";
-
-
-        private Builder Builder(View view) {
-            return new Builder(view);
-        }
-
-        private ShoppingDetailItem setName(String name) {
-            this.name = name;
-            return this;
-        }
-
-        private ShoppingDetailItem setTotalAmount(int totalAmount) {
-            this.totalAmount = "" + totalAmount;
-            return this;
-        }
-
-        private ShoppingDetailItem setBonus(int bonus) {
-            this.bonus = "" + bonus;
-            return this;
-        }
-
-        private ShoppingDetailItem setDeleteListener(View.OnClickListener deleteListener) {
-            this.deleteBtn.setOnClickListener(deleteListener);
-            return this;
-        }
-
-        private ShoppingDetailItem setSubmitListener(View.OnClickListener submitListener) {
-            this.submitBtn.setOnClickListener(submitListener);
-            return this;
-        }
-
-        private ShoppingDetailItem addOrdersItemsViews(@NonNull List<View> views) {
-            for(View v : views){
-                this.layout.addView(v);
-            }
-            return this;
-        }
-
-        private void build() {
-            nameText.setText(name);
-            totalAmountText.setText(totalAmount);
-            bonusText.setText(bonus);
-        }
-
-        private static class Builder {
-            private ShoppingDetailItem item;
-            public Builder(View v) {
-                item = new ShoppingDetailItem();
-                this.item.nameText = v.findViewById(R.id.restaurantNameText);
-                this.item.totalAmountText = v.findViewById(R.id.ordersTotalAmountText);
-                this.item.bonusText = v.findViewById(R.id.bonusText);
-                this.item.layout = v.findViewById(R.id.ordersItemsLayout);
-                this.item.deleteBtn = v.findViewById(R.id.deleteOrdersBtn);
-                this.item.submitBtn = v.findViewById(R.id.submitOrdersBtn);
-            }
-            private ShoppingDetailItem build() {
-                return this.item;
-            }
-        }
-    }
-
-    static class ShoppingCartOrderItem {
-        private SimpleDraweeView iconImageView;
-        private TextView nameText, scopeText, optText;
-        private ImageButton minusBtn, addBtn, deleteBtn;
-        private TextView quantityText, priceText;
-        public int quantity = 0, price = 0;
-
-        public void setAddAndMinusListener() {
-            this.addBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    quantity++;
-                    if (quantity > 50) {
-                        quantity = 50;
-                    }
-                    setPrice();
-                }
-            });
-            this.minusBtn.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    quantity--;
-                    if (quantity <= 0) {
-                        quantity = 1;
-                    }
-                    setPrice();
-                }
-            });
-        }
-
-        public void setPrice() {
-            int sun = this.price * this.quantity;
-            this.quantityText.setText(this.quantity + "");
-            this.priceText.setText(sun + "");
-        }
-
-        public ShoppingCartOrderItem setParameter(String name, String scope, String opt, int quantity, int price) {
-            this.quantity = quantity;
-            this.price = price;
-            this.nameText.setText(name);
-            this.scopeText.setText(scope);
-            this.optText.setText(opt);
-            this.quantityText.setText(quantity + "");
-            setAddAndMinusListener();
-            setPrice();
-            return this;
-        }
-
-        public Builder Builder(View view) {
-            return new Builder(view);
-        }
-
-        public static class Builder {
-            private ShoppingCartOrderItem item;
-            private String name = "", scope = "", opt = "";
-            private int quantity = 1, price = 0;
-
-            public Builder(View v) {
-                this.item = new ShoppingCartOrderItem();
-                this.item.iconImageView = v.findViewById(R.id.ordersItemIconImageView);
-                this.item.nameText = v.findViewById(R.id.ordersItemNameText);
-                this.item.scopeText = v.findViewById(R.id.ordersItemScopeText);
-                this.item.optText = v.findViewById(R.id.ordersItemOptText);
-                this.item.minusBtn = v.findViewById(R.id.ordersItemMinusBtn);
-                this.item.addBtn = v.findViewById(R.id.ordersItemAddBtn);
-                this.item.deleteBtn = v.findViewById(R.id.ordersItemDeleteBtn);
-                this.item.quantityText = v.findViewById(R.id.ordersItemQuantityText);
-                this.item.priceText = v.findViewById(R.id.ordersItemPriceText);
+            ShoppingDetailItemHolder(View v) {
+                this.nameText = v.findViewById(R.id.restaurantNameText);
+                this.totalAmountText = v.findViewById(R.id.ordersTotalAmountText);
+                this.bonusText = v.findViewById(R.id.bonusText);
+                this.layout = v.findViewById(R.id.ordersItemsLayout);
+                this.deleteBtn = v.findViewById(R.id.deleteOrdersBtn);
+                this.submitBtn = v.findViewById(R.id.submitOrdersBtn);
             }
 
-            public Builder setName(String name) {
+            private ShoppingDetailItemHolder setName(String name) {
                 this.name = name;
                 return this;
             }
 
-            public Builder setScope(String scope) {
-                this.scope = scope;
+            private ShoppingDetailItemHolder setTotalAmount(int totalAmount) {
+                this.totalAmount = "" + totalAmount;
                 return this;
             }
 
-            public Builder setOpt(String opt) {
-                this.opt = opt;
+            private ShoppingDetailItemHolder setBonus(int bonus) {
+                this.bonus = "" + bonus;
                 return this;
             }
 
-            public Builder setQuantity(int quantity) {
-                this.quantity = quantity < 1 ? 1 : quantity;
+            private ShoppingDetailItemHolder setDeleteListener(View.OnClickListener deleteListener) {
+                this.deleteBtn.setOnClickListener(deleteListener);
                 return this;
             }
 
-            public Builder setIconPath(String path) {
-                Uri uri = Uri.parse(path);
-                setIconPath(uri);
+            private ShoppingDetailItemHolder setSubmitListener(View.OnClickListener submitListener) {
+                this.submitBtn.setOnClickListener(submitListener);
                 return this;
             }
 
-            public Builder setIconPath(Uri uri) {
-                this.item.iconImageView.setImageURI(uri);
+//            private ShoppingDetailItemHolder addOrdersItemsViews(@NonNull List<View> views) {
+//                this.layout.removeAllViews();
+//                for (View v : views) {
+//                    this.layout.addView(v);
+//                }
+//                return this;
+//            }
+
+            private ShoppingDetailItemHolder setSubView (){
+                OrderSubItemHolder subItemHolder = null;
+                if (sebView == null){
+                    sebView = LayoutInflater.from(context).inflate(R.layout.user_shopping_order_item, null);
+                    subItemHolder = new OrderSubItemHolder(sebView);
+                    sebView.setTag(subItemHolder);
+                }else {
+                    subItemHolder = (OrderSubItemHolder)sebView.getTag();
+                }
+                subItemHolder.setName("subName")
+                        .setIconPath("http://i.epochtimes.com/assets/uploads/2017/09/Fotolia_58802987_Subscription_L-600x400.jpg")
+                        .setPrice(20)
+                        .setQuantity(1)
+                        .setScope("規格:" + "\n" + "追加")
+                        .build();
+                this.layout.removeAllViews();
+                this.layout.addView(sebView);
                 return this;
             }
 
-            public Builder setPrice(int price) {
-                this.price = price;
-                return this;
+            private void build() {
+                nameText.setText(name);
+                totalAmountText.setText(totalAmount);
+                bonusText.setText("應得紅利" + bonus);
             }
 
-            public Builder setDeleteListener(View.OnClickListener listener) {
-                this.item.deleteBtn.setOnClickListener(listener);
-                return this;
-            }
 
-            public ShoppingCartOrderItem build() {
-                return this.item.setParameter(this.name, this.scope, this.opt, this.quantity, this.price);
+            class OrderSubItemHolder {
+                private SimpleDraweeView iconImageView;
+                private TextView nameText, scopeText;
+                private ImageButton minusBtn, addBtn, deleteBtn;
+                private TextView quantityText, priceText;
+                public int quantity = 0, price = 0;
+                private String name = "", scope = "";
+
+
+                OrderSubItemHolder(View v) {
+                    this.iconImageView = v.findViewById(R.id.ordersItemIconImageView);
+                    this.nameText = v.findViewById(R.id.ordersItemNameText);
+                    this.scopeText = v.findViewById(R.id.ordersItemScopeText);
+                    this.minusBtn = v.findViewById(R.id.ordersItemMinusBtn);
+                    this.addBtn = v.findViewById(R.id.ordersItemAddBtn);
+                    this.deleteBtn = v.findViewById(R.id.ordersItemDeleteBtn);
+                    this.quantityText = v.findViewById(R.id.ordersItemQuantityText);
+                    this.priceText = v.findViewById(R.id.ordersItemPriceText);
+                }
+
+
+                private OrderSubItemHolder setName(String name) {
+                    this.name = name;
+                    return this;
+                }
+
+                private OrderSubItemHolder setScope(String scope) {
+                    this.scope = scope;
+                    return this;
+                }
+
+                private OrderSubItemHolder setQuantity(int quantity) {
+                    this.quantity = quantity < 1 ? 1 : quantity;
+                    return this;
+                }
+
+                private OrderSubItemHolder setIconPath(String path) {
+                    Uri uri = Uri.parse(path);
+                    setIconPath(uri);
+                    return this;
+                }
+
+                private OrderSubItemHolder setIconPath(Uri uri) {
+                    this.iconImageView.setImageURI(uri);
+                    return this;
+                }
+
+                private OrderSubItemHolder setPrice(int price) {
+                    this.price = price;
+                    return this;
+                }
+
+                private OrderSubItemHolder setDeleteListener(View.OnClickListener listener) {
+                    this.deleteBtn.setOnClickListener(listener);
+                    return this;
+                }
+
+                private void setAddAndMinusListener() {
+                    this.addBtn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            quantity++;
+                            if (quantity > 50) {
+                                quantity = 50;
+                            }
+                            setPriceComp();
+                        }
+                    });
+                    this.minusBtn.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            quantity--;
+                            if (quantity <= 0) {
+                                quantity = 1;
+                            }
+                            setPriceComp();
+                        }
+                    });
+                }
+
+                private void setPriceComp() {
+                    int sun = this.price * this.quantity;
+                    this.quantityText.setText(this.quantity + "");
+                    this.priceText.setText(sun + "");
+                }
+
+                private void build() {
+                    this.nameText.setText(name);
+                    this.scopeText.setText(scope);
+                    this.quantityText.setText(quantity + "");
+                    setAddAndMinusListener();
+                    setPriceComp();
+                }
             }
         }
     }
+
+
 }
