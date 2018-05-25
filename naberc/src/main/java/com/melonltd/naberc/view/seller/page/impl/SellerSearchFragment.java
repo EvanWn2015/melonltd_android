@@ -1,6 +1,5 @@
 package com.melonltd.naberc.view.seller.page.impl;
 
-
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -10,9 +9,6 @@ import android.view.ViewGroup;
 import com.melonltd.naberc.R;
 import com.melonltd.naberc.view.common.abs.AbsPageFragment;
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class SellerSearchFragment extends AbsPageFragment {
     private static final String TAG = SellerSearchFragment.class.getSimpleName();
     private static SellerSearchFragment FRAGMENT = null;

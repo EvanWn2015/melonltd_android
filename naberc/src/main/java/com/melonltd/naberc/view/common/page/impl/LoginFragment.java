@@ -1,6 +1,7 @@
 package com.melonltd.naberc.view.common.page.impl;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
@@ -17,6 +18,8 @@ import com.melonltd.naberc.model.helper.okhttp.ApiCallback;
 import com.melonltd.naberc.model.helper.okhttp.ApiManager;
 import com.melonltd.naberc.util.VerifyUtil;
 import com.melonltd.naberc.view.common.BaseCore;
+import com.melonltd.naberc.view.customize.LoadingBar;
+import com.melonltd.naberc.view.seller.SellerMainActivity;
 import com.melonltd.naberc.view.user.UserMainActivity;
 import com.melonltd.naberc.view.common.abs.AbsPageFragment;
 import com.melonltd.naberc.view.common.factory.PageFragmentFactory;
@@ -92,10 +95,16 @@ public class LoginFragment extends AbsPageFragment implements View.OnClickListen
                     ApiManager.test(new ApiCallback(getActivity()) {
                         @Override
                         public void onSuccess(String responseBody) {
-                            BaseCore.FRAGMENT_TAG = PageType.HOME.name();
-                            getFragmentManager().beginTransaction().replace(R.id.frameContainer, PageFragmentFactory.of(PageType.HOME, null)).commit();
-                            if (UserMainActivity.bottomMenuTabLayout != null) {
-                                UserMainActivity.bottomMenuTabLayout.setVisibility(View.VISIBLE);
+                            if ("111111".equals(accountEdit.getText().toString())) {
+                                LoadingBar bar = new LoadingBar(getContext(), true);
+                                startActivity(new Intent(getContext(), SellerMainActivity.class));
+                                bar.hide();
+                            } else {
+                                BaseCore.FRAGMENT_TAG = PageType.HOME.name();
+                                getFragmentManager().beginTransaction().replace(R.id.frameContainer, PageFragmentFactory.of(PageType.HOME, null)).commit();
+                                if (UserMainActivity.bottomMenuTabLayout != null) {
+                                    UserMainActivity.bottomMenuTabLayout.setVisibility(View.VISIBLE);
+                                }
                             }
                         }
 

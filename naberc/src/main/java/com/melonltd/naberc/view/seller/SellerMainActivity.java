@@ -81,7 +81,6 @@ public class SellerMainActivity extends BaseCore implements TabLayout.OnTabSelec
         tabLayout.addTab(tabLayout.newTab().setCustomView(v1).setTag(R.string.seller_menu_stat_btn), false);
         tabLayout.addTab(tabLayout.newTab().setCustomView(v2).setTag(R.string.seller_menu_menu_btn), false);
         tabLayout.addTab(tabLayout.newTab().setCustomView(v3).setTag(R.string.seller_menu_set_up_btn), false);
-
     }
 
     @Override

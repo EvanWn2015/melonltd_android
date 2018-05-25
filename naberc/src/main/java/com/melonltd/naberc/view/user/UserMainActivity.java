@@ -7,6 +7,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
+import android.support.multidex.MultiDex;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -35,6 +36,12 @@ public class UserMainActivity extends BaseCore implements View.OnClickListener, 
     private FrameLayout frameContainer;
     private static Drawable navigationIcon;
     private static final List<PageType> MAIN_PAGE = Lists.newArrayList(PageType.HOME, PageType.RESTAURANT, PageType.SHOPPING_CART, PageType.HISTORY, PageType.SET_UP);
+
+    @Override
+    protected void attachBaseContext(Context base) {
+        super.attachBaseContext(base);
+        MultiDex.install(this);
+    }
 
     @Override
     protected void onCreate(@NonNull Bundle savedInstanceState) {
@@ -68,18 +75,11 @@ public class UserMainActivity extends BaseCore implements View.OnClickListener, 
             View v2 = new NaberTab(context).Builder().setIcon(R.drawable.naber_tab_shopping_cart_icon).setTitle(R.string.menu_shopping_cart_btn).build();
             View v3 = new NaberTab(context).Builder().setIcon(R.drawable.naber_tab_history_icon).setTitle(R.string.menu_history_btn).build();
             View v4 = new NaberTab(context).Builder().setIcon(R.drawable.naber_tab_set_up_icon).setTitle(R.string.menu_set_up_btn).build();
-
             bottomMenuTabLayout.addTab(bottomMenuTabLayout.newTab().setCustomView(v0).setTag(R.string.menu_home_btn), false);
             bottomMenuTabLayout.addTab(bottomMenuTabLayout.newTab().setCustomView(v1).setTag(R.string.menu_restaurant_btn), false);
             bottomMenuTabLayout.addTab(bottomMenuTabLayout.newTab().setCustomView(v2).setTag(R.string.menu_shopping_cart_btn), false);
             bottomMenuTabLayout.addTab(bottomMenuTabLayout.newTab().setCustomView(v3).setTag(R.string.menu_history_btn), false);
             bottomMenuTabLayout.addTab(bottomMenuTabLayout.newTab().setCustomView(v4).setTag(R.string.menu_set_up_btn), false);
-//            bottomMenuTabLayout.addTab(bottomMenuTabLayout.newTab().setText(R.string.menu_home_btn).setIcon(R.drawable.naber_tab_home_icon).setTag(R.string.menu_home_btn), false);
-//            bottomMenuTabLayout.addTab(bottomMenuTabLayout.newTab().setText(R.string.menu_restaurant_btn).setIcon(R.drawable.naber_tab_restaurant_icon).setTag(R.string.menu_restaurant_btn), false);
-//            bottomMenuTabLayout.addTab(bottomMenuTabLayout.newTab().setText(R.string.menu_shopping_cart_btn).setIcon(R.drawable.naber_tab_shopping_cart_icon).setTag(R.string.menu_shopping_cart_btn), false);
-//            bottomMenuTabLayout.addTab(bottomMenuTabLayout.newTab().setText(R.string.menu_history_btn).setIcon(R.drawable.naber_tab_history_icon).setTag(R.string.menu_history_btn), false);
-//            bottomMenuTabLayout.addTab(bottomMenuTabLayout.newTab().setText(R.string.menu_set_up_btn).setIcon(R.drawable.naber_tab_set_up_icon).setTag(R.string.menu_set_up_btn), false);
-//            bottomMenuTabLayout.getTabAt(0).select();
         } else {
             bottomMenuTabLayout.setVisibility(View.GONE);
         }

@@ -48,7 +48,7 @@ public abstract class BaseCore extends AppCompatActivity implements LocationList
 
     public FragmentManager fragmentManager = getSupportFragmentManager();
 //    public static PopUpDialog POPUP = PopUpDialog.getInstance();
-    public static boolean IS_USER = false;
+    public static boolean IS_USER = true;
     public static boolean IS_HAS_ACC = false;
 
     @Override

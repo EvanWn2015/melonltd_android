@@ -2,6 +2,7 @@ package com.melonltd.naberc.view.seller.adapter;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,6 +16,7 @@ import com.melonltd.naberc.view.seller.page.impl.SellerOrdersFragment;
 import java.util.List;
 
 public class SellerOrdersAdapter extends RecyclerView.Adapter<SellerOrdersAdapter.ViewHolder> {
+    private static final String TAG = SellerOrdersAdapter.class.getSimpleName();
     private List<String> list;
     private View.OnClickListener cancelListener, processingListener, failureListener, canFetchListener, finishListener;
 
@@ -50,8 +52,14 @@ public class SellerOrdersAdapter extends RecyclerView.Adapter<SellerOrdersAdapte
                     + "\n";
         }
 
+        // set Tag
         holder.cancelBtn.setTag(list.get(position));
-        holder.foodItemsCountText.setText("(" + position + ")");
+        holder.processingBtn.setTag(list.get(position));
+        holder.failureBtn.setTag(list.get(position));
+        holder.canFetchBtn.setTag(list.get(position));
+        holder.finishBtn.setTag(list.get(position));
+
+        holder.foodItemsCountText.setText(list.get(position));
         holder.foodItemsText.setText(foodItems);
         holder.remarkText.setText(list.get(position));
 
