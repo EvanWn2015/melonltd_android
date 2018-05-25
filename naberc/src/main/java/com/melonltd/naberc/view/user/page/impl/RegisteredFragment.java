@@ -133,7 +133,7 @@ public class RegisteredFragment extends AbsPageFragment implements View.OnClickL
                         .setYearText(getResources().getString(R.string.data_time_picker_years_text))
                         .setMonthText(getResources().getString(R.string.data_time_picker_month_text))
                         .setDayText(getResources().getString(R.string.data_time_picker_day_text))
-                        .setCyclic(true)
+                        .setCyclic(false)
                         .setToolBarTextColor(getResources().getColor(R.color.naber_basis_blue))
                         .setMinMillseconds(System.currentTimeMillis() - tenYears)
                         .setMaxMillseconds(System.currentTimeMillis())

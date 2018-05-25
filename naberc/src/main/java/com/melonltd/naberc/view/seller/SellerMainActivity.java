@@ -7,13 +7,17 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
+import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.common.collect.Lists;
 import com.melonltd.naberc.R;
+import com.melonltd.naberc.model.helper.okhttp.ApiCallback;
+import com.melonltd.naberc.model.helper.okhttp.ApiManager;
 import com.melonltd.naberc.view.common.BaseCore;
 import com.melonltd.naberc.view.common.abs.AbsPageFragment;
 import com.melonltd.naberc.view.common.factory.PageFragmentFactory;
@@ -23,7 +27,7 @@ import com.melonltd.naberc.view.seller.adapter.DateSelectAdapter;
 
 import java.util.List;
 
-public class SellerMainActivity extends BaseCore implements TabLayout.OnTabSelectedListener, View.OnLayoutChangeListener {
+public class SellerMainActivity extends BaseCore implements TabLayout.OnTabSelectedListener, View.OnLayoutChangeListener, CompoundButton.OnCheckedChangeListener {
     private static final String TAG = SellerMainActivity.class.getSimpleName();
     private DrawerLayout drawer;
     public static TabLayout tabLayout;
@@ -31,7 +35,7 @@ public class SellerMainActivity extends BaseCore implements TabLayout.OnTabSelec
     private RecyclerView sellerRecyclerView;
     private Toolbar toolbar;
     private FrameLayout frameLayout;
-    private static final List<PageType> SELLER_MAIN_PAGE = Lists.newArrayList(PageType.SELLER_ORDERS, PageType.SELLER_STAT, PageType.SELLER_RESTAURANT, PageType.SELLER_SET_UP);
+    private static final List<PageType> SELLER_MAIN_PAGE = Lists.newArrayList(PageType.SELLER_SEARCH, PageType.SELLER_ORDERS, PageType.SELLER_STAT, PageType.SELLER_RESTAURANT, PageType.SELLER_SET_UP);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,11 +45,10 @@ public class SellerMainActivity extends BaseCore implements TabLayout.OnTabSelec
         serTab();
         List<String> list = Lists.newArrayList();
 
-
         for (int i = 0; i < 20; i++) {
             list.add((i + 1) * 30 + "~" + (1 + i) * 10);
         }
-        adapter = new DateSelectAdapter(this, list);
+        adapter = new DateSelectAdapter(this, list, this);
         final LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         sellerRecyclerView.setLayoutManager(layoutManager);
@@ -67,14 +70,27 @@ public class SellerMainActivity extends BaseCore implements TabLayout.OnTabSelec
     }
 
     private void serTab() {
+        tabLayout.removeAllTabs();
+        View v = new NaberTab(context).Builder().setIcon(R.drawable.naber_tab_search_icon).setTitle(R.string.seller_menu_search_btn).build();
         View v0 = new NaberTab(context).Builder().setIcon(R.drawable.naber_tab_history_icon).setTitle(R.string.seller_menu_orders_btn).build();
         View v1 = new NaberTab(context).Builder().setIcon(R.drawable.naber_tab_stat_icon).setTitle(R.string.seller_menu_stat_btn).build();
         View v2 = new NaberTab(context).Builder().setIcon(R.drawable.naber_tab_restaurant_icon).setTitle(R.string.seller_menu_menu_btn).build();
         View v3 = new NaberTab(context).Builder().setIcon(R.drawable.naber_tab_set_up_icon).setTitle(R.string.seller_menu_set_up_btn).build();
+        tabLayout.addTab(tabLayout.newTab().setCustomView(v).setTag(R.string.seller_menu_search_btn), false);
         tabLayout.addTab(tabLayout.newTab().setCustomView(v0).setTag(R.string.seller_menu_orders_btn), false);
         tabLayout.addTab(tabLayout.newTab().setCustomView(v1).setTag(R.string.seller_menu_stat_btn), false);
         tabLayout.addTab(tabLayout.newTab().setCustomView(v2).setTag(R.string.seller_menu_menu_btn), false);
         tabLayout.addTab(tabLayout.newTab().setCustomView(v3).setTag(R.string.seller_menu_set_up_btn), false);
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        AbsPageFragment fragment = null;
+        FRAGMENT_TAG = PageType.SELLER_SEARCH.name();
+        fragment = PageFragmentFactory.of(PageType.SELLER_SEARCH, null);
+        fragmentManager.beginTransaction().replace(R.id.sellerFrameContainer, fragment).addToBackStack(fragment.toString()).commit();
     }
 
     @Override
@@ -110,13 +126,13 @@ public class SellerMainActivity extends BaseCore implements TabLayout.OnTabSelec
                 FRAGMENT_TAG = PageType.ofId(Integer.parseInt(tab.getTag().toString())).name();
                 fragmentManager.beginTransaction().addToBackStack(fragment.toString()).replace(R.id.sellerFrameContainer, fragment).commit();
             }
+
             View v = tab.getCustomView();
             ImageView icon = v.findViewById(R.id.tabIcon);
             TextView text = v.findViewById(R.id.tabTitle);
             icon.setColorFilter(getResources().getColor(R.color.naber_basis));
             text.setTextColor(getResources().getColor(R.color.naber_basis));
         }
-
     }
 
     @Override
@@ -133,5 +149,20 @@ public class SellerMainActivity extends BaseCore implements TabLayout.OnTabSelec
             icon.setColorFilter(getResources().getColor(R.color.naber_basis));
             text.setTextColor(getResources().getColor(R.color.naber_basis));
         }
+    }
+
+    @Override
+    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
+        ApiManager.test(new ApiCallback(context) {
+            @Override
+            public void onSuccess(String responseBody) {
+
+            }
+
+            @Override
+            public void onFail(Exception error) {
+
+            }
+        });
     }
 }

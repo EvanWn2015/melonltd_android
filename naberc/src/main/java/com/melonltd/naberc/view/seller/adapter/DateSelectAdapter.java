@@ -6,6 +6,7 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CompoundButton;
 import android.widget.Switch;
 
 import com.melonltd.naberc.R;
@@ -13,12 +14,14 @@ import com.melonltd.naberc.R;
 import java.util.List;
 
 public class DateSelectAdapter extends RecyclerView.Adapter<DateSelectAdapter.ViewHolder> {
-    private Context context;
+//    private Context context;
     private List<String> list;
+    private CompoundButton.OnCheckedChangeListener listener;
 
-    public DateSelectAdapter(Context context, List<String> list) {
-        this.context = context;
+    public DateSelectAdapter(Context context, List<String> list, CompoundButton.OnCheckedChangeListener listener) {
+//        this.context = context;
         this.list = list;
+        this.listener = listener;
     }
 
     @NonNull
@@ -32,6 +35,8 @@ public class DateSelectAdapter extends RecyclerView.Adapter<DateSelectAdapter.Vi
     @Override
     public void onBindViewHolder(@NonNull DateSelectAdapter.ViewHolder holder, int i) {
         holder.aSwitch.setText(list.get(i));
+        holder.aSwitch.setTag(list.get(i));
+        holder.aSwitch.setOnCheckedChangeListener(this.listener);
     }
 
     @Override

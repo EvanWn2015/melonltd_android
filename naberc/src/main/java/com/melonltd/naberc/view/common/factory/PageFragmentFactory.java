@@ -5,6 +5,7 @@ import android.support.annotation.NonNull;
 
 import com.melonltd.naberc.view.seller.page.impl.SellerOrdersFragment;
 import com.melonltd.naberc.view.seller.page.impl.SellerRestaurantFragment;
+import com.melonltd.naberc.view.seller.page.impl.SellerSearchFragment;
 import com.melonltd.naberc.view.seller.page.impl.SellerSetUpFragment;
 import com.melonltd.naberc.view.seller.page.impl.SellerStatFragment;
 import com.melonltd.naberc.view.user.page.impl.CategoryMenuFragment;
@@ -71,6 +72,8 @@ public class PageFragmentFactory {
             case MENU_DETAIL:
                 return new MenuDetailFragment().getInstance(bundle);
             // seller
+            case SELLER_SEARCH:
+                return new SellerSearchFragment().getInstance(bundle);
             case SELLER_ORDERS:
                 return new SellerOrdersFragment().getInstance(bundle);
             case SELLER_STAT:
