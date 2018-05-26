@@ -40,9 +40,9 @@ dependencies {
 
     // firebase
     implementation 'com.google.firebase:firebase-core:15.0.2'
-    implementation 'com.google.firebase:firebase-auth:15.1.0'
-    implementation 'com.google.firebase:firebase-database:15.0.0'
-    implementation 'com.google.firebase:firebase-crash:15.0.2'
+//    implementation 'com.google.firebase:firebase-auth:15.1.0'
+//    implementation 'com.google.firebase:firebase-database:15.0.0'
+//    implementation 'com.google.firebase:firebase-crash:15.0.2'
     implementation 'com.google.firebase:firebase-messaging:15.0.2'
     //
     implementation 'com.google.guava:guava:23.6-android'
@@ -65,7 +65,11 @@ dependencies {
     implementation 'com.facebook.fresco:webpsupport:0.12.0'
     implementation 'com.facebook.fresco:webpsupport:0.12.0'
 
-    // test
+//    implementation 'com.android.support:recyclerview-v7:27.0.2'
+//    implementation 'com.android.support:support-v4:27.0.2'
+    implementation 'cn.bingoogolapple:bga-refreshlayout:1.1.8'
+
+//     test
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'

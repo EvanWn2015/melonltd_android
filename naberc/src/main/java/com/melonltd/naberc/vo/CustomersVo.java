@@ -1,8 +1,8 @@
 package com.melonltd.naberc.vo;
 
-import com.google.firebase.database.IgnoreExtraProperties;
+//import com.google.firebase.database.IgnoreExtraProperties;
 
-@IgnoreExtraProperties
+//@IgnoreExtraProperties
 public class CustomersVo extends ColumnAbs {
 
     public String name;

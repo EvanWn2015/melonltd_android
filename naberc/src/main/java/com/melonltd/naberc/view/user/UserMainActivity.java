@@ -53,9 +53,9 @@ public class UserMainActivity extends BaseCore implements View.OnClickListener, 
         setSupportActionBar(toolbar);
         serTab();
 
-        if (currentUser != null) {
-            Log.d(TAG, currentUser.getEmail());
-        }
+//        if (currentUser != null) {
+////            Log.d(TAG, currentUser.getEmail());
+//        }
     }
 
     private void getView() {

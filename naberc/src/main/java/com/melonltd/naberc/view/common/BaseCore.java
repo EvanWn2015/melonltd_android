@@ -19,8 +19,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+//import com.google.firebase.auth.FirebaseAuth;
+//import com.google.firebase.auth.FirebaseUser;
 import com.melonltd.naberc.R;
 import com.melonltd.naberc.model.preferences.SharedPreferencesService;
 import com.melonltd.naberc.util.Tools;
@@ -43,8 +43,8 @@ public abstract class BaseCore extends AppCompatActivity implements LocationList
     private static final int IO_STREAM_CODE = 1987;
     private static final String[] IO_STREAM = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
 
-    public static FirebaseAuth auth = FirebaseAuth.getInstance();
-    public static FirebaseUser currentUser = auth.getCurrentUser();
+//    public static FirebaseAuth auth = FirebaseAuth.getInstance();
+//    public static FirebaseUser currentUser = auth.getCurrentUser();
 
     public FragmentManager fragmentManager = getSupportFragmentManager();
 //    public static PopUpDialog POPUP = PopUpDialog.getInstance();
