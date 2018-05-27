@@ -138,6 +138,17 @@ public enum PageType {
         return 100;
     }
 
+
+
+    public static int equalsIdByName(String name) {
+        for (PageType entity : values()) {
+            if (entity.name().equals(name)) {
+                return entity.id;
+            }
+        }
+        return 0;
+    }
+
     public static boolean isMainPage(String name) {
         for (PageType entity : values()) {
             if (entity.position < 4) {

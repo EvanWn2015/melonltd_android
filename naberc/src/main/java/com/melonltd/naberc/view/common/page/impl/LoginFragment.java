@@ -97,7 +97,7 @@ public class LoginFragment extends AbsPageFragment implements View.OnClickListen
                         public void onSuccess(String responseBody) {
                             if ("111111".equals(accountEdit.getText().toString())) {
                                 LoadingBar bar = new LoadingBar(getContext(), true);
-                                startActivity(new Intent(getContext(), SellerMainActivity.class));
+                                getActivity().startActivity(new Intent(getContext(), SellerMainActivity.class));
                                 bar.hide();
                             } else {
                                 BaseCore.FRAGMENT_TAG = PageType.HOME.name();

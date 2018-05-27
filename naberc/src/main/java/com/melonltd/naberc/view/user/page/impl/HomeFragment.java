@@ -20,6 +20,7 @@ import com.melonltd.naberc.view.common.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.common.type.PageType;
 import com.melonltd.naberc.view.customize.GlideImageLoader;
 import com.melonltd.naberc.view.customize.OnLoadLayout;
+import com.melonltd.naberc.view.user.UserMainActivity;
 import com.melonltd.naberc.view.user.adapter.RestaurantAdapter;
 import com.youth.banner.Banner;
 import com.youth.banner.listener.OnBannerListener;
@@ -78,7 +79,6 @@ public class HomeFragment extends AbsPageFragment {
             return (View) container.getTag(R.id.user_home_page);
         }
     }
-
 
     private void getViews(View v) {
         contentLoadLayout = v.findViewById(R.id.contentLoadLayout);
@@ -162,7 +162,6 @@ public class HomeFragment extends AbsPageFragment {
     @Override
     public void onResume() {
         super.onResume();
-
 //        if ( RestaurantFragment.TO_RESTAURANT_DETAIL_INDEX >= 0) {
 //            Bundle b = new Bundle();
 //            b.putString("where", "RESTAURANT");

@@ -90,12 +90,12 @@ public class UserMainActivity extends BaseCore implements View.OnClickListener, 
         super.onResume();
 
         // TODO Seller page
-        startActivity(new Intent(context, SellerMainActivity.class));
+//        startActivity(new Intent(context, SellerMainActivity.class));
         // TODO user page
-//        AbsPageFragment fragment = null;
-//        bottomMenuTabLayout.setVisibility(View.GONE);
-//        fragment = PageFragmentFactory.of(PageType.LOGIN, null);
-//        fragmentManager.beginTransaction().replace(R.id.frameContainer, fragment).addToBackStack(fragment.toString()).commit();
+        AbsPageFragment fragment = null;
+        bottomMenuTabLayout.setVisibility(View.GONE);
+        fragment = PageFragmentFactory.of(PageType.LOGIN, null);
+        fragmentManager.beginTransaction().replace(R.id.frameContainer, fragment).addToBackStack(fragment.toString()).commit();
 
 //        if (SharedPreferencesService.isFirstUse()) {
 //            fragmentManager.beginTransaction().replace(R.id.frameContainer, new IntroFragment()).commit();
@@ -125,6 +125,14 @@ public class UserMainActivity extends BaseCore implements View.OnClickListener, 
     @Override
     public void onLayoutChange(View view, int i, int i1, int i2, int i3, int i4, int i5, int i6, int i7) {
         int position = PageType.equalsPositionByName(FRAGMENT_TAG);
+
+        // TODO toolbar title
+        if (position == 0) {
+            toolbar.setTitle("NABER");
+        } else {
+            toolbar.setTitle(getResources().getString(PageType.equalsIdByName(FRAGMENT_TAG)));
+        }
+
         for (int index = 0; index < bottomMenuTabLayout.getTabCount(); index++) {
             onTabUnselected(bottomMenuTabLayout.getTabAt(index));
         }
