@@ -256,8 +256,6 @@ public class SellerOrdersFragment extends AbsPageFragment {
                     .setOnItemClickListener(new OnItemClickListener() {
                         @Override
                         public void onItemClick(Object o, int position) {
-
-                            Log.d(TAG, extView.getMessage());
                             if (position == 1) {
                                 int index = tmpList.indexOf((String) view.getTag());
                                 tmpList.remove((String) view.getTag());

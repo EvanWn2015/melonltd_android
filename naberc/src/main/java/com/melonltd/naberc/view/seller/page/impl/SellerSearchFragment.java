@@ -7,9 +7,13 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 
 import com.google.common.collect.Lists;
 import com.melonltd.naberc.R;
+import com.melonltd.naberc.model.helper.okhttp.ApiCallback;
+import com.melonltd.naberc.model.helper.okhttp.ApiManager;
 import com.melonltd.naberc.view.common.abs.AbsPageFragment;
 import com.melonltd.naberc.view.seller.adapter.SearchAdapter;
 
@@ -21,7 +25,9 @@ import cn.bingoogolapple.refreshlayout.BGARefreshLayout;
 public class SellerSearchFragment extends AbsPageFragment {
     private static final String TAG = SellerSearchFragment.class.getSimpleName();
     private static SellerSearchFragment FRAGMENT = null;
-    private BGARefreshLayout refreshLayout;
+    private BGARefreshLayout searchRefreshLayout;
+    private EditText phoneEditText;
+    private Button phoneSearchBtn;
 
     private SearchAdapter adapter;
     private RecyclerView recyclerView;
@@ -65,9 +71,17 @@ public class SellerSearchFragment extends AbsPageFragment {
     }
 
     private void getViews(View v) {
-        refreshLayout = v.findViewById(R.id.sellerSearchRefreshLayout);
-        refreshLayout.setRefreshViewHolder(new BGANormalRefreshViewHolder(getContext(), true));
+        phoneEditText = v.findViewById(R.id.phoneEditText);
+        phoneSearchBtn = v.findViewById(R.id.phoneSearchBtn);
+        searchRefreshLayout = v.findViewById(R.id.sellerSearchRefreshLayout);
+        BGANormalRefreshViewHolder refreshViewHolder = new BGANormalRefreshViewHolder(getContext(), true);
+        refreshViewHolder.setPullDownRefreshText("Pull");
+        refreshViewHolder.setRefreshingText("Pull to refresh");
+        refreshViewHolder.setReleaseRefreshText("Pull to refresh");
+
+        searchRefreshLayout.setRefreshViewHolder(refreshViewHolder);
         recyclerView = v.findViewById(R.id.searchRecyclerView);
+
         final LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
@@ -75,15 +89,52 @@ public class SellerSearchFragment extends AbsPageFragment {
 
     private void setListener() {
         recyclerView.setAdapter(adapter);
-        refreshLayout.setDelegate(new BGARefreshLayout.BGARefreshLayoutDelegate() {
+        searchRefreshLayout.setDelegate(new BGARefreshLayout.BGARefreshLayoutDelegate() {
             @Override
             public void onBGARefreshLayoutBeginRefreshing(BGARefreshLayout refreshLayout) {
-                refreshLayout.endRefreshing();
+                ApiManager.test(new ApiCallback(getActivity()) {
+                    @Override
+                    public void onSuccess(String responseBody) {
+                        listData.clear();
+                        adapter.notifyDataSetChanged();
+                        for (int i = 0; i < 10; i++) {
+                            listData.add("listData : " + i);
+                        }
+                        adapter.notifyDataSetChanged();
+                        searchRefreshLayout.endRefreshing();
+                    }
+
+                    @Override
+                    public void onFail(Exception error) {
+                        searchRefreshLayout.endRefreshing();
+                    }
+                });
+
             }
 
             @Override
             public boolean onBGARefreshLayoutBeginLoadingMore(BGARefreshLayout refreshLayout) {
-                refreshLayout.endLoadingMore();
+//                searchRefreshLayout.endLoadingMore();
+//                for (int i = 0; i < 10; i++) {
+//                    listData.add("listData : " + i);
+//                }
+//                adapter.notifyDataSetChanged();
+//                searchRefreshLayout.endRefreshing();
+                ApiManager.test(new ApiCallback(getActivity()) {
+                    @Override
+                    public void onSuccess(String responseBody) {
+                        for (int i = 0; i < 10; i++) {
+                            listData.add("listData : " + i);
+                        }
+                        adapter.notifyDataSetChanged();
+                        searchRefreshLayout.endRefreshing();
+                    }
+
+                    @Override
+                    public void onFail(Exception error) {
+                        searchRefreshLayout.endRefreshing();
+                    }
+                });
                 return false;
             }
         });
