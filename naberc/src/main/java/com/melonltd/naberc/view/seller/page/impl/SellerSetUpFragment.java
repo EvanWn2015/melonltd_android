@@ -11,9 +11,6 @@ import android.view.ViewGroup;
 import com.melonltd.naberc.R;
 import com.melonltd.naberc.view.common.abs.AbsPageFragment;
 
-/**
- * A simple {@link Fragment} subclass.
- */
 public class SellerSetUpFragment extends AbsPageFragment {
     private static final String TAG = SellerSetUpFragment.class.getSimpleName();
     private static SellerSetUpFragment FRAGMENT = null;

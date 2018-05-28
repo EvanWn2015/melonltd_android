@@ -1,9 +1,11 @@
 package com.melonltd.naberc.view.common.type;
 
 import com.melonltd.naberc.R;
+import com.melonltd.naberc.view.seller.page.impl.SellerMenuEditFragment;
 import com.melonltd.naberc.view.seller.page.impl.SellerOrderLogsDetailFragment;
 import com.melonltd.naberc.view.seller.page.impl.SellerOrdersFragment;
 import com.melonltd.naberc.view.seller.page.impl.SellerOrdersLogsFragment;
+import com.melonltd.naberc.view.seller.page.impl.SellerCategoryListFragment;
 import com.melonltd.naberc.view.seller.page.impl.SellerRestaurantFragment;
 import com.melonltd.naberc.view.seller.page.impl.SellerSearchFragment;
 import com.melonltd.naberc.view.seller.page.impl.SellerSetUpFragment;
@@ -69,6 +71,8 @@ public enum PageType {
     SELLER_ORDERS_LOGS(R.string.seller_menu_orders_logs, 2, SellerOrdersLogsFragment.class),
     SELLER_ORDERS_LOGS_DETAIL(R.string.seller_menu_orders_logs_detail, 2, SellerOrderLogsDetailFragment.class),
     SELLER_RESTAURANT(R.string.seller_menu_menu_btn, 3, SellerRestaurantFragment.class),
+    SELLER_CATEGORY_LIST(R.string.seller_menu_category_list, 3, SellerCategoryListFragment.class),
+    SELLER_MENU_EDIT(R.string.seller_menu_menu_edit, 3, SellerMenuEditFragment.class),
     SELLER_SET_UP(R.string.seller_menu_set_up_btn, 4, SellerSetUpFragment.class),
     REGISTERED_SELLER(R.string.seller_page_registered_title, 104, RegisteredSellerFragment.class);
 

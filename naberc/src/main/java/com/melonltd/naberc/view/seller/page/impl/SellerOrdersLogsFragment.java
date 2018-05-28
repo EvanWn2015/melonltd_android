@@ -145,7 +145,6 @@ public class SellerOrdersLogsFragment extends AbsPageFragment implements View.On
         }
     }
 
-
     private void toOrderLogsDetailPag(int index) {
         BaseCore.FRAGMENT_TAG = PageType.SELLER_ORDERS_LOGS_DETAIL.name();
         TO_ORDERS_LOGS_DETAIL_INDEX = index;
@@ -172,7 +171,7 @@ public class SellerOrdersLogsFragment extends AbsPageFragment implements View.On
         switch (view.getId()) {
             case R.id.startTimeText:
             case R.id.endTimeText:
-                long tenYears = 70L * 365 * 1000 * 60 * 60 * 24L;
+                long oneYears = 1L * 365 * 1000 * 60 * 60 * 24L;
                 new TimePickerDialog.Builder()
                         .setTitleStringId("")
                         .setTitleStringId("請選擇")
@@ -181,7 +180,7 @@ public class SellerOrdersLogsFragment extends AbsPageFragment implements View.On
                         .setDayText(getResources().getString(R.string.data_time_picker_day_text))
                         .setCyclic(false)
                         .setToolBarTextColor(getResources().getColor(R.color.naber_basis_blue))
-                        .setMinMillseconds(System.currentTimeMillis() - tenYears)
+                        .setMinMillseconds(System.currentTimeMillis() - oneYears)
                         .setMaxMillseconds(System.currentTimeMillis())
                         .setCurrentMillseconds(System.currentTimeMillis())
                         .setThemeColor(getResources().getColor(R.color.naber_dividing_line_gray))
