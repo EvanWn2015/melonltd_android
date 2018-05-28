@@ -9,6 +9,7 @@ import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -37,16 +38,20 @@ import com.melonltd.naberc.view.customize.OnLoadLayout;
 
 import java.util.List;
 
+import cn.bingoogolapple.refreshlayout.BGANormalRefreshViewHolder;
+import cn.bingoogolapple.refreshlayout.BGARefreshLayout;
 import in.srain.cube.views.ptr.PtrFrameLayout;
 import in.srain.cube.views.ptr.PtrHandler;
 
 public class ShoppingCartFragment extends AbsPageFragment {
     private static final String TAG = ShoppingCartFragment.class.getSimpleName();
     private static ShoppingCartFragment FRAGMENT = null;
-    private OnLoadLayout onLoadLayout;
-    private ListView listView;
+
+
+    private BGARefreshLayout bgaRefreshLayout;
     private ShoppingCartAdapter adapter;
-    private List<String> list = Lists.newArrayList();
+    private RecyclerView recyclerView;
+    private List<String> listData = Lists.newArrayList();
 
     public ShoppingCartFragment() {
     }
@@ -69,7 +74,8 @@ public class ShoppingCartFragment extends AbsPageFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Fresco.initialize(getContext());
-        adapter = new ShoppingCartAdapter(getContext(), list);
+//        adapter = new ShoppingCartAdapter(getContext(), list);
+        adapter = new ShoppingCartAdapter(listData);
     }
 
     @Override
@@ -95,50 +101,53 @@ public class ShoppingCartFragment extends AbsPageFragment {
         return (View) container.getTag(R.id.user_shopping_cart_page);
     }
 
-
-    // TODO test
     private void testLoadData(boolean isRefresh) {
         if (isRefresh) {
-            list.clear();
+            listData.clear();
             adapter.notifyDataSetChanged();
         }
         for (int i = 0; i < 15; i++) {
-            list.add("" + i);
+            listData.add("" + i);
         }
         adapter.notifyDataSetChanged();
     }
 
     private void getViews(View v) {
-        onLoadLayout = v.findViewById(R.id.shoppingCartOnLoadLayout);
-        listView = v.findViewById(R.id.shoppingCartListView);
-        listView.setAdapter(adapter);
+        bgaRefreshLayout = v.findViewById(R.id.shoppingCartBGARefreshLayout);
+        recyclerView = v.findViewById(R.id.shoppingCartRecyclerView);
+
+        BGANormalRefreshViewHolder refreshViewHolder = new BGANormalRefreshViewHolder(getContext(), true);
+        refreshViewHolder.setPullDownRefreshText("Pull");
+        refreshViewHolder.setRefreshingText("Pull to refresh");
+        refreshViewHolder.setReleaseRefreshText("Pull to refresh");
+        refreshViewHolder.setLoadingMoreText("Loading more !");
+
+        bgaRefreshLayout.setRefreshViewHolder(refreshViewHolder);
+
+        final LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(layoutManager);
+
     }
 
     private void setListener() {
-        onLoadLayout.setPtrHandler(new PtrHandler() {
+        adapter.setListener(new DeleteListener(), new SubmitListener(), new DeleteSubViewListener());
+        recyclerView.setAdapter(adapter);
+        bgaRefreshLayout.setDelegate(new BGARefreshLayout.BGARefreshLayoutDelegate() {
             @Override
-            public void onRefreshBegin(PtrFrameLayout frame) {
-                ApiManager.test(new ApiCallback(getActivity()) {
-                    @Override
-                    public void onSuccess(String responseBody) {
-                        testLoadData(true);
-                        onLoadLayout.refreshComplete();
-                        adapter.notifyDataSetChanged();
-                    }
-
-                    @Override
-                    public void onFail(Exception error) {
-
-                    }
-                });
+            public void onBGARefreshLayoutBeginRefreshing(BGARefreshLayout refreshLayout) {
+                bgaRefreshLayout.endRefreshing();
             }
 
             @Override
-            public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
-                return ((OnLoadLayout) frame).isTop();
+            public boolean onBGARefreshLayoutBeginLoadingMore(BGARefreshLayout refreshLayout) {
+                bgaRefreshLayout.endLoadingMore();
+                return false;
             }
         });
+
     }
+
 
     @Override
     public void onResume() {
@@ -156,75 +165,78 @@ public class ShoppingCartFragment extends AbsPageFragment {
     }
 
 
-    class ShoppingCartAdapter extends BaseAdapter {
+    class DeleteListener implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            Log.d(TAG, v.getTag() + "");
+        }
+    }
+
+    class SubmitListener implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            Log.d(TAG, v.getTag() + "");
+        }
+    }
+
+    class DeleteSubViewListener implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            Log.d(TAG, v.getTag() + "");
+        }
+    }
+
+    class ShoppingCartAdapter extends RecyclerView.Adapter<ShoppingCartAdapter.ViewHolder> {
         private Context context;
-        private List<String> list;
+        private List<String> listData;
+        private View.OnClickListener deleteListener, submitListener, deleteSubViewListener;
 
-        ShoppingCartAdapter(Context context, List<String> list) {
-            this.context = context;
-            this.list = list;
+        ShoppingCartAdapter(List<String> listData) {
+            this.listData = listData;
+        }
+
+        private void setListener(View.OnClickListener deleteListener, View.OnClickListener submitListener, View.OnClickListener deleteSubViewListener) {
+            this.deleteListener = deleteListener;
+            this.submitListener = submitListener;
+            this.deleteSubViewListener = deleteSubViewListener;
+        }
+
+        @NonNull
+        @Override
+        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            this.context = parent.getContext();
+            View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.user_shopping_detail_item, parent, false);
+            ShoppingCartAdapter.ViewHolder vh = new ShoppingCartAdapter.ViewHolder(v);
+            vh.setListener(this.deleteSubViewListener);
+            return vh;
         }
 
         @Override
-        public int getCount() {
-            return list.size();
-        }
-
-        @Override
-        public Object getItem(int i) {
-            return list.get(i);
-        }
-
-        @Override
-        public long getItemId(int i) {
-            return i;
-        }
-
-        @Nullable
-        @Override
-        public CharSequence[] getAutofillOptions() {
-            return new CharSequence[0];
-        }
-
-        @Override
-        public View getView(int i, View view, ViewGroup viewGroup) {
-            ShoppingDetailItemHolder holder = null;
-            if (view == null) {
-                view = LayoutInflater.from(context).inflate(R.layout.user_shopping_detail_item, null);
-                holder = new ShoppingDetailItemHolder(view);
-                view.setTag(holder);
-            } else {
-                holder = (ShoppingDetailItemHolder) view.getTag();
+        public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+            List<String> sublist = Lists.newArrayList();
+            for(int i=0; i<position; i++){
+                sublist.add("sub" + i);
             }
-
-            holder.setName("test name" + i)
-                    .setTotalAmount(200 * (1 + i))
-                    .setBonus(20 * (1 + i))
-                    .setSubView(i)
-                    .setDeleteListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-
-                        }
-                    })
-                    .setSubmitListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-
-                        }
-                    }).build();
-
-
-            return view;
+            holder.setSubViews(sublist);
+            holder.deleteBtn.setTag(listData.get(position));
+            holder.submitBtn.setTag(listData.get(position));
+            holder.deleteBtn.setOnClickListener(this.deleteListener);
+            holder.submitBtn.setOnClickListener(this.submitListener);
         }
 
-        class ShoppingDetailItemHolder {
+        @Override
+        public int getItemCount() {
+            return listData.size();
+        }
+
+        class ViewHolder extends RecyclerView.ViewHolder {
             private TextView nameText, totalAmountText, bonusText;
             private LinearLayout layout;
             private Button deleteBtn, submitBtn;
-            private String name = "", totalAmount = "", bonus = "";
+            private View.OnClickListener deleteSubViewListener;
 
-            ShoppingDetailItemHolder(View v) {
+            ViewHolder(View v) {
+                super(v);
                 this.nameText = v.findViewById(R.id.restaurantNameText);
                 this.totalAmountText = v.findViewById(R.id.ordersTotalAmountText);
                 this.bonusText = v.findViewById(R.id.bonusText);
@@ -233,43 +245,17 @@ public class ShoppingCartFragment extends AbsPageFragment {
                 this.submitBtn = v.findViewById(R.id.submitOrdersBtn);
             }
 
-            private ShoppingDetailItemHolder setName(String name) {
-                this.name = name;
-                return this;
+            private void setListener(View.OnClickListener deleteSubViewListener) {
+                this.deleteSubViewListener = deleteSubViewListener;
             }
 
-            private ShoppingDetailItemHolder setTotalAmount(int totalAmount) {
-                this.totalAmount = "" + totalAmount;
-                return this;
-            }
-
-            private ShoppingDetailItemHolder setBonus(int bonus) {
-                this.bonus = "" + bonus;
-                return this;
-            }
-
-            private ShoppingDetailItemHolder setDeleteListener(View.OnClickListener deleteListener) {
-                this.deleteBtn.setOnClickListener(deleteListener);
-                return this;
-            }
-
-            private ShoppingDetailItemHolder setSubmitListener(View.OnClickListener submitListener) {
-                this.submitBtn.setOnClickListener(submitListener);
-                return this;
-            }
-
-            private ShoppingDetailItemHolder setSubView(int i) {
+            private void setSubViews(List<String> sublist) {
                 this.layout.removeAllViews();
-                for (int j = 0; j < i; j++) {
-                    View sebView = LayoutInflater.from(context).inflate(R.layout.user_shopping_order_item, null);
-                    new OrderSubItemHolder(sebView)
+                for (String ss : sublist) {
+                    View sebView = new OrderSubItemHolder(context)
                             .setName("subName")
-                            .setDeleteListener(new View.OnClickListener() {
-                                @Override
-                                public void onClick(View v) {
-                                    Log.d(TAG, "delete btn ");
-                                }
-                            })
+                            .setTag(ss)
+                            .setDeleteListener(this.deleteSubViewListener)
                             .setIconPath("http://i.epochtimes.com/assets/uploads/2017/09/Fotolia_58802987_Subscription_L-600x400.jpg")
                             .setPrice(20)
                             .setQuantity(1)
@@ -277,13 +263,6 @@ public class ShoppingCartFragment extends AbsPageFragment {
                             .build();
                     this.layout.addView(sebView);
                 }
-                return this;
-            }
-
-            private void build() {
-                nameText.setText(name);
-                totalAmountText.setText(totalAmount);
-                bonusText.setText("應得紅利" + bonus);
             }
 
             class OrderSubItemHolder {
@@ -293,9 +272,11 @@ public class ShoppingCartFragment extends AbsPageFragment {
                 private TextView quantityText, priceText;
                 public int quantity = 0, price = 0;
                 private String name = "", scope = "";
+                private View subView;
 
 
-                OrderSubItemHolder(View v) {
+                OrderSubItemHolder(Context context) {
+                    View v = LayoutInflater.from(context).inflate(R.layout.user_shopping_order_item, null);
                     this.iconImageView = v.findViewById(R.id.ordersItemIconImageView);
                     this.nameText = v.findViewById(R.id.ordersItemNameText);
                     this.scopeText = v.findViewById(R.id.ordersItemScopeText);
@@ -304,8 +285,15 @@ public class ShoppingCartFragment extends AbsPageFragment {
                     this.deleteBtn = v.findViewById(R.id.ordersItemDeleteBtn);
                     this.quantityText = v.findViewById(R.id.ordersItemQuantityText);
                     this.priceText = v.findViewById(R.id.ordersItemPriceText);
+                    this.subView = v;
                 }
 
+                private OrderSubItemHolder setTag(Object o) {
+                    this.minusBtn.setTag(o);
+                    this.addBtn.setTag(o);
+                    this.deleteBtn.setTag(o);
+                    return this;
+                }
 
                 private OrderSubItemHolder setName(String name) {
                     this.name = name;
@@ -347,6 +335,7 @@ public class ShoppingCartFragment extends AbsPageFragment {
                     this.addBtn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            Log.d(TAG, v.getTag() + "");
                             quantity++;
                             if (quantity > 50) {
                                 quantity = 50;
@@ -357,6 +346,7 @@ public class ShoppingCartFragment extends AbsPageFragment {
                     this.minusBtn.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            Log.d(TAG, v.getTag() + "");
                             quantity--;
                             if (quantity <= 0) {
                                 quantity = 1;
@@ -372,17 +362,16 @@ public class ShoppingCartFragment extends AbsPageFragment {
                     this.priceText.setText(sun + "");
                 }
 
-                private OrderSubItemHolder build() {
+                private View build() {
                     this.nameText.setText(name);
                     this.scopeText.setText(scope);
                     this.quantityText.setText(quantity + "");
                     setAddAndMinusListener();
                     setPriceComp();
-                    return this;
+                    return this.subView;
                 }
             }
         }
     }
-
 
 }
