@@ -9,6 +9,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.melonltd.naberc.R;
 
 import java.util.List;
@@ -58,7 +59,7 @@ public class MenuAdapter extends BaseAdapter {
     }
 
     static class MenuItem {
-        private ImageView itemIconImageView;
+        private SimpleDraweeView itemIconImageView;
         private TextView itemNameText, itemPriceText;
 
         public static MenuItem valueOf(View v) {

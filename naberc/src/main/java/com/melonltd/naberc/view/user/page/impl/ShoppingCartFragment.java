@@ -4,26 +4,17 @@ package com.melonltd.naberc.view.user.page.impl;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewStub;
-import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ListView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
@@ -33,15 +24,11 @@ import com.melonltd.naberc.R;
 import com.melonltd.naberc.model.helper.okhttp.ApiCallback;
 import com.melonltd.naberc.model.helper.okhttp.ApiManager;
 import com.melonltd.naberc.view.common.abs.AbsPageFragment;
-import com.melonltd.naberc.view.customize.GlideImageLoader;
-import com.melonltd.naberc.view.customize.OnLoadLayout;
 
 import java.util.List;
 
 import cn.bingoogolapple.refreshlayout.BGANormalRefreshViewHolder;
 import cn.bingoogolapple.refreshlayout.BGARefreshLayout;
-import in.srain.cube.views.ptr.PtrFrameLayout;
-import in.srain.cube.views.ptr.PtrHandler;
 
 public class ShoppingCartFragment extends AbsPageFragment {
     private static final String TAG = ShoppingCartFragment.class.getSimpleName();
@@ -282,7 +269,7 @@ public class ShoppingCartFragment extends AbsPageFragment {
                     this.scopeText = v.findViewById(R.id.ordersItemScopeText);
                     this.minusBtn = v.findViewById(R.id.ordersItemMinusBtn);
                     this.addBtn = v.findViewById(R.id.ordersItemAddBtn);
-                    this.deleteBtn = v.findViewById(R.id.ordersItemDeleteBtn);
+                    this.deleteBtn = v.findViewById(R.id.menuEditDeleteBtn);
                     this.quantityText = v.findViewById(R.id.ordersItemQuantityText);
                     this.priceText = v.findViewById(R.id.ordersItemPriceText);
                     this.subView = v;

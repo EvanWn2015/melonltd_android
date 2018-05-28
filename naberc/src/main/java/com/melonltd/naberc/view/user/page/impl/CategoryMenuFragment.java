@@ -10,6 +10,7 @@ import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.facebook.drawee.backends.pipeline.Fresco;
 import com.google.common.collect.Lists;
 import com.melonltd.naberc.R;
 import com.melonltd.naberc.model.helper.okhttp.ApiCallback;
@@ -61,6 +62,7 @@ public class CategoryMenuFragment extends AbsPageFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         adapter = new MenuAdapter(getContext(), list);
+        Fresco.initialize(getContext());
     }
 
     @Override

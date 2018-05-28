@@ -21,7 +21,7 @@
             android:text="規格(必選)"
             android:textSize="16sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/linearLayout11"
+            app:layout_constraintBottom_toTopOf="@+id/optLayout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -39,13 +39,13 @@
             app:layout_constraintTop_toTopOf="@+id/demandText" />
 
         <LinearLayout
-            android:id="@+id/linearLayout12"
+            android:id="@+id/scopeLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/linearLayout11"
+            app:layout_constraintEnd_toStartOf="@+id/optLayout"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/demandText">
 

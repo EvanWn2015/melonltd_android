@@ -21,7 +21,7 @@
             android:text="需求(必選)"
             android:textSize="16sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/linearLayout11"
+            app:layout_constraintBottom_toTopOf="@+id/optLayout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -34,12 +34,12 @@
             android:background="@android:color/transparent"
             android:src="@drawable/naber_add_icon"
             android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@+id/linearLayout11"
+            app:layout_constraintBottom_toTopOf="@+id/optLayout"
             app:layout_constraintEnd_toEndOf="@+id/demandText"
             app:layout_constraintTop_toTopOf="@+id/demandText" />
 
         <LinearLayout
-            android:id="@+id/linearLayout11"
+            android:id="@+id/optLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"

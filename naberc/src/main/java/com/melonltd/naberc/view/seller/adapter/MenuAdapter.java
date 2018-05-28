@@ -1,5 +1,6 @@
 package com.melonltd.naberc.view.seller.adapter;
 
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -10,6 +11,7 @@ import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
 
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.melonltd.naberc.R;
 
 import java.util.List;
@@ -38,6 +40,8 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull MenuAdapter.ViewHolder holder, int position) {
+
+        holder.itemIconImageView.setImageURI( Uri.parse("http://zipotesrestaurant.com/images-mexican-salvadorean-restaurant-redwood_city/slides/zipotes_mexican_salvadorean_20.jpg"));
         holder.nameText.setText("Menu Name " + position);
         holder.menuSwitch.setTag(listData.get(position));
         holder.deleteBtn.setTag(listData.get(position));
@@ -51,12 +55,14 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
+        private SimpleDraweeView itemIconImageView;
         private TextView nameText, priceText;
         private Button deleteBtn;
         private Switch menuSwitch;
 
         ViewHolder(View v) {
             super(v);
+            itemIconImageView= v.findViewById(R.id.ordersItemIconImageView);
             nameText = v.findViewById(R.id.ordersItemNameText);
             priceText = v.findViewById(R.id.itemPriceText);
             deleteBtn = v.findViewById(R.id.deleteBtn);

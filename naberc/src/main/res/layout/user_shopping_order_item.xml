@@ -94,11 +94,11 @@
         android:textColor="@android:color/black"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/linearLayout100"
-        app:layout_constraintEnd_toStartOf="@+id/ordersItemDeleteBtn"
-        app:layout_constraintTop_toTopOf="@+id/ordersItemDeleteBtn" />
+        app:layout_constraintEnd_toStartOf="@+id/menuEditDeleteBtn"
+        app:layout_constraintTop_toTopOf="@+id/menuEditDeleteBtn" />
 
     <ImageButton
-        android:id="@+id/ordersItemDeleteBtn"
+        android:id="@+id/menuEditDeleteBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"

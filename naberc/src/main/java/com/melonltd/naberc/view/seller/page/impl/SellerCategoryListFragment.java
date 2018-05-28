@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
+import com.facebook.drawee.backends.pipeline.Fresco;
 import com.google.common.collect.Lists;
 import com.melonltd.naberc.R;
 import com.melonltd.naberc.view.common.BaseCore;
@@ -62,6 +63,7 @@ public class SellerCategoryListFragment extends AbsPageFragment implements View.
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         adapter = new MenuAdapter(listData);
+        Fresco.initialize(getContext());
     }
 
     @Override
