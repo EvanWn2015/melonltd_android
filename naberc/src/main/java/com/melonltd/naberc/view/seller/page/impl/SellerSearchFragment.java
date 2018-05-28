@@ -78,6 +78,7 @@ public class SellerSearchFragment extends AbsPageFragment {
         refreshViewHolder.setPullDownRefreshText("Pull");
         refreshViewHolder.setRefreshingText("Pull to refresh");
         refreshViewHolder.setReleaseRefreshText("Pull to refresh");
+        refreshViewHolder.setLoadingMoreText("加載");
 
         searchRefreshLayout.setRefreshViewHolder(refreshViewHolder);
         recyclerView = v.findViewById(R.id.searchRecyclerView);

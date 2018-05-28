@@ -1,7 +1,11 @@
 package com.melonltd.naberc.view.seller;
 
+import android.app.Activity;
+import android.content.Context;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
+import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
@@ -29,11 +33,15 @@ import java.util.List;
 
 public class SellerMainActivity extends BaseCore implements TabLayout.OnTabSelectedListener, View.OnLayoutChangeListener, CompoundButton.OnCheckedChangeListener {
     private static final String TAG = SellerMainActivity.class.getSimpleName();
-    private DrawerLayout drawer;
+    private static Context context;
+    private static DrawerLayout drawer;
     public static TabLayout tabLayout;
     private DateSelectAdapter adapter;
     private RecyclerView sellerRecyclerView;
-    private Toolbar toolbar;
+
+    private static View.OnClickListener toolbarNavigationClickListener;
+    public static Toolbar toolbar;
+    private static Drawable backIcon, defualtIcon;
     private FrameLayout frameLayout;
     private static final List<PageType> SELLER_MAIN_PAGE = Lists.newArrayList(PageType.SELLER_SEARCH, PageType.SELLER_ORDERS, PageType.SELLER_STAT, PageType.SELLER_RESTAURANT, PageType.SELLER_SET_UP);
 
@@ -41,6 +49,7 @@ public class SellerMainActivity extends BaseCore implements TabLayout.OnTabSelec
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_seller);
+        context = this;
         getViews();
         serTab();
         List<String> list = Lists.newArrayList();
@@ -57,11 +66,17 @@ public class SellerMainActivity extends BaseCore implements TabLayout.OnTabSelec
 
     private void getViews() {
         toolbar = findViewById(R.id.toolbar);
+
         setSupportActionBar(toolbar);
         drawer = findViewById(R.id.seller_drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
+
+        backIcon = getResources().getDrawable(R.drawable.naber_back_icon);
+        defualtIcon = toolbar.getNavigationIcon();
+        toolbarNavigationClickListener = toggle.getToolbarNavigationClickListener();
+
         sellerRecyclerView = findViewById(R.id.sellerRecyclerView);
         tabLayout = findViewById(R.id.sellerMenuTabLayout);
         tabLayout.addOnTabSelectedListener(this);
@@ -163,5 +178,17 @@ public class SellerMainActivity extends BaseCore implements TabLayout.OnTabSelec
 
             }
         });
+    }
+
+    public static void navigationIconDisplay(boolean show, View.OnClickListener listener) {
+
+        if (!show) {
+            toolbar.setNavigationIcon(defualtIcon);
+            toolbar.setNavigationOnClickListener(null);
+            drawer.addDrawerListener(new ActionBarDrawerToggle((Activity) context, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close));
+        } else {
+            toolbar.setNavigationIcon(backIcon);
+            toolbar.setNavigationOnClickListener(listener);
+        }
     }
 }

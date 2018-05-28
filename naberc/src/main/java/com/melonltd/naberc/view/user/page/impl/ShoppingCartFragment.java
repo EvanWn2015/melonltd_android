@@ -284,6 +284,14 @@ public class ShoppingCartFragment extends AbsPageFragment {
                         .build();
                 this.layout.removeAllViews();
                 this.layout.addView(sebView);
+
+                View v =LayoutInflater.from(context).inflate(R.layout.user_shopping_order_item, null);
+                this.layout.addView(v);
+                View v2 =LayoutInflater.from(context).inflate(R.layout.user_shopping_order_item, null);
+                this.layout.addView(v2);
+                View v3 =LayoutInflater.from(context).inflate(R.layout.user_shopping_order_item, null);
+                this.layout.addView(v3);
+
                 return this;
             }
 

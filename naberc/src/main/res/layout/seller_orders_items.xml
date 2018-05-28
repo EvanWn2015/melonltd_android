@@ -7,12 +7,12 @@
     android:background="@drawable/naber_white_text_box">
 
     <View
-        android:id="@+id/view10"
+        android:id="@+id/toolerView"
         android:layout_width="wrap_content"
         android:layout_height="30dp"
         android:layout_margin="1dp"
         android:background="@color/naber_basis"
-        app:layout_constraintBottom_toTopOf="@+id/textView80"
+        app:layout_constraintBottom_toTopOf="@+id/logsItemText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -28,12 +28,12 @@
         android:textColor="@android:color/black"
         android:textStyle="bold"
         android:visibility="gone"
-        app:layout_constraintBottom_toBottomOf="@+id/view10"
-        app:layout_constraintStart_toStartOf="@+id/view10"
-        app:layout_constraintTop_toTopOf="@+id/view10" />
+        app:layout_constraintBottom_toBottomOf="@+id/toolerView"
+        app:layout_constraintStart_toStartOf="@+id/toolerView"
+        app:layout_constraintTop_toTopOf="@+id/toolerView" />
 
     <TextView
-        android:id="@+id/textView80"
+        android:id="@+id/logsItemText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:padding="8dp"
@@ -44,7 +44,7 @@
         app:layout_constraintBottom_toTopOf="@+id/foodItemsText"
         app:layout_constraintEnd_toStartOf="@+id/foodItemsCountText"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view10" />
+        app:layout_constraintTop_toBottomOf="@+id/toolerView" />
 
     <TextView
         android:id="@+id/foodItemsCountText"
@@ -54,10 +54,10 @@
         android:layout_marginTop="8dp"
         android:text="(200)"
         android:textSize="12sp"
-        app:layout_constraintBottom_toBottomOf="@+id/textView80"
+        app:layout_constraintBottom_toBottomOf="@+id/logsItemText"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/textView80"
-        app:layout_constraintTop_toTopOf="@+id/textView80" />
+        app:layout_constraintStart_toEndOf="@+id/logsItemText"
+        app:layout_constraintTop_toTopOf="@+id/logsItemText" />
 
     <TextView
         android:id="@+id/foodItemsText"
@@ -71,7 +71,7 @@
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView80"></TextView>
+        app:layout_constraintTop_toBottomOf="@+id/logsItemText"></TextView>
 
     <TextView
         android:id="@+id/textView85"

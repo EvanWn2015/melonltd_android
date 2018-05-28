@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
+    android:id="@+id/seller_stat_main_page"
     android:layout_height="match_parent"
     tools:context=".view.seller.page.impl.SellerStatFragment">
 
@@ -38,7 +39,7 @@
         android:textSize="12sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/textView96"
-        app:layout_constraintEnd_toStartOf="@+id/textView95"
+        app:layout_constraintEnd_toStartOf="@+id/monthlyIncomeText"
         app:layout_constraintHorizontal_chainStyle="spread_inside"
         app:layout_constraintStart_toStartOf="@+id/textView92"
         app:layout_constraintTop_toBottomOf="@+id/textView92" />
@@ -57,7 +58,7 @@
         app:layout_constraintStart_toStartOf="@+id/textView93" />
 
     <TextView
-        android:id="@+id/textView95"
+        android:id="@+id/monthlyIncomeText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="1dp"
@@ -86,9 +87,9 @@
         android:textColor="@android:color/background_light"
         android:textSize="22sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/textView95"
-        app:layout_constraintEnd_toEndOf="@+id/textView95"
-        app:layout_constraintStart_toStartOf="@+id/textView95" />
+        app:layout_constraintBottom_toBottomOf="@+id/monthlyIncomeText"
+        app:layout_constraintEnd_toEndOf="@+id/monthlyIncomeText"
+        app:layout_constraintStart_toStartOf="@+id/monthlyIncomeText" />
 
     <TextView
         android:id="@+id/textView96"
@@ -141,9 +142,9 @@
         android:textSize="12sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/textView103"
-        app:layout_constraintEnd_toEndOf="@+id/textView95"
+        app:layout_constraintEnd_toEndOf="@+id/monthlyIncomeText"
         app:layout_constraintStart_toEndOf="@+id/textView96"
-        app:layout_constraintTop_toBottomOf="@+id/textView95" />
+        app:layout_constraintTop_toBottomOf="@+id/monthlyIncomeText" />
 
     <TextView
         android:layout_width="0dp"

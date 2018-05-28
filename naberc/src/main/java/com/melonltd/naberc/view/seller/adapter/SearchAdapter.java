@@ -48,6 +48,13 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
                     + "\n";
         }
 
+        holder.processingBtn.setVisibility(View.GONE);
+        holder.canFetchBtn.setVisibility(View.GONE);
+        holder.finishBtn.setVisibility(View.GONE);
+        holder.failureBtn.setVisibility(View.GONE);
+        holder.finishBtn.setVisibility(View.GONE);
+
+
         // set Tag
         holder.cancelBtn.setTag(list.get(position));
         holder.processingBtn.setTag(list.get(position));
@@ -65,11 +72,25 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         holder.totalAmountText.setText((position * 2) + "$");
         holder.foodItemsText.setText(foodItems);
 
-        holder.processingBtn.setVisibility(View.VISIBLE);
-        holder.canFetchBtn.setVisibility(View.VISIBLE);
-        holder.finishBtn.setVisibility(View.VISIBLE);
-        holder.failureBtn.setVisibility(View.VISIBLE);
-        holder.finishBtn.setVisibility(View.VISIBLE);
+
+        if (position % 5 == 0) {
+            holder.ordersStatusText.setText("未處理");
+            holder.processingBtn.setVisibility(View.VISIBLE);
+            holder.canFetchBtn.setVisibility(View.VISIBLE);
+        } else if (position % 3 == 0) {
+            holder.ordersStatusText.setText("製作中");
+            holder.canFetchBtn.setVisibility(View.VISIBLE);
+            holder.finishBtn.setVisibility(View.VISIBLE);
+        } else if (position % 2 == 0){
+            holder.ordersStatusText.setText("可領取");
+            holder.failureBtn.setVisibility(View.VISIBLE);
+            holder.finishBtn.setVisibility(View.VISIBLE);
+        }
+
+//        holder.processingBtn.setVisibility(View.VISIBLE);
+//        holder.canFetchBtn.setVisibility(View.VISIBLE);
+//        holder.failureBtn.setVisibility(View.VISIBLE);
+//        holder.finishBtn.setVisibility(View.VISIBLE);
     }
 
     @Override
@@ -78,11 +99,13 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView foodItemsCountText, foodItemsText, remarkText, fetchTimeText, userPhoneNumberText, userNameText, totalAmountText;
+        private TextView ordersStatusText, foodItemsCountText, foodItemsText, remarkText, fetchTimeText, userPhoneNumberText, userNameText, totalAmountText;
         private Button cancelBtn, failureBtn, processingBtn, canFetchBtn, finishBtn;
 
         public ViewHolder(View v) {
             super(v);
+            ordersStatusText = v.findViewById(R.id.ordersStatusText);
+            ordersStatusText.setVisibility(View.VISIBLE);
             foodItemsCountText = v.findViewById(R.id.foodItemsCountText);
             foodItemsText = v.findViewById(R.id.foodItemsText);
             remarkText = v.findViewById(R.id.remarkText);
