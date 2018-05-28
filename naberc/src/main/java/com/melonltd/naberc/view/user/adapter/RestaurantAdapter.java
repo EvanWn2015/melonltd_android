@@ -1,6 +1,7 @@
 package com.melonltd.naberc.view.user.adapter;
 
 import android.content.Context;
+import android.net.Uri;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +10,7 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.facebook.drawee.view.SimpleDraweeView;
 import com.melonltd.naberc.R;
 
 import java.util.ArrayList;
@@ -49,7 +51,8 @@ public class RestaurantAdapter extends BaseAdapter {
             item = (RestaurantItem) view.getTag();
         }
         item.restaurantNameText.setText(list.get(i) + " XX 店");
-
+        Uri uri = Uri.parse("https://sjhexpress.com/wp-content/uploads/2015/02/HannahRidoutFoodPhotography.jpg");
+        item.restaurantIcon.setImageURI(uri);
         return view;
     }
 
@@ -66,7 +69,7 @@ public class RestaurantAdapter extends BaseAdapter {
 
 
     static class RestaurantItem {
-        ImageView restaurantIcon;
+        SimpleDraweeView restaurantIcon;
         TextView restaurantNameText, businessTimeText, addressText, distanceText;
         public static RestaurantItem valueOf(View view ) {
             RestaurantItem item =  new RestaurantItem();

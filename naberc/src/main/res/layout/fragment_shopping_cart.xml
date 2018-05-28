@@ -25,18 +25,10 @@
         cube_ptr:ptr_ratio_of_header_height_to_refresh="1.0"
         cube_ptr:ptr_resistance="1.0">
 
-        <!--<FrameLayout-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content">-->
-
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent">
-            <!--android:divider="@null"-->
-            <!--android:fadingEdge="none"-->
-            <!--android:headerDividersEnabled="false"-->
-            <!--android:footerDividersEnabled="false"-->
-            <!--android:dividerHeight="16dp"-->
+
             <ListView
                 android:id="@+id/shoppingCartListView"
                 android:layout_width="match_parent"
@@ -50,33 +42,5 @@
                 app:layout_constraintTop_toBottomOf="@+id/textView12"></ListView>
 
         </android.support.constraint.ConstraintLayout>
-        <!--</FrameLayout>-->
     </com.melonltd.naberc.view.customize.OnLoadLayout>
-
-    <!--<ScrollView-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent"-->
-    <!--android:orientation="vertical"-->
-    <!--android:overScrollMode="never"-->
-    <!--app:layout_constraintBottom_toBottomOf="parent"-->
-    <!--app:layout_constraintEnd_toEndOf="parent"-->
-    <!--app:layout_constraintStart_toStartOf="parent"-->
-    <!--app:layout_constraintTop_toTopOf="parent">-->
-
-    <!--<LinearLayout-->
-    <!--android:id="@+id/shoppingCartLayout"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent"-->
-    <!--android:orientation="vertical"-->
-    <!--android:padding="8dp">-->
-
-    <!--<include layout="@layout/user_shopping_detail_item" />-->
-    <!--<include layout="@layout/user_shopping_detail_item" />-->
-    <!--<include layout="@layout/user_shopping_detail_item" />-->
-
-
-    <!--</LinearLayout>-->
-    <!--</ScrollView>-->
-
-
 </android.support.constraint.ConstraintLayout>

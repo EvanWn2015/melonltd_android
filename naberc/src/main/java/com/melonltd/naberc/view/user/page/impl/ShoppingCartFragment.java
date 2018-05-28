@@ -200,7 +200,7 @@ public class ShoppingCartFragment extends AbsPageFragment {
             holder.setName("test name" + i)
                     .setTotalAmount(200 * (1 + i))
                     .setBonus(20 * (1 + i))
-                    .setSubView()
+                    .setSubView(i)
                     .setDeleteListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View view) {
@@ -223,7 +223,6 @@ public class ShoppingCartFragment extends AbsPageFragment {
             private LinearLayout layout;
             private Button deleteBtn, submitBtn;
             private String name = "", totalAmount = "", bonus = "";
-            private View sebView;
 
             ShoppingDetailItemHolder(View v) {
                 this.nameText = v.findViewById(R.id.restaurantNameText);
@@ -259,39 +258,25 @@ public class ShoppingCartFragment extends AbsPageFragment {
                 return this;
             }
 
-//            private ShoppingDetailItemHolder addOrdersItemsViews(@NonNull List<View> views) {
-//                this.layout.removeAllViews();
-//                for (View v : views) {
-//                    this.layout.addView(v);
-//                }
-//                return this;
-//            }
-
-            private ShoppingDetailItemHolder setSubView (){
-                OrderSubItemHolder subItemHolder = null;
-                if (sebView == null){
-                    sebView = LayoutInflater.from(context).inflate(R.layout.user_shopping_order_item, null);
-                    subItemHolder = new OrderSubItemHolder(sebView);
-                    sebView.setTag(subItemHolder);
-                }else {
-                    subItemHolder = (OrderSubItemHolder)sebView.getTag();
-                }
-                subItemHolder.setName("subName")
-                        .setIconPath("http://i.epochtimes.com/assets/uploads/2017/09/Fotolia_58802987_Subscription_L-600x400.jpg")
-                        .setPrice(20)
-                        .setQuantity(1)
-                        .setScope("規格:" + "\n" + "追加")
-                        .build();
+            private ShoppingDetailItemHolder setSubView(int i) {
                 this.layout.removeAllViews();
-                this.layout.addView(sebView);
-
-                View v =LayoutInflater.from(context).inflate(R.layout.user_shopping_order_item, null);
-                this.layout.addView(v);
-                View v2 =LayoutInflater.from(context).inflate(R.layout.user_shopping_order_item, null);
-                this.layout.addView(v2);
-                View v3 =LayoutInflater.from(context).inflate(R.layout.user_shopping_order_item, null);
-                this.layout.addView(v3);
-
+                for (int j = 0; j < i; j++) {
+                    View sebView = LayoutInflater.from(context).inflate(R.layout.user_shopping_order_item, null);
+                    new OrderSubItemHolder(sebView)
+                            .setName("subName")
+                            .setDeleteListener(new View.OnClickListener() {
+                                @Override
+                                public void onClick(View v) {
+                                    Log.d(TAG, "delete btn ");
+                                }
+                            })
+                            .setIconPath("http://i.epochtimes.com/assets/uploads/2017/09/Fotolia_58802987_Subscription_L-600x400.jpg")
+                            .setPrice(20)
+                            .setQuantity(1)
+                            .setScope("規格:" + "\n" + "追加")
+                            .build();
+                    this.layout.addView(sebView);
+                }
                 return this;
             }
 
@@ -300,7 +285,6 @@ public class ShoppingCartFragment extends AbsPageFragment {
                 totalAmountText.setText(totalAmount);
                 bonusText.setText("應得紅利" + bonus);
             }
-
 
             class OrderSubItemHolder {
                 private SimpleDraweeView iconImageView;
@@ -388,12 +372,13 @@ public class ShoppingCartFragment extends AbsPageFragment {
                     this.priceText.setText(sun + "");
                 }
 
-                private void build() {
+                private OrderSubItemHolder build() {
                     this.nameText.setText(name);
                     this.scopeText.setText(scope);
                     this.quantityText.setText(quantity + "");
                     setAddAndMinusListener();
                     setPriceComp();
+                    return this;
                 }
             }
         }
