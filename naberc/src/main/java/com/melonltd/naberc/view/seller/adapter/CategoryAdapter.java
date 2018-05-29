@@ -11,19 +11,20 @@ import android.widget.Switch;
 import android.widget.TextView;
 
 import com.melonltd.naberc.R;
+import com.melonltd.naberc.view.customize.SwitchButton;
 
 import java.util.List;
 
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHolder> {
     private List<String> listData;
-    private CompoundButton.OnCheckedChangeListener aSwitchListener;
+    private SwitchButton.OnCheckedChangeListener aSwitchListener;
     private View.OnClickListener deleteListener, editListener;
 
     public CategoryAdapter(List<String> listData) {
         this.listData = listData;
     }
 
-    public void setListener(CompoundButton.OnCheckedChangeListener aSwitchListener, View.OnClickListener editListener, View.OnClickListener deleteListener) {
+    public void setListener(SwitchButton.OnCheckedChangeListener aSwitchListener, View.OnClickListener editListener, View.OnClickListener deleteListener) {
         this.aSwitchListener = aSwitchListener;
         this.editListener = editListener;
         this.deleteListener = deleteListener;
@@ -58,7 +59,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     class ViewHolder extends RecyclerView.ViewHolder {
         private TextView categoryText;
         private Button editBtn, deleteBtn;
-        private Switch aSwitch;
+        private SwitchButton aSwitch;
 
         ViewHolder(View v) {
             super(v);

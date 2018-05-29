@@ -13,12 +13,13 @@ import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.melonltd.naberc.R;
+import com.melonltd.naberc.view.customize.SwitchButton;
 
 import java.util.List;
 
 public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
     private List<String> listData;
-    private CompoundButton.OnCheckedChangeListener switchListener;
+    private SwitchButton.OnCheckedChangeListener switchListener;
     private View.OnClickListener deleteListener, editListener;
     private View.OnLongClickListener copyLongListener;
 
@@ -26,7 +27,7 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
         this.listData = listData;
     }
 
-    public void setListener(CompoundButton.OnCheckedChangeListener switchListener, View.OnClickListener deleteListener, View.OnClickListener editListener, View.OnLongClickListener copyLongListener) {
+    public void setListener(SwitchButton.OnCheckedChangeListener switchListener, View.OnClickListener deleteListener, View.OnClickListener editListener, View.OnLongClickListener copyLongListener) {
         this.switchListener = switchListener;
         this.deleteListener = deleteListener;
         this.editListener = editListener;
@@ -66,7 +67,7 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
         private SimpleDraweeView itemIconImageView;
         private TextView nameText, priceText;
         private Button deleteBtn, editBtn;
-        private Switch menuSwitch;
+        private SwitchButton menuSwitch;
 
         ViewHolder(View v) {
             super(v);

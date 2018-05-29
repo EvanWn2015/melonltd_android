@@ -188,7 +188,7 @@ public class SellerMenuEditFragment extends AbsPageFragment {
                                     intent.setAction(Intent.ACTION_GET_CONTENT);
                                     startActivityForResult(intent, PICK_FROM_GALLERY);
                                 }
-                            } else {
+                            } else if (position ==0) {
                                 // 相機權限
                                 if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                                     ActivityCompat.requestPermissions(getActivity(), BaseCore.CAMERA, BaseCore.CAMERA_CODE);

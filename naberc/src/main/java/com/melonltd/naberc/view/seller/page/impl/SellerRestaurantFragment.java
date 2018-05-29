@@ -22,6 +22,7 @@ import com.melonltd.naberc.view.common.BaseCore;
 import com.melonltd.naberc.view.common.abs.AbsPageFragment;
 import com.melonltd.naberc.view.common.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.common.type.PageType;
+import com.melonltd.naberc.view.customize.SwitchButton;
 import com.melonltd.naberc.view.seller.SellerMainActivity;
 import com.melonltd.naberc.view.seller.adapter.CategoryAdapter;
 
@@ -127,11 +128,11 @@ public class SellerRestaurantFragment extends AbsPageFragment {
         getFragmentManager().beginTransaction().remove(this).replace(R.id.sellerFrameContainer, f).commit();
     }
 
-    class SwitchListener implements CompoundButton.OnCheckedChangeListener {
+    class SwitchListener implements SwitchButton.OnCheckedChangeListener {
         @Override
-        public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-            Log.d(TAG, b + "");
-            Log.d(TAG, compoundButton.getTag() + "");
+        public void onCheckedChanged(SwitchButton view, boolean isChecked) {
+            Log.d(TAG, isChecked + "");
+            Log.d(TAG, view.getTag() + "");
         }
     }
 

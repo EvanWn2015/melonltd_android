@@ -38,12 +38,15 @@ public class OrdersLogsAdapter extends RecyclerView.Adapter<OrdersLogsAdapter.Vi
 
     @Override
     public void onBindViewHolder(@NonNull OrdersLogsAdapter.ViewHolder holder, int position) {
-        holder.statusBtn.setText("test:" + position);
+
         if (position % 2 == 0) {
             holder.statusBtn.setBackgroundColor(this.context.getResources().getColor(R.color.naber_basis_green));
+            holder.statusBtn.setText("交易完成" + position);
+        }else{
+            holder.statusBtn.setBackgroundColor(this.context.getResources().getColor(R.color.naber_basis_red));
+            holder.statusBtn.setText("取消" + position);
         }
 
-        holder.amountText.setText("test:" + position);
         holder.statusBtn.setTag(listData.get(position));
         holder.statusBtn.setOnClickListener(this.btnListener);
         holder.logsItemText.setTag(listData.get(position));
