@@ -13,6 +13,8 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.TextView;
 
+import com.bigkoo.alertview.AlertView;
+import com.bigkoo.alertview.OnItemClickListener;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.google.common.collect.Lists;
 import com.melonltd.naberc.R;
@@ -99,7 +101,7 @@ public class SellerCategoryListFragment extends AbsPageFragment implements View.
     }
 
     private void setListener() {
-        adapter.setListener(new SwitchListener(), new DeleteListener());
+        adapter.setListener(new SwitchListener(), new DeleteListener(), new EditListener(), new CopyLongListener());
         recyclerView.setAdapter(adapter);
         newMenuBtn.setOnClickListener(this);
     }
@@ -164,6 +166,60 @@ public class SellerCategoryListFragment extends AbsPageFragment implements View.
         @Override
         public void onClick(View view) {
             Log.d(TAG, view.getTag() + "");
+            final int index = listData.indexOf(view.getTag());
+            new AlertView.Builder()
+                    .setTitle("")
+                    .setMessage("刪除後將無法找回，\n您確定要刪除嗎？")
+                    .setContext(getContext())
+                    .setStyle(AlertView.Style.Alert)
+                    .setOthers(new String[]{"確定刪除", "取消"})
+                    .setOnItemClickListener(new OnItemClickListener() {
+                        @Override
+                        public void onItemClick(Object o, int position) {
+                            if (position == 0) {
+                                listData.remove(index);
+                                adapter.notifyDataSetChanged();
+                            }
+                        }
+                    })
+                    .build()
+                    .setCancelable(true)
+                    .show();
+        }
+    }
+
+    class EditListener implements View.OnClickListener {
+        @Override
+        public void onClick(View view) {
+            Log.d(TAG, view.getTag() + "");
+            int index = listData.indexOf(view.getTag());
+            toMenuEditPage(index);
+        }
+    }
+
+
+    class CopyLongListener implements View.OnLongClickListener {
+        @Override
+        public boolean onLongClick(View view) {
+            Log.d(TAG, view.getTag() + "");
+            final int index = listData.indexOf(view.getTag());
+            new AlertView.Builder()
+                    .setTitle("複製 : " + view.getTag())
+                    .setContext(getContext())
+                    .setStyle(AlertView.Style.Alert)
+                    .setOthers(new String[]{"確定複製", "取消"})
+                    .setOnItemClickListener(new OnItemClickListener() {
+                        @Override
+                        public void onItemClick(Object o, int position) {
+                            if (position == 0) {
+                                toMenuEditPage(index);
+                            }
+                        }
+                    })
+                    .build()
+                    .setCancelable(true)
+                    .show();
+            return false;
         }
     }
 

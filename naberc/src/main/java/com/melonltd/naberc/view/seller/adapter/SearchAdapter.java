@@ -35,6 +35,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.seller_orders_items, parent, false);
         SearchAdapter.ViewHolder vh = new SearchAdapter.ViewHolder(v);
+        vh.setOnClickListeners(cancelListener, processingListener, failureListener, canFetchListener, finishListener);
         return vh;
     }
 

@@ -13,12 +13,16 @@ import android.widget.Button;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 
+import com.bigkoo.alertview.AlertView;
+import com.bigkoo.alertview.OnItemClickListener;
+import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.melonltd.naberc.R;
 import com.melonltd.naberc.view.common.BaseCore;
 import com.melonltd.naberc.view.common.abs.AbsPageFragment;
 import com.melonltd.naberc.view.common.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.common.type.PageType;
+import com.melonltd.naberc.view.seller.SellerMainActivity;
 import com.melonltd.naberc.view.seller.adapter.CategoryAdapter;
 
 import java.util.List;
@@ -95,6 +99,7 @@ public class SellerRestaurantFragment extends AbsPageFragment {
     private void setListener() {
         recyclerView.setAdapter(adapter);
         adapter.setListener(new SwitchListener(), new EditListener(), new DeleteListener());
+        newCategoryBtn.setOnClickListener(new NewCategory());
     }
 
     @Override
@@ -104,9 +109,7 @@ public class SellerRestaurantFragment extends AbsPageFragment {
             listData.add("test data : " + i);
         }
         adapter.notifyDataSetChanged();
-
-
-        if (TO_CATEGORY_LIST_PAGE_INDEX >=0){
+        if (TO_CATEGORY_LIST_PAGE_INDEX >= 0) {
             toCategoryListPage(TO_CATEGORY_LIST_PAGE_INDEX);
         }
     }
@@ -142,10 +145,48 @@ public class SellerRestaurantFragment extends AbsPageFragment {
 
     class DeleteListener implements View.OnClickListener {
         @Override
-        public void onClick(View view) {
-            Log.d(TAG, view.getTag() + "");
+        public void onClick(final View view) {
+            new AlertView.Builder()
+                    .setTitle("")
+                    .setMessage("請注意刪除種類\n，將會影響種類下的產品!")
+                    .setContext(getContext())
+                    .setStyle(AlertView.Style.Alert)
+                    .setOthers(new String[]{"確定刪除", "取消"})
+                    .setOnItemClickListener(new OnItemClickListener() {
+                        @Override
+                        public void onItemClick(Object o, int position) {
+                            if (position == 0) {
+                                listData.remove(view.getTag());
+                                adapter.notifyDataSetChanged();
+                            }
+                        }
+                    })
+                    .build()
+                    .setCancelable(true)
+                    .show();
         }
     }
 
+
+    class NewCategory implements View.OnClickListener {
+        @Override
+        public void onClick(View view) {
+            if (Strings.isNullOrEmpty(categoryEdit.getText().toString())) {
+                new AlertView.Builder()
+                        .setTitle("")
+                        .setMessage("請輸入種類名稱")
+                        .setContext(getContext())
+                        .setStyle(AlertView.Style.Alert)
+                        .setOthers(new String[]{"取消"})
+                        .build()
+                        .setCancelable(true)
+                        .show();
+            } else {
+                listData.add(0, categoryEdit.getText().toString());
+                adapter.notifyDataSetChanged();
+                categoryEdit.setText("");
+            }
+        }
+    }
 
 }

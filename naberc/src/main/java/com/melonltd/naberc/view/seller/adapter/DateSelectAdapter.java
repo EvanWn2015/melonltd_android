@@ -8,17 +8,19 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CompoundButton;
 import android.widget.Switch;
+import android.widget.TextView;
 
 import com.melonltd.naberc.R;
+import com.melonltd.naberc.view.customize.SwitchButton;
 
 import java.util.List;
 
 public class DateSelectAdapter extends RecyclerView.Adapter<DateSelectAdapter.ViewHolder> {
-//    private Context context;
+    //    private Context context;
     private List<String> list;
-    private CompoundButton.OnCheckedChangeListener listener;
+    private SwitchButton.OnCheckedChangeListener listener;
 
-    public DateSelectAdapter(Context context, List<String> list, CompoundButton.OnCheckedChangeListener listener) {
+    public DateSelectAdapter(Context context, List<String> list, SwitchButton.OnCheckedChangeListener listener) {
 //        this.context = context;
         this.list = list;
         this.listener = listener;
@@ -34,7 +36,7 @@ public class DateSelectAdapter extends RecyclerView.Adapter<DateSelectAdapter.Vi
 
     @Override
     public void onBindViewHolder(@NonNull DateSelectAdapter.ViewHolder holder, int i) {
-        holder.aSwitch.setText(list.get(i));
+        holder.dateText.setText("00:00 ~ 00:0" + i);
         holder.aSwitch.setTag(list.get(i));
         holder.aSwitch.setOnCheckedChangeListener(this.listener);
     }
@@ -45,10 +47,12 @@ public class DateSelectAdapter extends RecyclerView.Adapter<DateSelectAdapter.Vi
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        private Switch aSwitch;
+        private TextView dateText;
+        private SwitchButton aSwitch;
 
         public ViewHolder(View v) {
             super(v);
+            dateText = v.findViewById(R.id.dateText);
             aSwitch = v.findViewById(R.id.sellerDateSelectSwitch);
         }
     }

@@ -204,6 +204,7 @@ public class ShoppingCartFragment extends AbsPageFragment {
             for(int i=0; i<position; i++){
                 sublist.add("sub" + i);
             }
+
             holder.setSubViews(sublist);
             holder.deleteBtn.setTag(listData.get(position));
             holder.submitBtn.setTag(listData.get(position));

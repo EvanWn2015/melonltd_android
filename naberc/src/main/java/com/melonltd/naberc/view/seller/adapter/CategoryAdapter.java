@@ -40,7 +40,7 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
 
-        holder.categoryText.setText("test :: " + position);
+        holder.categoryText.setText(listData.get(position));
         holder.aSwitch.setTag(listData.get(position));
         holder.editBtn.setTag(listData.get(position));
         holder.deleteBtn.setTag(listData.get(position));

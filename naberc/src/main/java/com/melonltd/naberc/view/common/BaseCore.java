@@ -34,20 +34,20 @@ public abstract class BaseCore extends AppCompatActivity implements LocationList
 
     public static String FRAGMENT_TAG = PageType.LOGIN.name();
 
-    private static final int CAMERA_CODE = 8765;
-    private static final String[] CAMERA = new String[]{Manifest.permission.CAMERA};
+    public static final int CAMERA_CODE = 8765;
+    public static final String[] CAMERA = new String[]{Manifest.permission.CAMERA};
 
     private static final int LOCATION_CODE = 9876;
-    private static final String[] LOCATION = new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
+    public static final String[] LOCATION = new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
 
-    private static final int IO_STREAM_CODE = 1987;
-    private static final String[] IO_STREAM = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
+    public static final int IO_STREAM_CODE = 1987;
+    public static final String[] IO_STREAM = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
 
 //    public static FirebaseAuth auth = FirebaseAuth.getInstance();
 //    public static FirebaseUser currentUser = auth.getCurrentUser();
 
     public FragmentManager fragmentManager = getSupportFragmentManager();
-//    public static PopUpDialog POPUP = PopUpDialog.getInstance();
+    //    public static PopUpDialog POPUP = PopUpDialog.getInstance();
     public static boolean IS_USER = true;
     public static boolean IS_HAS_ACC = false;
 
@@ -80,9 +80,9 @@ public abstract class BaseCore extends AppCompatActivity implements LocationList
 
         // TODO 權限相關
         // 相機權限
-//        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-//            ActivityCompat.requestPermissions(this, CAMERA, CAMERA_CODE);
-//        }
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, CAMERA, CAMERA_CODE);
+        }
 
         // TODO GPS 權限
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -92,9 +92,9 @@ public abstract class BaseCore extends AppCompatActivity implements LocationList
         }
 
         // TODO 寫入權限
-//        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-//            ActivityCompat.requestPermissions(this, IO_STREAM, IO_STREAM_CODE);
-//        }
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, IO_STREAM, IO_STREAM_CODE);
+        }
 
 //        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 //        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
@@ -122,7 +122,7 @@ public abstract class BaseCore extends AppCompatActivity implements LocationList
         if (!Tools.NETWORK.hasNetWork(cm)) {
             // TODO show Dialog
             Log.d(TAG, "no NETWORK? ???");
-        }else {
+        } else {
             // TODO check google service version
             // Tools.GoogleVersion.checkVersion(context, this);
         }

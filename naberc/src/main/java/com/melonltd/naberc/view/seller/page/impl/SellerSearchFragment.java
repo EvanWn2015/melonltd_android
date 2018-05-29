@@ -4,12 +4,17 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
+import com.bigkoo.alertview.AlertView;
+import com.bigkoo.alertview.OnItemClickListener;
+import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.melonltd.naberc.R;
 import com.melonltd.naberc.model.helper.okhttp.ApiCallback;
@@ -90,6 +95,7 @@ public class SellerSearchFragment extends AbsPageFragment {
 
     private void setListener() {
         recyclerView.setAdapter(adapter);
+        adapter.setOnClickListeners(new CancelListener(), new ProcessingListener(), new FailureListener(), new CanFetchListener(), new FinishListener());
         searchRefreshLayout.setDelegate(new BGARefreshLayout.BGARefreshLayoutDelegate() {
             @Override
             public void onBGARefreshLayoutBeginRefreshing(BGARefreshLayout refreshLayout) {
@@ -139,6 +145,119 @@ public class SellerSearchFragment extends AbsPageFragment {
                 return false;
             }
         });
+    }
+
+    class CancelListener implements View.OnClickListener {
+        @Override
+        public void onClick(final View view) {
+            final CancelListenerView extView = new CancelListenerView();
+            new AlertView.Builder()
+                    .setContext(getContext())
+                    .setStyle(AlertView.Style.Alert)
+                    .setOthers(new String[]{"返回", "送出"})
+                    .setOnItemClickListener(new OnItemClickListener() {
+                        @Override
+                        public void onItemClick(Object o, int position) {
+                            if (position == 1) {
+                                int index = listData.indexOf((String) view.getTag());
+                                listData.remove((String) view.getTag());
+                                adapter.notifyItemRemoved(index);
+                            }
+                        }
+                    })
+                    .build()
+                    .addExtView(extView.getView())
+                    .setCancelable(true)
+                    .show();
+        }
+    }
+
+    class ProcessingListener implements View.OnClickListener {
+        @Override
+        public void onClick(View view) {
+            Object o = view.getTag();
+            Log.d(TAG, o + "");
+            int index = listData.indexOf((String) view.getTag());
+            listData.remove((String) view.getTag());
+            adapter.notifyItemRemoved(index);
+        }
+    }
+
+    class FailureListener implements View.OnClickListener {
+        @Override
+        public void onClick(View view) {
+            int index = listData.indexOf((String) view.getTag());
+            listData.remove((String) view.getTag());
+            adapter.notifyItemRemoved(index);
+        }
+    }
+
+    class CanFetchListener implements View.OnClickListener {
+        @Override
+        public void onClick(View view) {
+            int index = listData.indexOf((String) view.getTag());
+            listData.remove((String) view.getTag());
+            adapter.notifyItemRemoved(index);
+        }
+    }
+
+    class FinishListener implements View.OnClickListener {
+        @Override
+        public void onClick(View view) {
+            int index = listData.indexOf((String) view.getTag());
+            listData.remove((String) view.getTag());
+            adapter.notifyItemRemoved(index);
+        }
+    }
+
+    class CancelListenerView implements View.OnClickListener {
+        private View view;
+        private TextView defText1;
+        private TextView defText2;
+        private EditText customEdit;
+        private String msg = "";
+
+        CancelListenerView() {
+            this.view = getLayoutInflater().inflate(R.layout.seller_cancel_order_notifiy_to_user_message, null);
+            this.defText1 = view.findViewById(R.id.defaultText1);
+            this.defText2 = view.findViewById(R.id.defaultText2);
+            this.customEdit = view.findViewById(R.id.customEdit);
+            // 先帶入預設一
+            this.msg = defText1.getText().toString();
+            setListener();
+        }
+
+        private void setListener() {
+            this.defText1.setOnClickListener(CancelListenerView.this);
+            this.defText2.setOnClickListener(CancelListenerView.this);
+        }
+
+        @Override
+        public void onClick(View v) {
+            switch (v.getId()) {
+                case R.id.defaultText1:
+                    v.setBackgroundResource(R.drawable.naber_reverse_orange_button_style);
+                    this.defText2.setBackgroundResource(R.drawable.naber_reverse_gary_button_style);
+                    this.msg = defText1.getText().toString();
+                    break;
+                case R.id.defaultText2:
+                    v.setBackgroundResource(R.drawable.naber_reverse_orange_button_style);
+                    this.defText1.setBackgroundResource(R.drawable.naber_reverse_gary_button_style);
+                    this.msg = defText2.getText().toString();
+                    break;
+            }
+        }
+
+        private View getView() {
+            return this.view;
+        }
+
+        private String getMessage() {
+            if (!Strings.isNullOrEmpty(customEdit.getText().toString()) && customEdit.getText().toString().length() > 0) {
+                return customEdit.getText().toString();
+            }
+            return this.msg;
+        }
     }
 
 }

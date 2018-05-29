@@ -5,6 +5,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/seller_menu_edit_page"
     android:layout_width="match_parent"
+    android:overScrollMode="never"
+    android:scrollbars="none"
     android:layout_height="match_parent"
     tools:context=".view.seller.page.impl.SellerMenuEditFragment">
 
@@ -29,7 +31,7 @@
             app:layout_constraintTop_toTopOf="parent"></View>
 
         <ImageView
-            android:id="@+id/imageView6"
+            android:id="@+id/menuIconImage"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginBottom="8dp"
@@ -46,7 +48,7 @@
             android:id="@+id/textView80"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
+            android:layout_marginBottom="16dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
@@ -65,6 +67,8 @@
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:background="@drawable/naber_reverse_gary_button_style"
+            android:hint="請輸入產品名稱"
+            android:padding="8dp"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="@+id/textView80"
             app:layout_constraintEnd_toEndOf="parent"
@@ -78,7 +82,7 @@
             android:layout_marginBottom="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             android:text="最低價位"
             android:textColor="@android:color/black"
             android:textSize="14sp"
@@ -90,10 +94,12 @@
         <EditText
             android:id="@+id/editText2"
             android:layout_width="0dp"
+            android:padding="8dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:background="@drawable/naber_reverse_gary_button_style"
+            android:hint="請輸入產品最低價位"
             android:inputType="number"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="@+id/textView88"
@@ -144,12 +150,12 @@
             android:background="@color/naber_basis"
             android:text="取消"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/button3"
+            app:layout_constraintEnd_toStartOf="@+id/saveBtn"
             app:layout_constraintStart_toEndOf="@+id/newDemandBtn"
             app:layout_constraintTop_toBottomOf="@+id/editLayout" />
 
         <Button
-            android:id="@+id/button3"
+            android:id="@+id/saveBtn"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_marginEnd="8dp"

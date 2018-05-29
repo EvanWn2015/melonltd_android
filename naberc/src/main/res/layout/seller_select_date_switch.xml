@@ -4,19 +4,48 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
 
-    <Switch
+    <TextView
+        android:id="@+id/dateText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:text="00:00~00:30"
+        android:textColor="@android:color/black"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/sellerDateSelectSwitch"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <com.melonltd.naberc.view.customize.SwitchButton
         android:id="@+id/sellerDateSelectSwitch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginStart="16dp"
+        android:layout_marginEnd="8dp"
         android:layout_marginTop="8dp"
-        android:text="Switch"
         app:layout_constraintBottom_toTopOf="@+id/view9"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintStart_toEndOf="@+id/dateText"
+        app:layout_constraintTop_toTopOf="parent"
+        app:sb_checked="true"
+        app:sb_show_indicator="false" />
+
+    <!--<com.melonltd.naberc.view.customize.SwitchButton-->
+        <!--android:id="@+id/sellerDateSelectSwitch"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginBottom="8dp"-->
+        <!--android:layout_marginEnd="16dp"-->
+        <!--android:layout_marginStart="16dp"-->
+        <!--android:layout_marginTop="8dp"-->
+        <!--android:text="Switch"-->
+        <!--app:layout_constraintBottom_toBottomOf="@+id/textView57"-->
+        <!--app:layout_constraintEnd_toEndOf="@+id/textView57"-->
+        <!--app:layout_constraintTop_toTopOf="@+id/textView57"-->
+        <!--app:sb_checked="true"-->
+        <!--app:sb_show_indicator="false" />-->
 
     <View
         android:id="@+id/view9"

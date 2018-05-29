@@ -2,6 +2,7 @@ package com.melonltd.naberc.view.seller;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -27,11 +28,12 @@ import com.melonltd.naberc.view.common.abs.AbsPageFragment;
 import com.melonltd.naberc.view.common.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.common.type.PageType;
 import com.melonltd.naberc.view.customize.NaberTab;
+import com.melonltd.naberc.view.customize.SwitchButton;
 import com.melonltd.naberc.view.seller.adapter.DateSelectAdapter;
 
 import java.util.List;
 
-public class SellerMainActivity extends BaseCore implements TabLayout.OnTabSelectedListener, View.OnLayoutChangeListener, CompoundButton.OnCheckedChangeListener {
+public class SellerMainActivity extends BaseCore implements TabLayout.OnTabSelectedListener, View.OnLayoutChangeListener, SwitchButton.OnCheckedChangeListener {
     private static final String TAG = SellerMainActivity.class.getSimpleName();
     private static Context context;
     private static DrawerLayout drawer;
@@ -62,6 +64,13 @@ public class SellerMainActivity extends BaseCore implements TabLayout.OnTabSelec
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         sellerRecyclerView.setLayoutManager(layoutManager);
         sellerRecyclerView.setAdapter(adapter);
+
+
+
+        AbsPageFragment fragment = null;
+        FRAGMENT_TAG = PageType.SELLER_SEARCH.name();
+        fragment = PageFragmentFactory.of(PageType.SELLER_SEARCH, null);
+        fragmentManager.beginTransaction().replace(R.id.sellerFrameContainer, fragment).addToBackStack(fragment.toString()).commit();
     }
 
     private void getViews() {
@@ -101,10 +110,18 @@ public class SellerMainActivity extends BaseCore implements TabLayout.OnTabSelec
     @Override
     protected void onResume() {
         super.onResume();
-        AbsPageFragment fragment = null;
-        FRAGMENT_TAG = PageType.SELLER_SEARCH.name();
-        fragment = PageFragmentFactory.of(PageType.SELLER_SEARCH, null);
-        fragmentManager.beginTransaction().replace(R.id.sellerFrameContainer, fragment).addToBackStack(fragment.toString()).commit();
+//        AbsPageFragment fragment = null;
+//        FRAGMENT_TAG = PageType.SELLER_SEARCH.name();
+//        fragment = PageFragmentFactory.of(PageType.SELLER_SEARCH, null);
+//        fragmentManager.beginTransaction().replace(R.id.sellerFrameContainer, fragment).addToBackStack(fragment.toString()).commit();
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        Log.d(TAG, "requestCode:" + requestCode);
+        Log.d(TAG, "resultCode:" + resultCode);
     }
 
     @Override
@@ -165,21 +182,6 @@ public class SellerMainActivity extends BaseCore implements TabLayout.OnTabSelec
         }
     }
 
-    @Override
-    public void onCheckedChanged(CompoundButton compoundButton, boolean b) {
-        ApiManager.test(new ApiCallback(context) {
-            @Override
-            public void onSuccess(String responseBody) {
-
-            }
-
-            @Override
-            public void onFail(Exception error) {
-
-            }
-        });
-    }
-
     public static void navigationIconDisplay(boolean show, View.OnClickListener listener) {
 
         if (!show) {
@@ -190,5 +192,10 @@ public class SellerMainActivity extends BaseCore implements TabLayout.OnTabSelec
             toolbar.setNavigationIcon(backIcon);
             toolbar.setNavigationOnClickListener(listener);
         }
+    }
+
+    @Override
+    public void onCheckedChanged(SwitchButton view, boolean isChecked) {
+
     }
 }

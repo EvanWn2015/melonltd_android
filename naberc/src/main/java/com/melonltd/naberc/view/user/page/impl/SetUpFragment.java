@@ -14,6 +14,7 @@ import com.melonltd.naberc.view.common.BaseCore;
 import com.melonltd.naberc.view.common.abs.AbsPageFragment;
 import com.melonltd.naberc.view.common.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.common.type.PageType;
+import com.melonltd.naberc.view.customize.SwitchButton;
 
 
 public class SetUpFragment extends AbsPageFragment implements View.OnClickListener {
@@ -21,7 +22,7 @@ public class SetUpFragment extends AbsPageFragment implements View.OnClickListen
     private static SetUpFragment FRAGMENT = null;
     private TextView accountNumberText, dividendText;
     private TextView toAccountEdit, toAboutUsText, toHelpText, toTeachingText;
-    private Switch soundSwitch, shakeSwitch;
+    private SwitchButton soundSwitch, shakeSwitch;
     public static int TO_ACCOUNT_DETAIL_INDEX = -1;
     public static int TO_SIMPLE_INFO_INDEX = -1;
 

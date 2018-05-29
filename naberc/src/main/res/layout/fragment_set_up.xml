@@ -22,8 +22,7 @@
             app:layout_constraintBottom_toTopOf="@+id/textView44"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-        </LinearLayout>
+            app:layout_constraintTop_toTopOf="parent"></LinearLayout>
 
         <com.melonltd.naberc.view.customize.CircleImageView
             android:id="@+id/circleImageView"
@@ -232,24 +231,27 @@
             app:layout_constraintEnd_toEndOf="@+id/textView54"
             app:layout_constraintTop_toTopOf="@+id/textView54" />
 
-
-        <Switch
+        <com.melonltd.naberc.view.customize.SwitchButton
             android:id="@+id/soundSwitch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="32dp"
             app:layout_constraintBottom_toBottomOf="@+id/textView56"
             app:layout_constraintEnd_toEndOf="@+id/textView56"
-            app:layout_constraintTop_toTopOf="@+id/textView56" />
+            app:layout_constraintTop_toTopOf="@+id/textView56"
+            app:sb_checked="true"
+            app:sb_show_indicator="false" />
 
-        <Switch
+        <com.melonltd.naberc.view.customize.SwitchButton
             android:id="@+id/shakeSwitch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="32dp"
             app:layout_constraintBottom_toBottomOf="@+id/textView57"
             app:layout_constraintEnd_toEndOf="@+id/textView57"
-            app:layout_constraintTop_toTopOf="@+id/textView57" />
+            app:layout_constraintTop_toTopOf="@+id/textView57"
+            app:sb_checked="true"
+            app:sb_show_indicator="false" />
 
         <ImageView
             android:layout_width="16dp"

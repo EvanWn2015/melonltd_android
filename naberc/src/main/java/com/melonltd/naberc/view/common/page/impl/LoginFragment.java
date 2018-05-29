@@ -95,7 +95,7 @@ public class LoginFragment extends AbsPageFragment implements View.OnClickListen
                     ApiManager.test(new ApiCallback(getActivity()) {
                         @Override
                         public void onSuccess(String responseBody) {
-                            if ("111111".equals(accountEdit.getText().toString())) {
+                            if ("1".equals(accountEdit.getText().toString())) {
                                 LoadingBar bar = new LoadingBar(getContext(), true);
                                 getActivity().startActivity(new Intent(getContext(), SellerMainActivity.class));
                                 bar.hide();

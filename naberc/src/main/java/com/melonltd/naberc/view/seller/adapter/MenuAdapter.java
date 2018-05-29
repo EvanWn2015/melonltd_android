@@ -19,15 +19,18 @@ import java.util.List;
 public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
     private List<String> listData;
     private CompoundButton.OnCheckedChangeListener switchListener;
-    private View.OnClickListener deleteListener;
+    private View.OnClickListener deleteListener, editListener;
+    private View.OnLongClickListener copyLongListener;
 
     public MenuAdapter(List<String> listData) {
         this.listData = listData;
     }
 
-    public void setListener(CompoundButton.OnCheckedChangeListener switchListener, View.OnClickListener deleteListener) {
+    public void setListener(CompoundButton.OnCheckedChangeListener switchListener, View.OnClickListener deleteListener, View.OnClickListener editListener, View.OnLongClickListener copyLongListener) {
         this.switchListener = switchListener;
         this.deleteListener = deleteListener;
+        this.editListener = editListener;
+        this.copyLongListener = copyLongListener;
     }
 
     @NonNull
@@ -41,12 +44,17 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull MenuAdapter.ViewHolder holder, int position) {
 
-        holder.itemIconImageView.setImageURI( Uri.parse("http://zipotesrestaurant.com/images-mexican-salvadorean-restaurant-redwood_city/slides/zipotes_mexican_salvadorean_20.jpg"));
+        holder.itemIconImageView.setImageURI(Uri.parse("http://zipotesrestaurant.com/images-mexican-salvadorean-restaurant-redwood_city/slides/zipotes_mexican_salvadorean_20.jpg"));
         holder.nameText.setText("Menu Name " + position);
         holder.menuSwitch.setTag(listData.get(position));
         holder.deleteBtn.setTag(listData.get(position));
+        holder.editBtn.setTag(listData.get(position));
+        holder.itemIconImageView.setTag(listData.get(position));
+
+        holder.itemIconImageView.setOnLongClickListener(this.copyLongListener);
         holder.menuSwitch.setOnCheckedChangeListener(this.switchListener);
         holder.deleteBtn.setOnClickListener(this.deleteListener);
+        holder.editBtn.setOnClickListener(this.editListener);
     }
 
     @Override
@@ -57,16 +65,18 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
     class ViewHolder extends RecyclerView.ViewHolder {
         private SimpleDraweeView itemIconImageView;
         private TextView nameText, priceText;
-        private Button deleteBtn;
+        private Button deleteBtn, editBtn;
         private Switch menuSwitch;
 
         ViewHolder(View v) {
             super(v);
-            itemIconImageView= v.findViewById(R.id.ordersItemIconImageView);
+            itemIconImageView = v.findViewById(R.id.ordersItemIconImageView);
             nameText = v.findViewById(R.id.ordersItemNameText);
             priceText = v.findViewById(R.id.itemPriceText);
             deleteBtn = v.findViewById(R.id.deleteBtn);
             deleteBtn.setVisibility(View.VISIBLE);
+            editBtn = v.findViewById(R.id.editBtn);
+            editBtn.setVisibility(View.VISIBLE);
             menuSwitch = v.findViewById(R.id.menuSwitch);
             menuSwitch.setVisibility(View.VISIBLE);
             View lineView = v.findViewById(R.id.lineView);

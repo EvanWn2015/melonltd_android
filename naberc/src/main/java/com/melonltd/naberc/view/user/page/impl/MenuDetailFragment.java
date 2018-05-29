@@ -21,7 +21,6 @@ import android.widget.RadioGroup;
 import android.widget.TextView;
 
 import com.bigkoo.alertview.AlertView;
-import com.bigkoo.alertview.OnDismissListener;
 import com.bigkoo.alertview.OnItemClickListener;
 import com.google.common.base.Strings;
 import com.melonltd.naberc.R;
@@ -210,7 +209,7 @@ public class MenuDetailFragment extends AbsPageFragment implements View.OnClickL
 
     private void setOptView() {
         View v = LayoutInflater.from(getContext()).inflate(R.layout.menu_detail_optional, null);
-        LinearLayout optLayout = v.findViewById(R.id.optLayout);
+        LinearLayout optLayout = v.findViewById(R.id.demandLayout);
         for (int i = 0; i < 5; i++) {
             CheckBox box = new NaberCheckButton().Builder(getContext())
                     .setTitle("加料" + i)
