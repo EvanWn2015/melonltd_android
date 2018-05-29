@@ -1,6 +1,7 @@
 package com.melonltd.naberc.view.user.page.impl;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.text.InputType;
@@ -11,9 +12,15 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.bigkoo.alertview.AlertView;
+import com.bigkoo.pickerview.builder.OptionsPickerBuilder;
+import com.bigkoo.pickerview.listener.OnOptionsSelectChangeListener;
+import com.bigkoo.pickerview.listener.OnOptionsSelectListener;
+import com.bigkoo.pickerview.view.OptionsPickerView;
 import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
 import com.jzxiang.pickerview.TimePickerDialog;
 import com.jzxiang.pickerview.data.Type;
 import com.jzxiang.pickerview.listener.OnDateSetListener;
@@ -26,14 +33,15 @@ import com.melonltd.naberc.view.common.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.common.type.PageType;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
-public class RegisteredFragment extends AbsPageFragment implements View.OnClickListener, View.OnFocusChangeListener {
+public class RegisteredFragment extends AbsPageFragment implements View.OnClickListener {
     private static final String TAG = RegisteredFragment.class.getSimpleName();
     private static RegisteredFragment FRAGMENT = null;
-
-    private EditText identityEditText, nameEditText, addressEditText, emailEditText, passwordEditText, confirmPasswordEditText,
-            birthdayEditText;
+    private TextView identityEditText, birthdayEditText;
+    private EditText nameEditText, addressEditText, emailEditText, passwordEditText, confirmPasswordEditText ;
     private Button submitBtn, backToLoginBtn;
 
 
@@ -88,30 +96,45 @@ public class RegisteredFragment extends AbsPageFragment implements View.OnClickL
 
     }
 
-    public void closeKeyBoard(EditText editText) {
-        InputMethodManager inputMeg = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-        inputMeg.hideSoftInputFromWindow(editText.getWindowToken(), 0);
-    }
+//    public void closeKeyBoard(EditText editText) {
+//        InputMethodManager inputMeg = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+//        inputMeg.hideSoftInputFromWindow(editText.getWindowToken(), 0);
+//    }
 
     private void setListener() {
         submitBtn.setOnClickListener(this);
         backToLoginBtn.setOnClickListener(this);
 
-        identityEditText.setOnFocusChangeListener(this);
-        birthdayEditText.setOnFocusChangeListener(this);
+//        identityEditText.setOnFocusChangeListener(this);
+        identityEditText.setOnClickListener(this);
+//        birthdayEditText.setOnFocusChangeListener(this);
         birthdayEditText.setOnClickListener(this);
     }
 
     @Override
     public void onResume() {
         super.onResume();
-
-
     }
 
     private void backToLoginPage() {
         AbsPageFragment fragment = PageFragmentFactory.of(PageType.LOGIN, null);
         getFragmentManager().beginTransaction().remove(this).replace(R.id.frameContainer, fragment).addToBackStack(fragment.toString()).commit();
+    }
+
+    private void showOptIdentity() {
+        final ArrayList<String> options1Items = Lists.newArrayList("社會人士", "學生");
+        final ArrayList<ArrayList<String>> options2Items = Lists.newArrayList(Lists.<String>newArrayList(""), Lists.<String>newArrayList("大學", "中學"));
+        OptionsPickerView pvOptions = new OptionsPickerBuilder(getContext(), new OnOptionsSelectListener() {
+            @Override
+            public void onOptionsSelect(int options1, int option2, int options3, View v) {
+                String tx = options1Items.get(options1)
+                        + options2Items.get(options1).get(option2);
+                Log.d(TAG, tx);
+                identityEditText.setText(tx);
+            }
+        }).build();
+        pvOptions.setPicker(options1Items, options2Items);
+        pvOptions.show();
     }
 
     @Override
@@ -121,6 +144,10 @@ public class RegisteredFragment extends AbsPageFragment implements View.OnClickL
                 if (verifyInput()) {
                     backToLoginPage();
                 }
+                break;
+            case R.id.identityEditText:
+                Log.d(TAG, " identityEditText");
+                showOptIdentity();
                 break;
             case R.id.backToLoginBtn:
                 backToLoginPage();
@@ -154,14 +181,14 @@ public class RegisteredFragment extends AbsPageFragment implements View.OnClickL
         }
     }
 
-    @Override
-    public void onFocusChange(View view, boolean b) {
-        Log.d(TAG, "onFocusChange");
-        if (b) {
-            closeKeyBoard(birthdayEditText);
-            onClick(view);
-        }
-    }
+//    @Override
+//    public void onFocusChange(View view, boolean b) {
+//        Log.d(TAG, "onFocusChange");
+//        if (b) {
+//            closeKeyBoard(birthdayEditText);
+//            onClick(view);
+//        }
+//    }
 
 
     private boolean verifyInput() {
