@@ -1,8 +1,12 @@
 package com.melonltd.naberc.view.user.page.impl;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.res.AssetManager;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.text.InputType;
 import android.util.Log;
@@ -21,10 +25,12 @@ import com.bigkoo.pickerview.listener.OnOptionsSelectListener;
 import com.bigkoo.pickerview.view.OptionsPickerView;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
+import com.google.gson.Gson;
 import com.jzxiang.pickerview.TimePickerDialog;
 import com.jzxiang.pickerview.data.Type;
 import com.jzxiang.pickerview.listener.OnDateSetListener;
 import com.melonltd.naberc.R;
+import com.melonltd.naberc.model.bean.IdentityJsonBean;
 import com.melonltd.naberc.util.VerifyUtil;
 
 import com.melonltd.naberc.view.common.BaseCore;
@@ -32,6 +38,11 @@ import com.melonltd.naberc.view.common.abs.AbsPageFragment;
 import com.melonltd.naberc.view.common.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.common.type.PageType;
 
+import org.json.JSONArray;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -41,9 +52,41 @@ public class RegisteredFragment extends AbsPageFragment implements View.OnClickL
     private static final String TAG = RegisteredFragment.class.getSimpleName();
     private static RegisteredFragment FRAGMENT = null;
     private TextView identityEditText, birthdayEditText;
-    private EditText nameEditText, addressEditText, emailEditText, passwordEditText, confirmPasswordEditText ;
+    private EditText nameEditText, addressEditText, emailEditText, passwordEditText, confirmPasswordEditText;
     private Button submitBtn, backToLoginBtn;
 
+
+    private List<String> options1Items = Lists.newArrayList();
+    private List<List<String>> options2Items = Lists.newArrayList();
+    private static final int MSG_LOAD_DATA = 0x0001;
+    private static final int MSG_LOAD_SUCCESS = 0x0002;
+    private static final int MSG_LOAD_FAILED = 0x0003;
+    private Thread thread;
+    private boolean isLoaded = false;
+
+    @SuppressLint("HandlerLeak")
+    private Handler mHandler = new Handler() {
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case MSG_LOAD_DATA:
+                    if (thread == null) {
+                        thread = new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                initJsonData();
+                            }
+                        });
+                        thread.start();
+                    }
+                    break;
+                case MSG_LOAD_SUCCESS:
+                    isLoaded = true;
+                    break;
+                case MSG_LOAD_FAILED:
+                    break;
+            }
+        }
+    };
 
     public RegisteredFragment() {
     }
@@ -73,6 +116,7 @@ public class RegisteredFragment extends AbsPageFragment implements View.OnClickL
             View v = inflater.inflate(R.layout.fragment_registered, container, false);
             getViews(v);
             setListener();
+            mHandler.sendEmptyMessage(MSG_LOAD_DATA);
             container.setTag(R.id.user_registered_page, v);
             return v;
         }
@@ -92,22 +136,12 @@ public class RegisteredFragment extends AbsPageFragment implements View.OnClickL
 
         birthdayEditText.setInputType(InputType.TYPE_NULL);
         identityEditText.setInputType(InputType.TYPE_NULL);
-
-
     }
-
-//    public void closeKeyBoard(EditText editText) {
-//        InputMethodManager inputMeg = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-//        inputMeg.hideSoftInputFromWindow(editText.getWindowToken(), 0);
-//    }
 
     private void setListener() {
         submitBtn.setOnClickListener(this);
         backToLoginBtn.setOnClickListener(this);
-
-//        identityEditText.setOnFocusChangeListener(this);
         identityEditText.setOnClickListener(this);
-//        birthdayEditText.setOnFocusChangeListener(this);
         birthdayEditText.setOnClickListener(this);
     }
 
@@ -122,19 +156,32 @@ public class RegisteredFragment extends AbsPageFragment implements View.OnClickL
     }
 
     private void showOptIdentity() {
-        final ArrayList<String> options1Items = Lists.newArrayList("社會人士", "學生");
-        final ArrayList<ArrayList<String>> options2Items = Lists.newArrayList(Lists.<String>newArrayList(""), Lists.<String>newArrayList("大學", "中學"));
-        OptionsPickerView pvOptions = new OptionsPickerBuilder(getContext(), new OnOptionsSelectListener() {
-            @Override
-            public void onOptionsSelect(int options1, int option2, int options3, View v) {
-                String tx = options1Items.get(options1)
-                        + options2Items.get(options1).get(option2);
-                Log.d(TAG, tx);
-                identityEditText.setText(tx);
-            }
-        }).build();
-        pvOptions.setPicker(options1Items, options2Items);
-        pvOptions.show();
+        mHandler.sendEmptyMessage(MSG_LOAD_DATA);
+        if (isLoaded) {
+            OptionsPickerView pvOptions = new OptionsPickerBuilder(getContext(), new OnOptionsSelectListener() {
+                @Override
+                public void onOptionsSelect(int options1, int option2, int options3, View v) {
+                    String tx = options1Items.get(options1) + " : " + options2Items.get(options1).get(option2);
+                    Log.d(TAG, tx);
+                    identityEditText.setText(tx);
+                }
+            })
+                    .setTitleBgColor(getResources().getColor(R.color.naber_dividing_line_gray))
+                    .setCancelColor(getResources().getColor(R.color.naber_dividing_gray))
+                    .setSubmitColor(getResources().getColor(R.color.naber_dividing_gray))
+                    .build();
+            pvOptions.setPicker(options1Items, options2Items);
+            pvOptions.show();
+        }
+
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        if (mHandler != null) {
+            mHandler.removeCallbacksAndMessages(null);
+        }
     }
 
     @Override
@@ -181,14 +228,60 @@ public class RegisteredFragment extends AbsPageFragment implements View.OnClickL
         }
     }
 
-//    @Override
-//    public void onFocusChange(View view, boolean b) {
-//        Log.d(TAG, "onFocusChange");
-//        if (b) {
-//            closeKeyBoard(birthdayEditText);
-//            onClick(view);
-//        }
-//    }
+
+    private String getJson(Context context, String fileName) {
+        StringBuilder stringBuilder = new StringBuilder();
+        try {
+            AssetManager assetManager = context.getAssets();
+            BufferedReader bf = new BufferedReader(new InputStreamReader(assetManager.open(fileName)));
+            String line;
+            while ((line = bf.readLine()) != null) {
+                stringBuilder.append(line);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return stringBuilder.toString();
+    }
+
+
+    private void initJsonData() {
+        String JsonData = getJson(getContext(), "identity.json");
+        ArrayList<IdentityJsonBean> identityBean = parseData(JsonData);
+        List<String> opt1 = Lists.newArrayList();
+        List<List<String>> opt2 = Lists.newArrayList();
+        for (IdentityJsonBean b : identityBean) {
+            opt1.add(b.getName());
+            List<String> datas = Lists.newArrayList();
+            for (String d : b.getDatas()) {
+                datas.add(d);
+            }
+            opt2.add(datas);
+        }
+        options1Items.clear();
+        options1Items.addAll(opt1);
+        options2Items.clear();
+        options2Items.addAll(opt2);
+
+        mHandler.sendEmptyMessage(MSG_LOAD_SUCCESS);
+
+    }
+
+    public ArrayList<IdentityJsonBean> parseData(String result) {//Gson 解析
+        ArrayList<IdentityJsonBean> detail = new ArrayList<>();
+        try {
+            JSONArray data = new JSONArray(result);
+            Gson gson = new Gson();
+            for (int i = 0; i < data.length(); i++) {
+                IdentityJsonBean entity = gson.fromJson(data.optJSONObject(i).toString(), IdentityJsonBean.class);
+                detail.add(entity);
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            mHandler.sendEmptyMessage(MSG_LOAD_FAILED);
+        }
+        return detail;
+    }
 
 
     private boolean verifyInput() {
