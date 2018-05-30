@@ -144,8 +144,8 @@ public class SellerMainActivity extends BaseCore implements TabLayout.OnTabSelec
         View v = tab.getCustomView();
         ImageView icon = v.findViewById(R.id.tabIcon);
         TextView text = v.findViewById(R.id.tabTitle);
-        icon.setColorFilter(getResources().getColor(android.R.color.black));
-        text.setTextColor(getResources().getColor(android.R.color.black));
+        icon.setColorFilter(getResources().getColor(R.color.naber_tab_default_color));
+        text.setTextColor(getResources().getColor(R.color.naber_tab_default_color));
     }
 
     @Override

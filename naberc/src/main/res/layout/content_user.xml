@@ -22,9 +22,9 @@
     <android.support.design.widget.TabLayout
         android:id="@+id/bottomMenuTabLayout"
         android:layout_width="match_parent"
-        android:paddingTop="4dp"
         android:layout_height="wrap_content"
         android:background="#92bcbcbc"
+        android:paddingTop="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
@@ -37,7 +37,6 @@
         app:tabPaddingTop="0dp"
         app:tabSelectedTextColor="@color/colorPrimary"
         app:tabTextAppearance="@style/MineCustomTabText"
-        app:tabTextColor="@android:color/black">
-    </android.support.design.widget.TabLayout>
+        app:tabTextColor="@android:color/black"></android.support.design.widget.TabLayout>
 
 </android.support.constraint.ConstraintLayout>

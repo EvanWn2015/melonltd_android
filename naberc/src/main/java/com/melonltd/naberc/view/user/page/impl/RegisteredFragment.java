@@ -257,7 +257,6 @@ public class RegisteredFragment extends AbsPageFragment implements View.OnClickL
         return stringBuilder.toString();
     }
 
-
     private void initJsonData() {
         String JsonData = getJson(getContext(), "identity.json");
         ArrayList<IdentityJsonBean> identityBean = parseData(JsonData);
@@ -275,9 +274,7 @@ public class RegisteredFragment extends AbsPageFragment implements View.OnClickL
         options1Items.addAll(opt1);
         options2Items.clear();
         options2Items.addAll(opt2);
-
         mHandler.sendEmptyMessage(MSG_LOAD_SUCCESS);
-
     }
 
     public ArrayList<IdentityJsonBean> parseData(String result) {//Gson 解析

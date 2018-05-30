@@ -21,6 +21,7 @@ import android.view.KeyEvent;
 
 //import com.google.firebase.auth.FirebaseAuth;
 //import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.melonltd.naberc.R;
 import com.melonltd.naberc.model.preferences.SharedPreferencesService;
 import com.melonltd.naberc.util.Tools;
@@ -55,7 +56,8 @@ public abstract class BaseCore extends AppCompatActivity implements LocationList
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context = this;
-
+        String toekn = FirebaseInstanceId.getInstance().getToken();
+        Log.d(TAG, toekn + "");
 //        try {
 //            int v = getPackageManager().getPackageInfo("com.google.android.gms", 0 ).versionCode;
 //            Log.d(TAG, v +"");

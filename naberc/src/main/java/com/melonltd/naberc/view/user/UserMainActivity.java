@@ -90,12 +90,12 @@ public class UserMainActivity extends BaseCore implements View.OnClickListener, 
         super.onResume();
 
         // TODO Seller page
-//        startActivity(new Intent(context, SellerMainActivity.class));
+        startActivity(new Intent(context, SellerMainActivity.class));
         // TODO user page
-        AbsPageFragment fragment = null;
-        bottomMenuTabLayout.setVisibility(View.GONE);
-        fragment = PageFragmentFactory.of(PageType.LOGIN, null);
-        fragmentManager.beginTransaction().replace(R.id.frameContainer, fragment).addToBackStack(fragment.toString()).commit();
+//        AbsPageFragment fragment = null;
+//        bottomMenuTabLayout.setVisibility(View.GONE);
+//        fragment = PageFragmentFactory.of(PageType.LOGIN, null);
+//        fragmentManager.beginTransaction().replace(R.id.frameContainer, fragment).addToBackStack(fragment.toString()).commit();
 
 //        if (SharedPreferencesService.isFirstUse()) {
 //            fragmentManager.beginTransaction().replace(R.id.frameContainer, new IntroFragment()).commit();
@@ -189,8 +189,8 @@ public class UserMainActivity extends BaseCore implements View.OnClickListener, 
         View v = tab.getCustomView();
         ImageView icon = v.findViewById(R.id.tabIcon);
         TextView text = v.findViewById(R.id.tabTitle);
-        icon.setColorFilter(getResources().getColor(android.R.color.black));
-        text.setTextColor(getResources().getColor(android.R.color.black));
+        icon.setColorFilter(getResources().getColor(R.color.naber_tab_default_color));
+        text.setTextColor(getResources().getColor(R.color.naber_tab_default_color));
 //        tab.getIcon().setColorFilter(ContextCompat.getColor(context, R.color.cardview_dark_background), PorterDuff.Mode.SRC_IN);
     }
 
