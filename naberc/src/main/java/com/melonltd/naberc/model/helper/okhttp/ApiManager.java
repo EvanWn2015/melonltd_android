@@ -38,7 +38,6 @@ public class ApiManager {
     public static <T> void test(ApiCallback callback) {
         HttpUrl url = HttpUrl.parse(ApiUrl.test).newBuilder()
                 .build();
-        Log.d(TAG, url.toString());
         Call call = getClient().get(url);
         call.enqueue(callback);
     }

@@ -155,6 +155,9 @@ public class ShoppingCartFragment extends AbsPageFragment {
     class DeleteListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
+            int index  = listData.indexOf(v.getTag());
+            listData.remove(v.getTag());
+            adapter.notifyItemRemoved(index);
             Log.d(TAG, v.getTag() + "");
         }
     }
@@ -259,7 +262,7 @@ public class ShoppingCartFragment extends AbsPageFragment {
                 private ImageButton minusBtn, addBtn, deleteBtn;
                 private TextView quantityText, priceText;
                 public int quantity = 0, price = 0;
-                private String name = "", scope = "";
+//                private String name = "", scope = "";
                 private View subView;
 
 
@@ -282,14 +285,15 @@ public class ShoppingCartFragment extends AbsPageFragment {
                     this.deleteBtn.setTag(o);
                     return this;
                 }
-
+//
                 private OrderSubItemHolder setName(String name) {
-                    this.name = name;
+                    this.nameText.setText(name);
+
                     return this;
                 }
-
+//
                 private OrderSubItemHolder setScope(String scope) {
-                    this.scope = scope;
+                    this.scopeText.setText(scope);
                     return this;
                 }
 
@@ -351,8 +355,6 @@ public class ShoppingCartFragment extends AbsPageFragment {
                 }
 
                 private View build() {
-                    this.nameText.setText(name);
-                    this.scopeText.setText(scope);
                     this.quantityText.setText(quantity + "");
                     setAddAndMinusListener();
                     setPriceComp();

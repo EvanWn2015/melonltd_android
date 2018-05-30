@@ -14,10 +14,10 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.bigkoo.pickerview.builder.TimePickerBuilder;
+import com.bigkoo.pickerview.listener.OnTimeSelectListener;
+import com.bigkoo.pickerview.view.TimePickerView;
 import com.google.common.collect.Lists;
-import com.jzxiang.pickerview.TimePickerDialog;
-import com.jzxiang.pickerview.data.Type;
-import com.jzxiang.pickerview.listener.OnDateSetListener;
 import com.melonltd.naberc.R;
 import com.melonltd.naberc.view.common.BaseCore;
 import com.melonltd.naberc.view.common.abs.AbsPageFragment;
@@ -27,6 +27,7 @@ import com.melonltd.naberc.view.seller.SellerMainActivity;
 import com.melonltd.naberc.view.seller.adapter.OrdersLogsAdapter;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -140,7 +141,7 @@ public class SellerOrdersLogsFragment extends AbsPageFragment implements View.On
             });
         }
 
-        if (TO_ORDERS_LOGS_DETAIL_INDEX >=0){
+        if (TO_ORDERS_LOGS_DETAIL_INDEX >= 0) {
             toOrderLogsDetailPag(TO_ORDERS_LOGS_DETAIL_INDEX);
         }
     }
@@ -172,34 +173,61 @@ public class SellerOrdersLogsFragment extends AbsPageFragment implements View.On
             case R.id.startTimeText:
             case R.id.endTimeText:
                 long oneYears = 1L * 365 * 1000 * 60 * 60 * 24L;
-                new TimePickerDialog.Builder()
-                        .setTitleStringId("")
-                        .setTitleStringId("請選擇")
-                        .setYearText(getResources().getString(R.string.data_time_picker_years_text))
-                        .setMonthText(getResources().getString(R.string.data_time_picker_month_text))
-                        .setDayText(getResources().getString(R.string.data_time_picker_day_text))
-                        .setCyclic(false)
-                        .setToolBarTextColor(getResources().getColor(R.color.naber_basis_blue))
-                        .setMinMillseconds(System.currentTimeMillis() - oneYears)
-                        .setMaxMillseconds(System.currentTimeMillis())
-                        .setCurrentMillseconds(System.currentTimeMillis())
-                        .setThemeColor(getResources().getColor(R.color.naber_dividing_line_gray))
-                        .setType(Type.YEAR_MONTH_DAY)
-                        .setWheelItemTextNormalColor(getResources().getColor(R.color.naber_dividing_line_gray))
-                        .setWheelItemTextSize(16)
-                        .setCallBack(new OnDateSetListener() {
-                            @Override
-                            public void onDateSet(TimePickerDialog timePickerView, long millseconds) {
-                                Log.d(TAG, "");
-                                if (viewId == R.id.startTimeText) {
-                                    startTimeText.setText(new SimpleDateFormat("yyyy-MM-dd").format(new Date(millseconds)));
-                                } else if (viewId == R.id.endTimeText) {
-                                    endTimeText.setText(new SimpleDateFormat("yyyy-MM-dd").format(new Date(millseconds)));
-                                }
-
-                            }
-                        })
-                        .build().show(getFragmentManager(), "YEAR_MONTH_DAY");
+                Calendar now = Calendar.getInstance();
+                Calendar startDate = Calendar.getInstance();
+                startDate.setTimeInMillis(now.getTime().getTime() - oneYears);
+                TimePickerView tp = new TimePickerBuilder(getContext(), new OnTimeSelectListener() {
+                    @Override
+                    public void onTimeSelect(Date date, View v) {
+                        Log.d(TAG, date.toString());
+                        Log.d(TAG, "");
+                        if (viewId == R.id.startTimeText) {
+                            startTimeText.setText(new SimpleDateFormat("yyyy-MM-dd").format(date));
+                        } else if (viewId == R.id.endTimeText) {
+                            endTimeText.setText(new SimpleDateFormat("yyyy-MM-dd").format(date));
+                        }
+                    }
+                })
+                        .setType(new boolean[]{true, true, true, false, false, false})//"year","month","day","hours","minutes","seconds "
+                        .setTitleSize(20)//标题文字大小
+                        .setOutSideCancelable(true)//点击屏幕，点在控件外部范围时，是否取消显示
+                        .isCyclic(false)//是否循环滚动
+                        .setTitleBgColor(getResources().getColor(R.color.naber_dividing_line_gray))
+                        .setCancelColor(getResources().getColor(R.color.naber_dividing_gray))
+                        .setSubmitColor(getResources().getColor(R.color.naber_dividing_gray))
+                        .setRangDate(startDate, now)//起始终止年月日设定
+                        .isCenterLabel(false) //是否只显示中间选中项的label文字，false则每项item全部都带有label。
+                        .isDialog(false)//是否显示为对话框样式
+                        .build();
+                tp.show();
+//                new TimePickerDialog.Builder()
+//                        .setTitleStringId("")
+//                        .setTitleStringId("請選擇")
+//                        .setYearText(getResources().getString(R.string.data_time_picker_years_text))
+//                        .setMonthText(getResources().getString(R.string.data_time_picker_month_text))
+//                        .setDayText(getResources().getString(R.string.data_time_picker_day_text))
+//                        .setCyclic(false)
+//                        .setToolBarTextColor(getResources().getColor(R.color.naber_basis_blue))
+//                        .setMinMillseconds(System.currentTimeMillis() - oneYears)
+//                        .setMaxMillseconds(System.currentTimeMillis())
+//                        .setCurrentMillseconds(System.currentTimeMillis())
+//                        .setThemeColor(getResources().getColor(R.color.naber_dividing_line_gray))
+//                        .setType(Type.YEAR_MONTH_DAY)
+//                        .setWheelItemTextNormalColor(getResources().getColor(R.color.naber_dividing_line_gray))
+//                        .setWheelItemTextSize(16)
+//                        .setCallBack(new OnDateSetListener() {
+//                            @Override
+//                            public void onDateSet(TimePickerDialog timePickerView, long millseconds) {
+//                                Log.d(TAG, "");
+//                                if (viewId == R.id.startTimeText) {
+//                                    startTimeText.setText(new SimpleDateFormat("yyyy-MM-dd").format(new Date(millseconds)));
+//                                } else if (viewId == R.id.endTimeText) {
+//                                    endTimeText.setText(new SimpleDateFormat("yyyy-MM-dd").format(new Date(millseconds)));
+//                                }
+//
+//                            }
+//                        })
+//                        .build().show(getFragmentManager(), "YEAR_MONTH_DAY");
                 break;
 
         }

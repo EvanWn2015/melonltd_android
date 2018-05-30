@@ -13,13 +13,12 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.bigkoo.alertview.AlertView;
-import com.bigkoo.alertview.OnDismissListener;
 import com.bigkoo.alertview.OnItemClickListener;
+import com.bigkoo.pickerview.builder.TimePickerBuilder;
+import com.bigkoo.pickerview.listener.OnTimeSelectListener;
+import com.bigkoo.pickerview.view.TimePickerView;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
-import com.jzxiang.pickerview.TimePickerDialog;
-import com.jzxiang.pickerview.data.Type;
-import com.jzxiang.pickerview.listener.OnDateSetListener;
 import com.melonltd.naberc.R;
 import com.melonltd.naberc.model.helper.okhttp.ApiCallback;
 import com.melonltd.naberc.model.helper.okhttp.ApiManager;
@@ -27,6 +26,7 @@ import com.melonltd.naberc.view.common.abs.AbsPageFragment;
 import com.melonltd.naberc.view.seller.adapter.SellerOrdersAdapter;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -165,30 +165,55 @@ public class SellerOrdersFragment extends AbsPageFragment {
         @Override
         public void onClick(View view) {
             long date = 1000 * 60 * 60 * 24 * 2L;
-            new TimePickerDialog.Builder()
-                    .setTitleStringId("")
-                    .setTitleStringId("請選擇")
-                    .setYearText(getResources().getString(R.string.data_time_picker_years_text))
-                    .setMonthText(getResources().getString(R.string.data_time_picker_month_text))
-                    .setDayText(getResources().getString(R.string.data_time_picker_day_text))
-                    .setCyclic(false)
-                    .setToolBarTextColor(getResources().getColor(R.color.naber_basis_blue))
-                    .setMinMillseconds(System.currentTimeMillis())
-                    .setMaxMillseconds(System.currentTimeMillis() + date)
-                    .setCurrentMillseconds(System.currentTimeMillis())
-                    .setThemeColor(getResources().getColor(R.color.naber_dividing_line_gray))
-                    .setType(Type.YEAR_MONTH_DAY)
-                    .setWheelItemTextNormalColor(getResources().getColor(R.color.naber_dividing_line_gray))
-                    .setWheelItemTextSize(16)
-                    .setCallBack(new OnDateSetListener() {
-                        @Override
-                        public void onDateSet(TimePickerDialog timePickerView, long millseconds) {
-                            searchDateText.setText(new SimpleDateFormat("yyyy-MM-dd").format(new Date(millseconds)));
-//                            searchByDate(millseconds);
-                        }
-                    })
-                    .build()
-                    .show(getFragmentManager(), "YEAR_MONTH_DAY");
+            Calendar now = Calendar.getInstance();
+            Calendar endDate = Calendar.getInstance();
+            endDate.setTimeInMillis(now.getTime().getTime() + date);
+            TimePickerView tp = new TimePickerBuilder(getContext(), new OnTimeSelectListener() {
+                @Override
+                public void onTimeSelect(Date date, View v) {
+                    Log.d(TAG, date.toString());
+                    searchDateText.setText(new SimpleDateFormat("yyyy-MM-dd").format(date));
+                }
+            })
+                    .setType(new boolean[]{true, true, true, false, false, false})//"year","month","day","hours","minutes","seconds "
+                    .setTitleSize(20)//标题文字大小
+                    .setOutSideCancelable(true)//点击屏幕，点在控件外部范围时，是否取消显示
+                    .isCyclic(false)//是否循环滚动
+                    .setTitleBgColor(getResources().getColor(R.color.naber_dividing_line_gray))
+                    .setCancelColor(getResources().getColor(R.color.naber_dividing_gray))
+                    .setSubmitColor(getResources().getColor(R.color.naber_dividing_gray))
+                    .setRangDate(now, endDate)//起始终止年月日设定
+                    .isCenterLabel(false) //是否只显示中间选中项的label文字，false则每项item全部都带有label。
+                    .isDialog(false)//是否显示为对话框样式
+                    .build();
+
+            tp.show();
+
+//            long date = 1000 * 60 * 60 * 24 * 2L;
+//            new TimePickerDialog.Builder()
+//                    .setTitleStringId("")
+//                    .setTitleStringId("請選擇")
+//                    .setYearText(getResources().getString(R.string.data_time_picker_years_text))
+//                    .setMonthText(getResources().getString(R.string.data_time_picker_month_text))
+//                    .setDayText(getResources().getString(R.string.data_time_picker_day_text))
+//                    .setCyclic(false)
+//                    .setToolBarTextColor(getResources().getColor(R.color.naber_basis_blue))
+//                    .setMinMillseconds(System.currentTimeMillis())
+//                    .setMaxMillseconds(System.currentTimeMillis() + date)
+//                    .setCurrentMillseconds(System.currentTimeMillis())
+//                    .setThemeColor(getResources().getColor(R.color.naber_dividing_line_gray))
+//                    .setType(Type.YEAR_MONTH_DAY)
+//                    .setWheelItemTextNormalColor(getResources().getColor(R.color.naber_dividing_line_gray))
+//                    .setWheelItemTextSize(16)
+//                    .setCallBack(new OnDateSetListener() {
+//                        @Override
+//                        public void onDateSet(TimePickerDialog timePickerView, long millseconds) {
+//                            searchDateText.setText(new SimpleDateFormat("yyyy-MM-dd").format(new Date(millseconds)));
+////                            searchByDate(millseconds);
+//                        }
+//                    })
+//                    .build()
+//                    .show(getFragmentManager(), "YEAR_MONTH_DAY");
 
         }
     }

@@ -3,7 +3,6 @@ package com.melonltd.naberc.view.user.page.impl;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.AssetManager;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -13,26 +12,23 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
 import com.bigkoo.alertview.AlertView;
 import com.bigkoo.pickerview.builder.OptionsPickerBuilder;
-import com.bigkoo.pickerview.listener.OnOptionsSelectChangeListener;
+import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.OnOptionsSelectListener;
+import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.OptionsPickerView;
+import com.bigkoo.pickerview.view.TimePickerView;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.gson.Gson;
-import com.jzxiang.pickerview.TimePickerDialog;
-import com.jzxiang.pickerview.data.Type;
-import com.jzxiang.pickerview.listener.OnDateSetListener;
 import com.melonltd.naberc.R;
 import com.melonltd.naberc.model.bean.IdentityJsonBean;
 import com.melonltd.naberc.util.VerifyUtil;
-
 import com.melonltd.naberc.view.common.BaseCore;
 import com.melonltd.naberc.view.common.abs.AbsPageFragment;
 import com.melonltd.naberc.view.common.factory.PageFragmentFactory;
@@ -45,6 +41,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -166,6 +163,7 @@ public class RegisteredFragment extends AbsPageFragment implements View.OnClickL
                     identityEditText.setText(tx);
                 }
             })
+                    .setTitleSize(20)
                     .setTitleBgColor(getResources().getColor(R.color.naber_dividing_line_gray))
                     .setCancelColor(getResources().getColor(R.color.naber_dividing_gray))
                     .setSubmitColor(getResources().getColor(R.color.naber_dividing_gray))
@@ -173,7 +171,45 @@ public class RegisteredFragment extends AbsPageFragment implements View.OnClickL
             pvOptions.setPicker(options1Items, options2Items);
             pvOptions.show();
         }
+    }
 
+
+    private void showBirthday() {
+        Calendar selectedDate = Calendar.getInstance();
+        Calendar startDate = Calendar.getInstance();
+        startDate.set(1948, 1, 1);
+        Calendar endDate = Calendar.getInstance();
+        TimePickerView tp = new TimePickerBuilder(getContext(), new OnTimeSelectListener() {
+            @Override
+            public void onTimeSelect(Date date, View v) {
+                Log.d(TAG, date.toString());
+                birthdayEditText.setText(new SimpleDateFormat("yyyy-MM-dd").format(date));
+            }
+        })
+                .setType(new boolean[]{true, true, true, false, false, false})//"year","month","day","hours","minutes","seconds "
+//                .setCancelText("Cancel")//取消按钮文字
+//                .setSubmitText("Sure")//确认按钮文字
+//                .setContentSize(18)//滚轮文字大小
+                .setTitleSize(20)//标题文字大小
+//                .setTitleText("Title")//标题文字
+                .setOutSideCancelable(true)//点击屏幕，点在控件外部范围时，是否取消显示
+                .isCyclic(false)//是否循环滚动
+                .setTitleBgColor(getResources().getColor(R.color.naber_dividing_line_gray))
+                .setCancelColor(getResources().getColor(R.color.naber_dividing_gray))
+                .setSubmitColor(getResources().getColor(R.color.naber_dividing_gray))
+//                .setTitleColor(Color.BLACK)//标题文字颜色
+//                .setSubmitColor(Color.BLUE)//确定按钮文字颜色
+//                .setCancelColor(Color.BLUE)//取消按钮文字颜色
+//                .setTitleBgColor(0xFF666666)//标题背景颜色 Night mode
+//                .setBgColor(0xFF333333)//滚轮背景颜色 Night mode
+                .setDate(selectedDate)// 如果不设置的话，默认是系统时间*/
+                .setRangDate(startDate, endDate)//起始终止年月日设定
+//                .setLabel("年", "月", "日", "时", "分", "秒")//默认设置为年月日时分秒
+                .isCenterLabel(false) //是否只显示中间选中项的label文字，false则每项item全部都带有label。
+                .isDialog(false)//是否显示为对话框样式
+                .build();
+
+        tp.show();
     }
 
     @Override
@@ -200,30 +236,7 @@ public class RegisteredFragment extends AbsPageFragment implements View.OnClickL
                 backToLoginPage();
                 break;
             case R.id.birthdayEditText:
-                long tenYears = 70L * 365 * 1000 * 60 * 60 * 24L;
-                new TimePickerDialog.Builder()
-                        .setTitleStringId("")
-                        .setTitleStringId("請選擇")
-                        .setYearText(getResources().getString(R.string.data_time_picker_years_text))
-                        .setMonthText(getResources().getString(R.string.data_time_picker_month_text))
-                        .setDayText(getResources().getString(R.string.data_time_picker_day_text))
-                        .setCyclic(false)
-                        .setToolBarTextColor(getResources().getColor(R.color.naber_basis_blue))
-                        .setMinMillseconds(System.currentTimeMillis() - tenYears)
-                        .setMaxMillseconds(System.currentTimeMillis())
-                        .setCurrentMillseconds(System.currentTimeMillis())
-                        .setThemeColor(getResources().getColor(R.color.naber_dividing_line_gray))
-                        .setType(Type.YEAR_MONTH_DAY)
-                        .setWheelItemTextNormalColor(getResources().getColor(R.color.naber_dividing_line_gray))
-                        .setWheelItemTextSize(16)
-                        .setCallBack(new OnDateSetListener() {
-                            @Override
-                            public void onDateSet(TimePickerDialog timePickerView, long millseconds) {
-                                Log.d(TAG, "");
-                                birthdayEditText.setText(new SimpleDateFormat("yyyy-MM-dd").format(new Date(millseconds)));
-                            }
-                        })
-                        .build().show(getFragmentManager(), "YEAR_MONTH_DAY");
+                showBirthday();
                 break;
         }
     }

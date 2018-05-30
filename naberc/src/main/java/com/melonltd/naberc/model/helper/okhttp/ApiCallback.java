@@ -9,6 +9,7 @@ import android.util.Log;
 
 import com.bigkoo.alertview.AlertView;
 import com.bigkoo.alertview.OnItemClickListener;
+import com.melonltd.naberc.model.service.Base64Service;
 import com.melonltd.naberc.util.Tools;
 import com.melonltd.naberc.view.customize.LoadingBar;
 
@@ -76,7 +77,8 @@ public abstract class ApiCallback implements Callback {
                     @Override
                     public void run() {
                         try {
-                            onSuccess(response.body().string());
+                            final String resp = Base64Service.decryptBASE64(response.body().string());
+                            onSuccess(resp);
                         } catch (IOException e) {
                             Log.e(TAG, "fail", e);
                             onFailure(call, new IOException("Failed"));

@@ -99,6 +99,7 @@ public class ClientManager {
                 .url(url)
                 .get()
                 .build();
+
         return CLIENT.newCall(request);
     }
 
