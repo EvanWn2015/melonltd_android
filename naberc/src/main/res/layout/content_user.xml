@@ -23,7 +23,7 @@
         android:id="@+id/bottomMenuTabLayout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="#92bcbcbc"
+        android:background="@color/naber_dividing_line_gray"
         android:paddingTop="4dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -37,6 +37,6 @@
         app:tabPaddingTop="0dp"
         app:tabSelectedTextColor="@color/colorPrimary"
         app:tabTextAppearance="@style/MineCustomTabText"
-        app:tabTextColor="@android:color/black"></android.support.design.widget.TabLayout>
+        app:tabTextColor="@color/naber_tab_default_color" />
 
 </android.support.constraint.ConstraintLayout>
