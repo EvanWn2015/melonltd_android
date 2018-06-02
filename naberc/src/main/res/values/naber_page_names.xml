@@ -26,16 +26,17 @@
     <string name="user_page_order_detail_title">訂單詳情</string>
 
     <!-- seller page -->
-    <string name="seller_menu_search_btn">查詢</string>
+    <string name="seller_menu_search_btn">快速查詢</string>
     <string name="seller_menu_orders_btn">訂單</string>
     <string name="seller_menu_stat_btn">營運概況</string>
     <string name="seller_menu_orders_logs">營運概況</string>
     <string name="seller_menu_orders_logs_detail">營運概況</string>
     <string name="seller_menu_menu_btn">菜單</string>
     <string name="seller_menu_category_list">菜單</string>
-    <string name="seller_menu_menu_edit">菜單</string>
+    <string name="seller_menu_menu_edit">產品細項</string>
     <string name="seller_menu_set_up_btn">設定</string>
-    <string name="seller_page_registered_title">註冊</string>
+    <string name="seller_menu_seller_detail">商家設定</string>
+    <string name="seller_page_registered_title">商家註冊</string>
 
 
 </resources>

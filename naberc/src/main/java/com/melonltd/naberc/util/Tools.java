@@ -31,7 +31,9 @@ import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Locale;
+import java.util.TimeZone;
 
 /**
  * Created by evan on 2018/1/5.
@@ -60,6 +62,13 @@ public class Tools {
         public static String date(Locale locale, String template, Long time) {
             simpleDate = new SimpleDateFormat(template, locale);
             return simpleDate.format(time);
+        }
+
+
+        public static String toUTCDateTime(Date date){
+            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:SS.sss'Z'");
+            format.setTimeZone(TimeZone.getTimeZone("UTC"));
+            return format.format(date);
         }
     }
 

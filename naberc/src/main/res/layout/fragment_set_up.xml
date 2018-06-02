@@ -48,13 +48,13 @@
             android:background="@color/naber_dividing_line_gray"
             android:padding="8dp"
             android:text="帳號"
-            app:layout_constraintBottom_toTopOf="@+id/toAccountEdit"
+            app:layout_constraintBottom_toTopOf="@+id/toSellerEdit"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
         <TextView
-            android:id="@+id/toAccountEdit"
+            android:id="@+id/toSellerEdit"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
@@ -79,7 +79,7 @@
             app:layout_constraintBottom_toTopOf="@+id/textView55"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/toAccountEdit" />
+            app:layout_constraintTop_toBottomOf="@+id/toSellerEdit" />
 
         <TextView
             android:id="@+id/textView55"
@@ -127,9 +127,11 @@
             android:id="@+id/textView58"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
             android:background="@color/naber_dividing_line_gray"
             android:padding="8dp"
             android:text="其它"
+            app:layout_constraintBottom_toTopOf="@+id/toAboutUsText"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView57" />
@@ -138,11 +140,13 @@
             android:id="@+id/toAboutUsText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:background="@drawable/naber_text_base_line"
             android:padding="8dp"
             android:text="關於我們"
+            app:layout_constraintBottom_toTopOf="@+id/toHelpText"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView58" />
@@ -151,11 +155,13 @@
             android:id="@+id/toHelpText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:background="@drawable/naber_text_base_line"
             android:padding="8dp"
             android:text="教學"
+            app:layout_constraintBottom_toTopOf="@+id/toTeachingText"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -165,11 +171,13 @@
             android:id="@+id/toTeachingText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:background="@drawable/naber_text_base_line"
             android:padding="8dp"
             android:text="幫助"
+            app:layout_constraintBottom_toTopOf="@+id/textView62"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -179,10 +187,12 @@
             android:id="@+id/textView62"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="32dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:padding="8dp"
             android:text="版本"
+            app:layout_constraintBottom_toTopOf="@+id/view2"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -206,18 +216,18 @@
             android:layout_marginEnd="32dp"
             android:layout_marginTop="8dp"
             android:text="0987-654-321"
-            app:layout_constraintBottom_toBottomOf="@+id/toAccountEdit"
-            app:layout_constraintEnd_toEndOf="@+id/toAccountEdit"
-            app:layout_constraintTop_toTopOf="@+id/toAccountEdit" />
+            app:layout_constraintBottom_toBottomOf="@+id/toSellerEdit"
+            app:layout_constraintEnd_toEndOf="@+id/toSellerEdit"
+            app:layout_constraintTop_toTopOf="@+id/toSellerEdit" />
 
         <ImageView
             android:layout_width="16dp"
             android:layout_height="16dp"
             android:layout_marginEnd="8dp"
             android:background="@drawable/naber_arrow_right"
-            app:layout_constraintBottom_toBottomOf="@+id/toAccountEdit"
-            app:layout_constraintEnd_toEndOf="@+id/toAccountEdit"
-            app:layout_constraintTop_toTopOf="@+id/toAccountEdit" />
+            app:layout_constraintBottom_toBottomOf="@+id/toSellerEdit"
+            app:layout_constraintEnd_toEndOf="@+id/toSellerEdit"
+            app:layout_constraintTop_toTopOf="@+id/toSellerEdit" />
 
         <TextView
             android:id="@+id/dividendText"

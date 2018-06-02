@@ -172,7 +172,7 @@ public class SellerMainActivity extends BaseCore implements TabLayout.OnTabSelec
         for (int index = 0; index < tabLayout.getTabCount(); index++) {
             onTabUnselected(tabLayout.getTabAt(index));
         }
-
+        toolbar.setTitle(getResources().getString(PageType.equalsIdByName(FRAGMENT_TAG)));
         if (tabLayout.getTabAt(position) != null) {
             View v = tabLayout.getTabAt(position).getCustomView();
             ImageView icon = v.findViewById(R.id.tabIcon);

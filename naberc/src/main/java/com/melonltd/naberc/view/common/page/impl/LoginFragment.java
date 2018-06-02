@@ -91,31 +91,33 @@ public class LoginFragment extends AbsPageFragment implements View.OnClickListen
         AbsPageFragment fragment = null;
         switch (v.getId()) {
             case R.id.loginBtn:
-                if (verifyInput()) {
-                    ApiManager.test(new ApiCallback(getActivity()) {
-                        @Override
-                        public void onSuccess(String responseBody) {
-                            if ("1".equals(accountEdit.getText().toString())) {
-                                LoadingBar bar = new LoadingBar(getContext(), true);
-                                getActivity().startActivity(new Intent(getContext(), SellerMainActivity.class));
-                                bar.hide();
-                            } else {
-                                BaseCore.FRAGMENT_TAG = PageType.HOME.name();
-                                getFragmentManager().beginTransaction().replace(R.id.frameContainer, PageFragmentFactory.of(PageType.HOME, null)).commit();
-                                if (UserMainActivity.bottomMenuTabLayout != null) {
-                                    UserMainActivity.bottomMenuTabLayout.setVisibility(View.VISIBLE);
-                                }
-                            }
-                        }
-
-                        @Override
-                        public void onFail(Exception error) {
-
-                        }
-                    });
-
-//                    AuthService.signInWithEmailAndPassword(mail, password, getFragmentManager(), null);
+                if ("1".equals(accountEdit.getText().toString())) {
+                    LoadingBar bar = new LoadingBar(getContext(), true);
+                    getActivity().startActivity(new Intent(getContext(), SellerMainActivity.class));
+                    bar.hide();
+                } else {
+                    BaseCore.FRAGMENT_TAG = PageType.HOME.name();
+                    getFragmentManager().beginTransaction().replace(R.id.frameContainer, PageFragmentFactory.of(PageType.HOME, null)).commit();
+                    if (UserMainActivity.bottomMenuTabLayout != null) {
+                        UserMainActivity.bottomMenuTabLayout.setVisibility(View.VISIBLE);
+                    }
                 }
+//                if (verifyInput()) {
+//
+////                    ApiManager.test(new ApiCallback(getActivity()) {
+////                        @Override
+////                        public void onSuccess(String responseBody) {
+////
+////                        }
+////
+////                        @Override
+////                        public void onFail(Exception error) {
+////
+////                        }
+////                    });
+//
+////                    AuthService.signInWithEmailAndPassword(mail, password, getFragmentManager(), null);
+//                }
                 break;
             case R.id.toVerifySMSBtn:
 //                UserMainActivity.bottomMenuTabLayout.setVisibility(View.VISIBLE);

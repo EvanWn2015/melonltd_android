@@ -6,7 +6,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import com.melonltd.naberc.R;
@@ -57,7 +56,7 @@ public class SetUpFragment extends AbsPageFragment implements View.OnClickListen
     }
 
     private void getViews(View v) {
-        toAccountEdit = v.findViewById(R.id.toAccountEdit);
+        toAccountEdit = v.findViewById(R.id.toSellerEdit);
         toAboutUsText = v.findViewById(R.id.toAboutUsText);
         toHelpText = v.findViewById(R.id.toHelpText);
         toTeachingText = v.findViewById(R.id.toTeachingText);
@@ -107,7 +106,7 @@ public class SetUpFragment extends AbsPageFragment implements View.OnClickListen
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.toAccountEdit:
+            case R.id.toSellerEdit:
                 Log.d(TAG, "toAccoutEdit");
                 toAccountDetail(1);
                 break;

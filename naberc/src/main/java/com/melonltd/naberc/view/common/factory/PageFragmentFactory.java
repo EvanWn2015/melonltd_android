@@ -3,6 +3,7 @@ package com.melonltd.naberc.view.common.factory;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 
+import com.melonltd.naberc.view.seller.page.impl.SellerDetailFragment;
 import com.melonltd.naberc.view.seller.page.impl.SellerMenuEditFragment;
 import com.melonltd.naberc.view.seller.page.impl.SellerOrderLogsDetailFragment;
 import com.melonltd.naberc.view.seller.page.impl.SellerOrdersFragment;
@@ -94,6 +95,8 @@ public class PageFragmentFactory {
                 return new SellerMenuEditFragment().getInstance(bundle);
             case SELLER_SET_UP:
                 return new SellerSetUpFragment().getInstance(bundle);
+            case SELLER_DETAIL:
+                return new SellerDetailFragment().getInstance(bundle);
             default:
                 return new HomeFragment().getInstance(bundle);
         }

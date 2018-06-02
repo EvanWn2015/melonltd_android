@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -153,6 +154,8 @@ public class RegisteredFragment extends AbsPageFragment implements View.OnClickL
     }
 
     private void showOptIdentity() {
+        InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(identityEditText.getWindowToken(), 0);
         mHandler.sendEmptyMessage(MSG_LOAD_DATA);
         if (isLoaded) {
             OptionsPickerView pvOptions = new OptionsPickerBuilder(getContext(), new OnOptionsSelectListener() {
@@ -175,6 +178,9 @@ public class RegisteredFragment extends AbsPageFragment implements View.OnClickL
 
 
     private void showBirthday() {
+        InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+//        imm.toggleSoftInput(1, InputMethodManager.HIDE_NOT_ALWAYS);
+        imm.hideSoftInputFromWindow(birthdayEditText.getWindowToken(), 0);
         Calendar selectedDate = Calendar.getInstance();
         Calendar startDate = Calendar.getInstance();
         startDate.set(1948, 1, 1);

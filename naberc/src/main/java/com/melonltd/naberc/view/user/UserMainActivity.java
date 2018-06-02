@@ -1,6 +1,7 @@
 package com.melonltd.naberc.view.user;
 
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -24,7 +25,13 @@ import com.melonltd.naberc.view.common.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.common.type.PageType;
 import com.melonltd.naberc.view.seller.SellerMainActivity;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.Instant;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.TimeZone;
 
 //import com.youth.banner.loader.ImageLoader;
 
@@ -88,7 +95,11 @@ public class UserMainActivity extends BaseCore implements View.OnClickListener, 
     @Override
     protected void onResume() {
         super.onResume();
-
+//        Date currentTime = new Date();
+//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:SS.sss'Z'");
+////        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
+//
+//        Log.d(TAG, "UTC time: " + sdf.format(currentTime));
         // TODO Seller page
 //        startActivity(new Intent(context, SellerMainActivity.class));
         // TODO user page
