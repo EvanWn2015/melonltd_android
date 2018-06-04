@@ -20,6 +20,7 @@ import com.melonltd.naberc.R;
 import com.melonltd.naberc.model.helper.okhttp.ApiCallback;
 import com.melonltd.naberc.model.helper.okhttp.ApiManager;
 import com.melonltd.naberc.view.common.abs.AbsPageFragment;
+import com.melonltd.naberc.view.seller.SellerMainActivity;
 import com.melonltd.naberc.view.seller.adapter.SearchAdapter;
 
 import java.util.List;
@@ -71,8 +72,15 @@ public class SellerSearchFragment extends AbsPageFragment {
             getViews(v);
             setListener();
             container.setTag(R.id.seller_search_main_page, v);
+            return v;
         }
         return (View) container.getTag(R.id.seller_search_main_page);
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        SellerMainActivity.toolbar.setNavigationIcon(null);
     }
 
     private void getViews(View v) {

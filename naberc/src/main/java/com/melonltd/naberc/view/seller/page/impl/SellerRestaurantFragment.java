@@ -106,6 +106,7 @@ public class SellerRestaurantFragment extends AbsPageFragment {
     @Override
     public void onResume() {
         super.onResume();
+        SellerMainActivity.toolbar.setNavigationIcon(null);
         for (int i = 0; i < 10; i++) {
             listData.add("test data : " + i);
         }

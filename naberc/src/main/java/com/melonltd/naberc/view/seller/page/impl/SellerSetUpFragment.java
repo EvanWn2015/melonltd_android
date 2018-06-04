@@ -14,6 +14,7 @@ import com.melonltd.naberc.view.common.BaseCore;
 import com.melonltd.naberc.view.common.abs.AbsPageFragment;
 import com.melonltd.naberc.view.common.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.common.type.PageType;
+import com.melonltd.naberc.view.seller.SellerMainActivity;
 
 public class SellerSetUpFragment extends AbsPageFragment implements View.OnClickListener {
     private static final String TAG = SellerSetUpFragment.class.getSimpleName();
@@ -69,7 +70,8 @@ public class SellerSetUpFragment extends AbsPageFragment implements View.OnClick
     @Override
     public void onResume() {
         super.onResume();
-        if (TO_SELLER_DETAIL_INDEX > 0){
+        SellerMainActivity.toolbar.setNavigationIcon(null);
+        if (TO_SELLER_DETAIL_INDEX > 0) {
             toSellerDetail(TO_SELLER_DETAIL_INDEX);
         }
     }

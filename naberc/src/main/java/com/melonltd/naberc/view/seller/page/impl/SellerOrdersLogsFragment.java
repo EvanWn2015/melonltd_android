@@ -72,6 +72,7 @@ public class SellerOrdersLogsFragment extends AbsPageFragment implements View.On
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        SellerMainActivity.toolbar.setNavigationIcon(null);
         if (container.getTag(R.id.seller_orders_logs_page) == null) {
             View v = inflater.inflate(R.layout.fragment_seller_orders_logs, container, false);
             getViews(v);

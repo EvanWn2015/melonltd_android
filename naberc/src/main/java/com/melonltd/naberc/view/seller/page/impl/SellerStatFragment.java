@@ -14,6 +14,7 @@ import com.melonltd.naberc.view.common.BaseCore;
 import com.melonltd.naberc.view.common.abs.AbsPageFragment;
 import com.melonltd.naberc.view.common.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.common.type.PageType;
+import com.melonltd.naberc.view.seller.SellerMainActivity;
 
 /**
  * A simple {@link Fragment} subclass.
@@ -71,7 +72,7 @@ public class SellerStatFragment extends AbsPageFragment implements View.OnClickL
     @Override
     public void onResume() {
         super.onResume();
-
+        SellerMainActivity.toolbar.setNavigationIcon(null);
         if (TO_SELLER_ORDERS_LOGS_INDEX >= 0) {
             toOrdersLogsPage();
         }

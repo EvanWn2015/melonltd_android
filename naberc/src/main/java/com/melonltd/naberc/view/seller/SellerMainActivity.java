@@ -59,13 +59,12 @@ public class SellerMainActivity extends BaseCore implements TabLayout.OnTabSelec
         for (int i = 0; i < 20; i++) {
             list.add((i + 1) * 30 + "~" + (1 + i) * 10);
         }
+
         adapter = new DateSelectAdapter(this, list, this);
         final LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         sellerRecyclerView.setLayoutManager(layoutManager);
         sellerRecyclerView.setAdapter(adapter);
-
-
 
         AbsPageFragment fragment = null;
         FRAGMENT_TAG = PageType.SELLER_SEARCH.name();
@@ -168,6 +167,13 @@ public class SellerMainActivity extends BaseCore implements TabLayout.OnTabSelec
 
     @Override
     public void onLayoutChange(View view, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
+
+//        if (!PageType.SELLER_ORDERS.name().equals(BaseCore.FRAGMENT_TAG)) {
+//            toolbar.setNavigationIcon(defualtIcon);
+//        } else {
+//            toolbar.setNavigationIcon(null);
+//        }
+
         int position = PageType.equalsPositionByName(FRAGMENT_TAG);
         for (int index = 0; index < tabLayout.getTabCount(); index++) {
             onTabUnselected(tabLayout.getTabAt(index));

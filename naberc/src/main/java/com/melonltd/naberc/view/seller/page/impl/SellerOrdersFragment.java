@@ -23,6 +23,7 @@ import com.melonltd.naberc.R;
 import com.melonltd.naberc.model.helper.okhttp.ApiCallback;
 import com.melonltd.naberc.model.helper.okhttp.ApiManager;
 import com.melonltd.naberc.view.common.abs.AbsPageFragment;
+import com.melonltd.naberc.view.seller.SellerMainActivity;
 import com.melonltd.naberc.view.seller.adapter.SellerOrdersAdapter;
 
 import java.text.SimpleDateFormat;
@@ -75,15 +76,16 @@ public class SellerOrdersFragment extends AbsPageFragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        SellerMainActivity.navigationIconDisplay(false, null);
         if (container.getTag(R.id.seller_orders_main_page) == null) {
             View v = inflater.inflate(R.layout.fragment_seller_orders, container, false);
             getViews(v);
             setListener();
             container.setTag(R.id.seller_orders_main_page, v);
             return v;
-        } else {
-            return (View) container.getTag(R.id.seller_orders_main_page);
         }
+        return (View) container.getTag(R.id.seller_orders_main_page);
+
     }
 
     @Override
