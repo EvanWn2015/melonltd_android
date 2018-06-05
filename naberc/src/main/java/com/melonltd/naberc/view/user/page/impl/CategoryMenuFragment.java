@@ -30,7 +30,7 @@ import in.srain.cube.views.ptr.PtrFrameLayout;
 
 public class CategoryMenuFragment extends AbsPageFragment {
     private static final String TAG = CategoryMenuFragment.class.getSimpleName();
-    private static CategoryMenuFragment FRAGMENT = null;
+    public static CategoryMenuFragment FRAGMENT = null;
 
     private TextView categoryNameText;
     private OnLoadLayout menuOnLoadLayout;
@@ -52,6 +52,7 @@ public class CategoryMenuFragment extends AbsPageFragment {
     public AbsPageFragment getInstance(Bundle bundle) {
         if (FRAGMENT == null) {
             FRAGMENT = new CategoryMenuFragment();
+            TO_MENU_DETAIL_INDEX = -1;
         }
         FRAGMENT.setArguments(null);
         FRAGMENT.setArguments(bundle);

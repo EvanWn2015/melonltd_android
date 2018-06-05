@@ -17,10 +17,10 @@ import com.melonltd.naberc.model.helper.okhttp.ApiManager;
 import com.melonltd.naberc.view.common.BaseCore;
 import com.melonltd.naberc.view.common.abs.AbsPageFragment;
 import com.melonltd.naberc.view.common.factory.PageFragmentFactory;
+import com.melonltd.naberc.view.common.page.impl.RestaurantFragment;
 import com.melonltd.naberc.view.common.type.PageType;
 import com.melonltd.naberc.view.customize.GlideImageLoader;
 import com.melonltd.naberc.view.customize.OnLoadLayout;
-import com.melonltd.naberc.view.user.UserMainActivity;
 import com.melonltd.naberc.view.user.adapter.RestaurantAdapter;
 import com.youth.banner.Banner;
 import com.youth.banner.listener.OnBannerListener;
@@ -34,7 +34,7 @@ import in.srain.cube.views.ptr.PtrHandler;
 
 public class HomeFragment extends AbsPageFragment {
     private static final String TAG = HomeFragment.class.getSimpleName();
-    private static HomeFragment FRAGMENT = null;
+    public static HomeFragment FRAGMENT = null;
     private OnLoadLayout contentLoadLayout;
     private ListView top30RestaurantListView;
     private RestaurantAdapter adapter;
@@ -74,9 +74,8 @@ public class HomeFragment extends AbsPageFragment {
             setListener();
             container.setTag(R.id.user_home_page, v);
             return v;
-        } else {
-            return (View) container.getTag(R.id.user_home_page);
         }
+        return (View) container.getTag(R.id.user_home_page);
     }
 
     private void getViews(View v) {

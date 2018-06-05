@@ -34,7 +34,7 @@ import java.util.List;
 
 public class SellerOrdersFragment extends AbsPageFragment {
     private static final String TAG = SellerOrdersFragment.class.getSimpleName();
-    private static SellerOrdersFragment FRAGMENT = null;
+    public static SellerOrdersFragment FRAGMENT = null;
     private TextView searchDateText;
     private TextView untreatedText, processingText, canFetchText;
     private TextView untreatedSumText, processingSumText, canFetchSumText;

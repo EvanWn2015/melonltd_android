@@ -21,10 +21,10 @@ import com.melonltd.naberc.view.seller.SellerMainActivity;
  */
 public class SellerStatFragment extends AbsPageFragment implements View.OnClickListener {
     private static final String TAG = SellerStatFragment.class.getSimpleName();
-    private static SellerStatFragment FRAGMENT = null;
+    public static SellerStatFragment FRAGMENT = null;
     public static int TO_SELLER_ORDERS_LOGS_INDEX = -1;
 
-    private TextView monthlyIncomeText;
+    private TextView finishOrderText;
 
     public SellerStatFragment() {
         // Required empty public constructor
@@ -34,6 +34,7 @@ public class SellerStatFragment extends AbsPageFragment implements View.OnClickL
     public AbsPageFragment getInstance(Bundle bundle) {
         if (FRAGMENT == null) {
             FRAGMENT = new SellerStatFragment();
+            TO_SELLER_ORDERS_LOGS_INDEX = -1;
         }
         FRAGMENT.setArguments(bundle);
         return FRAGMENT;
@@ -62,11 +63,11 @@ public class SellerStatFragment extends AbsPageFragment implements View.OnClickL
     }
 
     private void getViews(View v) {
-        monthlyIncomeText = v.findViewById(R.id.monthlyIncomeText);
+        finishOrderText = v.findViewById(R.id.finishOrderText);
     }
 
     private void setListener() {
-        monthlyIncomeText.setOnClickListener(this);
+        finishOrderText.setOnClickListener(this);
     }
 
     @Override

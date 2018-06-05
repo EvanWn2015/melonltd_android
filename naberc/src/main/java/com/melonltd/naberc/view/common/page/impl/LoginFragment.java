@@ -4,6 +4,8 @@ package com.melonltd.naberc.view.common.page.impl;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,12 +15,14 @@ import android.widget.TextView;
 
 import com.bigkoo.alertview.AlertView;
 import com.google.common.base.Strings;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.melonltd.naberc.R;
 import com.melonltd.naberc.model.helper.okhttp.ApiCallback;
 import com.melonltd.naberc.model.helper.okhttp.ApiManager;
 import com.melonltd.naberc.util.VerifyUtil;
 import com.melonltd.naberc.view.common.BaseCore;
 import com.melonltd.naberc.view.customize.LoadingBar;
+import com.melonltd.naberc.view.intro.IntroActivity;
 import com.melonltd.naberc.view.seller.SellerMainActivity;
 import com.melonltd.naberc.view.user.UserMainActivity;
 import com.melonltd.naberc.view.common.abs.AbsPageFragment;
@@ -29,7 +33,7 @@ import com.melonltd.naberc.view.common.type.PageType;
 
 public class LoginFragment extends AbsPageFragment implements View.OnClickListener {
     private static final String TAG = LoginFragment.class.getSimpleName();
-    private static LoginFragment FRAGMENT = null;
+    public static LoginFragment FRAGMENT = null;
     private EditText accountEdit, passwordEdit;
     private Button loginBtn, toVerifySMSBtn, toRegisteredSellerBtn;
     private TextView recoverPasswordText;
@@ -83,7 +87,7 @@ public class LoginFragment extends AbsPageFragment implements View.OnClickListen
     @Override
     public void onResume() {
         super.onResume();
-        UserMainActivity.bottomMenuTabLayout.setVisibility(View.GONE);
+//        UserMainActivity.bottomMenuTabLayout.setVisibility(View.GONE);
     }
 
     @Override
@@ -91,16 +95,21 @@ public class LoginFragment extends AbsPageFragment implements View.OnClickListen
         AbsPageFragment fragment = null;
         switch (v.getId()) {
             case R.id.loginBtn:
+
+                String token = FirebaseInstanceId.getInstance().getToken();
+                Log.d("FCM token" , token + "");
                 if ("1".equals(accountEdit.getText().toString())) {
-                    LoadingBar bar = new LoadingBar(getContext(), true);
                     getActivity().startActivity(new Intent(getContext(), SellerMainActivity.class));
-                    bar.hide();
+                }else if ("3".equals(accountEdit.getText().toString())){
+                    getActivity().startActivity(new Intent(getContext(), IntroActivity.class));
                 } else {
-                    BaseCore.FRAGMENT_TAG = PageType.HOME.name();
-                    getFragmentManager().beginTransaction().replace(R.id.frameContainer, PageFragmentFactory.of(PageType.HOME, null)).commit();
-                    if (UserMainActivity.bottomMenuTabLayout != null) {
-                        UserMainActivity.bottomMenuTabLayout.setVisibility(View.VISIBLE);
-                    }
+//                    BaseCore.FRAGMENT_TAG = PageType.HOME.name();
+                    getActivity().startActivity(new Intent(getContext(), UserMainActivity.class));
+
+//                    getFragmentManager().beginTransaction().replace(R.id.frameContainer, PageFragmentFactory.of(PageType.HOME, null)).commit();
+//                    if (UserMainActivity.bottomMenuTabLayout != null) {
+//                        UserMainActivity.bottomMenuTabLayout.setVisibility(View.VISIBLE);
+//                    }
                 }
 //                if (verifyInput()) {
 //
@@ -123,17 +132,17 @@ public class LoginFragment extends AbsPageFragment implements View.OnClickListen
 //                UserMainActivity.bottomMenuTabLayout.setVisibility(View.VISIBLE);
                 BaseCore.FRAGMENT_TAG = PageType.VERIFY_SMS.name();
                 fragment = PageFragmentFactory.of(PageType.VERIFY_SMS, null);
-                getFragmentManager().beginTransaction().remove(this).replace(R.id.frameContainer, fragment).addToBackStack(fragment.toString()).commit();
+                getFragmentManager().beginTransaction().remove(this).replace(R.id.baseContainer, fragment).addToBackStack(fragment.toString()).commit();
                 break;
             case R.id.toRegisteredSellerBtn:
                 BaseCore.FRAGMENT_TAG = PageType.REGISTERED_SELLER.name();
                 fragment = PageFragmentFactory.of(PageType.REGISTERED_SELLER, null);
-                getFragmentManager().beginTransaction().remove(this).replace(R.id.frameContainer, fragment).addToBackStack(fragment.toString()).commit();
+                getFragmentManager().beginTransaction().remove(this).replace(R.id.baseContainer, fragment).addToBackStack(fragment.toString()).commit();
                 break;
             case R.id.recoverPasswordText:
                 BaseCore.FRAGMENT_TAG = PageType.RECOVER_PASSWORD.name();
                 fragment = PageFragmentFactory.of(PageType.RECOVER_PASSWORD, null);
-                getFragmentManager().beginTransaction().remove(this).replace(R.id.frameContainer, fragment).addToBackStack(fragment.toString()).commit();
+                getFragmentManager().beginTransaction().remove(this).replace(R.id.baseContainer, fragment).addToBackStack(fragment.toString()).commit();
                 break;
         }
     }

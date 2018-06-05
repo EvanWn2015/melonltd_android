@@ -23,6 +23,7 @@ import com.google.common.collect.Lists;
 import com.melonltd.naberc.R;
 import com.melonltd.naberc.model.helper.okhttp.ApiCallback;
 import com.melonltd.naberc.model.helper.okhttp.ApiManager;
+import com.melonltd.naberc.view.common.BaseActivity;
 import com.melonltd.naberc.view.common.BaseCore;
 import com.melonltd.naberc.view.common.abs.AbsPageFragment;
 import com.melonltd.naberc.view.common.factory.PageFragmentFactory;
@@ -30,6 +31,7 @@ import com.melonltd.naberc.view.common.type.PageType;
 import com.melonltd.naberc.view.customize.NaberTab;
 import com.melonltd.naberc.view.customize.SwitchButton;
 import com.melonltd.naberc.view.seller.adapter.DateSelectAdapter;
+import com.melonltd.naberc.view.user.UserMainActivity;
 
 import java.util.List;
 
@@ -66,6 +68,7 @@ public class SellerMainActivity extends BaseCore implements TabLayout.OnTabSelec
         sellerRecyclerView.setLayoutManager(layoutManager);
         sellerRecyclerView.setAdapter(adapter);
 
+        removeFragment();
         AbsPageFragment fragment = null;
         FRAGMENT_TAG = PageType.SELLER_SEARCH.name();
         fragment = PageFragmentFactory.of(PageType.SELLER_SEARCH, null);
@@ -109,18 +112,6 @@ public class SellerMainActivity extends BaseCore implements TabLayout.OnTabSelec
     @Override
     protected void onResume() {
         super.onResume();
-//        AbsPageFragment fragment = null;
-//        FRAGMENT_TAG = PageType.SELLER_SEARCH.name();
-//        fragment = PageFragmentFactory.of(PageType.SELLER_SEARCH, null);
-//        fragmentManager.beginTransaction().replace(R.id.sellerFrameContainer, fragment).addToBackStack(fragment.toString()).commit();
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        Log.d(TAG, "requestCode:" + requestCode);
-        Log.d(TAG, "resultCode:" + resultCode);
     }
 
     @Override
@@ -203,5 +194,15 @@ public class SellerMainActivity extends BaseCore implements TabLayout.OnTabSelec
     @Override
     public void onCheckedChanged(SwitchButton view, boolean isChecked) {
 
+    }
+
+    public static void toLoginPage() {
+        BaseCore.FRAGMENT_TAG = PageType.LOGIN.name();
+        context.startActivity(new Intent(context, BaseActivity.class));
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 }

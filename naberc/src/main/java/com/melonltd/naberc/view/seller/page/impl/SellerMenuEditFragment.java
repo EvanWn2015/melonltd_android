@@ -42,7 +42,7 @@ import java.util.List;
 
 public class SellerMenuEditFragment extends AbsPageFragment {
     private static final String TAG = SellerMenuEditFragment.class.getSimpleName();
-    private static SellerMenuEditFragment FRAGMENT = null;
+    public static SellerMenuEditFragment FRAGMENT = null;
     private Button newDemandBtn, saveBtn;
     private ImageView menuIconImage;
     private LinearLayout editLayout;

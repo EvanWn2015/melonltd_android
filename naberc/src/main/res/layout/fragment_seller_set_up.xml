@@ -33,7 +33,6 @@
             android:layout_marginBottom="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:background="@drawable/naber_text_base_line"
             android:padding="8dp"
             android:text="帳號"
             app:layout_constraintBottom_toTopOf="@+id/textView54"
@@ -123,42 +122,42 @@
             android:background="@drawable/naber_text_base_line"
             android:padding="8dp"
             android:text="關於我們"
-            app:layout_constraintBottom_toTopOf="@+id/toHelpText"
+            app:layout_constraintBottom_toTopOf="@+id/textView62"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView58" />
 
-        <TextView
-            android:id="@+id/toHelpText"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/naber_text_base_line"
-            android:padding="8dp"
-            android:text="教學"
-            app:layout_constraintBottom_toTopOf="@+id/toTeachingText"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/toAboutUsText" />
+        <!--<TextView-->
+            <!--android:id="@+id/toHelpText"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginBottom="8dp"-->
+            <!--android:layout_marginStart="8dp"-->
+            <!--android:layout_marginTop="8dp"-->
+            <!--android:background="@drawable/naber_text_base_line"-->
+            <!--android:padding="8dp"-->
+            <!--android:text="教學"-->
+            <!--app:layout_constraintBottom_toTopOf="@+id/toTeachingText"-->
+            <!--app:layout_constraintEnd_toEndOf="parent"-->
+            <!--app:layout_constraintHorizontal_bias="0.0"-->
+            <!--app:layout_constraintStart_toStartOf="parent"-->
+            <!--app:layout_constraintTop_toBottomOf="@+id/toAboutUsText" />-->
 
-        <TextView
-            android:id="@+id/toTeachingText"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/naber_text_base_line"
-            android:padding="8dp"
-            android:text="幫助"
-            app:layout_constraintBottom_toTopOf="@+id/textView62"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/toHelpText" />
+        <!--<TextView-->
+            <!--android:id="@+id/toTeachingText"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginBottom="8dp"-->
+            <!--android:layout_marginStart="8dp"-->
+            <!--android:layout_marginTop="8dp"-->
+            <!--android:background="@drawable/naber_text_base_line"-->
+            <!--android:padding="8dp"-->
+            <!--android:text="幫助"-->
+            <!--app:layout_constraintBottom_toTopOf="@+id/textView62"-->
+            <!--app:layout_constraintEnd_toEndOf="parent"-->
+            <!--app:layout_constraintHorizontal_bias="0.0"-->
+            <!--app:layout_constraintStart_toStartOf="parent"-->
+            <!--app:layout_constraintTop_toBottomOf="@+id/toHelpText" />-->
 
         <TextView
             android:id="@+id/textView62"
@@ -173,7 +172,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/toTeachingText" />
+            app:layout_constraintTop_toBottomOf="@+id/toAboutUsText" />
 
         <View
             android:id="@+id/view2"
@@ -252,25 +251,25 @@
             app:layout_constraintEnd_toEndOf="@+id/toAboutUsText"
             app:layout_constraintTop_toTopOf="@+id/toAboutUsText" />
 
-        <ImageView
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:layout_marginEnd="8dp"
-            android:background="@drawable/naber_arrow_right"
-            app:layout_constraintBottom_toBottomOf="@+id/toHelpText"
-            app:layout_constraintEnd_toEndOf="@+id/toHelpText"
-            app:layout_constraintTop_toTopOf="@+id/toHelpText" />
+        <!--<ImageView-->
+            <!--android:layout_width="16dp"-->
+            <!--android:layout_height="16dp"-->
+            <!--android:layout_marginEnd="8dp"-->
+            <!--android:background="@drawable/naber_arrow_right"-->
+            <!--app:layout_constraintBottom_toBottomOf="@+id/toHelpText"-->
+            <!--app:layout_constraintEnd_toEndOf="@+id/toHelpText"-->
+            <!--app:layout_constraintTop_toTopOf="@+id/toHelpText" />-->
 
-        <ImageView
-            android:layout_width="16dp"
-            android:layout_height="16dp"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginTop="8dp"
-            android:background="@drawable/naber_arrow_right"
-            app:layout_constraintBottom_toBottomOf="@+id/toTeachingText"
-            app:layout_constraintEnd_toEndOf="@+id/toTeachingText"
-            app:layout_constraintTop_toTopOf="@+id/toTeachingText" />
+        <!--<ImageView-->
+            <!--android:layout_width="16dp"-->
+            <!--android:layout_height="16dp"-->
+            <!--android:layout_marginBottom="8dp"-->
+            <!--android:layout_marginEnd="8dp"-->
+            <!--android:layout_marginTop="8dp"-->
+            <!--android:background="@drawable/naber_arrow_right"-->
+            <!--app:layout_constraintBottom_toBottomOf="@+id/toTeachingText"-->
+            <!--app:layout_constraintEnd_toEndOf="@+id/toTeachingText"-->
+            <!--app:layout_constraintTop_toTopOf="@+id/toTeachingText" />-->
 
         <TextView
             android:id="@+id/textView59"

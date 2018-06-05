@@ -12,26 +12,27 @@ import com.melonltd.naberc.view.seller.page.impl.SellerCategoryListFragment;
 import com.melonltd.naberc.view.seller.page.impl.SellerRestaurantFragment;
 import com.melonltd.naberc.view.seller.page.impl.SellerSearchFragment;
 import com.melonltd.naberc.view.seller.page.impl.SellerSetUpFragment;
+import com.melonltd.naberc.view.seller.page.impl.SellerSimpleInformationFragment;
 import com.melonltd.naberc.view.seller.page.impl.SellerStatFragment;
 import com.melonltd.naberc.view.user.page.impl.CategoryMenuFragment;
 import com.melonltd.naberc.view.user.page.impl.MenuDetailFragment;
 import com.melonltd.naberc.view.user.page.impl.RestaurantDetailFragment;
-import com.melonltd.naberc.view.common.page.impl.ResetPasswordFragment;
+import com.melonltd.naberc.view.user.page.impl.ResetPasswordFragment;
 import com.melonltd.naberc.view.user.page.impl.AccountDetailFragment;
 import com.melonltd.naberc.view.user.page.impl.OrderDetailFragment;
 import com.melonltd.naberc.view.common.page.impl.RecoverPasswordFragment;
-import com.melonltd.naberc.view.user.page.impl.RegisteredSellerFragment;
+import com.melonltd.naberc.view.common.page.impl.RegisteredSellerFragment;
 import com.melonltd.naberc.view.common.abs.AbsPageFragment;
 import com.melonltd.naberc.view.user.page.impl.HistoryFragment;
 import com.melonltd.naberc.view.user.page.impl.HomeFragment;
 import com.melonltd.naberc.view.common.page.impl.LoginFragment;
 import com.melonltd.naberc.view.user.page.impl.RegisteredFragment;
-import com.melonltd.naberc.view.user.page.impl.RestaurantFragment;
+import com.melonltd.naberc.view.common.page.impl.RestaurantFragment;
 import com.melonltd.naberc.view.user.page.impl.SetUpFragment;
 import com.melonltd.naberc.view.user.page.impl.ShoppingCartFragment;
 import com.melonltd.naberc.view.user.page.impl.SimpleInformationFragment;
 import com.melonltd.naberc.view.user.page.impl.SubmitOrdersFragment;
-import com.melonltd.naberc.view.user.page.impl.VerifySMSFragment;
+import com.melonltd.naberc.view.common.page.impl.VerifySMSFragment;
 import com.melonltd.naberc.view.common.type.PageType;
 
 public class PageFragmentFactory {
@@ -95,6 +96,8 @@ public class PageFragmentFactory {
                 return new SellerMenuEditFragment().getInstance(bundle);
             case SELLER_SET_UP:
                 return new SellerSetUpFragment().getInstance(bundle);
+            case SELLER_SIMPLE_INFO:
+                return new SellerSimpleInformationFragment().getInstance(bundle);
             case SELLER_DETAIL:
                 return new SellerDetailFragment().getInstance(bundle);
             default:

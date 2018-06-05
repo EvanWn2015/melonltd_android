@@ -21,7 +21,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
             android:background="@drawable/naber_reverse_gary_button_style"
-            app:layout_constraintBottom_toTopOf="@+id/businessLayout"
+            app:layout_constraintBottom_toTopOf="@+id/Layout"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -188,7 +188,7 @@
 
 
         <LinearLayout
-            android:id="@+id/businessLayout"
+            android:id="@+id/Layout"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"
@@ -213,6 +213,17 @@
                 android:textColor="@android:color/black"
                 android:textSize="14sp"
                 android:textStyle="bold" />
+
+            <LinearLayout
+                android:id="@+id/businessLayout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="start"
+                android:gravity="start"
+                android:orientation="vertical">
+
+            </LinearLayout>
+
         </LinearLayout>
 
         <Button
@@ -225,7 +236,7 @@
             app:layout_constraintBottom_toTopOf="@+id/view12"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/businessLayout" />
+            app:layout_constraintTop_toBottomOf="@+id/Layout" />
 
         <View
             android:id="@+id/view12"

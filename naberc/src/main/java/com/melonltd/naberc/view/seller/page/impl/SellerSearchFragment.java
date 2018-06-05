@@ -30,7 +30,7 @@ import cn.bingoogolapple.refreshlayout.BGARefreshLayout;
 
 public class SellerSearchFragment extends AbsPageFragment {
     private static final String TAG = SellerSearchFragment.class.getSimpleName();
-    private static SellerSearchFragment FRAGMENT = null;
+    public static SellerSearchFragment FRAGMENT = null;
     private BGARefreshLayout searchRefreshLayout;
     private EditText phoneEditText;
     private Button phoneSearchBtn;
@@ -46,8 +46,8 @@ public class SellerSearchFragment extends AbsPageFragment {
     public AbsPageFragment getInstance(Bundle bundle) {
         if (FRAGMENT == null) {
             FRAGMENT = new SellerSearchFragment();
+            FRAGMENT.setArguments(bundle);
         }
-        FRAGMENT.setArguments(bundle);
         return FRAGMENT;
     }
 

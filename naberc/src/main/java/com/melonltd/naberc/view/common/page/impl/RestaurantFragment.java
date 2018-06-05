@@ -1,4 +1,4 @@
-package com.melonltd.naberc.view.user.page.impl;
+package com.melonltd.naberc.view.common.page.impl;
 
 
 import android.os.Bundle;
@@ -32,7 +32,7 @@ import in.srain.cube.views.ptr.PtrHandler;
 
 public class RestaurantFragment extends AbsPageFragment implements View.OnClickListener {
     private static final String TAG = RestaurantFragment.class.getSimpleName();
-    private static RestaurantFragment FRAGMENT = null;
+    public static RestaurantFragment FRAGMENT = null;
 
     private TextView filterTypeText;
     private Button filterCategoryBtn, filterAreaBtn, filterDistanceBtn;
@@ -130,7 +130,7 @@ public class RestaurantFragment extends AbsPageFragment implements View.OnClickL
                 b.putString("where", "RESTAURANT");
                 BaseCore.FRAGMENT_TAG = PageType.RESTAURANT_DETAIL.name();
                 AbsPageFragment f = PageFragmentFactory.of(PageType.RESTAURANT_DETAIL, b);
-                getFragmentManager().beginTransaction().replace(R.id.frameContainer, f).commit();
+                getFragmentManager().beginTransaction().replace(R.id.baseContainer, f).commit();
             }
         });
     }
@@ -167,7 +167,7 @@ public class RestaurantFragment extends AbsPageFragment implements View.OnClickL
 //            b.putString("where", "RESTAURANT");
             BaseCore.FRAGMENT_TAG = PageType.RESTAURANT_DETAIL.name();
             AbsPageFragment f = PageFragmentFactory.of(PageType.RESTAURANT_DETAIL, b);
-            getFragmentManager().beginTransaction().replace(R.id.frameContainer, f).commit();
+            getFragmentManager().beginTransaction().replace(R.id.baseContainer, f).commit();
 //        } else if (HOME_TO_RESTAURANT_DETAIL_INDEX >=0){
 //            Log.d(TAG, "home to this ");
         } else {

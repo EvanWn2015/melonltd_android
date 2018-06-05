@@ -36,7 +36,7 @@ import cn.bingoogolapple.refreshlayout.BGARefreshLayout;
 
 public class SellerOrdersLogsFragment extends AbsPageFragment implements View.OnClickListener {
     private static final String TAG = SellerOrdersLogsFragment.class.getSimpleName();
-    private static SellerOrdersLogsFragment FRAGMENT = null;
+    public static SellerOrdersLogsFragment FRAGMENT = null;
 
     private TextView startTimeText, endTimeText;
     private BGARefreshLayout bgaRefreshLayout;
@@ -53,6 +53,7 @@ public class SellerOrdersLogsFragment extends AbsPageFragment implements View.On
     public AbsPageFragment getInstance(Bundle bundle) {
         if (FRAGMENT == null) {
             FRAGMENT = new SellerOrdersLogsFragment();
+            TO_ORDERS_LOGS_DETAIL_INDEX = -1;
         }
         FRAGMENT.setArguments(bundle);
         return FRAGMENT;

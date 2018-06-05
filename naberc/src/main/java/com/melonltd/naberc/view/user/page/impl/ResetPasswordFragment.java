@@ -1,4 +1,4 @@
-package com.melonltd.naberc.view.common.page.impl;
+package com.melonltd.naberc.view.user.page.impl;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -10,12 +10,11 @@ import com.melonltd.naberc.R;
 import com.melonltd.naberc.view.user.UserMainActivity;
 import com.melonltd.naberc.view.common.abs.AbsPageFragment;
 import com.melonltd.naberc.view.common.factory.PageFragmentFactory;
-import com.melonltd.naberc.view.user.page.impl.AccountDetailFragment;
 import com.melonltd.naberc.view.common.type.PageType;
 
 public class ResetPasswordFragment extends AbsPageFragment {
     private static final String TAG = ResetPasswordFragment.class.getSimpleName();
-    private static ResetPasswordFragment FRAGMENT = null;
+    public static ResetPasswordFragment FRAGMENT = null;
 
     public ResetPasswordFragment() {
     }

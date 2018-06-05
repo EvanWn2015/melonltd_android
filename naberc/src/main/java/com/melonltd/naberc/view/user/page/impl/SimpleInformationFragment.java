@@ -15,7 +15,7 @@ import com.melonltd.naberc.view.common.type.PageType;
 
 public class SimpleInformationFragment extends AbsPageFragment {
     private static final String TAG = SimpleInformationFragment.class.getSimpleName();
-    private static SimpleInformationFragment FRAGMENT = null;
+    public static SimpleInformationFragment FRAGMENT = null;
 
     public SimpleInformationFragment() {
     }

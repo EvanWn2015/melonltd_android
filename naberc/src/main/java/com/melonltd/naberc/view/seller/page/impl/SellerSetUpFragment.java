@@ -18,10 +18,11 @@ import com.melonltd.naberc.view.seller.SellerMainActivity;
 
 public class SellerSetUpFragment extends AbsPageFragment implements View.OnClickListener {
     private static final String TAG = SellerSetUpFragment.class.getSimpleName();
-    private static SellerSetUpFragment FRAGMENT = null;
+    public static SellerSetUpFragment FRAGMENT = null;
 
-    private TextView toSellerEdit;
+    private TextView toSellerEdit, toAboutUsText;
     public static int TO_SELLER_DETAIL_INDEX = -1;
+    public static int TO_SELLER_SIMPLE_INFO_INDEX = -1;
 
     public SellerSetUpFragment() {
         // Required empty public constructor
@@ -31,6 +32,8 @@ public class SellerSetUpFragment extends AbsPageFragment implements View.OnClick
     public AbsPageFragment getInstance(Bundle bundle) {
         if (FRAGMENT == null) {
             FRAGMENT = new SellerSetUpFragment();
+            TO_SELLER_DETAIL_INDEX = -1;
+            TO_SELLER_SIMPLE_INFO_INDEX = -1;
         }
         FRAGMENT.setArguments(bundle);
         return FRAGMENT;
@@ -60,10 +63,12 @@ public class SellerSetUpFragment extends AbsPageFragment implements View.OnClick
 
     private void getViews(View v) {
         toSellerEdit = v.findViewById(R.id.toSellerEdit);
+        toAboutUsText = v.findViewById(R.id.toAboutUsText);
     }
 
     private void setListener() {
         toSellerEdit.setOnClickListener(this);
+        toAboutUsText.setOnClickListener(this);
     }
 
 
@@ -83,12 +88,25 @@ public class SellerSetUpFragment extends AbsPageFragment implements View.OnClick
         getFragmentManager().beginTransaction().replace(R.id.sellerFrameContainer, f).commit();
     }
 
+
+    private void toSimpleInfo(int i) {
+        Bundle b = new Bundle();
+        b.putString("user detail", "");
+        TO_SELLER_SIMPLE_INFO_INDEX = i;
+        BaseCore.FRAGMENT_TAG = PageType.SELLER_SIMPLE_INFO.name();
+        AbsPageFragment f = PageFragmentFactory.of(PageType.SELLER_SIMPLE_INFO, b);
+        getFragmentManager().beginTransaction().replace(R.id.sellerFrameContainer, f).commit();
+    }
+
     @Override
     public void onClick(View view) {
 
         switch (view.getId()) {
             case R.id.toSellerEdit:
                 toSellerDetail(1);
+                break;
+            case R.id.toAboutUsText:
+                toSimpleInfo(1);
                 break;
         }
 

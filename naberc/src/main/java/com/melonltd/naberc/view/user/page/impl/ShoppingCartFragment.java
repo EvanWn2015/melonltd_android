@@ -23,7 +23,10 @@ import com.google.common.collect.Lists;
 import com.melonltd.naberc.R;
 import com.melonltd.naberc.model.helper.okhttp.ApiCallback;
 import com.melonltd.naberc.model.helper.okhttp.ApiManager;
+import com.melonltd.naberc.view.common.BaseCore;
 import com.melonltd.naberc.view.common.abs.AbsPageFragment;
+import com.melonltd.naberc.view.common.factory.PageFragmentFactory;
+import com.melonltd.naberc.view.common.type.PageType;
 
 import java.util.List;
 
@@ -32,13 +35,14 @@ import cn.bingoogolapple.refreshlayout.BGARefreshLayout;
 
 public class ShoppingCartFragment extends AbsPageFragment {
     private static final String TAG = ShoppingCartFragment.class.getSimpleName();
-    private static ShoppingCartFragment FRAGMENT = null;
-
+    public static ShoppingCartFragment FRAGMENT = null;
 
     private BGARefreshLayout bgaRefreshLayout;
     private ShoppingCartAdapter adapter;
     private RecyclerView recyclerView;
     private List<String> listData = Lists.newArrayList();
+
+    public static int TO_SUBMIT_ORDERS_PAGE_INDEX = -1;
 
     public ShoppingCartFragment() {
     }
@@ -48,6 +52,7 @@ public class ShoppingCartFragment extends AbsPageFragment {
         if (FRAGMENT == null) {
             FRAGMENT = new ShoppingCartFragment();
             FRAGMENT.setArguments(bundle);
+            TO_SUBMIT_ORDERS_PAGE_INDEX = -1;
         }
         return FRAGMENT;
     }
@@ -155,7 +160,7 @@ public class ShoppingCartFragment extends AbsPageFragment {
     class DeleteListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
-            int index  = listData.indexOf(v.getTag());
+            int index = listData.indexOf(v.getTag());
             listData.remove(v.getTag());
             adapter.notifyItemRemoved(index);
             Log.d(TAG, v.getTag() + "");
@@ -166,7 +171,16 @@ public class ShoppingCartFragment extends AbsPageFragment {
         @Override
         public void onClick(View v) {
             Log.d(TAG, v.getTag() + "");
+            toSubmitOrdersPage(1);
         }
+    }
+
+
+    private void toSubmitOrdersPage(int i) {
+        TO_SUBMIT_ORDERS_PAGE_INDEX = i;
+        BaseCore.FRAGMENT_TAG = PageType.SUBMIT_ORDER.name();
+        AbsPageFragment f = PageFragmentFactory.of(PageType.SUBMIT_ORDER, null);
+        getFragmentManager().beginTransaction().remove(this).replace(R.id.frameContainer, f).commit();
     }
 
     class DeleteSubViewListener implements View.OnClickListener {
@@ -204,7 +218,7 @@ public class ShoppingCartFragment extends AbsPageFragment {
         @Override
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
             List<String> sublist = Lists.newArrayList();
-            for(int i=0; i<position; i++){
+            for (int i = 0; i < position; i++) {
                 sublist.add("sub" + i);
             }
 
@@ -262,7 +276,7 @@ public class ShoppingCartFragment extends AbsPageFragment {
                 private ImageButton minusBtn, addBtn, deleteBtn;
                 private TextView quantityText, priceText;
                 public int quantity = 0, price = 0;
-//                private String name = "", scope = "";
+                //                private String name = "", scope = "";
                 private View subView;
 
 
@@ -285,13 +299,15 @@ public class ShoppingCartFragment extends AbsPageFragment {
                     this.deleteBtn.setTag(o);
                     return this;
                 }
-//
+
+                //
                 private OrderSubItemHolder setName(String name) {
                     this.nameText.setText(name);
 
                     return this;
                 }
-//
+
+                //
                 private OrderSubItemHolder setScope(String scope) {
                     this.scopeText.setText(scope);
                     return this;

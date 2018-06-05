@@ -2,9 +2,10 @@ package com.melonltd.naberc.view.seller.page.impl;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.util.Log;
+import android.support.constraint.ConstraintLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,7 +18,6 @@ import android.widget.TextView;
 import com.bigkoo.alertview.AlertView;
 import com.bigkoo.alertview.OnItemClickListener;
 import com.bigkoo.pickerview.builder.OptionsPickerBuilder;
-import com.bigkoo.pickerview.listener.OnOptionsSelectChangeListener;
 import com.bigkoo.pickerview.listener.OnOptionsSelectListener;
 import com.bigkoo.pickerview.view.OptionsPickerView;
 import com.google.common.collect.Lists;
@@ -29,15 +29,15 @@ import com.melonltd.naberc.view.common.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.common.type.PageType;
 import com.melonltd.naberc.view.customize.SwitchButton;
 import com.melonltd.naberc.view.seller.SellerMainActivity;
+import com.melonltd.naberc.view.user.UserMainActivity;
 
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 public class SellerDetailFragment extends AbsPageFragment implements View.OnClickListener {
     private static final String TAG = SellerDetailFragment.class.getSimpleName();
-    private static SellerDetailFragment FRAGMENT = null;
+    public static SellerDetailFragment FRAGMENT = null;
 
     private EditText bulletinEdit;
     private Button submitBtn, logoutBtn;
@@ -88,7 +88,7 @@ public class SellerDetailFragment extends AbsPageFragment implements View.OnClic
         logoutBtn = v.findViewById(R.id.logoutBtn);
         storeStartText = v.findViewById(R.id.storeStartText);
         storeEndText = v.findViewById(R.id.storeEndText);
-        businessLayout = v.findViewById(R.id.businessLayout);
+        businessLayout = v.findViewById(R.id.Layout);
     }
 
     private void setListener() {
@@ -151,6 +151,7 @@ public class SellerDetailFragment extends AbsPageFragment implements View.OnClic
 
 
     private void builderThreeBusiness() {
+        businessLayout.removeAllViews();
         Date now = new Date();
         long day = 1000 * 60 * 60 * 24L;
         SimpleDateFormat format = new SimpleDateFormat("MM/dd");
@@ -170,19 +171,19 @@ public class SellerDetailFragment extends AbsPageFragment implements View.OnClic
     class BusinessChangeListener implements SwitchButton.OnCheckedChangeListener {
         @Override
         public void onCheckedChanged(final SwitchButton view, boolean isChecked) {
-            if (!isChecked){
+            if (!isChecked) {
                 new AlertView.Builder()
                         .setTitle("")
                         .setMessage("關閉營業時段，請先確認該日有無訂單，\n若有訂單請記得告知使用者")
                         .setContext(getContext())
                         .setStyle(AlertView.Style.Alert)
-                        .setOthers(new String[]{"確定關閉","取消"})
+                        .setOthers(new String[]{"確定關閉", "取消"})
                         .setOnItemClickListener(new OnItemClickListener() {
                             @Override
                             public void onItemClick(Object o, int position) {
-                                if (position == 0){
+                                if (position == 0) {
                                     // TODO api
-                                }else if (position == 1) {
+                                } else if (position == 1) {
                                     view.setChecked(true);
                                 }
                             }
@@ -194,6 +195,14 @@ public class SellerDetailFragment extends AbsPageFragment implements View.OnClic
         }
     }
 
+//    private void toLoginPage() {
+//        BaseCore.FRAGMENT_TAG = PageType.LOGIN.name();
+//        getFragmentManager().beginTransaction().remove(this).commit();
+//        getActivity().startActivity(new Intent(getContext(), UserMainActivity.class));
+////        getActivity().startActivity(new Intent(getContext(), UserMainActivity.class));
+////        AbsPageFragment f = PageFragmentFactory.of(PageType.LOGIN, null);
+//
+//    }
 
     @Override
     public void onClick(View view) {
@@ -201,6 +210,7 @@ public class SellerDetailFragment extends AbsPageFragment implements View.OnClic
             case R.id.submitBtn:
                 break;
             case R.id.logoutBtn:
+                SellerMainActivity.toLoginPage();
                 break;
             case R.id.storeStartText:
                 showDatePicker(R.id.storeStartText);

@@ -35,7 +35,7 @@ import com.melonltd.naberc.view.user.UserMainActivity;
 
 public class MenuDetailFragment extends AbsPageFragment implements View.OnClickListener {
     private static final String TAG = MenuDetailFragment.class.getSimpleName();
-    private static MenuDetailFragment FRAGMENT = null;
+    public static MenuDetailFragment FRAGMENT = null;
     private Button addToShopCartBtn;
     private ImageButton addBtn, minusBtn;
     private TextView totalAmountText;
@@ -60,6 +60,7 @@ public class MenuDetailFragment extends AbsPageFragment implements View.OnClickL
     public AbsPageFragment getInstance(Bundle bundle) {
         if (FRAGMENT == null) {
             FRAGMENT = new MenuDetailFragment();
+            CATEGORY_MENU_TO_THIS_INDEX = -1;
         }
         FRAGMENT.setArguments(null);
         FRAGMENT.setArguments(bundle);

@@ -1,7 +1,6 @@
 package com.melonltd.naberc.view.user;
 
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -18,26 +17,21 @@ import android.widget.TextView;
 
 import com.google.common.collect.Lists;
 import com.melonltd.naberc.R;
+import com.melonltd.naberc.view.common.BaseActivity;
 import com.melonltd.naberc.view.common.BaseCore;
-import com.melonltd.naberc.view.customize.NaberTab;
 import com.melonltd.naberc.view.common.abs.AbsPageFragment;
 import com.melonltd.naberc.view.common.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.common.type.PageType;
+import com.melonltd.naberc.view.customize.NaberTab;
 import com.melonltd.naberc.view.seller.SellerMainActivity;
 
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.time.Instant;
-import java.util.Calendar;
-import java.util.Date;
 import java.util.List;
-import java.util.TimeZone;
 
 //import com.youth.banner.loader.ImageLoader;
 
 public class UserMainActivity extends BaseCore implements View.OnClickListener, TabLayout.OnTabSelectedListener, View.OnLayoutChangeListener {
     private static final String TAG = UserMainActivity.class.getSimpleName();
-    private Context context;
+    private static Context context;
     public static Toolbar toolbar;
     public static TabLayout bottomMenuTabLayout;
     private FrameLayout frameContainer;
@@ -59,10 +53,11 @@ public class UserMainActivity extends BaseCore implements View.OnClickListener, 
         getView();
         setSupportActionBar(toolbar);
         serTab();
-
-//        if (currentUser != null) {
-////            Log.d(TAG, currentUser.getEmail());
-//        }
+        removeFragment();
+        AbsPageFragment fragment = null;
+        FRAGMENT_TAG = PageType.HOME.name();
+        fragment = PageFragmentFactory.of(PageType.HOME, null);
+        fragmentManager.beginTransaction().replace(R.id.frameContainer, fragment).addToBackStack(fragment.toString()).commit();
     }
 
     private void getView() {
@@ -75,52 +70,22 @@ public class UserMainActivity extends BaseCore implements View.OnClickListener, 
 
     private void serTab() {
         bottomMenuTabLayout.removeAllTabs();
-        // TODO icon size & text size
-        if (IS_USER) {
-            View v0 = new NaberTab(context).Builder().setIcon(R.drawable.naber_tab_home_icon).setTitle(R.string.menu_home_btn).build();
-            View v1 = new NaberTab(context).Builder().setIcon(R.drawable.naber_tab_restaurant_icon).setTitle(R.string.menu_restaurant_btn).build();
-            View v2 = new NaberTab(context).Builder().setIcon(R.drawable.naber_tab_shopping_cart_icon).setTitle(R.string.menu_shopping_cart_btn).build();
-            View v3 = new NaberTab(context).Builder().setIcon(R.drawable.naber_tab_history_icon).setTitle(R.string.menu_history_btn).build();
-            View v4 = new NaberTab(context).Builder().setIcon(R.drawable.naber_tab_set_up_icon).setTitle(R.string.menu_set_up_btn).build();
-            bottomMenuTabLayout.addTab(bottomMenuTabLayout.newTab().setCustomView(v0).setTag(R.string.menu_home_btn), false);
-            bottomMenuTabLayout.addTab(bottomMenuTabLayout.newTab().setCustomView(v1).setTag(R.string.menu_restaurant_btn), false);
-            bottomMenuTabLayout.addTab(bottomMenuTabLayout.newTab().setCustomView(v2).setTag(R.string.menu_shopping_cart_btn), false);
-            bottomMenuTabLayout.addTab(bottomMenuTabLayout.newTab().setCustomView(v3).setTag(R.string.menu_history_btn), false);
-            bottomMenuTabLayout.addTab(bottomMenuTabLayout.newTab().setCustomView(v4).setTag(R.string.menu_set_up_btn), false);
-        } else {
-            bottomMenuTabLayout.setVisibility(View.GONE);
-        }
+        View v0 = new NaberTab(context).Builder().setIcon(R.drawable.naber_tab_home_icon).setTitle(R.string.menu_home_btn).build();
+        View v1 = new NaberTab(context).Builder().setIcon(R.drawable.naber_tab_restaurant_icon).setTitle(R.string.menu_restaurant_btn).build();
+        View v2 = new NaberTab(context).Builder().setIcon(R.drawable.naber_tab_shopping_cart_icon).setTitle(R.string.menu_shopping_cart_btn).build();
+        View v3 = new NaberTab(context).Builder().setIcon(R.drawable.naber_tab_history_icon).setTitle(R.string.menu_history_btn).build();
+        View v4 = new NaberTab(context).Builder().setIcon(R.drawable.naber_tab_set_up_icon).setTitle(R.string.menu_set_up_btn).build();
+        bottomMenuTabLayout.addTab(bottomMenuTabLayout.newTab().setCustomView(v0).setTag(R.string.menu_home_btn), false);
+        bottomMenuTabLayout.addTab(bottomMenuTabLayout.newTab().setCustomView(v1).setTag(R.string.menu_restaurant_btn), false);
+        bottomMenuTabLayout.addTab(bottomMenuTabLayout.newTab().setCustomView(v2).setTag(R.string.menu_shopping_cart_btn), false);
+        bottomMenuTabLayout.addTab(bottomMenuTabLayout.newTab().setCustomView(v3).setTag(R.string.menu_history_btn), false);
+        bottomMenuTabLayout.addTab(bottomMenuTabLayout.newTab().setCustomView(v4).setTag(R.string.menu_set_up_btn), false);
     }
+
 
     @Override
     protected void onResume() {
         super.onResume();
-//        Date currentTime = new Date();
-//        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:SS.sss'Z'");
-////        sdf.setTimeZone(TimeZone.getTimeZone("UTC"));
-//
-//        Log.d(TAG, "UTC time: " + sdf.format(currentTime));
-        // TODO Seller page
-//        startActivity(new Intent(context, SellerMainActivity.class));
-        // TODO user page
-        AbsPageFragment fragment = null;
-        bottomMenuTabLayout.setVisibility(View.GONE);
-        fragment = PageFragmentFactory.of(PageType.LOGIN, null);
-        fragmentManager.beginTransaction().replace(R.id.frameContainer, fragment).addToBackStack(fragment.toString()).commit();
-
-//        if (SharedPreferencesService.isFirstUse()) {
-//            fragmentManager.beginTransaction().replace(R.id.frameContainer, new IntroFragment()).commit();
-////        }else if (BaseCore.currentUser == null){
-////            bottomMenuTabLayout.setVisibility(View.GONE);
-////            fragment = PageFragmentFactory.of(PageType.LOGIN, null);
-////            fragmentManager.beginTransaction().replace(R.id.frameContainer, fragment).commit();
-//        } else {
-//            fragment = PageFragmentFactory.of(PageType.equalsName(FRAGMENT_TAG), null);
-//            if (fragment == null) {
-//                fragment = PageFragmentFactory.of(PageType.HOME, null);
-//            }
-//            fragmentManager.beginTransaction().replace(R.id.frameContainer, fragment).commit();
-//        }
     }
 
     @Override
@@ -232,5 +197,13 @@ public class UserMainActivity extends BaseCore implements View.OnClickListener, 
             toolbar.setNavigationIcon(navigationIcon);
         }
         toolbar.setNavigationOnClickListener(listener);
+
     }
+
+    public static void toLoginPage() {
+        BaseCore.FRAGMENT_TAG = PageType.LOGIN.name();
+        context.startActivity(new Intent(context, BaseActivity.class));
+    }
+
+
 }

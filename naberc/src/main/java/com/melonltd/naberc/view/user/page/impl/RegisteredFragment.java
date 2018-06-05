@@ -48,7 +48,7 @@ import java.util.List;
 
 public class RegisteredFragment extends AbsPageFragment implements View.OnClickListener {
     private static final String TAG = RegisteredFragment.class.getSimpleName();
-    private static RegisteredFragment FRAGMENT = null;
+    public static RegisteredFragment FRAGMENT = null;
     private TextView identityEditText, birthdayEditText;
     private EditText nameEditText, addressEditText, emailEditText, passwordEditText, confirmPasswordEditText;
     private Button submitBtn, backToLoginBtn;
@@ -150,7 +150,7 @@ public class RegisteredFragment extends AbsPageFragment implements View.OnClickL
 
     private void backToLoginPage() {
         AbsPageFragment fragment = PageFragmentFactory.of(PageType.LOGIN, null);
-        getFragmentManager().beginTransaction().remove(this).replace(R.id.frameContainer, fragment).addToBackStack(fragment.toString()).commit();
+        getFragmentManager().beginTransaction().remove(this).replace(R.id.baseContainer, fragment).addToBackStack(fragment.toString()).commit();
     }
 
     private void showOptIdentity() {

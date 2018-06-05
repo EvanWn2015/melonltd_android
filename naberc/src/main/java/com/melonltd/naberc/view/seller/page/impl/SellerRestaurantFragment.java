@@ -33,7 +33,7 @@ import cn.bingoogolapple.refreshlayout.BGARefreshLayout;
 
 public class SellerRestaurantFragment extends AbsPageFragment {
     private static final String TAG = SellerRestaurantFragment.class.getSimpleName();
-    private static SellerRestaurantFragment FRAGMENT = null;
+    public static SellerRestaurantFragment FRAGMENT = null;
 
     private EditText categoryEdit;
     private Button newCategoryBtn;
@@ -50,6 +50,7 @@ public class SellerRestaurantFragment extends AbsPageFragment {
     public AbsPageFragment getInstance(Bundle bundle) {
         if (FRAGMENT == null) {
             FRAGMENT = new SellerRestaurantFragment();
+            TO_CATEGORY_LIST_PAGE_INDEX = -1;
         }
         FRAGMENT.setArguments(bundle);
         return FRAGMENT;
@@ -108,7 +109,7 @@ public class SellerRestaurantFragment extends AbsPageFragment {
         super.onResume();
         SellerMainActivity.toolbar.setNavigationIcon(null);
         for (int i = 0; i < 10; i++) {
-            listData.add("test data : " + i);
+            listData.add(i + "XX 系列");
         }
         adapter.notifyDataSetChanged();
         if (TO_CATEGORY_LIST_PAGE_INDEX >= 0) {

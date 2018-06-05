@@ -18,7 +18,7 @@ import com.melonltd.naberc.view.common.type.PageType;
 
 public class AccountDetailFragment extends AbsPageFragment implements View.OnClickListener {
     private static final String TAG = AccountDetailFragment.class.getSimpleName();
-    private static AccountDetailFragment FRAGMENT = null;
+    public static AccountDetailFragment FRAGMENT = null;
     private Button logoutBtn, toResetPasswordBtn;
     public static int TO_RESET_PASSWORD_INDEX = -1;
 
@@ -30,6 +30,7 @@ public class AccountDetailFragment extends AbsPageFragment implements View.OnCli
         if (FRAGMENT == null) {
             FRAGMENT = new AccountDetailFragment();
             FRAGMENT.setArguments(bundle);
+            TO_RESET_PASSWORD_INDEX = -1;
         }
         return FRAGMENT;
     }
@@ -105,7 +106,7 @@ public class AccountDetailFragment extends AbsPageFragment implements View.OnCli
                 ApiManager.test(new ApiCallback(getActivity()) {
                     @Override
                     public void onSuccess(String responseBody) {
-                        toLoginPage();
+                        UserMainActivity.toLoginPage();
                     }
 
                     @Override
@@ -122,15 +123,15 @@ public class AccountDetailFragment extends AbsPageFragment implements View.OnCli
     }
 
 
-    private void toLoginPage() {
-        UserMainActivity.FRAGMENT_TAG = PageType.LOGIN.name();
-        AbsPageFragment f = PageFragmentFactory.of(PageType.LOGIN, null);
-        getFragmentManager().beginTransaction().remove(this).replace(R.id.frameContainer, f).commit();
-    }
+//    private void toLoginPage() {
+//        BaseCore.FRAGMENT_TAG = PageType.LOGIN.name();
+//        AbsPageFragment f = PageFragmentFactory.of(PageType.LOGIN, null);
+//        getFragmentManager().beginTransaction().remove(this).replace(R.id.frameContainer, f).commit();
+//    }
 
     private void toResetPassword(int i) {
         TO_RESET_PASSWORD_INDEX = i;
-        UserMainActivity.FRAGMENT_TAG = PageType.RESET_PASSWORD.name();
+        BaseCore.FRAGMENT_TAG = PageType.RESET_PASSWORD.name();
         AbsPageFragment f = PageFragmentFactory.of(PageType.RESET_PASSWORD, null);
         getFragmentManager().beginTransaction().remove(this).replace(R.id.frameContainer, f).commit();
     }

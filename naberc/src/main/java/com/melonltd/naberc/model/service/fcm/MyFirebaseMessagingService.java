@@ -1,28 +1,11 @@
 package com.melonltd.naberc.model.service.fcm;
 
-import android.app.Notification;
-import android.app.NotificationChannel;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.content.Context;
-import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.media.RingtoneManager;
-import android.os.Build;
-import android.os.Bundle;
-import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
-import com.melonltd.naberc.R;
 import com.melonltd.naberc.util.Tools;
-import com.melonltd.naberc.view.user.UserMainActivity;
 
-import java.io.IOException;
-import java.net.URL;
 import java.util.Map;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
@@ -33,7 +16,9 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-        Log.d("FCM", "onMessageReceived:" + Tools.GSON.toJson(remoteMessage));
+        Log.d("FCM", "onMessageReceived:  " + remoteMessage);
+        Map<String, String> map  = remoteMessage.getData();
+        Log.d("FCM", "onMessageReceived:  " + Tools.GSON.toJson(map));
     }
 
     private void sendNotification(RemoteMessage.Notification notification, Map<String, String> data) {

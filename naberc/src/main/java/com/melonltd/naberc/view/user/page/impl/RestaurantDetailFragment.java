@@ -17,20 +17,20 @@ import com.melonltd.naberc.model.helper.okhttp.ApiManager;
 import com.melonltd.naberc.view.common.BaseCore;
 import com.melonltd.naberc.view.common.abs.AbsPageFragment;
 import com.melonltd.naberc.view.common.factory.PageFragmentFactory;
+import com.melonltd.naberc.view.common.page.impl.RestaurantFragment;
 import com.melonltd.naberc.view.common.type.PageType;
 import com.melonltd.naberc.view.customize.OnLoadLayout;
 import com.melonltd.naberc.view.user.UserMainActivity;
 import com.melonltd.naberc.view.user.adapter.CategoryAdapter;
 
 import java.util.List;
-import java.util.Random;
 
 import in.srain.cube.views.ptr.PtrDefaultHandler;
 import in.srain.cube.views.ptr.PtrFrameLayout;
 
 public class RestaurantDetailFragment extends AbsPageFragment {
     private static final String TAG = RestaurantDetailFragment.class.getSimpleName();
-    private static RestaurantDetailFragment FRAGMENT = null;
+    public static RestaurantDetailFragment FRAGMENT = null;
     private ImageView restaurantBackgroundImage, restaurantIcon;
     private TextView restaurantBulletinText, restaurantNameText, businessTimeText, addressText, distanceText;
     private OnLoadLayout categoryOnLoadLayout;
@@ -52,6 +52,7 @@ public class RestaurantDetailFragment extends AbsPageFragment {
     public AbsPageFragment getInstance(Bundle bundle) {
         if (FRAGMENT == null) {
             FRAGMENT = new RestaurantDetailFragment();
+            TO_CATEGORY_MENU_INDEX = -1;
         }
         FRAGMENT.setArguments(null);
         FRAGMENT.setArguments(bundle);

@@ -14,18 +14,54 @@ import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 
-//import com.google.firebase.auth.FirebaseAuth;
-//import com.google.firebase.auth.FirebaseUser;
+import com.google.common.collect.Lists;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.melonltd.naberc.R;
 import com.melonltd.naberc.model.preferences.SharedPreferencesService;
 import com.melonltd.naberc.util.Tools;
+import com.melonltd.naberc.view.common.abs.AbsPageFragment;
+import com.melonltd.naberc.view.common.intf.PageFragment;
+import com.melonltd.naberc.view.common.page.impl.LoginFragment;
+import com.melonltd.naberc.view.common.page.impl.RecoverPasswordFragment;
+import com.melonltd.naberc.view.common.page.impl.RegisteredSellerFragment;
+import com.melonltd.naberc.view.common.page.impl.RestaurantFragment;
+import com.melonltd.naberc.view.common.page.impl.VerifySMSFragment;
 import com.melonltd.naberc.view.common.type.PageType;
+import com.melonltd.naberc.view.seller.page.impl.SellerCategoryListFragment;
+import com.melonltd.naberc.view.seller.page.impl.SellerDetailFragment;
+import com.melonltd.naberc.view.seller.page.impl.SellerMenuEditFragment;
+import com.melonltd.naberc.view.seller.page.impl.SellerOrderLogsDetailFragment;
+import com.melonltd.naberc.view.seller.page.impl.SellerOrdersFragment;
+import com.melonltd.naberc.view.seller.page.impl.SellerOrdersLogsFragment;
+import com.melonltd.naberc.view.seller.page.impl.SellerRestaurantFragment;
+import com.melonltd.naberc.view.seller.page.impl.SellerSearchFragment;
+import com.melonltd.naberc.view.seller.page.impl.SellerSetUpFragment;
+import com.melonltd.naberc.view.seller.page.impl.SellerSimpleInformationFragment;
+import com.melonltd.naberc.view.seller.page.impl.SellerStatFragment;
+import com.melonltd.naberc.view.user.page.impl.AccountDetailFragment;
+import com.melonltd.naberc.view.user.page.impl.CategoryMenuFragment;
+import com.melonltd.naberc.view.user.page.impl.HistoryFragment;
+import com.melonltd.naberc.view.user.page.impl.HomeFragment;
+import com.melonltd.naberc.view.user.page.impl.MenuDetailFragment;
+import com.melonltd.naberc.view.user.page.impl.OrderDetailFragment;
+import com.melonltd.naberc.view.user.page.impl.RegisteredFragment;
+import com.melonltd.naberc.view.user.page.impl.ResetPasswordFragment;
+import com.melonltd.naberc.view.user.page.impl.RestaurantDetailFragment;
+import com.melonltd.naberc.view.user.page.impl.SetUpFragment;
+import com.melonltd.naberc.view.user.page.impl.ShoppingCartFragment;
+import com.melonltd.naberc.view.user.page.impl.SimpleInformationFragment;
+import com.melonltd.naberc.view.user.page.impl.SubmitOrdersFragment;
+
+import java.util.List;
+
+//import com.google.firebase.auth.FirebaseAuth;
+//import com.google.firebase.auth.FirebaseUser;
 
 public abstract class BaseCore extends AppCompatActivity implements LocationListener {
     private static final String TAG = BaseCore.class.getSimpleName();
@@ -126,27 +162,9 @@ public abstract class BaseCore extends AppCompatActivity implements LocationList
             Log.d(TAG, "no NETWORK? ???");
         } else {
             // TODO check google service version
-            // Tools.GoogleVersion.checkVersion(context, this);
+//            Tools.GoogleVersion.checkVersion(context, this);
         }
 
-//        GoogleApiAvailability googleAPI = GoogleApiAvailability.getInstance();
-//        int result = googleAPI.isGooglePlayServicesAvailable(this);
-//        if (result != ConnectionResult.SUCCESS) {
-//            if (googleAPI.isUserResolvableError(result)) {
-//                Dialog dialog = googleAPI.getErrorDialog(this, result, 9000);
-//                dialog.setCanceledOnTouchOutside(false);
-//                dialog.setOnKeyListener(new DialogInterface.OnKeyListener() {
-//                    @Override
-//                    public boolean onKey(DialogInterface dialogInterface, int i, KeyEvent keyEvent) {
-//                        if (i == KeyEvent.KEYCODE_BACK) {
-//                            return true;
-//                        }
-//                        return false;
-//                    }
-//                });
-//                dialog.show();
-//            }
-//        }
     }
 
 
@@ -227,6 +245,44 @@ public abstract class BaseCore extends AppCompatActivity implements LocationList
             return true;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    public void removeFragment(){
+        LoginFragment.FRAGMENT = null;
+        RecoverPasswordFragment.FRAGMENT = null;
+        RegisteredFragment.FRAGMENT = null;
+        VerifySMSFragment.FRAGMENT = null;
+        RegisteredSellerFragment.FRAGMENT = null;
+        HomeFragment.FRAGMENT = null;
+        RestaurantFragment.FRAGMENT = null;
+        RestaurantDetailFragment.FRAGMENT = null;
+        CategoryMenuFragment.FRAGMENT = null;
+        MenuDetailFragment.FRAGMENT = null;
+        ShoppingCartFragment.FRAGMENT = null;
+        SubmitOrdersFragment.FRAGMENT = null;
+        HistoryFragment.FRAGMENT = null;
+        OrderDetailFragment.FRAGMENT = null;
+        SetUpFragment.FRAGMENT = null;
+        AccountDetailFragment.FRAGMENT = null;
+        SimpleInformationFragment.FRAGMENT = null;
+        ResetPasswordFragment.FRAGMENT = null;
+        SellerSearchFragment.FRAGMENT = null;
+        SellerOrdersFragment.FRAGMENT = null;
+        SellerStatFragment.FRAGMENT = null;
+        SellerOrdersLogsFragment.FRAGMENT = null;
+        SellerOrderLogsDetailFragment.FRAGMENT = null;
+        SellerRestaurantFragment.FRAGMENT = null;
+        SellerCategoryListFragment.FRAGMENT = null;
+        SellerMenuEditFragment.FRAGMENT = null;
+        SellerSetUpFragment.FRAGMENT = null;
+        SellerDetailFragment.FRAGMENT = null;
+        SellerSimpleInformationFragment.FRAGMENT = null;
+        for (Fragment fragment : fragmentManager.getFragments()) {
+            Log.d(TAG, fragment + "");
+            if (fragment instanceof AbsPageFragment) {
+                fragmentManager.beginTransaction().remove(fragment).commit();
+            }
+        }
     }
 
 }

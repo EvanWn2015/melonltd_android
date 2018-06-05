@@ -46,7 +46,7 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
     public void onBindViewHolder(@NonNull MenuAdapter.ViewHolder holder, int position) {
 
         holder.itemIconImageView.setImageURI(Uri.parse("http://zipotesrestaurant.com/images-mexican-salvadorean-restaurant-redwood_city/slides/zipotes_mexican_salvadorean_20.jpg"));
-        holder.nameText.setText("Menu Name " + position);
+        holder.nameText.setText(listData.get(position));
         holder.menuSwitch.setTag(listData.get(position));
         holder.deleteBtn.setTag(listData.get(position));
         holder.editBtn.setTag(listData.get(position));

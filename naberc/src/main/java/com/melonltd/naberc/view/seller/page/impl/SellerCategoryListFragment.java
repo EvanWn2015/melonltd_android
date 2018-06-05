@@ -33,7 +33,7 @@ import cn.bingoogolapple.refreshlayout.BGARefreshLayout;
 
 public class SellerCategoryListFragment extends AbsPageFragment implements View.OnClickListener {
     private static final String TAG = SellerCategoryListFragment.class.getSimpleName();
-    private static SellerCategoryListFragment FRAGMENT = null;
+    public static SellerCategoryListFragment FRAGMENT = null;
 
     private TextView categoryNameText;
     private Button newMenuBtn;
@@ -52,6 +52,7 @@ public class SellerCategoryListFragment extends AbsPageFragment implements View.
     public AbsPageFragment getInstance(Bundle bundle) {
         if (FRAGMENT == null) {
             FRAGMENT = new SellerCategoryListFragment();
+            TO_MENU_EDIT_PAGE_INDEX =-1;
         }
         FRAGMENT.setArguments(bundle);
         return FRAGMENT;

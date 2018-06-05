@@ -21,7 +21,7 @@ import com.melonltd.naberc.view.common.type.PageType;
  */
 public class OrderDetailFragment extends AbsPageFragment {
     private static final String TAG = OrderDetailFragment.class.getSimpleName();
-    private static OrderDetailFragment FRAGMENT = null;
+    public static OrderDetailFragment FRAGMENT = null;
 
 
     public OrderDetailFragment() {

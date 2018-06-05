@@ -20,7 +20,11 @@ import com.bigkoo.pickerview.view.TimePickerView;
 import com.melonltd.naberc.R;
 import com.melonltd.naberc.model.helper.okhttp.ApiCallback;
 import com.melonltd.naberc.model.helper.okhttp.ApiManager;
+import com.melonltd.naberc.view.common.BaseCore;
 import com.melonltd.naberc.view.common.abs.AbsPageFragment;
+import com.melonltd.naberc.view.common.factory.PageFragmentFactory;
+import com.melonltd.naberc.view.common.type.PageType;
+import com.melonltd.naberc.view.user.UserMainActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -29,7 +33,7 @@ import java.util.Date;
 
 public class SubmitOrdersFragment extends AbsPageFragment implements View.OnClickListener {
     private static final String TAG = SubmitOrdersFragment.class.getSimpleName();
-    private static SubmitOrdersFragment FRAGMENT = null;
+    public static SubmitOrdersFragment FRAGMENT = null;
     private TextView selectDateText, userNameText, userPhoneNumberText, ordersPriceText, ordersBonusText;
     private EditText remarkText;
     private Button submitOrdersBtn;
@@ -80,10 +84,37 @@ public class SubmitOrdersFragment extends AbsPageFragment implements View.OnClic
         submitOrdersBtn.setOnClickListener(this);
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        if (UserMainActivity.toolbar != null) {
+            UserMainActivity.navigationIconDisplay(true, new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    backToShoppingCartPage();
+                    UserMainActivity.navigationIconDisplay(false, null);
+                }
+            });
+        }
+    }
+
+    private void backToShoppingCartPage() {
+        BaseCore.FRAGMENT_TAG = PageType.SHOPPING_CART.name();
+        ShoppingCartFragment.TO_SUBMIT_ORDERS_PAGE_INDEX = -1;
+        AbsPageFragment f = PageFragmentFactory.of(PageType.SHOPPING_CART, null);
+        getFragmentManager().beginTransaction().remove(this).replace(R.id.frameContainer, f).commit();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        UserMainActivity.navigationIconDisplay(false, null);
+    }
+
 
     private void showTimePicker() {
         long minutes_20 = 1000 * 60 * 20L;
-        long day_3 = 1000 * 60 * 60 * 24 * 3L;
+        long day_3 = 1000 * 60 * 60 * 24 * 2L;
         Calendar now = Calendar.getInstance();
         Calendar startDate = Calendar.getInstance();
         startDate.setTimeInMillis(now.getTime().getTime() + minutes_20);
@@ -97,17 +128,17 @@ public class SubmitOrdersFragment extends AbsPageFragment implements View.OnClic
                 selectDateText.setText(new SimpleDateFormat("yyyy-MM-dd hh:mm").format(date));
             }
         })
-                .setType(new boolean[]{true, true, true, false, false, false})//"year","month","day","hours","minutes","seconds "
-                .setTitleSize(20)//标题文字大小
-                .setOutSideCancelable(true)//点击屏幕，点在控件外部范围时，是否取消显示
-                .isCyclic(false)//是否循环滚动
+                .setType(new boolean[]{true, true, true, true, true, false})//"year","month","day","hours","minutes","seconds "
+                .setTitleSize(20)
+                .setOutSideCancelable(true)
+                .isCyclic(false)
                 .setTitleBgColor(getResources().getColor(R.color.naber_dividing_line_gray))
                 .setCancelColor(getResources().getColor(R.color.naber_dividing_gray))
                 .setSubmitColor(getResources().getColor(R.color.naber_dividing_gray))
                 .setDate(startDate)
-                .setRangDate(startDate, endDate)//起始终止年月日设定
-                .isCenterLabel(false) //是否只显示中间选中项的label文字，false则每项item全部都带有label。
-                .isDialog(false)//是否显示为对话框样式
+                .setRangDate(startDate, endDate)
+                .isCenterLabel(false)
+                .isDialog(false)
                 .build();
         tp.show();
 
@@ -181,15 +212,6 @@ public class SubmitOrdersFragment extends AbsPageFragment implements View.OnClic
                 .build().show();
     }
 
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    @Override
-    public void onStop() {
-        super.onStop();
-    }
 
     @Override
     public void onDestroy() {

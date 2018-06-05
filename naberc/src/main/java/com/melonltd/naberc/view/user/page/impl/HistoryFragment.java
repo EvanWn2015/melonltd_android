@@ -26,7 +26,7 @@ import in.srain.cube.views.ptr.PtrFrameLayout;
 
 public class HistoryFragment extends AbsPageFragment {
     private static final String TAG = HomeFragment.class.getSimpleName();
-    private static HistoryFragment FRAGMENT = null;
+    public static HistoryFragment FRAGMENT = null;
     private OnLoadLayout historyOnLoadLayout;
     private HistoryAdapter adapter;
     private ListView historyListView;
@@ -41,6 +41,7 @@ public class HistoryFragment extends AbsPageFragment {
         if (FRAGMENT == null) {
             FRAGMENT = new HistoryFragment();
             FRAGMENT.setArguments(bundle);
+            TO_ORDER_DETAIL_INDEX = -1;
         }
         return FRAGMENT;
     }

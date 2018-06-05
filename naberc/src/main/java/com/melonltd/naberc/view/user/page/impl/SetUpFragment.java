@@ -18,7 +18,7 @@ import com.melonltd.naberc.view.customize.SwitchButton;
 
 public class SetUpFragment extends AbsPageFragment implements View.OnClickListener {
     private static final String TAG = HomeFragment.class.getSimpleName();
-    private static SetUpFragment FRAGMENT = null;
+    public static SetUpFragment FRAGMENT = null;
     private TextView accountNumberText, dividendText;
     private TextView toAccountEdit, toAboutUsText, toHelpText, toTeachingText;
     private SwitchButton soundSwitch, shakeSwitch;
@@ -33,6 +33,8 @@ public class SetUpFragment extends AbsPageFragment implements View.OnClickListen
         if (FRAGMENT == null) {
             FRAGMENT = new SetUpFragment();
             FRAGMENT.setArguments(bundle);
+            TO_ACCOUNT_DETAIL_INDEX = -1;
+            TO_SIMPLE_INFO_INDEX = -1;
         }
         return FRAGMENT;
     }

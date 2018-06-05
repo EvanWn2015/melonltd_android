@@ -73,7 +73,7 @@
         android:textColor="@android:color/white"
         android:textSize="12sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/textView97"
+        app:layout_constraintBottom_toTopOf="@+id/finishOrderText "
         app:layout_constraintEnd_toEndOf="@+id/textView92"
         app:layout_constraintStart_toEndOf="@+id/textView93"
         app:layout_constraintTop_toBottomOf="@+id/textView92" />
@@ -108,7 +108,7 @@
         android:textSize="12sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/textView103"
-        app:layout_constraintEnd_toStartOf="@+id/textView97"
+        app:layout_constraintEnd_toStartOf="@+id/finishOrderText "
         app:layout_constraintStart_toStartOf="@+id/textView93"
         app:layout_constraintTop_toBottomOf="@+id/textView93" />
 
@@ -126,7 +126,7 @@
         app:layout_constraintStart_toStartOf="@+id/textView96" />
 
     <TextView
-        android:id="@+id/textView97"
+        android:id="@+id/finishOrderText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="16dp"
@@ -155,9 +155,9 @@
         android:textColor="@android:color/background_light"
         android:textSize="22sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toBottomOf="@+id/textView97"
-        app:layout_constraintEnd_toEndOf="@+id/textView97"
-        app:layout_constraintStart_toStartOf="@+id/textView97" />
+        app:layout_constraintBottom_toBottomOf="@+id/finishOrderText"
+        app:layout_constraintEnd_toEndOf="@+id/finishOrderText"
+        app:layout_constraintStart_toStartOf="@+id/finishOrderText" />
 
     <TextView
         android:id="@+id/textView103"

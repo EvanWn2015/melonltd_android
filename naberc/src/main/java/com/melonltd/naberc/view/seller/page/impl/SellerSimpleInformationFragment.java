@@ -1,8 +1,6 @@
 package com.melonltd.naberc.view.seller.page.impl;
 
-
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,18 +12,19 @@ import com.melonltd.naberc.view.common.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.common.type.PageType;
 import com.melonltd.naberc.view.seller.SellerMainActivity;
 
+public class SellerSimpleInformationFragment extends AbsPageFragment {
+    private static final String TAG = SellerSimpleInformationFragment.class.getSimpleName();
+    public static SellerSimpleInformationFragment FRAGMENT = null;
 
-public class SellerOrderLogsDetailFragment extends AbsPageFragment {
-    private static final String TAG = SellerOrderLogsDetailFragment.class.getSimpleName();
-    public static SellerOrderLogsDetailFragment FRAGMENT = null;
 
-    public SellerOrderLogsDetailFragment() {
+    public SellerSimpleInformationFragment() {
+        // Required empty public constructor
     }
 
     @Override
     public AbsPageFragment getInstance(Bundle bundle) {
         if (FRAGMENT == null) {
-            FRAGMENT = new SellerOrderLogsDetailFragment();
+            FRAGMENT = new SellerSimpleInformationFragment();
         }
         FRAGMENT.setArguments(bundle);
         return FRAGMENT;
@@ -33,26 +32,15 @@ public class SellerOrderLogsDetailFragment extends AbsPageFragment {
 
     @Override
     public AbsPageFragment newInstance(Object... o) {
-        return new SellerOrderLogsDetailFragment();
+        return new SellerSimpleInformationFragment();
     }
 
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        return inflater.inflate(R.layout.fragment_seller_simple_information, container, false);
     }
 
-    @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {// Inflate the layout for this fragment
-
-        if (container.getTag(R.id.seller_order_logs_detail_page) == null) {
-            View v = inflater.inflate(R.layout.fragment_seller_order_logs_detail, container, false);
-            // getView
-            container.setTag(R.id.seller_order_logs_detail_page, v);
-            return v;
-        }
-        return (View) container.getTag(R.id.seller_order_logs_detail_page);
-    }
 
     @Override
     public void onResume() {
@@ -61,7 +49,7 @@ public class SellerOrderLogsDetailFragment extends AbsPageFragment {
             SellerMainActivity.navigationIconDisplay(true, new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    backToSellerOrdersLogsPage();
+                    backToSellerSetUpPage();
                     SellerMainActivity.navigationIconDisplay(false, null);
                 }
             });
@@ -72,13 +60,12 @@ public class SellerOrderLogsDetailFragment extends AbsPageFragment {
     public void onStop() {
         super.onStop();
         SellerMainActivity.navigationIconDisplay(false, null);
-
     }
 
-    private void backToSellerOrdersLogsPage(){
-        BaseCore.FRAGMENT_TAG = PageType.SELLER_ORDERS_LOGS.name();
-        SellerOrdersLogsFragment.TO_ORDERS_LOGS_DETAIL_INDEX = -1;
-        AbsPageFragment f = PageFragmentFactory.of(PageType.SELLER_ORDERS_LOGS, null);
+    private void backToSellerSetUpPage() {
+        BaseCore.FRAGMENT_TAG = PageType.SELLER_SET_UP.name();
+        SellerSetUpFragment.TO_SELLER_SIMPLE_INFO_INDEX = -1;
+        AbsPageFragment f = PageFragmentFactory.of(PageType.SELLER_SET_UP, null);
         getFragmentManager().beginTransaction().remove(this).replace(R.id.sellerFrameContainer, f).commit();
     }
 }

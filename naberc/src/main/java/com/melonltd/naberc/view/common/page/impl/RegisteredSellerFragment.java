@@ -1,4 +1,4 @@
-package com.melonltd.naberc.view.user.page.impl;
+package com.melonltd.naberc.view.common.page.impl;
 
 
 import android.os.Bundle;
@@ -26,7 +26,7 @@ import com.melonltd.naberc.view.common.type.PageType;
  */
 public class RegisteredSellerFragment extends AbsPageFragment implements View.OnClickListener {
     private static final String TAG = RegisteredSellerFragment.class.getSimpleName();
-    private static RegisteredSellerFragment FRAGMENT = null;
+    public static RegisteredSellerFragment FRAGMENT = null;
     private EditText nameEdit, addressEdit, contactPersonEdit, contactPhoneEdit;
     private Button submitBun, backToLoginBtn;
 
@@ -136,7 +136,7 @@ public class RegisteredSellerFragment extends AbsPageFragment implements View.On
 
     private void backToLoginPage() {
         AbsPageFragment fragment = PageFragmentFactory.of(PageType.LOGIN, null);
-        getFragmentManager().beginTransaction().remove(this).replace(R.id.frameContainer, fragment).addToBackStack(fragment.toString()).commit();
+        getFragmentManager().beginTransaction().remove(this).replace(R.id.baseContainer, fragment).addToBackStack(fragment.toString()).commit();
     }
 
 }
