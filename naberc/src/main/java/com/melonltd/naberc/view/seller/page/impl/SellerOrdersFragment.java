@@ -93,6 +93,7 @@ public class SellerOrdersFragment extends AbsPageFragment {
         super.onResume();
         initData();
         setListCount();
+        SellerMainActivity.lockDrawer(false);
     }
 
     private void initData() {

@@ -210,7 +210,8 @@ public class SellerDetailFragment extends AbsPageFragment implements View.OnClic
             case R.id.submitBtn:
                 break;
             case R.id.logoutBtn:
-                SellerMainActivity.toLoginPage();
+//                SellerMainActivity.toLoginPage();
+                getActivity().finish();
                 break;
             case R.id.storeStartText:
                 showDatePicker(R.id.storeStartText);

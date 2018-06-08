@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -93,6 +94,11 @@ public class SellerMainActivity extends BaseCore implements TabLayout.OnTabSelec
         tabLayout.addOnTabSelectedListener(this);
         frameLayout = findViewById(R.id.sellerFrameContainer);
         frameLayout.addOnLayoutChangeListener(this);
+    }
+
+
+    private void setListener() {
+
     }
 
     private void serTab() {
@@ -195,14 +201,23 @@ public class SellerMainActivity extends BaseCore implements TabLayout.OnTabSelec
     public void onCheckedChanged(SwitchButton view, boolean isChecked) {
 
     }
-
-    public static void toLoginPage() {
-        BaseCore.FRAGMENT_TAG = PageType.LOGIN.name();
-        context.startActivity(new Intent(context, BaseActivity.class));
-    }
+//
+//    public static void toLoginPage() {
+//        BaseCore.FRAGMENT_TAG = PageType.LOGIN.name();
+//        context.startActivity(new Intent(context, BaseActivity.class));
+//    }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+    }
+
+
+    public static void lockDrawer(boolean lock) {
+        if (lock){
+            SellerMainActivity.toolbar.setNavigationIcon(null);
+            drawer.closeDrawers();
+        }
+        drawer.setDrawerLockMode(lock ? DrawerLayout.LOCK_MODE_LOCKED_CLOSED : DrawerLayout.LOCK_MODE_UNDEFINED);
     }
 }

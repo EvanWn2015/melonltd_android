@@ -107,7 +107,8 @@ public class SellerRestaurantFragment extends AbsPageFragment {
     @Override
     public void onResume() {
         super.onResume();
-        SellerMainActivity.toolbar.setNavigationIcon(null);
+//        SellerMainActivity.toolbar.setNavigationIcon(null);
+        SellerMainActivity.lockDrawer(true);
         for (int i = 0; i < 10; i++) {
             listData.add(i + "XX 系列");
         }

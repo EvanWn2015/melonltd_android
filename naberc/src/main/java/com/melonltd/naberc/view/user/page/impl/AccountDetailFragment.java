@@ -106,7 +106,8 @@ public class AccountDetailFragment extends AbsPageFragment implements View.OnCli
                 ApiManager.test(new ApiCallback(getActivity()) {
                     @Override
                     public void onSuccess(String responseBody) {
-                        UserMainActivity.toLoginPage();
+//                        UserMainActivity.toLoginPage();
+                        getActivity().finish();
                     }
 
                     @Override

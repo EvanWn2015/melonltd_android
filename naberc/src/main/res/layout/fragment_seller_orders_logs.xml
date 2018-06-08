@@ -45,9 +45,9 @@
 
     <ImageView
         android:id="@+id/imageView3"
-        android:layout_width="14dp"
-        android:layout_height="14dp"
-        android:layout_marginBottom="8dp"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginBottom="4dp"
         android:layout_marginEnd="8dp"
         android:background="@drawable/shape_reverse_triangle"
         app:layout_constraintBottom_toBottomOf="@+id/startTimeText"
@@ -69,9 +69,9 @@
 
     <ImageView
         android:id="@+id/imageView5"
-        android:layout_width="14dp"
-        android:layout_height="14dp"
-        android:layout_marginBottom="8dp"
+        android:layout_width="24dp"
+        android:layout_height="24dp"
+        android:layout_marginBottom="4dp"
         android:layout_marginEnd="8dp"
         android:background="@drawable/shape_reverse_triangle"
         app:layout_constraintBottom_toBottomOf="@+id/endTimeText"

@@ -80,7 +80,8 @@ public class SellerSearchFragment extends AbsPageFragment {
     @Override
     public void onResume() {
         super.onResume();
-        SellerMainActivity.toolbar.setNavigationIcon(null);
+        SellerMainActivity.lockDrawer(true);
+//        SellerMainActivity.toolbar.setNavigationIcon(null);
     }
 
     private void getViews(View v) {

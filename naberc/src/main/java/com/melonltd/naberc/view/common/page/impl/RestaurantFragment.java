@@ -130,7 +130,7 @@ public class RestaurantFragment extends AbsPageFragment implements View.OnClickL
                 b.putString("where", "RESTAURANT");
                 BaseCore.FRAGMENT_TAG = PageType.RESTAURANT_DETAIL.name();
                 AbsPageFragment f = PageFragmentFactory.of(PageType.RESTAURANT_DETAIL, b);
-                getFragmentManager().beginTransaction().replace(R.id.baseContainer, f).commit();
+                getFragmentManager().beginTransaction().replace(R.id.frameContainer, f).commit();
             }
         });
     }
@@ -193,7 +193,26 @@ public class RestaurantFragment extends AbsPageFragment implements View.OnClickL
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.filterCategoryBtn:
-                final String[] categorys = new String[]{"飲料店", "早餐店", "美式", "中式", "日式", "義式", "咖啡聽"};
+                final String[] categorys = new String[]{"火鍋",
+                        "燒烤/居酒屋",
+                        "鐵板燒",
+                        "素蔬食",
+                        "早午餐",
+                        "下午茶",
+                        "西式/牛排",
+                        "中式",
+                        "港式",
+                        "日式",
+                        "韓式",
+                        "異國",
+                        "美式",
+                        "義式",
+                        "熱炒",
+                        "小吃",
+                        "泰式",
+                        "咖啡輕食",
+                        "甜點",
+                        "冰飲"};
                 new AlertView.Builder()
                         .setContext(getContext())
                         .setStyle(AlertView.Style.ActionSheet)

@@ -94,12 +94,12 @@
         android:layout_marginStart="8dp"
         android:checked="true"
         android:visibility="gone"
-        app:sb_checked="true"
-        app:sb_show_indicator="false"
         app:layout_constraintBottom_toBottomOf="@+id/deleteBtn"
         app:layout_constraintEnd_toStartOf="@+id/deleteBtn"
         app:layout_constraintStart_toEndOf="@+id/ordersItemNameText"
-        app:layout_constraintTop_toTopOf="@+id/deleteBtn" />
+        app:layout_constraintTop_toTopOf="@+id/deleteBtn"
+        app:sb_checked="true"
+        app:sb_show_indicator="false" />
 
     <View
         android:id="@+id/lineView"

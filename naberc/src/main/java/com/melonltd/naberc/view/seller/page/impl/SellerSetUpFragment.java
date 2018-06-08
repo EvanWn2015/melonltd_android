@@ -75,7 +75,8 @@ public class SellerSetUpFragment extends AbsPageFragment implements View.OnClick
     @Override
     public void onResume() {
         super.onResume();
-        SellerMainActivity.toolbar.setNavigationIcon(null);
+//        SellerMainActivity.toolbar.setNavigationIcon(null);
+        SellerMainActivity.lockDrawer(true);
         if (TO_SELLER_DETAIL_INDEX > 0) {
             toSellerDetail(TO_SELLER_DETAIL_INDEX);
         }

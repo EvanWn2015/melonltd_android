@@ -53,9 +53,10 @@ public class RestaurantDetailFragment extends AbsPageFragment {
         if (FRAGMENT == null) {
             FRAGMENT = new RestaurantDetailFragment();
             TO_CATEGORY_MENU_INDEX = -1;
+            FRAGMENT.setArguments(bundle);
         }
-        FRAGMENT.setArguments(null);
-        FRAGMENT.setArguments(bundle);
+//        FRAGMENT.setArguments(null);
+
         return FRAGMENT;
     }
 
