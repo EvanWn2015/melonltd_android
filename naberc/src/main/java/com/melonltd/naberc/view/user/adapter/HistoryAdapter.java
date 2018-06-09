@@ -1,79 +1,65 @@
 package com.melonltd.naberc.view.user.adapter;
 
-import android.content.Context;
-import android.support.annotation.Nullable;
+import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.melonltd.naberc.R;
 
-import java.util.ArrayList;
+import java.util.List;
 
-public class HistoryAdapter extends BaseAdapter {
-    private LayoutInflater inflater = null;
-    private ArrayList<String> list;
 
-    public HistoryAdapter(Context context, ArrayList list) {
-        this.list = list;
-        this.inflater = LayoutInflater.from(context);
+public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHolder> {
+    private static final String TAG = HistoryAdapter.class.getSimpleName();
+    private List<String> listData;
+    private View.OnClickListener ItemClickListener;
+
+    public HistoryAdapter(List<String> listDate) {
+        this.listData = listDate;
+    }
+
+    public void setListener(View.OnClickListener ItemClickListener){
+        this.ItemClickListener =ItemClickListener;
+    }
+
+    @NonNull
+    @Override
+    public HistoryAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.user_history_item, parent, false);
+        HistoryAdapter.ViewHolder vh = new HistoryAdapter.ViewHolder(v);
+        return vh;
     }
 
     @Override
-    public int getCount() {
-        return list.size();
+    public void onBindViewHolder(@NonNull HistoryAdapter.ViewHolder holder, int position) {
+
+
+        holder.itemView.setTag(position);
+        holder.itemView.setOnClickListener(this.ItemClickListener);
+        holder.restaurantNameText.setText("營業時間 10:00~ 11:0" + listData.get(position));
     }
 
     @Override
-    public Object getItem(int i) {
-        return list.get(i);
+    public int getItemCount() {
+        return listData.size();
     }
 
-    @Override
-    public long getItemId(int i) {
-        return i;
-    }
 
-    @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
-        HistoryItem item = null;
-        if (view == null) {
-            view = inflater.inflate(R.layout.user_history_item, null);
-            item = HistoryItem.valueOf(view);
-            view.setTag(item);
-        } else {
-            item = (HistoryItem) view.getTag();
-        }
-
-        // TODO item view
-        item.restaurantNameText.setText("營業時間 10:00~ 11:0" + list.get(i));
-        return view;
-    }
-
-    @Nullable
-    @Override
-    public CharSequence[] getAutofillOptions() {
-        return new CharSequence[0];
-    }
-
-    public void setData(ArrayList<String> list) {
-        this.list = list;
-        this.notifyDataSetChanged();
-    }
-
-    static class HistoryItem {
+    class ViewHolder extends RecyclerView.ViewHolder {
         TextView restaurantNameText, totalAmountText, orderStatusText, getOrderTimeText;
 
-        public static HistoryItem valueOf(View v) {
-            HistoryItem item = new HistoryItem();
-            item.restaurantNameText = v.findViewById(R.id.restaurantNameText);
-            item.totalAmountText = v.findViewById(R.id.totalAmountText);
-            item.orderStatusText = v.findViewById(R.id.orderStatusText);
-            item.getOrderTimeText = v.findViewById(R.id.getOrderTimeText);
-            return item;
+        public ViewHolder(View v) {
+            super(v);
+            restaurantNameText = v.findViewById(R.id.restaurantNameText);
+            totalAmountText = v.findViewById(R.id.totalAmountText);
+            orderStatusText = v.findViewById(R.id.orderStatusText);
+            getOrderTimeText = v.findViewById(R.id.getOrderTimeText);
         }
     }
 }
+
 

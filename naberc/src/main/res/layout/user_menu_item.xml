@@ -2,7 +2,10 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    android:layout_marginStart="8dp"
+    android:layout_marginEnd="8dp"
     android:layout_width="match_parent"
+    android:background="@drawable/naber_text_base_line"
     android:layout_height="wrap_content">
 
     <com.facebook.drawee.view.SimpleDraweeView

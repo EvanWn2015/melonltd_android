@@ -62,29 +62,29 @@ public class RegisteredFragment extends AbsPageFragment implements View.OnClickL
     private Thread thread;
     private boolean isLoaded = false;
 
-    @SuppressLint("HandlerLeak")
-    private Handler mHandler = new Handler() {
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case MSG_LOAD_DATA:
-                    if (thread == null) {
-                        thread = new Thread(new Runnable() {
-                            @Override
-                            public void run() {
-                                initJsonData();
-                            }
-                        });
-                        thread.start();
-                    }
-                    break;
-                case MSG_LOAD_SUCCESS:
-                    isLoaded = true;
-                    break;
-                case MSG_LOAD_FAILED:
-                    break;
-            }
-        }
-    };
+//    @SuppressLint("HandlerLeak")
+//    private Handler mHandler = new Handler() {
+//        public void handleMessage(Message msg) {
+//            switch (msg.what) {
+//                case MSG_LOAD_DATA:
+//                    if (thread == null) {
+//                        thread = new Thread(new Runnable() {
+//                            @Override
+//                            public void run() {
+//                                initJsonData();
+//                            }
+//                        });
+//                        thread.start();
+//                    }
+//                    break;
+//                case MSG_LOAD_SUCCESS:
+//                    isLoaded = true;
+//                    break;
+//                case MSG_LOAD_FAILED:
+//                    break;
+//            }
+//        }
+//    };
 
     public RegisteredFragment() {
     }
@@ -106,6 +106,7 @@ public class RegisteredFragment extends AbsPageFragment implements View.OnClickL
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        initJsonData();
     }
 
     @Override
@@ -114,7 +115,7 @@ public class RegisteredFragment extends AbsPageFragment implements View.OnClickL
             View v = inflater.inflate(R.layout.fragment_registered, container, false);
             getViews(v);
             setListener();
-            mHandler.sendEmptyMessage(MSG_LOAD_DATA);
+//            mHandler.sendEmptyMessage(MSG_LOAD_DATA);
             container.setTag(R.id.user_registered_page, v);
             return v;
         }
@@ -156,8 +157,8 @@ public class RegisteredFragment extends AbsPageFragment implements View.OnClickL
     private void showOptIdentity() {
         InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(identityEditText.getWindowToken(), 0);
-        mHandler.sendEmptyMessage(MSG_LOAD_DATA);
-        if (isLoaded) {
+//        mHandler.sendEmptyMessage(MSG_LOAD_DATA);
+//        if (isLoaded) {
             OptionsPickerView pvOptions = new OptionsPickerBuilder(getContext(), new OnOptionsSelectListener() {
                 @Override
                 public void onOptionsSelect(int options1, int option2, int options3, View v) {
@@ -173,7 +174,7 @@ public class RegisteredFragment extends AbsPageFragment implements View.OnClickL
                     .build();
             pvOptions.setPicker(options1Items, options2Items);
             pvOptions.show();
-        }
+//        }
     }
 
 
@@ -221,9 +222,9 @@ public class RegisteredFragment extends AbsPageFragment implements View.OnClickL
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (mHandler != null) {
-            mHandler.removeCallbacksAndMessages(null);
-        }
+//        if (mHandler != null) {
+//            mHandler.removeCallbacksAndMessages(null);
+//        }
     }
 
     @Override
@@ -280,7 +281,7 @@ public class RegisteredFragment extends AbsPageFragment implements View.OnClickL
         options1Items.addAll(opt1);
         options2Items.clear();
         options2Items.addAll(opt2);
-        mHandler.sendEmptyMessage(MSG_LOAD_SUCCESS);
+//        mHandler.sendEmptyMessage(MSG_LOAD_SUCCESS);
     }
 
     public ArrayList<IdentityJsonBean> parseData(String result) {//Gson 解析
@@ -294,7 +295,7 @@ public class RegisteredFragment extends AbsPageFragment implements View.OnClickL
             }
         } catch (Exception e) {
             e.printStackTrace();
-            mHandler.sendEmptyMessage(MSG_LOAD_FAILED);
+//            mHandler.sendEmptyMessage(MSG_LOAD_FAILED);
         }
         return detail;
     }

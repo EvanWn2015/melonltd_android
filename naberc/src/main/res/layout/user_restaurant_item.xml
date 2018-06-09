@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/restaurantItem"
     android:layout_width="match_parent"
+    android:background="@drawable/naber_text_base_line"
     xmlns:fresco="http://schemas.android.com/apk/res-auto"
     android:layout_height="wrap_content">
 
@@ -9,35 +11,23 @@
         android:id="@+id/restaurantImageView"
         android:layout_width="80dp"
         android:layout_height="80dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="16dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="16dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         fresco:backgroundImage="@drawable/naber_reverse_gary_button_style"
         fresco:failureImage="@drawable/naber_icon_logo_reverse" />
 
-    <!--<ImageView-->
-        <!--android:id="@+id/restaurantImageView"-->
-        <!--android:layout_width="100dp"-->
-        <!--android:layout_height="100dp"-->
-        <!--android:layout_marginBottom="8dp"-->
-        <!--android:layout_marginStart="8dp"-->
-        <!--android:layout_marginTop="8dp"-->
-        <!--android:background="@drawable/naber_reverse_gary_button_style"-->
-        <!--android:src="@drawable/naber_icon_logo_reverse"-->
-        <!--app:layout_constraintBottom_toBottomOf="parent"-->
-        <!--app:layout_constraintStart_toStartOf="parent"-->
-        <!--app:layout_constraintTop_toTopOf="parent" />-->
-
     <ImageView
         android:id="@+id/imageView4"
         android:layout_width="24dp"
         android:layout_height="24dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="4dp"
         android:src="@drawable/naber_icon_clock"
+        app:layout_constraintEnd_toStartOf="@+id/businessTimeText"
         app:layout_constraintStart_toEndOf="@+id/restaurantImageView"
         app:layout_constraintTop_toBottomOf="@+id/restaurantNameText" />
 
@@ -45,12 +35,12 @@
         android:id="@+id/restaurantNameText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="4dp"
-        android:paddingStart="8dp"
-        android:paddingTop="4dp"
+        android:layout_marginBottom="4dp"
+        android:layout_marginStart="8dp"
         android:text="民族店"
         android:textSize="18sp"
         android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/imageView4"
         app:layout_constraintStart_toEndOf="@+id/restaurantImageView"
         app:layout_constraintTop_toTopOf="@+id/restaurantImageView" />
 
@@ -58,10 +48,10 @@
         android:id="@+id/businessTimeText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="48dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginTop="4dp"
         android:maxLines="1"
-        android:text="大學甄選入學委員會"
+        android:text="接單時間 10:00~14:00"
         app:layout_constraintBottom_toTopOf="@+id/addressText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/imageView4"
@@ -73,10 +63,9 @@
         android:id="@+id/addressText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="48dp"
+        android:layout_marginEnd="8dp"
         android:maxLines="1"
-        android:text="107學年度個人申請招生統一分發結果，今年個人申請共有5萬9510個名"
+        android:text="桃園市中壢區中山東路1111號"
         app:layout_constraintBottom_toTopOf="@+id/getTypeText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/businessTimeText"
@@ -86,12 +75,13 @@
         android:id="@+id/getTypeText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
+        android:layout_marginBottom="4dp"
         android:background="@drawable/naber_reverse_gary_button_style"
         android:paddingEnd="4dp"
         android:paddingStart="4dp"
         android:text="自取"
         android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@+id/addressText"
         app:layout_constraintTop_toBottomOf="@+id/addressText" />
 

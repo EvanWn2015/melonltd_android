@@ -55,6 +55,7 @@
         app:layout_constraintTop_toBottomOf="@+id/categoryNameText">
 
         <android.support.v7.widget.RecyclerView
+            android:fastScrollEnabled="false"
             android:id="@+id/menuRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"

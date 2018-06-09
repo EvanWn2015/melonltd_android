@@ -20,17 +20,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 
-import com.google.common.collect.Lists;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.melonltd.naberc.R;
 import com.melonltd.naberc.model.preferences.SharedPreferencesService;
 import com.melonltd.naberc.util.Tools;
 import com.melonltd.naberc.view.common.abs.AbsPageFragment;
-import com.melonltd.naberc.view.common.intf.PageFragment;
 import com.melonltd.naberc.view.common.page.impl.LoginFragment;
 import com.melonltd.naberc.view.common.page.impl.RecoverPasswordFragment;
 import com.melonltd.naberc.view.common.page.impl.RegisteredSellerFragment;
-import com.melonltd.naberc.view.common.page.impl.RestaurantFragment;
+import com.melonltd.naberc.view.customize.LoadingBar;
+import com.melonltd.naberc.view.user.page.impl.RestaurantFragment;
 import com.melonltd.naberc.view.common.page.impl.VerifySMSFragment;
 import com.melonltd.naberc.view.common.type.PageType;
 import com.melonltd.naberc.view.seller.page.impl.SellerCategoryListFragment;
@@ -57,8 +56,6 @@ import com.melonltd.naberc.view.user.page.impl.SetUpFragment;
 import com.melonltd.naberc.view.user.page.impl.ShoppingCartFragment;
 import com.melonltd.naberc.view.user.page.impl.SimpleInformationFragment;
 import com.melonltd.naberc.view.user.page.impl.SubmitOrdersFragment;
-
-import java.util.List;
 
 //import com.google.firebase.auth.FirebaseAuth;
 //import com.google.firebase.auth.FirebaseUser;
@@ -277,6 +274,7 @@ public abstract class BaseCore extends AppCompatActivity implements LocationList
         SellerSetUpFragment.FRAGMENT = null;
         SellerDetailFragment.FRAGMENT = null;
         SellerSimpleInformationFragment.FRAGMENT = null;
+
         for (Fragment fragment : fragmentManager.getFragments()) {
             Log.d(TAG, fragment + "");
             if (fragment instanceof AbsPageFragment) {

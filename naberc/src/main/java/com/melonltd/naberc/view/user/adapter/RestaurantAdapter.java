@@ -1,84 +1,72 @@
 package com.melonltd.naberc.view.user.adapter;
 
-import android.content.Context;
 import android.net.Uri;
-import android.support.annotation.Nullable;
+import android.support.annotation.NonNull;
+import android.support.constraint.ConstraintLayout;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.melonltd.naberc.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
-public class RestaurantAdapter extends BaseAdapter {
+public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.ViewHolder> {
+    private static final  String TAG = RestaurantAdapter.class.getSimpleName();
+    private List<String> listData;
+    private View.OnClickListener itemOnClickListener;
 
-    private LayoutInflater inflater = null;
-    private ArrayList<String> list;
+    public RestaurantAdapter(List<String> listData) {
+        this.listData = listData;
+    }
 
-    public RestaurantAdapter(Context context, ArrayList list) {
-        this.list = list;
-        this.inflater = LayoutInflater.from(context);
+
+    public void setItemOnClickListener(View.OnClickListener itemOnClickListener){
+        this.itemOnClickListener = itemOnClickListener;
+    }
+    @NonNull
+    @Override
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.user_restaurant_item, parent, false);
+        RestaurantAdapter.ViewHolder vh = new RestaurantAdapter.ViewHolder(v);
+        return vh;
     }
 
     @Override
-    public int getCount() {
-        return list.size();
-    }
+    public void onBindViewHolder(@NonNull RestaurantAdapter.ViewHolder holder, int position) {
 
-    @Override
-    public Object getItem(int i) {
-        return list.get(i);
-    }
-
-    @Override
-    public long getItemId(int i) {
-        return i;
-    }
-
-    @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
-        RestaurantItem item = null;
-        if (view == null) {
-            view = inflater.inflate(R.layout.user_restaurant_item, null);
-            item = RestaurantItem.valueOf(view);
-            view.setTag(item);
-        } else {
-            item = (RestaurantItem) view.getTag();
-        }
-        item.restaurantNameText.setText(list.get(i) + " XX 店");
+        holder.restaurantNameText.setText(listData.get(position) + " XX 店");
         Uri uri = Uri.parse("https://sjhexpress.com/wp-content/uploads/2015/02/HannahRidoutFoodPhotography.jpg");
-        item.restaurantIcon.setImageURI(uri);
-        return view;
+        holder.restaurantIcon.setImageURI(uri);
+        holder.restaurantItem.setTag(position);
+        holder.restaurantItem.setOnClickListener(this.itemOnClickListener );
     }
 
-    @Nullable
+
     @Override
-    public CharSequence[] getAutofillOptions() {
-        return new CharSequence[0];
-    }
-
-    public void setData(ArrayList<String> list) {
-        this.list = list;
-        this.notifyDataSetChanged();
+    public int getItemCount() {
+        return listData.size();
     }
 
 
-    static class RestaurantItem {
+    public class ViewHolder extends RecyclerView.ViewHolder {
         SimpleDraweeView restaurantIcon;
+        ConstraintLayout restaurantItem;
         TextView restaurantNameText, businessTimeText, addressText, distanceText;
-        public static RestaurantItem valueOf(View view ) {
-            RestaurantItem item =  new RestaurantItem();
-            item.restaurantIcon = view.findViewById(R.id.restaurantImageView);
-            item.restaurantNameText = view.findViewById(R.id.restaurantNameText);
-            item.businessTimeText = view.findViewById(R.id.businessTimeText);
-            item.addressText = view.findViewById(R.id.addressText);
-            item.distanceText = view.findViewById(R.id.distanceText);
-            return item;
+        ViewHolder(View v) {
+            super(v);
+            restaurantItem = v.findViewById(R.id.restaurantItem);
+            restaurantIcon = v.findViewById(R.id.restaurantImageView);
+            restaurantNameText = v.findViewById(R.id.restaurantNameText);
+            businessTimeText = v.findViewById(R.id.businessTimeText);
+            addressText = v.findViewById(R.id.addressText);
+            distanceText = v.findViewById(R.id.distanceText);
         }
     }
 }

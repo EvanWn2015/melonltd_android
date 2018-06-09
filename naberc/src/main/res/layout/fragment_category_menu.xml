@@ -1,9 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:cube_ptr="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/user_category_menu__page"
+    android:id="@+id/user_category_menu_page"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_constraintBottom_toBottomOf="parent"
@@ -21,45 +20,27 @@
         android:text="冷飲"
         android:textSize="14sp"
         android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/menuOnLoadLayout"
+        app:layout_constraintBottom_toTopOf="@+id/menuBGARefreshLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-
-    <com.melonltd.naberc.view.customize.OnLoadLayout
-        android:id="@+id/menuOnLoadLayout"
+    <cn.bingoogolapple.refreshlayout.BGARefreshLayout
+        android:id="@+id/menuBGARefreshLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/categoryNameText"
-        cube_ptr:ptr_duration_to_close="100"
-        cube_ptr:ptr_duration_to_close_header="1000"
-        cube_ptr:ptr_keep_header_when_refresh="false"
-        cube_ptr:ptr_pull_to_fresh="false"
-        cube_ptr:ptr_ratio_of_header_height_to_refresh="1.0"
-        cube_ptr:ptr_resistance="1.0">
+        app:layout_constraintTop_toBottomOf="@+id/categoryNameText">
 
-        <FrameLayout
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/menuRecyclerView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="vertical">
-
-                <ListView
-                    android:id="@+id/menuListView"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:overScrollMode="never"></ListView>
-
-            </LinearLayout>
-        </FrameLayout>
-    </com.melonltd.naberc.view.customize.OnLoadLayout>
-
-
+            android:layout_height="match_parent"
+            android:overScrollMode="never"
+            android:scrollbars="none" />
+    </cn.bingoogolapple.refreshlayout.BGARefreshLayout>
 </android.support.constraint.ConstraintLayout>

@@ -31,10 +31,11 @@ import cn.bingoogolapple.refreshlayout.BGARefreshLayout;
 public class SellerSearchFragment extends AbsPageFragment {
     private static final String TAG = SellerSearchFragment.class.getSimpleName();
     public static SellerSearchFragment FRAGMENT = null;
-    private BGARefreshLayout searchRefreshLayout;
+
     private EditText phoneEditText;
     private Button phoneSearchBtn;
 
+    private BGARefreshLayout searchRefreshLayout;
     private SearchAdapter adapter;
     private RecyclerView recyclerView;
     private List<String> listData = Lists.newArrayList();

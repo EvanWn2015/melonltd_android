@@ -27,7 +27,7 @@ import com.melonltd.naberc.view.user.page.impl.HistoryFragment;
 import com.melonltd.naberc.view.user.page.impl.HomeFragment;
 import com.melonltd.naberc.view.common.page.impl.LoginFragment;
 import com.melonltd.naberc.view.user.page.impl.RegisteredFragment;
-import com.melonltd.naberc.view.common.page.impl.RestaurantFragment;
+import com.melonltd.naberc.view.user.page.impl.RestaurantFragment;
 import com.melonltd.naberc.view.user.page.impl.SetUpFragment;
 import com.melonltd.naberc.view.user.page.impl.ShoppingCartFragment;
 import com.melonltd.naberc.view.user.page.impl.SimpleInformationFragment;

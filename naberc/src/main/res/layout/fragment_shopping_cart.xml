@@ -25,38 +25,4 @@
             android:scrollbars="none" />
     </cn.bingoogolapple.refreshlayout.BGARefreshLayout>
 
-
-    <!--<com.melonltd.naberc.view.customize.OnLoadLayout-->
-    <!--android:id="@+id/shoppingCartOnLoadLayout"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent"-->
-    <!--app:layout_constraintBottom_toBottomOf="parent"-->
-    <!--app:layout_constraintEnd_toEndOf="parent"-->
-    <!--app:layout_constraintStart_toStartOf="parent"-->
-    <!--app:layout_constraintTop_toTopOf="parent"-->
-    <!--cube_ptr:ptr_duration_to_close="100"-->
-    <!--cube_ptr:ptr_duration_to_close_header="1000"-->
-    <!--cube_ptr:ptr_keep_header_when_refresh="false"-->
-    <!--cube_ptr:ptr_pull_to_fresh="false"-->
-    <!--cube_ptr:ptr_ratio_of_header_height_to_refresh="1.0"-->
-    <!--cube_ptr:ptr_resistance="1.0">-->
-
-    <!--<android.support.constraint.ConstraintLayout-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent">-->
-
-    <!--<ListView-->
-    <!--android:id="@+id/shoppingCartListView"-->
-    <!--android:layout_width="match_parent"-->
-    <!--android:layout_height="match_parent"-->
-    <!--android:layout_margin="8dp"-->
-    <!--android:layout_marginStart="8dp"-->
-    <!--android:maxLength="3"-->
-    <!--android:overScrollMode="never"-->
-    <!--app:layout_constraintEnd_toEndOf="parent"-->
-    <!--app:layout_constraintStart_toStartOf="parent"-->
-    <!--app:layout_constraintTop_toBottomOf="@+id/textView12"></ListView>-->
-
-    <!--</android.support.constraint.ConstraintLayout>-->
-    <!--</com.melonltd.naberc.view.customize.OnLoadLayout>-->
 </LinearLayout>

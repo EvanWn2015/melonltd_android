@@ -2,13 +2,16 @@ package com.melonltd.naberc.view.user.page.impl;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
+import android.widget.ImageView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.google.common.collect.Lists;
 import com.melonltd.naberc.R;
@@ -17,30 +20,30 @@ import com.melonltd.naberc.model.helper.okhttp.ApiManager;
 import com.melonltd.naberc.view.common.BaseCore;
 import com.melonltd.naberc.view.common.abs.AbsPageFragment;
 import com.melonltd.naberc.view.common.factory.PageFragmentFactory;
-import com.melonltd.naberc.view.common.page.impl.RestaurantFragment;
 import com.melonltd.naberc.view.common.type.PageType;
-import com.melonltd.naberc.view.customize.GlideImageLoader;
-import com.melonltd.naberc.view.customize.OnLoadLayout;
 import com.melonltd.naberc.view.user.adapter.RestaurantAdapter;
-import com.youth.banner.Banner;
-import com.youth.banner.listener.OnBannerListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import in.srain.cube.views.ptr.PtrFrameLayout;
-import in.srain.cube.views.ptr.PtrHandler;
+import cn.bingoogolapple.bgabanner.BGABanner;
+import cn.bingoogolapple.refreshlayout.BGANormalRefreshViewHolder;
+import cn.bingoogolapple.refreshlayout.BGARefreshLayout;
 
 
 public class HomeFragment extends AbsPageFragment {
     private static final String TAG = HomeFragment.class.getSimpleName();
     public static HomeFragment FRAGMENT = null;
-    private OnLoadLayout contentLoadLayout;
-    private ListView top30RestaurantListView;
+
+
+    private BGABanner banner;
+
+    private BGARefreshLayout bgaRefreshLayout;
+    private RecyclerView recyclerView;
     private RestaurantAdapter adapter;
-    private ArrayList<String> list = Lists.newArrayList();
-    private List<String> images = Lists.newArrayList();
-    private Banner banner;
+    private List<String> list = Lists.newArrayList();
+    private List<String> images = Lists.<String>newArrayList();
+
 
     public HomeFragment() {
     }
@@ -63,7 +66,7 @@ public class HomeFragment extends AbsPageFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Fresco.initialize(getContext());
-        adapter = new RestaurantAdapter(getContext(), list);
+        adapter = new RestaurantAdapter(list);
     }
 
     @Override
@@ -79,65 +82,104 @@ public class HomeFragment extends AbsPageFragment {
     }
 
     private void getViews(View v) {
-        contentLoadLayout = v.findViewById(R.id.contentLoadLayout);
-        top30RestaurantListView = v.findViewById(R.id.top30ListView);
-        top30RestaurantListView.setAdapter(adapter);
-        top30RestaurantListView.addHeaderView(LayoutInflater.from(getContext()).inflate(R.layout.user_home_banner_header_view, null), null, false);
-        banner = v.findViewById(R.id.banner);
+        banner = v.findViewById(R.id.homeBanner);
+
+        bgaRefreshLayout = v.findViewById(R.id.top30BGARefreshLayout);
+        recyclerView = v.findViewById(R.id.top30RecyclerView);
+        BGANormalRefreshViewHolder refreshViewHolder = new BGANormalRefreshViewHolder(getContext(), true);
+        refreshViewHolder.setPullDownRefreshText("Pull");
+        refreshViewHolder.setRefreshingText("Pull to refresh");
+        refreshViewHolder.setReleaseRefreshText("Pull to refresh");
+        refreshViewHolder.setLoadingMoreText("Loading more !");
+
+        bgaRefreshLayout.setRefreshViewHolder(refreshViewHolder);
+
+        final LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(layoutManager);
     }
 
 
     private void setListener() {
-        contentLoadLayout.setPtrHandler(new PtrHandler() {
-            @Override
-            public void onRefreshBegin(PtrFrameLayout frame) {
-                doLoadData(true);
-            }
 
+        banner.setAdapter(new BGABanner.Adapter<ImageView, String>() {
             @Override
-            public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
-                return ((OnLoadLayout) frame).isTop();
-            }
-        });
-
-        top30RestaurantListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                RestaurantFragment.TO_RESTAURANT_DETAIL_INDEX = i;
-                RestaurantDetailFragment.TO_CATEGORY_MENU_INDEX = -1;
-                BaseCore.FRAGMENT_TAG = PageType.RESTAURANT_DETAIL.name();
-                Bundle b = new Bundle();
-                b.putString("where", "HOME");
-                AbsPageFragment f = PageFragmentFactory.of(PageType.RESTAURANT_DETAIL, b);
-                getFragmentManager().beginTransaction().replace(R.id.frameContainer, f).commit();
+            public void fillBannerItem(BGABanner banner, ImageView itemView, String model, int position) {
+                Glide.with(itemView.getContext())
+                        .load(model)
+                        .apply(new RequestOptions().placeholder(R.drawable.naber_default_image).error(R.drawable.naber_default_image).dontAnimate())
+                        .into(itemView);
             }
         });
 
-        banner.setOnBannerListener(new OnBannerListener() {
+        banner.setDelegate(new BGABanner.Delegate<ImageView, String>() {
             @Override
-            public void OnBannerClick(int position) {
-                Log.d(TAG, "banner click :" + position);
+            public void onBannerItemClick(BGABanner banner, ImageView itemView, String model, int position) {
+                Log.d(TAG, model + position);
+            }
+        });
+
+        recyclerView.setAdapter(adapter);
+        adapter.setItemOnClickListener(new ItemOnClickListener());
+
+        bgaRefreshLayout.setDelegate(new BGARefreshLayout.BGARefreshLayoutDelegate() {
+            @Override
+            public void onBGARefreshLayoutBeginRefreshing(BGARefreshLayout refreshLayout) {
+                bgaRefreshLayout.endRefreshing();
+                ApiManager.test(new ApiCallback(getActivity()) {
+                    @Override
+                    public void onSuccess(String responseBody) {
+                        list.clear();
+                        for (int i = 0; i < 30; i++) {
+                            list.add("" + i);
+                        }
+                        adapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onFail(Exception error) {
+                        bgaRefreshLayout.endRefreshing();
+                    }
+                });
+            }
+
+            @Override
+            public boolean onBGARefreshLayoutBeginLoadingMore(BGARefreshLayout refreshLayout) {
+                ApiManager.test(new ApiCallback(getActivity()) {
+                    @Override
+                    public void onSuccess(String responseBody) {
+                        for (int i = 0; i < 30; i++) {
+                            list.add("" + i);
+                        }
+                        adapter.notifyDataSetChanged();
+                        bgaRefreshLayout.endRefreshing();
+                    }
+
+                    @Override
+                    public void onFail(Exception error) {
+                        bgaRefreshLayout.endRefreshing();
+                    }
+                });
+                return false;
             }
         });
     }
 
+    private void loadBannerData(){
+        images = Lists.<String>newArrayList(
+                "https://www.mcdonalds.com/content/dam/usa/documents/mcdelivery/mcdelivery_new11.jpg",
+                "http://a57.foxnews.com/media2.foxnews.com/2016/06/09/640/360/060916_chew_crispychicken_1280.jpg",
+                "http://farm5.staticflickr.com/4532/38105655392_0b57dca007_c.jpg",
+                "http://www.mrsteak.com.tw/photos/327_3854411.jpg",
+                "https://ibw.bwnet.com.tw/image/pool/2017/05/c0ee05d61c65709a30621f46e2d22908.jpg"
+                );
+        banner.setData(images,Lists.<String>newArrayList());
+    }
 
     private void doLoadData(boolean isRefresh) {
         if (isRefresh) {
-            images.clear();
             list.clear();
         }
-        adapter.notifyDataSetChanged();
-        images =Lists.newArrayList("http://img2.imgtn.bdimg.com/it/u=3093785514,1341050958&fm=21&gp=0.jpg",
-                "http://img2.3lian.com/2014/f2/37/d/40.jpg",
-                "http://d.3987.com/sqmy_131219/001.jpg",
-                "http://img2.3lian.com/2014/f2/37/d/39.jpg",
-                "http://www.8kmm.com/UploadFiles/2012/8/201208140920132659.jpg",
-                "http://f.hiphotos.baidu.com/image/h%3D200/sign=1478eb74d5a20cf45990f9df460b4b0c/d058ccbf6c81800a5422e5fdb43533fa838b4779.jpg",
-                "http://f.hiphotos.baidu.com/image/pic/item/09fa513d269759ee50f1971ab6fb43166c22dfba.jpg");
-        banner.setImages(images).setImageLoader(new GlideImageLoader()).start();
-
-
         ApiManager.test(new ApiCallback(getActivity()) {
             @Override
             public void onSuccess(String responseBody) {
@@ -145,7 +187,6 @@ public class HomeFragment extends AbsPageFragment {
                     list.add("" + i);
                 }
                 adapter.notifyDataSetChanged();
-                contentLoadLayout.refreshComplete();
             }
 
             @Override
@@ -173,7 +214,7 @@ public class HomeFragment extends AbsPageFragment {
         if (list.size() == 0) {
             doLoadData(true);
         }
-
+        loadBannerData();
 //        }
     }
 
@@ -186,5 +227,19 @@ public class HomeFragment extends AbsPageFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+    }
+
+    class ItemOnClickListener implements View.OnClickListener{
+        @Override
+        public void onClick(View view) {
+            Log.d(TAG, view.getTag() + "");
+            Log.d(TAG, "item on :" + view.getTag());
+            Bundle b = new Bundle();
+            b.putString("where", "RESTAURANT");
+            BaseCore.FRAGMENT_TAG = PageType.RESTAURANT_DETAIL.name();
+            AbsPageFragment f = PageFragmentFactory.of(PageType.RESTAURANT_DETAIL, b);
+            getFragmentManager().beginTransaction().replace(R.id.frameContainer, f).commit();
+
+        }
     }
 }

@@ -94,6 +94,7 @@
             android:id="@+id/sellerOrdersLogsRecyclerView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:fastScrollEnabled="false"
             android:background="@android:color/white"
             android:overScrollMode="never"
             android:scrollbars="none" />

@@ -3,11 +3,11 @@ package com.melonltd.naberc.view.user.page.impl;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ListView;
 import android.widget.TextView;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
@@ -19,23 +19,23 @@ import com.melonltd.naberc.view.common.BaseCore;
 import com.melonltd.naberc.view.common.abs.AbsPageFragment;
 import com.melonltd.naberc.view.common.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.common.type.PageType;
-import com.melonltd.naberc.view.customize.OnLoadLayout;
 import com.melonltd.naberc.view.user.UserMainActivity;
 import com.melonltd.naberc.view.user.adapter.MenuAdapter;
 
 import java.util.List;
 
-import in.srain.cube.views.ptr.PtrDefaultHandler;
-import in.srain.cube.views.ptr.PtrFrameLayout;
+import cn.bingoogolapple.refreshlayout.BGANormalRefreshViewHolder;
+import cn.bingoogolapple.refreshlayout.BGARefreshLayout;
 
 public class CategoryMenuFragment extends AbsPageFragment {
     private static final String TAG = CategoryMenuFragment.class.getSimpleName();
     public static CategoryMenuFragment FRAGMENT = null;
 
     private TextView categoryNameText;
-    private OnLoadLayout menuOnLoadLayout;
+    private BGARefreshLayout bgaRefreshLayout;
+    private RecyclerView recyclerView;
     private MenuAdapter adapter;
-    private ListView menuListView;
+
     private List<String> list = Lists.newArrayList();
     public static int TO_MENU_DETAIL_INDEX = -1;
 
@@ -62,53 +62,87 @@ public class CategoryMenuFragment extends AbsPageFragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        adapter = new MenuAdapter(getContext(), list);
+        adapter = new MenuAdapter(list);
         Fresco.initialize(getContext());
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        if (container.getTag(R.id.user_category_menu__page) == null) {
+        if (container.getTag(R.id.user_category_menu_page) == null) {
             View v = inflater.inflate(R.layout.fragment_category_menu, container, false);
             getViews(v);
             setListener();
-            container.setTag(R.id.user_category_menu__page, v);
+            container.setTag(R.id.user_category_menu_page, v);
             return v;
         }
-        return (View) container.getTag(R.id.user_category_menu__page);
+        return (View) container.getTag(R.id.user_category_menu_page);
     }
 
     private void getViews(View v) {
         categoryNameText = v.findViewById(R.id.categoryNameText);
-        menuOnLoadLayout = v.findViewById(R.id.menuOnLoadLayout);
-        menuListView = v.findViewById(R.id.menuListView);
-        menuListView.setAdapter(adapter);
+
+        bgaRefreshLayout = v.findViewById(R.id.menuBGARefreshLayout);
+        recyclerView = v.findViewById(R.id.menuRecyclerView);
+
+        BGANormalRefreshViewHolder refreshViewHolder = new BGANormalRefreshViewHolder(getContext(), true);
+        refreshViewHolder.setPullDownRefreshText("Pull");
+        refreshViewHolder.setRefreshingText("Pull to refresh");
+        refreshViewHolder.setReleaseRefreshText("Pull to refresh");
+        refreshViewHolder.setLoadingMoreText("Loading more !");
+
+        bgaRefreshLayout.setRefreshViewHolder(refreshViewHolder);
+
+        final LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
+        layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
+        recyclerView.setLayoutManager(layoutManager);
     }
 
     private void setListener() {
-        menuOnLoadLayout.setPtrHandler(new PtrDefaultHandler() {
+        adapter.setItemClickListener(new ItemClickListener());
+        recyclerView.setAdapter(adapter);
+
+
+        bgaRefreshLayout.setDelegate(new BGARefreshLayout.BGARefreshLayoutDelegate() {
             @Override
-            public void onRefreshBegin(PtrFrameLayout frame) {
-                doLoadData(true);
+            public void onBGARefreshLayoutBeginRefreshing(BGARefreshLayout refreshLayout) {
+                bgaRefreshLayout.endRefreshing();
+                ApiManager.test(new ApiCallback(getActivity()) {
+                    @Override
+                    public void onSuccess(String responseBody) {
+                        list.clear();
+                        for (int i = 0; i < 30; i++) {
+                            list.add("" + i);
+                        }
+                        adapter.notifyDataSetChanged();
+
+                    }
+
+                    @Override
+                    public void onFail(Exception error) {
+                        bgaRefreshLayout.endRefreshing();
+                    }
+                });
             }
 
             @Override
-            public boolean checkCanDoRefresh(PtrFrameLayout frame, View content, View header) {
-                return ((OnLoadLayout) frame).isTop();
-            }
-        });
+            public boolean onBGARefreshLayoutBeginLoadingMore(BGARefreshLayout refreshLayout) {
+                bgaRefreshLayout.endLoadingMore();
+                ApiManager.test(new ApiCallback(getActivity()) {
+                    @Override
+                    public void onSuccess(String responseBody) {
+                        for (int i = 0; i < 30; i++) {
+                            list.add("" + i);
+                        }
+                        adapter.notifyDataSetChanged();
 
-        menuOnLoadLayout.setOnLoadListener(new OnLoadLayout.OnLoadListener() {
-            @Override
-            public void onLoad() {
-                doLoadData(false);
-            }
-        });
+                    }
 
-        menuListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
-                toMenuDetailPage(i);
+                    @Override
+                    public void onFail(Exception error) {
+                        bgaRefreshLayout.endLoadingMore();
+                    }
+                });
+                return false;
             }
         });
     }
@@ -125,7 +159,6 @@ public class CategoryMenuFragment extends AbsPageFragment {
                     list.add("" + i);
                 }
                 adapter.notifyDataSetChanged();
-                menuOnLoadLayout.refreshComplete();
             }
 
             @Override
@@ -153,7 +186,7 @@ public class CategoryMenuFragment extends AbsPageFragment {
                 }
             });
         }
-        if (TO_MENU_DETAIL_INDEX >=0 ){
+        if (TO_MENU_DETAIL_INDEX >= 0) {
             toMenuDetailPage(TO_MENU_DETAIL_INDEX);
         }
     }
@@ -181,5 +214,13 @@ public class CategoryMenuFragment extends AbsPageFragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
+    }
+
+
+    class ItemClickListener implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            toMenuDetailPage((int) v.getTag());
+        }
     }
 }

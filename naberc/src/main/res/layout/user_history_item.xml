@@ -3,6 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
+    android:background="@drawable/naber_text_base_line"
     android:layout_height="wrap_content">
 
     <TextView
@@ -54,7 +55,7 @@
         app:layout_constraintTop_toBottomOf="@+id/restaurantNameText" />
 
     <TextView
-        android:id="@+id/totalAmountText "
+        android:id="@+id/totalAmountText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"

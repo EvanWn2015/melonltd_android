@@ -3,12 +3,9 @@ package com.melonltd.naberc.model.helper.okhttp;
 import android.app.Activity;
 import android.content.Context;
 import android.net.ConnectivityManager;
-import android.os.Handler;
-import android.os.Looper;
 import android.util.Log;
 
 import com.bigkoo.alertview.AlertView;
-import com.bigkoo.alertview.OnItemClickListener;
 import com.melonltd.naberc.model.service.Base64Service;
 import com.melonltd.naberc.util.Tools;
 import com.melonltd.naberc.view.customize.LoadingBar;
@@ -21,7 +18,7 @@ import okhttp3.Response;
 
 public abstract class ApiCallback implements Callback {
     private static final String TAG = ApiCallback.class.getSimpleName();
-    private static LoadingBar loadingBar;
+    private static LoadingBar BAR;
 
     abstract public void onSuccess(final String responseBody);
 
@@ -31,7 +28,7 @@ public abstract class ApiCallback implements Callback {
 
     public ApiCallback(Activity activity) {
         this.activity = activity;
-        this.loadingBar = new LoadingBar(activity, true);
+        this.BAR = new LoadingBar(activity);
     }
 
     public ApiCallback(Context context) {
@@ -39,7 +36,7 @@ public abstract class ApiCallback implements Callback {
         if (context instanceof Activity){
             Log.d(TAG, "");
         }
-        this.loadingBar = new LoadingBar(activity, true);
+        this.BAR = new LoadingBar(activity);
     }
 
 
@@ -51,7 +48,7 @@ public abstract class ApiCallback implements Callback {
                     public void run() {
                         // 如果是 network 錯誤
                         if (checkNetWork()) {
-                            loadingBar.hide();
+                            BAR.hide();
                             getAlertView().show();
                             return;
                         }
@@ -61,7 +58,7 @@ public abstract class ApiCallback implements Callback {
                         } else {
                             onFail(e);
                         }
-                        loadingBar.hide();
+                        BAR.hide();
                     }
                 });
     }
@@ -83,7 +80,7 @@ public abstract class ApiCallback implements Callback {
                             Log.e(TAG, "fail", e);
                             onFailure(call, new IOException("Failed"));
                         }
-                        loadingBar.hide();
+                        BAR.hide();
                     }
                 });
     }

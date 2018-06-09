@@ -1,12 +1,11 @@
 package com.melonltd.naberc.view.user.adapter;
 
-import android.content.Context;
-import android.support.annotation.Nullable;
+import android.net.Uri;
+import android.support.annotation.NonNull;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
@@ -14,60 +13,51 @@ import com.melonltd.naberc.R;
 
 import java.util.List;
 
-public class MenuAdapter extends BaseAdapter {
-    private LayoutInflater inflater;
-    private List<String> list;
 
-    public MenuAdapter(Context context, List list) {
-        this.inflater = LayoutInflater.from(context);
-        this.list = list;
+public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
+    private static final String TAG = MenuAdapter.class.getSimpleName();
+    private List<String> listData;
+    private View.OnClickListener itemClickListener;
+
+    public MenuAdapter(List<String> listData) {
+        this.listData = listData;
+    }
+
+    public void setItemClickListener(View.OnClickListener itemClickListener) {
+        this.itemClickListener = itemClickListener;
+    }
+
+    @NonNull
+    @Override
+    public MenuAdapter.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.user_menu_item, parent, false);
+        MenuAdapter.ViewHolder vh = new MenuAdapter.ViewHolder(v);
+        return vh;
     }
 
     @Override
-    public int getCount() {
-        return list.size();
+    public void onBindViewHolder(@NonNull MenuAdapter.ViewHolder h, int position) {
+        h.itemView.setTag(position);
+        h.itemView.setOnClickListener(this.itemClickListener);
+        h.itemPriceText.setText("3" + position);
+        h.itemIconImageView.setImageURI(Uri.parse("http://zipotesrestaurant.com/images-mexican-salvadorean-restaurant-redwood_city/slides/zipotes_mexican_salvadorean_20.jpg"));
     }
 
     @Override
-    public Object getItem(int i) {
-        return list.get(i);
+    public int getItemCount() {
+        return listData.size();
     }
 
-    @Override
-    public long getItemId(int i) {
-        return i;
-    }
-
-    @Override
-    public View getView(int i, View view, ViewGroup viewGroup) {
-        MenuItem item = null;
-        if (view == null) {
-            view = inflater.inflate(R.layout.user_menu_item, null);
-            item = MenuItem.valueOf(view);
-            view.setTag(item);
-        } else {
-            item = (MenuItem) view.getTag();
-        }
-        item.itemPriceText.setText("3" + i);
-        return view;
-    }
-
-    @Nullable
-    @Override
-    public CharSequence[] getAutofillOptions() {
-        return new CharSequence[0];
-    }
-
-    static class MenuItem {
+    class ViewHolder extends RecyclerView.ViewHolder {
         private SimpleDraweeView itemIconImageView;
         private TextView itemNameText, itemPriceText;
 
-        public static MenuItem valueOf(View v) {
-            MenuItem item = new MenuItem();
-            item.itemIconImageView = v.findViewById(R.id.ordersItemIconImageView);
-            item.itemNameText = v.findViewById(R.id.ordersItemNameText);
-            item.itemPriceText = v.findViewById(R.id.itemPriceText);
-            return item;
+        public ViewHolder(View v) {
+            super(v);
+            itemIconImageView = v.findViewById(R.id.ordersItemIconImageView);
+            itemNameText = v.findViewById(R.id.ordersItemNameText);
+            itemPriceText = v.findViewById(R.id.itemPriceText);
         }
     }
 }
+

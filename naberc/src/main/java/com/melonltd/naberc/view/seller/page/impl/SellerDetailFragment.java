@@ -2,10 +2,8 @@ package com.melonltd.naberc.view.seller.page.impl;
 
 
 import android.content.Context;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.constraint.ConstraintLayout;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +27,6 @@ import com.melonltd.naberc.view.common.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.common.type.PageType;
 import com.melonltd.naberc.view.customize.SwitchButton;
 import com.melonltd.naberc.view.seller.SellerMainActivity;
-import com.melonltd.naberc.view.user.UserMainActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -88,7 +85,7 @@ public class SellerDetailFragment extends AbsPageFragment implements View.OnClic
         logoutBtn = v.findViewById(R.id.logoutBtn);
         storeStartText = v.findViewById(R.id.storeStartText);
         storeEndText = v.findViewById(R.id.storeEndText);
-        businessLayout = v.findViewById(R.id.Layout);
+        businessLayout = v.findViewById(R.id.businessLayout);
     }
 
     private void setListener() {

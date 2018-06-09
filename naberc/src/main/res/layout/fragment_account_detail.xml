@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/user_account_detail_page"
     android:layout_width="match_parent"
-    android:overScrollMode="never"
     android:layout_height="match_parent"
+    android:overScrollMode="never"
     tools:context=".view.user.page.impl.AccountDetailFragment">
 
     <android.support.constraint.ConstraintLayout
@@ -13,7 +14,6 @@
         android:layout_height="match_parent"
         android:background="@android:color/transparent">
 
-        <!--</ScrollView>-->
         <LinearLayout
             android:id="@+id/linearLayout"
             android:layout_width="0dp"
@@ -27,21 +27,21 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"></LinearLayout>
 
-        <com.melonltd.naberc.view.customize.CircleImageView
+
+        <com.facebook.drawee.view.SimpleDraweeView
             android:id="@+id/avatarImage"
             android:layout_width="120dp"
-            android:layout_height="100dp"
-            android:layout_centerInParent="true"
-            android:layout_marginBottom="32dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="32dp"
-            android:scaleType="centerCrop"
-            android:src="@drawable/naber_icon_logo"
+            android:layout_height="120dp"
             app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
             app:layout_constraintEnd_toEndOf="@+id/linearLayout"
             app:layout_constraintStart_toStartOf="@+id/linearLayout"
-            app:layout_constraintTop_toTopOf="@+id/linearLayout" />
+            app:layout_constraintTop_toTopOf="@+id/linearLayout"
+            fresco:backgroundImage="@drawable/naber_icon_logo"
+            fresco:failureImage="@drawable/naber_icon_logo"
+            fresco:overlayImage="@drawable/naber_icon_logo"
+            fresco:roundWithOverlayColor="@color/naber_basis"
+            fresco:roundedCornerRadius="60dp" />
+
 
         <TextView
             android:id="@+id/textView53"

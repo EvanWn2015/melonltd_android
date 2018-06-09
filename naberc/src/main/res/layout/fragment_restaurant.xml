@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:id="@+id/user_restaurant_page"
     android:layout_height="match_parent"
-    tools:context=".view.common.page.impl.RestaurantFragment">
+    tools:context=".view.user.page.impl.RestaurantFragment">
 
 
     <TextView
@@ -70,51 +70,30 @@
         android:layout_width="wrap_content"
         android:layout_height="1dp"
         android:background="@color/colorAccent"
-        app:layout_constraintBottom_toTopOf="@+id/restaurantOnLoadLayout"
+        app:layout_constraintBottom_toTopOf="@+id/restaurantBGARefreshLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/filterCategoryBtn" />
 
-    <com.melonltd.naberc.view.customize.OnLoadLayout
-        android:id="@+id/restaurantOnLoadLayout"
+
+    <cn.bingoogolapple.refreshlayout.BGARefreshLayout
+        android:id="@+id/restaurantBGARefreshLayout"
         android:layout_width="match_parent"
         android:layout_height="0dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/view6"
-        app:ptr_duration_to_close="100"
-        app:ptr_duration_to_close_header="1000"
-        app:ptr_keep_header_when_refresh="false"
-        app:ptr_pull_to_fresh="false"
-        app:ptr_ratio_of_header_height_to_refresh="1.0"
-        app:ptr_resistance="1.0">
+        app:layout_constraintTop_toBottomOf="@+id/view6">
 
-        <FrameLayout
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/restaurantRecyclerView"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical">
-
-                <ListView
-                    android:id="@+id/restaurantListView"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:focusable="false"
-                    android:fadeScrollbars="false"
-                    android:overScrollMode="never"
-                    android:descendantFocusability="blocksDescendants"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent">
-
-                </ListView>
-
-            </LinearLayout>
-        </FrameLayout>
-
-    </com.melonltd.naberc.view.customize.OnLoadLayout>
+            android:layout_height="match_parent"
+            android:overScrollMode="never"
+            android:scrollbars="none" />
+    </cn.bingoogolapple.refreshlayout.BGARefreshLayout>
 
 </android.support.constraint.ConstraintLayout>
