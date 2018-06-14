@@ -21,8 +21,10 @@ import javax.net.ssl.X509TrustManager;
 
 import okhttp3.Call;
 import okhttp3.ConnectionPool;
+import okhttp3.FormBody;
 import okhttp3.HttpUrl;
 import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -51,6 +53,7 @@ public class ClientManager {
 
     private final static String HEADER_KEY = "Authorization";
 
+    private static final MediaType X_WWW_FORM = MediaType.parse("application/x-www-form-urlencoded; charset=utf-8");
     private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
     private static final MediaType TEXT = MediaType.parse("text/plain; charset=utf-8");
 
@@ -134,6 +137,34 @@ public class ClientManager {
             Log.e(TAG, "error", e);
             return null;
         }
+    }
+
+    public static Call postDate(HttpUrl url, String data) {
+//        RequestBody body = RequestBody.create(X_WWW_FORM, data);
+
+//        RequestBody requestBody = new MultipartBody.Builder()
+//                .setType(X_WWW_FORM)
+//                .addFormDataPart("data", data)
+//                .build();
+
+        RequestBody formBody = new FormBody.Builder()
+                .add("data", data)
+                .build();
+
+        Request request = new Request.Builder()
+//                .header(HEADER_KEY, Preference.headervalue)
+                .url(url)
+                .post(formBody)
+                .build();
+
+        return CLIENT.newCall(request);
+//        try {
+//            Response response = CLIENT.newCall(request).execute();
+//            return response;
+//        } catch (IOException e) {
+//            Log.e(TAG, "error", e);
+//            return null;
+//        }
     }
 
     public static Call put(String url, String json) {
