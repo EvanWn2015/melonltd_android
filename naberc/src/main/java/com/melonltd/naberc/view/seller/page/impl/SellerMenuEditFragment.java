@@ -13,6 +13,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.ActivityCompat;
 import android.util.Log;
@@ -28,23 +29,35 @@ import android.widget.TextView;
 
 import com.bigkoo.alertview.AlertView;
 import com.bigkoo.alertview.OnItemClickListener;
+import com.facebook.drawee.view.SimpleDraweeView;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.melonltd.naberc.R;
+import com.melonltd.naberc.model.constant.NaberConstant;
 import com.melonltd.naberc.view.common.BaseCore;
 import com.melonltd.naberc.view.common.abs.AbsPageFragment;
 import com.melonltd.naberc.view.common.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.common.type.PageType;
 import com.melonltd.naberc.view.seller.SellerMainActivity;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.List;
 
 public class SellerMenuEditFragment extends AbsPageFragment {
     private static final String TAG = SellerMenuEditFragment.class.getSimpleName();
     public static SellerMenuEditFragment FRAGMENT = null;
     private Button newDemandBtn, saveBtn;
-    private ImageView menuIconImage;
+    private SimpleDraweeView menuIconImage;
     private LinearLayout editLayout;
     private ImageButton scopeAddBtn, optAddBtn;
     private LinearLayout scopeLayout, optLayout;
@@ -88,7 +101,7 @@ public class SellerMenuEditFragment extends AbsPageFragment {
         newDemandBtn = v.findViewById(R.id.newDemandBtn);
         editLayout = v.findViewById(R.id.editLayout);
         saveBtn = v.findViewById(R.id.saveBtn);
-
+//        https://firebasestorage.googleapis.com/v0/b/naber-test.appspot.com/o/images%2Fmountains.jpg?alt=media&token=75e92b00-3d0e-4519-b1e6-11b00a38aa5f
         scopeAddBtn = v.findViewById(R.id.scopeAddBtn);
         scopeAddBtn.setVisibility(View.VISIBLE);
         scopeLayout = v.findViewById(R.id.scopeLayout);
@@ -116,8 +129,43 @@ public class SellerMenuEditFragment extends AbsPageFragment {
                     menuIconImage.setImageBitmap(mbmp);
                     break;
                 case PICK_FROM_GALLERY:
-                    Uri uri = data.getData();
-                    menuIconImage.setImageURI(uri);
+                    Uri imageUri = data.getData();
+                    Bitmap bitmap = null;
+                    try {
+                        bitmap = BitmapFactory.decodeStream(getContext().getContentResolver().openInputStream(imageUri));
+                    } catch (FileNotFoundException e) {
+                        e.printStackTrace();
+                    }
+
+
+                    ByteArrayOutputStream out = new ByteArrayOutputStream();
+                    bitmap.compress(Bitmap.CompressFormat.PNG, 80, out);
+                    byte[] datas = out.toByteArray();
+
+                    final StorageReference ref = FirebaseStorage
+                            .getInstance(NaberConstant.STORAGE_PATH)
+                            .getReference()
+                            .child("food/food_uuid.jpg");
+
+                    ref.putBytes(datas).continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                        @Override
+                        public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                            if (!task.isSuccessful()) {
+                                throw task.getException();
+                            }
+                            return ref.getDownloadUrl();
+                        }
+                    }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Uri> task) {
+                            if (task.isSuccessful()) {
+                                Uri downloadUri = task.getResult();
+                                menuIconImage.setImageURI(downloadUri);
+                                Log.d(TAG, downloadUri.toString());
+                            }
+                        }
+                    });
+
                     break;
             }
         }
@@ -188,7 +236,7 @@ public class SellerMenuEditFragment extends AbsPageFragment {
                                     intent.setAction(Intent.ACTION_GET_CONTENT);
                                     startActivityForResult(intent, PICK_FROM_GALLERY);
                                 }
-                            } else if (position ==0) {
+                            } else if (position == 0) {
                                 // 相機權限
                                 if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                                     ActivityCompat.requestPermissions(getActivity(), BaseCore.CAMERA, BaseCore.CAMERA_CODE);
