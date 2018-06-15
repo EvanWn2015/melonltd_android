@@ -3,6 +3,7 @@ package com.melonltd.naberc.model.helper.okhttp;
 import android.util.Log;
 
 import com.melonltd.naberc.model.api.ApiUrl;
+import com.melonltd.naberc.util.Tools;
 
 import java.io.IOException;
 import java.net.ConnectException;
@@ -25,6 +26,7 @@ public class ApiManager {
         return CLIENT_MANAGER;
     }
 
+
     public static void getUserInfo(int rule_id, ApiCallback callback) {
         HttpUrl url = HttpUrl.parse(ApiUrl.userInfo).newBuilder()
                 .addQueryParameter("user_id", "ecadmin")
@@ -36,9 +38,30 @@ public class ApiManager {
     }
 
     public static <T> void test(ApiCallback callback) {
+        TData tt=  new TData();
+        String gg = Tools.GSON.toJson(tt);
         HttpUrl url = HttpUrl.parse(ApiUrl.test).newBuilder()
                 .build();
-        Call call = getClient().get(url);
+
+
+        Call call = getClient().postDate(url, tt.data);
         call.enqueue(callback);
     }
+
+
+    public static class TData{
+        public String data = Tools.GSON.toJson(new TT("0987654321", "GVGhhGhb"));
+
+    }
+    public static class TT {
+
+        private String password;
+        private String phone;
+
+        public TT(String phone, String password){
+            this.phone = phone;
+            this.password = password;
+        }
+    }
+
 }

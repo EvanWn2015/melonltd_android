@@ -20,6 +20,13 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
+import com.google.firebase.auth.AuthResult;
+import com.google.firebase.auth.EmailAuthProvider;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.melonltd.naberc.R;
 import com.melonltd.naberc.model.preferences.SharedPreferencesService;
@@ -77,8 +84,9 @@ public abstract class BaseCore extends AppCompatActivity implements LocationList
     public static final int IO_STREAM_CODE = 1987;
     public static final String[] IO_STREAM = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
 
-//    public static FirebaseAuth auth = FirebaseAuth.getInstance();
-//    public static FirebaseUser currentUser = auth.getCurrentUser();
+    public static FirebaseAuth auth = FirebaseAuth.getInstance();
+    public static FirebaseUser currentUser = auth.getCurrentUser();
+
 
     public FragmentManager fragmentManager = getSupportFragmentManager();
     //    public static PopUpDialog POPUP = PopUpDialog.getInstance();
@@ -91,6 +99,28 @@ public abstract class BaseCore extends AppCompatActivity implements LocationList
         context = this;
         String toekn = FirebaseInstanceId.getInstance().getToken();
         Log.d(TAG, toekn + "");
+        Log.d(TAG, auth + "");
+        Log.d(TAG, currentUser + "");
+//        AuthCredential credential = EmailAuthProvider.getCredential(email, password);
+        auth.signInAnonymously()
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+
+                            currentUser = auth.getCurrentUser();
+                            Log.d(TAG, "signInAnonymously:success");
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w(TAG, "signInAnonymously:failure", task.getException());
+                        }
+
+                        // ...
+                    }
+                });
+
+
 //        try {
 //            int v = getPackageManager().getPackageInfo("com.google.android.gms", 0 ).versionCode;
 //            Log.d(TAG, v +"");
@@ -159,7 +189,7 @@ public abstract class BaseCore extends AppCompatActivity implements LocationList
             Log.d(TAG, "no NETWORK? ???");
         } else {
             // TODO check google service version
-//            Tools.GoogleVersion.checkVersion(context, this);
+            Tools.GoogleVersion.checkVersion(context, this);
         }
 
     }
@@ -172,21 +202,29 @@ public abstract class BaseCore extends AppCompatActivity implements LocationList
     }
 
     private void doNext(int requestCode, int[] grantResults) {
-        if (grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-            return;
-        }
+        Log.d(TAG, grantResults.length +"" );
 
-        switch (requestCode) {
-//            case CAMERA_CODE:
+
+//        switch (requestCode) {
+////            case CAMERA_CODE:
+////                break;
+//            case LOCATION_CODE:
+//                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//                    setLocationListener();
+//                }else{
+//                    return;
+//                }
 //                break;
-            case LOCATION_CODE:
-                setLocationListener();
-                break;
-            case IO_STREAM_CODE:
-                break;
-            default:
-
-        }
+//            case IO_STREAM_CODE:
+//                if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+////                    setLocationListener();
+//                }else{
+//                    return;
+//                }
+//                break;
+//            default:
+//
+//        }
     }
 
     // TODO 偏好儲存設定 寫入

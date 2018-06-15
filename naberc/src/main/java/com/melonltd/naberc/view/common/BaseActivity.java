@@ -1,26 +1,26 @@
 package com.melonltd.naberc.view.common;
 
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
+import android.support.annotation.NonNull;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.melonltd.naberc.R;
 import com.melonltd.naberc.view.common.abs.AbsPageFragment;
 import com.melonltd.naberc.view.common.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.common.type.PageType;
-import com.melonltd.naberc.view.user.UserMainActivity;
-
-import java.util.List;
 
 public class BaseActivity extends BaseCore implements View.OnLayoutChangeListener {
-
+    private static final String TAG = BaseActivity.class.getSimpleName();
     private Context context;
     public static Toolbar toolbar;
     private FrameLayout baseContainer;
@@ -31,12 +31,19 @@ public class BaseActivity extends BaseCore implements View.OnLayoutChangeListene
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base);
         context = this;
+
+//        FirebaseStorage storage = FirebaseStorage.getInstance();
+//        gs://naber-test.appspot.com
+
+
+
+
         getViews();
         BaseCore.FRAGMENT_TAG = PageType.LOGIN.name();
         removeFragment();
     }
 
-    private  void getViews(){
+    private void getViews() {
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         baseContainer = findViewById(R.id.baseContainer);

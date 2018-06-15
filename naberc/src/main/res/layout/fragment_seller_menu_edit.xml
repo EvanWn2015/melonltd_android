@@ -5,6 +5,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/seller_menu_edit_page"
     android:layout_width="match_parent"
+    xmlns:fresco="http://schemas.android.com/apk/res-auto"
     android:layout_height="match_parent"
     android:overScrollMode="never"
     android:scrollbars="none"
@@ -30,7 +31,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"></View>
 
-        <ImageView
+        <com.facebook.drawee.view.SimpleDraweeView
             android:id="@+id/menuIconImage"
             android:layout_width="120dp"
             android:layout_height="120dp"
@@ -38,11 +39,13 @@
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:src="@drawable/naber_icon_logo"
             app:layout_constraintBottom_toBottomOf="@+id/view10"
             app:layout_constraintEnd_toEndOf="@+id/view10"
             app:layout_constraintStart_toStartOf="@+id/view10"
-            app:layout_constraintTop_toTopOf="@+id/view10" />
+            app:layout_constraintTop_toTopOf="@+id/view10"
+            fresco:backgroundImage="@drawable/naber_reverse_gary_button_style"
+            fresco:overlayImage="@drawable/naber_icon_logo"
+            fresco:failureImage="@drawable/naber_icon_logo" />
 
         <TextView
             android:id="@+id/textView80"

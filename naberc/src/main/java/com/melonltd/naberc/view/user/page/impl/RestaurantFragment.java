@@ -185,7 +185,7 @@ public class RestaurantFragment extends AbsPageFragment implements View.OnClickL
 //            b.putString("where", "RESTAURANT");
             BaseCore.FRAGMENT_TAG = PageType.RESTAURANT_DETAIL.name();
             AbsPageFragment f = PageFragmentFactory.of(PageType.RESTAURANT_DETAIL, b);
-            getFragmentManager().beginTransaction().replace(R.id.baseContainer, f).commit();
+            getFragmentManager().beginTransaction().replace(R.id.frameContainer, f).commit();
 //        } else if (HOME_TO_RESTAURANT_DETAIL_INDEX >=0){
 //            Log.d(TAG, "home to this ");
         } else {
