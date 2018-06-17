@@ -2,29 +2,21 @@ package com.melonltd.naberc.view.seller;
 
 import android.app.Activity;
 import android.content.Context;
-import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.design.widget.NavigationView;
 import android.support.design.widget.TabLayout;
-import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
-import android.widget.CompoundButton;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.common.collect.Lists;
 import com.melonltd.naberc.R;
-import com.melonltd.naberc.model.helper.okhttp.ApiCallback;
-import com.melonltd.naberc.model.helper.okhttp.ApiManager;
-import com.melonltd.naberc.view.common.BaseActivity;
 import com.melonltd.naberc.view.common.BaseCore;
 import com.melonltd.naberc.view.common.abs.AbsPageFragment;
 import com.melonltd.naberc.view.common.factory.PageFragmentFactory;
@@ -32,7 +24,17 @@ import com.melonltd.naberc.view.common.type.PageType;
 import com.melonltd.naberc.view.customize.NaberTab;
 import com.melonltd.naberc.view.customize.SwitchButton;
 import com.melonltd.naberc.view.seller.adapter.DateSelectAdapter;
-import com.melonltd.naberc.view.user.UserMainActivity;
+import com.melonltd.naberc.view.seller.page.impl.SellerCategoryListFragment;
+import com.melonltd.naberc.view.seller.page.impl.SellerDetailFragment;
+import com.melonltd.naberc.view.seller.page.impl.SellerMenuEditFragment;
+import com.melonltd.naberc.view.seller.page.impl.SellerOrderLogsDetailFragment;
+import com.melonltd.naberc.view.seller.page.impl.SellerOrdersFragment;
+import com.melonltd.naberc.view.seller.page.impl.SellerOrdersLogsFragment;
+import com.melonltd.naberc.view.seller.page.impl.SellerRestaurantFragment;
+import com.melonltd.naberc.view.seller.page.impl.SellerSearchFragment;
+import com.melonltd.naberc.view.seller.page.impl.SellerSetUpFragment;
+import com.melonltd.naberc.view.seller.page.impl.SellerSimpleInformationFragment;
+import com.melonltd.naberc.view.seller.page.impl.SellerStatFragment;
 
 import java.util.List;
 
@@ -41,10 +43,11 @@ public class SellerMainActivity extends BaseCore implements TabLayout.OnTabSelec
     private static Context context;
     private static DrawerLayout drawer;
     public static TabLayout tabLayout;
+
     private DateSelectAdapter adapter;
     private RecyclerView sellerRecyclerView;
-
     private static View.OnClickListener toolbarNavigationClickListener;
+
     public static Toolbar toolbar;
     private static Drawable backIcon, defualtIcon;
     private FrameLayout frameLayout;
@@ -69,17 +72,15 @@ public class SellerMainActivity extends BaseCore implements TabLayout.OnTabSelec
         sellerRecyclerView.setLayoutManager(layoutManager);
         sellerRecyclerView.setAdapter(adapter);
 
-        removeFragment();
-        AbsPageFragment fragment = null;
         FRAGMENT_TAG = PageType.SELLER_SEARCH.name();
-        fragment = PageFragmentFactory.of(PageType.SELLER_SEARCH, null);
-        fragmentManager.beginTransaction().replace(R.id.sellerFrameContainer, fragment).addToBackStack(fragment.toString()).commit();
+        AbsPageFragment fragment = PageFragmentFactory.of(PageType.SELLER_SEARCH, null);
+        getSupportFragmentManager().beginTransaction().replace(R.id.sellerFrameContainer, fragment).addToBackStack(PageType.SELLER_SEARCH.name()).commit();
     }
 
     private void getViews() {
         toolbar = findViewById(R.id.toolbar);
-
         setSupportActionBar(toolbar);
+
         drawer = findViewById(R.id.seller_drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -93,9 +94,8 @@ public class SellerMainActivity extends BaseCore implements TabLayout.OnTabSelec
         tabLayout = findViewById(R.id.sellerMenuTabLayout);
         tabLayout.addOnTabSelectedListener(this);
         frameLayout = findViewById(R.id.sellerFrameContainer);
-        frameLayout.addOnLayoutChangeListener(this);
+//        frameLayout.addOnLayoutChangeListener(this);
     }
-
 
     private void setListener() {
 
@@ -120,13 +120,30 @@ public class SellerMainActivity extends BaseCore implements TabLayout.OnTabSelec
         super.onResume();
     }
 
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        SellerCategoryListFragment.FRAGMENT = null;
+        SellerDetailFragment.FRAGMENT = null;
+        SellerMenuEditFragment.FRAGMENT = null;
+        SellerOrderLogsDetailFragment.FRAGMENT = null;
+        SellerOrdersFragment.FRAGMENT = null;
+        SellerOrdersLogsFragment.FRAGMENT = null;
+        SellerRestaurantFragment.FRAGMENT = null;
+        SellerSearchFragment.FRAGMENT = null;
+        SellerSetUpFragment.FRAGMENT = null;
+        SellerSimpleInformationFragment.FRAGMENT = null;
+        SellerStatFragment.FRAGMENT = null;
+    }
+
     @Override
     public void onTabSelected(TabLayout.Tab tab) {
         int index = Integer.parseInt(tab.getTag().toString());
         if (SELLER_MAIN_PAGE.contains(PageType.ofId(index))) {
             AbsPageFragment fragment = PageFragmentFactory.of(PageType.ofId(Integer.parseInt(tab.getTag().toString())), null);
             FRAGMENT_TAG = PageType.ofId(Integer.parseInt(tab.getTag().toString())).name();
-            fragmentManager.beginTransaction().addToBackStack(fragment.toString()).replace(R.id.sellerFrameContainer, fragment).commit();
+            getSupportFragmentManager().beginTransaction().addToBackStack(fragment.toString()).replace(R.id.sellerFrameContainer, fragment).commit();
         }
         View v = tab.getCustomView();
         ImageView icon = v.findViewById(R.id.tabIcon);
@@ -151,7 +168,7 @@ public class SellerMainActivity extends BaseCore implements TabLayout.OnTabSelec
             if (SELLER_MAIN_PAGE.contains(PageType.ofId(index))) {
                 AbsPageFragment fragment = PageFragmentFactory.of(PageType.ofId(Integer.parseInt(tab.getTag().toString())), null);
                 FRAGMENT_TAG = PageType.ofId(Integer.parseInt(tab.getTag().toString())).name();
-                fragmentManager.beginTransaction().addToBackStack(fragment.toString()).replace(R.id.sellerFrameContainer, fragment).commit();
+                getSupportFragmentManager().beginTransaction().addToBackStack(fragment.toString()).replace(R.id.sellerFrameContainer, fragment).commit();
             }
 
             View v = tab.getCustomView();
@@ -161,6 +178,7 @@ public class SellerMainActivity extends BaseCore implements TabLayout.OnTabSelec
             text.setTextColor(getResources().getColor(R.color.naber_basis));
         }
     }
+
 
     @Override
     public void onLayoutChange(View view, int left, int top, int right, int bottom, int oldLeft, int oldTop, int oldRight, int oldBottom) {
@@ -214,7 +232,7 @@ public class SellerMainActivity extends BaseCore implements TabLayout.OnTabSelec
 
 
     public static void lockDrawer(boolean lock) {
-        if (lock){
+        if (lock) {
             SellerMainActivity.toolbar.setNavigationIcon(null);
             drawer.closeDrawers();
         }

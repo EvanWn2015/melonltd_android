@@ -22,6 +22,7 @@ import com.melonltd.naberc.view.common.BaseCore;
 import com.melonltd.naberc.view.common.abs.AbsPageFragment;
 import com.melonltd.naberc.view.common.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.common.type.PageType;
+import com.melonltd.naberc.view.user.UserMainActivity;
 import com.melonltd.naberc.view.user.adapter.RestaurantAdapter;
 
 import java.util.List;
@@ -180,6 +181,7 @@ public class RestaurantFragment extends AbsPageFragment implements View.OnClickL
     public void onResume() {
         super.onResume();
         // TODO Bundle check where to detail page HOME or this
+        UserMainActivity.changeTabAndToolbarStatus();
         if (TO_RESTAURANT_DETAIL_INDEX >= 0) {
             Bundle b = new Bundle();
 //            b.putString("where", "RESTAURANT");

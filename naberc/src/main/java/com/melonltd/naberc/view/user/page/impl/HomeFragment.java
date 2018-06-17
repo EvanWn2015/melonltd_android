@@ -21,6 +21,7 @@ import com.melonltd.naberc.view.common.BaseCore;
 import com.melonltd.naberc.view.common.abs.AbsPageFragment;
 import com.melonltd.naberc.view.common.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.common.type.PageType;
+import com.melonltd.naberc.view.user.UserMainActivity;
 import com.melonltd.naberc.view.user.adapter.RestaurantAdapter;
 
 import java.util.ArrayList;
@@ -35,15 +36,11 @@ public class HomeFragment extends AbsPageFragment {
     private static final String TAG = HomeFragment.class.getSimpleName();
     public static HomeFragment FRAGMENT = null;
 
-
     private BGABanner banner;
 
-    private BGARefreshLayout bgaRefreshLayout;
-    private RecyclerView recyclerView;
     private RestaurantAdapter adapter;
     private List<String> list = Lists.newArrayList();
     private List<String> images = Lists.<String>newArrayList();
-
 
     public HomeFragment() {
     }
@@ -74,7 +71,7 @@ public class HomeFragment extends AbsPageFragment {
         if (container.getTag(R.id.user_home_page) == null) {
             View v = inflater.inflate(R.layout.fragment_home, container, false);
             getViews(v);
-            setListener();
+//            setListener();
             container.setTag(R.id.user_home_page, v);
             return v;
         }
@@ -84,8 +81,8 @@ public class HomeFragment extends AbsPageFragment {
     private void getViews(View v) {
         banner = v.findViewById(R.id.homeBanner);
 
-        bgaRefreshLayout = v.findViewById(R.id.top30BGARefreshLayout);
-        recyclerView = v.findViewById(R.id.top30RecyclerView);
+        final BGARefreshLayout bgaRefreshLayout = v.findViewById(R.id.top30BGARefreshLayout);
+        RecyclerView recyclerView = v.findViewById(R.id.top30RecyclerView);
         BGANormalRefreshViewHolder refreshViewHolder = new BGANormalRefreshViewHolder(getContext(), true);
         refreshViewHolder.setPullDownRefreshText("Pull");
         refreshViewHolder.setRefreshingText("Pull to refresh");
@@ -97,10 +94,8 @@ public class HomeFragment extends AbsPageFragment {
         final LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
-    }
 
-
-    private void setListener() {
+        //setListener
 
         banner.setAdapter(new BGABanner.Adapter<ImageView, String>() {
             @Override
@@ -165,6 +160,7 @@ public class HomeFragment extends AbsPageFragment {
         });
     }
 
+
     private void loadBannerData(){
         images = Lists.<String>newArrayList(
                 "https://www.mcdonalds.com/content/dam/usa/documents/mcdelivery/mcdelivery_new11.jpg",
@@ -204,6 +200,7 @@ public class HomeFragment extends AbsPageFragment {
     @Override
     public void onResume() {
         super.onResume();
+        UserMainActivity.changeTabAndToolbarStatus();
 //        if ( RestaurantFragment.TO_RESTAURANT_DETAIL_INDEX >= 0) {
 //            Bundle b = new Bundle();
 //            b.putString("where", "RESTAURANT");

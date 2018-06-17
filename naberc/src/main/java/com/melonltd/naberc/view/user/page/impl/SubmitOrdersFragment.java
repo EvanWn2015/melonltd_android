@@ -87,6 +87,7 @@ public class SubmitOrdersFragment extends AbsPageFragment implements View.OnClic
     @Override
     public void onResume() {
         super.onResume();
+        UserMainActivity.changeTabAndToolbarStatus();
         if (UserMainActivity.toolbar != null) {
             UserMainActivity.navigationIconDisplay(true, new View.OnClickListener() {
                 @Override

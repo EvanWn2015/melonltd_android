@@ -27,6 +27,7 @@ import com.melonltd.naberc.view.common.BaseCore;
 import com.melonltd.naberc.view.common.abs.AbsPageFragment;
 import com.melonltd.naberc.view.common.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.common.type.PageType;
+import com.melonltd.naberc.view.user.UserMainActivity;
 
 import java.util.List;
 
@@ -144,6 +145,7 @@ public class ShoppingCartFragment extends AbsPageFragment {
     @Override
     public void onResume() {
         super.onResume();
+        UserMainActivity.changeTabAndToolbarStatus();
     }
 
     @Override

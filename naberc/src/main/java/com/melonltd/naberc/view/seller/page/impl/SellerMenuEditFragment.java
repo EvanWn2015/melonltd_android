@@ -3,15 +3,11 @@ package com.melonltd.naberc.view.seller.page.impl;
 
 import android.Manifest;
 import android.app.Activity;
-import android.app.Fragment;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.Matrix;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
@@ -23,7 +19,6 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
@@ -35,13 +30,14 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.melonltd.naberc.R;
 import com.melonltd.naberc.model.constant.NaberConstant;
+import com.melonltd.naberc.util.PhotoTools;
+import com.melonltd.naberc.util.Tools;
 import com.melonltd.naberc.view.common.BaseCore;
 import com.melonltd.naberc.view.common.abs.AbsPageFragment;
 import com.melonltd.naberc.view.common.factory.PageFragmentFactory;
@@ -49,8 +45,6 @@ import com.melonltd.naberc.view.common.type.PageType;
 import com.melonltd.naberc.view.seller.SellerMainActivity;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.util.List;
 
 public class SellerMenuEditFragment extends AbsPageFragment {
@@ -123,51 +117,61 @@ public class SellerMenuEditFragment extends AbsPageFragment {
         super.onActivityResult(requestCode, resultCode, data);
 
         if (resultCode == Activity.RESULT_OK) {
+            Bitmap bitmap = null;
             switch (requestCode) {
                 case PICK_FROM_CAMERA:
-                    Bitmap mbmp = (Bitmap) data.getExtras().get("data");
-                    menuIconImage.setImageBitmap(mbmp);
+                    bitmap = (Bitmap) data.getExtras().get("data");
+                    menuIconImage.setImageBitmap(bitmap);
                     break;
                 case PICK_FROM_GALLERY:
-                    Uri imageUri = data.getData();
-                    Bitmap bitmap = null;
+                    Uri pickedImage = data.getData();
                     try {
-                        bitmap = BitmapFactory.decodeStream(getContext().getContentResolver().openInputStream(imageUri));
-                    } catch (FileNotFoundException e) {
-                        e.printStackTrace();
+                        bitmap = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), pickedImage);
+                    } catch (Exception e) {
+                        // Manage exception ...
                     }
-
-
-                    ByteArrayOutputStream out = new ByteArrayOutputStream();
-                    bitmap.compress(Bitmap.CompressFormat.PNG, 80, out);
-                    byte[] datas = out.toByteArray();
-
-                    final StorageReference ref = FirebaseStorage
-                            .getInstance(NaberConstant.STORAGE_PATH)
-                            .getReference()
-                            .child("food/food_uuid.jpg");
-
-                    ref.putBytes(datas).continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
-                        @Override
-                        public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
-                            if (!task.isSuccessful()) {
-                                throw task.getException();
-                            }
-                            return ref.getDownloadUrl();
-                        }
-                    }).addOnCompleteListener(new OnCompleteListener<Uri>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Uri> task) {
-                            if (task.isSuccessful()) {
-                                Uri downloadUri = task.getResult();
-                                menuIconImage.setImageURI(downloadUri);
-                                Log.d(TAG, downloadUri.toString());
-                            }
-                        }
-                    });
-
                     break;
             }
+
+            if (bitmap != null && bitmap.getByteCount() != 0){
+                ByteArrayOutputStream out = new ByteArrayOutputStream();
+                bitmap = PhotoTools.sampleBitmap(bitmap, 120);
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+                byte[] bytes = out.toByteArray();
+
+                final StorageReference ref = PhotoTools.getReference(NaberConstant.STORAGE_PATH, "food/", "food_uuid.jpg");
+                ref.putBytes(bytes).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception exception) {
+                        // Handle unsuccessful uploads
+                    }
+                }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onSuccess(UploadTask.TaskSnapshot task) {
+
+                    }
+                }).continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+                    @Override
+                    public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                        if (!task.isSuccessful()) {
+                            throw task.getException();
+                        }
+                        return ref.getDownloadUrl();
+                    }
+                }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Uri> task) {
+                        if (task.isSuccessful()) {
+                            Uri downloadUri = task.getResult();
+                            menuIconImage.setImageURI(downloadUri);
+                            Log.d(TAG, downloadUri.toString());
+                        }
+                    }
+                });
+            }else {
+                // TODO 圖片上傳失敗
+            }
+
         }
     }
 
@@ -228,7 +232,8 @@ public class SellerMenuEditFragment extends AbsPageFragment {
                         public void onItemClick(Object o, int position) {
                             if (position == 1) {
                                 // 確認寫入權限
-                                if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                                if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
+                                        ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
                                     ActivityCompat.requestPermissions(getActivity(), BaseCore.IO_STREAM, BaseCore.IO_STREAM_CODE);
                                 } else {
                                     Intent intent = new Intent();

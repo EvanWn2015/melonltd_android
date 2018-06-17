@@ -21,7 +21,6 @@ import com.melonltd.naberc.view.common.type.PageType;
 public class RecoverPasswordFragment extends AbsPageFragment implements View.OnClickListener {
     private static final String TAG = RecoverPasswordFragment.class.getSimpleName();
     public static RecoverPasswordFragment FRAGMENT = null;
-    private Button submitBtn;
     private EditText mailEdit;
 
     public RecoverPasswordFragment() {
@@ -58,7 +57,7 @@ public class RecoverPasswordFragment extends AbsPageFragment implements View.OnC
     }
 
     private void getView(View v) {
-        submitBtn = v.findViewById(R.id.submitRecoverPasswordBtn);
+        Button submitBtn = v.findViewById(R.id.submitRecoverPasswordBtn);
         mailEdit = v.findViewById(R.id.recoverEmailEdit);
         submitBtn.setOnClickListener(this);
     }
@@ -66,6 +65,7 @@ public class RecoverPasswordFragment extends AbsPageFragment implements View.OnC
     @Override
     public void onResume() {
         super.onResume();
+        BaseActivity.changeToolbarStatus();
         mailEdit.setText("");
         if (BaseActivity.toolbar != null) {
             BaseActivity.navigationIconDisplay(true, new View.OnClickListener() {

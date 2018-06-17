@@ -168,7 +168,7 @@ public class RestaurantDetailFragment extends AbsPageFragment {
         if (list.size() == 0) {
             doLoadData(true);
         }
-
+        UserMainActivity.changeTabAndToolbarStatus();
         if (UserMainActivity.toolbar != null) {
             UserMainActivity.navigationIconDisplay(true, new View.OnClickListener() {
                 @Override

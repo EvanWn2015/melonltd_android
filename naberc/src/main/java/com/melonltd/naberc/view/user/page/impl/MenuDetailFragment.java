@@ -240,6 +240,7 @@ public class MenuDetailFragment extends AbsPageFragment implements View.OnClickL
     @Override
     public void onResume() {
         super.onResume();
+        UserMainActivity.changeTabAndToolbarStatus();
         if (contentLayout.getChildCount() == 0) {
             refreshContent();
         }

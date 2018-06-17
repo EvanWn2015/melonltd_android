@@ -23,7 +23,7 @@ import com.melonltd.naberc.view.common.abs.AbsPageFragment;
 import com.melonltd.naberc.view.user.page.impl.HistoryFragment;
 import com.melonltd.naberc.view.user.page.impl.HomeFragment;
 import com.melonltd.naberc.view.common.page.impl.LoginFragment;
-import com.melonltd.naberc.view.user.page.impl.RegisteredFragment;
+import com.melonltd.naberc.view.common.page.impl.RegisteredFragment;
 import com.melonltd.naberc.view.user.page.impl.ResetPasswordFragment;
 import com.melonltd.naberc.view.user.page.impl.RestaurantFragment;
 import com.melonltd.naberc.view.user.page.impl.SetUpFragment;
@@ -49,7 +49,7 @@ public enum PageType {
     // common
     LOGIN(R.string.common_page_login_title, 100, LoginFragment.class),
     RECOVER_PASSWORD(R.string.common_page_recover_password_title, 101, RecoverPasswordFragment.class),
-    REGISTERED(R.string.user_page_registered_title, 103, RegisteredFragment.class),
+    REGISTERED_USER(R.string.user_page_registered_title, 103, RegisteredFragment.class),
     VERIFY_SMS(R.string.user_page_verify_sms_title, 105, VerifySMSFragment.class),
     REGISTERED_SELLER(R.string.seller_page_registered_title, 104, RegisteredSellerFragment.class),
     // user
@@ -109,6 +109,10 @@ public enum PageType {
             }
         }
         return HOME;
+    }
+
+    public int getId (){
+        return id;
     }
 
     public static PageType ofPosition(int position) {

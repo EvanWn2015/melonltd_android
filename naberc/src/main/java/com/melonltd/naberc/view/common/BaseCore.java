@@ -2,6 +2,7 @@ package com.melonltd.naberc.view.common;
 
 import android.Manifest;
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -14,28 +15,22 @@ import android.os.PersistableBundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
-import com.google.firebase.auth.EmailAuthProvider;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.melonltd.naberc.R;
 import com.melonltd.naberc.model.preferences.SharedPreferencesService;
 import com.melonltd.naberc.util.Tools;
-import com.melonltd.naberc.view.common.abs.AbsPageFragment;
 import com.melonltd.naberc.view.common.page.impl.LoginFragment;
 import com.melonltd.naberc.view.common.page.impl.RecoverPasswordFragment;
 import com.melonltd.naberc.view.common.page.impl.RegisteredSellerFragment;
-import com.melonltd.naberc.view.customize.LoadingBar;
 import com.melonltd.naberc.view.user.page.impl.RestaurantFragment;
 import com.melonltd.naberc.view.common.page.impl.VerifySMSFragment;
 import com.melonltd.naberc.view.common.type.PageType;
@@ -56,16 +51,13 @@ import com.melonltd.naberc.view.user.page.impl.HistoryFragment;
 import com.melonltd.naberc.view.user.page.impl.HomeFragment;
 import com.melonltd.naberc.view.user.page.impl.MenuDetailFragment;
 import com.melonltd.naberc.view.user.page.impl.OrderDetailFragment;
-import com.melonltd.naberc.view.user.page.impl.RegisteredFragment;
+import com.melonltd.naberc.view.common.page.impl.RegisteredFragment;
 import com.melonltd.naberc.view.user.page.impl.ResetPasswordFragment;
 import com.melonltd.naberc.view.user.page.impl.RestaurantDetailFragment;
 import com.melonltd.naberc.view.user.page.impl.SetUpFragment;
 import com.melonltd.naberc.view.user.page.impl.ShoppingCartFragment;
 import com.melonltd.naberc.view.user.page.impl.SimpleInformationFragment;
 import com.melonltd.naberc.view.user.page.impl.SubmitOrdersFragment;
-
-//import com.google.firebase.auth.FirebaseAuth;
-//import com.google.firebase.auth.FirebaseUser;
 
 public abstract class BaseCore extends AppCompatActivity implements LocationListener {
     private static final String TAG = BaseCore.class.getSimpleName();
@@ -84,12 +76,8 @@ public abstract class BaseCore extends AppCompatActivity implements LocationList
     public static final int IO_STREAM_CODE = 1987;
     public static final String[] IO_STREAM = new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE, Manifest.permission.READ_EXTERNAL_STORAGE};
 
-    public static FirebaseAuth auth = FirebaseAuth.getInstance();
-    public static FirebaseUser currentUser = auth.getCurrentUser();
+    public static FirebaseUser currentUser ;
 
-
-    public FragmentManager fragmentManager = getSupportFragmentManager();
-    //    public static PopUpDialog POPUP = PopUpDialog.getInstance();
     public static boolean IS_USER = true;
     public static boolean IS_HAS_ACC = false;
 
@@ -99,26 +87,7 @@ public abstract class BaseCore extends AppCompatActivity implements LocationList
         context = this;
         String toekn = FirebaseInstanceId.getInstance().getToken();
         Log.d(TAG, toekn + "");
-        Log.d(TAG, auth + "");
-        Log.d(TAG, currentUser + "");
-//        AuthCredential credential = EmailAuthProvider.getCredential(email, password);
-        auth.signInAnonymously()
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-
-                            currentUser = auth.getCurrentUser();
-                            Log.d(TAG, "signInAnonymously:success");
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w(TAG, "signInAnonymously:failure", task.getException());
-                        }
-
-                        // ...
-                    }
-                });
+        getCurrentUser(this);
 
 
 //        try {
@@ -157,7 +126,8 @@ public abstract class BaseCore extends AppCompatActivity implements LocationList
         }
 
         // TODO 寫入權限
-        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED &&
+                ActivityCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(this, IO_STREAM, IO_STREAM_CODE);
         }
 
@@ -172,6 +142,24 @@ public abstract class BaseCore extends AppCompatActivity implements LocationList
 
         // TODO  init SharedPreferences
         SharedPreferencesService.newInstance(getSharedPreferences(getString(R.string.shared_preferences_key), Context.MODE_PRIVATE));
+    }
+
+    public static void getCurrentUser (Activity activity){
+        final FirebaseAuth auth = FirebaseAuth.getInstance();
+        auth.signInAnonymously()
+                .addOnCompleteListener(activity, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+
+                            currentUser = auth.getCurrentUser();
+                            Log.d(TAG, "signInAnonymously:success");
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Log.w(TAG, "signInAnonymously:failure", task.getException());
+                        }
+                    }
+                });
     }
 
     @Override
@@ -282,43 +270,43 @@ public abstract class BaseCore extends AppCompatActivity implements LocationList
         return super.onKeyDown(keyCode, event);
     }
 
-    public void removeFragment(){
-        LoginFragment.FRAGMENT = null;
-        RecoverPasswordFragment.FRAGMENT = null;
-        RegisteredFragment.FRAGMENT = null;
-        VerifySMSFragment.FRAGMENT = null;
-        RegisteredSellerFragment.FRAGMENT = null;
-        HomeFragment.FRAGMENT = null;
-        RestaurantFragment.FRAGMENT = null;
-        RestaurantDetailFragment.FRAGMENT = null;
-        CategoryMenuFragment.FRAGMENT = null;
-        MenuDetailFragment.FRAGMENT = null;
-        ShoppingCartFragment.FRAGMENT = null;
-        SubmitOrdersFragment.FRAGMENT = null;
-        HistoryFragment.FRAGMENT = null;
-        OrderDetailFragment.FRAGMENT = null;
-        SetUpFragment.FRAGMENT = null;
-        AccountDetailFragment.FRAGMENT = null;
-        SimpleInformationFragment.FRAGMENT = null;
-        ResetPasswordFragment.FRAGMENT = null;
-        SellerSearchFragment.FRAGMENT = null;
-        SellerOrdersFragment.FRAGMENT = null;
-        SellerStatFragment.FRAGMENT = null;
-        SellerOrdersLogsFragment.FRAGMENT = null;
-        SellerOrderLogsDetailFragment.FRAGMENT = null;
-        SellerRestaurantFragment.FRAGMENT = null;
-        SellerCategoryListFragment.FRAGMENT = null;
-        SellerMenuEditFragment.FRAGMENT = null;
-        SellerSetUpFragment.FRAGMENT = null;
-        SellerDetailFragment.FRAGMENT = null;
-        SellerSimpleInformationFragment.FRAGMENT = null;
+//    public void removeFragment(){
+//        LoginFragment.FRAGMENT = null;
+//        RecoverPasswordFragment.FRAGMENT = null;
+//        RegisteredFragment.FRAGMENT = null;
+//        VerifySMSFragment.FRAGMENT = null;
+//        RegisteredSellerFragment.FRAGMENT = null;
+//        HomeFragment.FRAGMENT = null;
+//        RestaurantFragment.FRAGMENT = null;
+//        RestaurantDetailFragment.FRAGMENT = null;
+//        CategoryMenuFragment.FRAGMENT = null;
+//        MenuDetailFragment.FRAGMENT = null;
+//        ShoppingCartFragment.FRAGMENT = null;
+//        SubmitOrdersFragment.FRAGMENT = null;
+//        HistoryFragment.FRAGMENT = null;
+//        OrderDetailFragment.FRAGMENT = null;
+//        SetUpFragment.FRAGMENT = null;
+//        AccountDetailFragment.FRAGMENT = null;
+//        SimpleInformationFragment.FRAGMENT = null;
+//        ResetPasswordFragment.FRAGMENT = null;
+//        SellerSearchFragment.FRAGMENT = null;
+//        SellerOrdersFragment.FRAGMENT = null;
+//        SellerStatFragment.FRAGMENT = null;
+//        SellerOrdersLogsFragment.FRAGMENT = null;
+//        SellerOrderLogsDetailFragment.FRAGMENT = null;
+//        SellerRestaurantFragment.FRAGMENT = null;
+//        SellerCategoryListFragment.FRAGMENT = null;
+//        SellerMenuEditFragment.FRAGMENT = null;
+//        SellerSetUpFragment.FRAGMENT = null;
+//        SellerDetailFragment.FRAGMENT = null;
+//        SellerSimpleInformationFragment.FRAGMENT = null;
 
-        for (Fragment fragment : fragmentManager.getFragments()) {
-            Log.d(TAG, fragment + "");
-            if (fragment instanceof AbsPageFragment) {
-                fragmentManager.beginTransaction().remove(fragment).commit();
-            }
-        }
-    }
+//        for (Fragment fragment : fragmentManager.getFragments()) {
+//            Log.d(TAG, fragment + "");
+//            if (fragment instanceof AbsPageFragment) {
+//                fragmentManager.beginTransaction().remove(fragment).commit();
+//            }
+//        }
+//    }
 
 }

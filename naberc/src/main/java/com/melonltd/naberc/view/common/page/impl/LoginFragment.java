@@ -1,10 +1,8 @@
 package com.melonltd.naberc.view.common.page.impl;
 
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -17,26 +15,20 @@ import com.bigkoo.alertview.AlertView;
 import com.google.common.base.Strings;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.melonltd.naberc.R;
-import com.melonltd.naberc.model.helper.okhttp.ApiCallback;
-import com.melonltd.naberc.model.helper.okhttp.ApiManager;
 import com.melonltd.naberc.util.VerifyUtil;
+import com.melonltd.naberc.view.common.BaseActivity;
 import com.melonltd.naberc.view.common.BaseCore;
-import com.melonltd.naberc.view.customize.LoadingBar;
-import com.melonltd.naberc.view.intro.IntroActivity;
-import com.melonltd.naberc.view.seller.SellerMainActivity;
-import com.melonltd.naberc.view.user.UserMainActivity;
 import com.melonltd.naberc.view.common.abs.AbsPageFragment;
 import com.melonltd.naberc.view.common.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.common.type.PageType;
-
-//import static com.melonltd.naberc.view.common.page.impl.BaseCore.FRAGMENT_TAG;
+import com.melonltd.naberc.view.intro.IntroActivity;
+import com.melonltd.naberc.view.seller.SellerMainActivity;
+import com.melonltd.naberc.view.user.UserMainActivity;
 
 public class LoginFragment extends AbsPageFragment implements View.OnClickListener {
     private static final String TAG = LoginFragment.class.getSimpleName();
     public static LoginFragment FRAGMENT = null;
     private EditText accountEdit, passwordEdit;
-    private Button loginBtn, toVerifySMSBtn, toRegisteredSellerBtn;
-    private TextView recoverPasswordText;
 
     public LoginFragment() {
     }
@@ -64,30 +56,29 @@ public class LoginFragment extends AbsPageFragment implements View.OnClickListen
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_login, container, false);
         getView(v);
-        setListener();
         return v;
     }
 
     private void getView(View v) {
         accountEdit = v.findViewById(R.id.accountEdit);
         passwordEdit = v.findViewById(R.id.passwordEdit);
-        loginBtn = v.findViewById(R.id.loginBtn);
-        toVerifySMSBtn = v.findViewById(R.id.toVerifySMSBtn);
-        toRegisteredSellerBtn = v.findViewById(R.id.toRegisteredSellerBtn);
-        recoverPasswordText = v.findViewById(R.id.recoverPasswordText);
-    }
+        Button loginBtn = v.findViewById(R.id.loginBtn);
+        Button toVerifySMSBtn = v.findViewById(R.id.toVerifySMSBtn);
+        Button toRegisteredSellerBtn = v.findViewById(R.id.toRegisteredSellerBtn);
+        TextView recoverPasswordText = v.findViewById(R.id.recoverPasswordText);
 
-    private void setListener() {
+        // setListener
         loginBtn.setOnClickListener(this);
         toVerifySMSBtn.setOnClickListener(this);
         toRegisteredSellerBtn.setOnClickListener(this);
         recoverPasswordText.setOnClickListener(this);
     }
 
+
     @Override
     public void onResume() {
         super.onResume();
-//        UserMainActivity.bottomMenuTabLayout.setVisibility(View.GONE);
+        BaseActivity.changeToolbarStatus();
     }
 
     @Override
@@ -99,12 +90,15 @@ public class LoginFragment extends AbsPageFragment implements View.OnClickListen
                 String token = FirebaseInstanceId.getInstance().getToken();
                 Log.d("FCM token" , token + "");
                 if ("1".equals(accountEdit.getText().toString())) {
-                    getActivity().startActivity(new Intent(getContext(), SellerMainActivity.class));
+                    BaseActivity.context.startActivity(new Intent(BaseActivity.context, SellerMainActivity.class));
+//                    getActivity().startActivity(new Intent(getContext(), SellerMainActivity.class));
                 }else if ("3".equals(accountEdit.getText().toString())){
-                    getActivity().startActivity(new Intent(getContext(), IntroActivity.class));
+                    BaseActivity.context.startActivity(new Intent(BaseActivity.context, IntroActivity.class));
+//                    getActivity().startActivity(new Intent(getContext(), IntroActivity.class));
                 } else {
 //                    BaseCore.FRAGMENT_TAG = PageType.HOME.name();
-                    getActivity().startActivity(new Intent(getContext(), UserMainActivity.class));
+                    BaseActivity.context.startActivity(new Intent(BaseActivity.context, UserMainActivity.class));
+//                    getActivity().startActivity(new Intent(getContext(), UserMainActivity.class));
 
 //                    getFragmentManager().beginTransaction().replace(R.id.frameContainer, PageFragmentFactory.of(PageType.HOME, null)).commit();
 //                    if (UserMainActivity.bottomMenuTabLayout != null) {

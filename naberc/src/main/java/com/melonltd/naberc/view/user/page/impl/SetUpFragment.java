@@ -14,6 +14,7 @@ import com.melonltd.naberc.view.common.abs.AbsPageFragment;
 import com.melonltd.naberc.view.common.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.common.type.PageType;
 import com.melonltd.naberc.view.customize.SwitchButton;
+import com.melonltd.naberc.view.user.UserMainActivity;
 
 
 public class SetUpFragment extends AbsPageFragment implements View.OnClickListener {
@@ -80,6 +81,7 @@ public class SetUpFragment extends AbsPageFragment implements View.OnClickListen
     @Override
     public void onResume() {
         super.onResume();
+        UserMainActivity.changeTabAndToolbarStatus();
         if (TO_ACCOUNT_DETAIL_INDEX >= 0) {
             toAccountDetail(1);
         } else if (TO_SIMPLE_INFO_INDEX >= 0) {
@@ -93,7 +95,7 @@ public class SetUpFragment extends AbsPageFragment implements View.OnClickListen
         TO_ACCOUNT_DETAIL_INDEX = i;
         BaseCore.FRAGMENT_TAG = PageType.ACCOUNT_DETAIL.name();
         AbsPageFragment f = PageFragmentFactory.of(PageType.ACCOUNT_DETAIL, b);
-        getFragmentManager().beginTransaction().replace(R.id.frameContainer, f).commit();
+        getFragmentManager().beginTransaction().replace(R.id.frameContainer, f).addToBackStack(f.toString()).commit();
     }
 
     private void toSimpleInfo(int i) {
@@ -102,7 +104,7 @@ public class SetUpFragment extends AbsPageFragment implements View.OnClickListen
         TO_SIMPLE_INFO_INDEX = i;
         BaseCore.FRAGMENT_TAG = PageType.SIMPLE_INFO.name();
         AbsPageFragment f = PageFragmentFactory.of(PageType.SIMPLE_INFO, b);
-        getFragmentManager().beginTransaction().replace(R.id.frameContainer, f).commit();
+        getFragmentManager().beginTransaction().replace(R.id.frameContainer, f).addToBackStack(f.toString()).commit();
     }
 
     @Override

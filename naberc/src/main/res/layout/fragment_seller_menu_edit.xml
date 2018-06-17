@@ -43,8 +43,7 @@
             app:layout_constraintEnd_toEndOf="@+id/view10"
             app:layout_constraintStart_toStartOf="@+id/view10"
             app:layout_constraintTop_toTopOf="@+id/view10"
-            fresco:backgroundImage="@drawable/naber_reverse_gary_button_style"
-            fresco:overlayImage="@drawable/naber_icon_logo"
+            fresco:backgroundImage="@drawable/naber_icon_logo"
             fresco:failureImage="@drawable/naber_icon_logo" />
 
         <TextView
@@ -118,7 +117,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:orientation="vertical"
-            app:layout_constraintBottom_toTopOf="@+id/button2"
+            app:layout_constraintBottom_toTopOf="@+id/linearLayout6"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView88">
@@ -130,6 +129,7 @@
         </LinearLayout>
 
         <LinearLayout
+            android:id="@+id/linearLayout6"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="16dp"

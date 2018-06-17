@@ -18,7 +18,7 @@ import okhttp3.Response;
 
 public abstract class ApiCallback implements Callback {
     private static final String TAG = ApiCallback.class.getSimpleName();
-    private static LoadingBar BAR;
+//    private static LoadingBar BAR;
 
     abstract public void onSuccess(final String responseBody);
 
@@ -28,7 +28,7 @@ public abstract class ApiCallback implements Callback {
 
     public ApiCallback(Activity activity) {
         this.activity = activity;
-        this.BAR = new LoadingBar(activity);
+//        this.BAR = new LoadingBar(activity);
     }
 
     public ApiCallback(Context context) {
@@ -36,7 +36,7 @@ public abstract class ApiCallback implements Callback {
         if (context instanceof Activity){
             Log.d(TAG, "");
         }
-        this.BAR = new LoadingBar(activity);
+//        this.BAR = new LoadingBar(activity);
     }
 
 
@@ -48,7 +48,7 @@ public abstract class ApiCallback implements Callback {
                     public void run() {
                         // 如果是 network 錯誤
                         if (checkNetWork()) {
-                            BAR.hide();
+//                            BAR.hide();
                             getAlertView().show();
                             return;
                         }
@@ -58,7 +58,7 @@ public abstract class ApiCallback implements Callback {
                         } else {
                             onFail(e);
                         }
-                        BAR.hide();
+//                        BAR.hide();
                     }
                 });
     }
@@ -80,7 +80,7 @@ public abstract class ApiCallback implements Callback {
                             Log.e(TAG, "fail", e);
                             onFailure(call, new IOException("Failed"));
                         }
-                        BAR.hide();
+//                        BAR.hide();
                     }
                 });
     }

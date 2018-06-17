@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
@@ -17,59 +18,71 @@ import com.google.firebase.storage.UploadTask;
 import com.melonltd.naberc.R;
 import com.melonltd.naberc.view.common.abs.AbsPageFragment;
 import com.melonltd.naberc.view.common.factory.PageFragmentFactory;
+import com.melonltd.naberc.view.common.intf.PageFragment;
+import com.melonltd.naberc.view.common.page.impl.LoginFragment;
+import com.melonltd.naberc.view.common.page.impl.RecoverPasswordFragment;
+import com.melonltd.naberc.view.common.page.impl.RegisteredFragment;
+import com.melonltd.naberc.view.common.page.impl.RegisteredSellerFragment;
+import com.melonltd.naberc.view.common.page.impl.VerifySMSFragment;
 import com.melonltd.naberc.view.common.type.PageType;
 
-public class BaseActivity extends BaseCore implements View.OnLayoutChangeListener {
+public class BaseActivity extends BaseCore {
     private static final String TAG = BaseActivity.class.getSimpleName();
-    private Context context;
+    public static Context context;
     public static Toolbar toolbar;
-    private FrameLayout baseContainer;
-    private static Drawable navigationIcon;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base);
         context = this;
-
-//        FirebaseStorage storage = FirebaseStorage.getInstance();
-//        gs://naber-test.appspot.com
-
-
-
-
         getViews();
-        BaseCore.FRAGMENT_TAG = PageType.LOGIN.name();
-        removeFragment();
     }
 
     private void getViews() {
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        baseContainer = findViewById(R.id.baseContainer);
-        navigationIcon = getResources().getDrawable(R.drawable.naber_back_icon);
-        baseContainer.addOnLayoutChangeListener(this);
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        AbsPageFragment fragment = null;
-        fragment = PageFragmentFactory.of(PageType.LOGIN, null);
-        fragmentManager.beginTransaction().replace(R.id.baseContainer, fragment).addToBackStack(fragment.toString()).commit();
+        BaseCore.FRAGMENT_TAG = PageType.LOGIN.name();
+        AbsPageFragment fragment = PageFragmentFactory.of(PageType.LOGIN, null);
+        getSupportFragmentManager().beginTransaction().replace(R.id.baseContainer, fragment).addToBackStack(fragment.toString()).commit();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        LoginFragment.FRAGMENT = null;
+        RecoverPasswordFragment.FRAGMENT = null;
+        RegisteredFragment.FRAGMENT = null;
+        RegisteredSellerFragment.FRAGMENT = null;
+        VerifySMSFragment.FRAGMENT = null;
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 
     public static void navigationIconDisplay(boolean show, View.OnClickListener listener) {
         if (!show) {
             toolbar.setNavigationIcon(null);
         } else {
-            toolbar.setNavigationIcon(navigationIcon);
+            toolbar.setNavigationIcon(context.getResources().getDrawable(R.drawable.naber_back_icon));
         }
         toolbar.setNavigationOnClickListener(listener);
     }
 
-    @Override
-    public void onLayoutChange(View view, int i, int i1, int i2, int i3, int i4, int i5, int i6, int i7) {
-        toolbar.setTitle(getResources().getString(PageType.equalsIdByName(FRAGMENT_TAG)));
+    public static void changeToolbarStatus() {
+        toolbar.setTitle(context.getResources().getString(PageType.equalsIdByName(FRAGMENT_TAG)));
     }
+
 }

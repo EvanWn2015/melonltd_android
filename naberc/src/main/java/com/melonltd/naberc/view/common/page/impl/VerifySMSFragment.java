@@ -24,8 +24,6 @@ import com.melonltd.naberc.view.common.type.PageType;
 public class VerifySMSFragment extends AbsPageFragment implements View.OnClickListener {
     private static final String TAG = VerifySMSFragment.class.getSimpleName();
     public static VerifySMSFragment FRAGMENT = null;
-    private Button requestVerifyCodeBtn, submitToRegisteredBun;
-    private TextView privacyPolicyText;
     private EditText phoneNamberEdit, verifySMSEdit;
 
     public VerifySMSFragment() {
@@ -50,7 +48,6 @@ public class VerifySMSFragment extends AbsPageFragment implements View.OnClickLi
         if (container.getTag(R.id.user_verify_sms_page) == null) {
             View v = inflater.inflate(R.layout.fragment_verify_sms, container, false);
             getView(v);
-            setListener();
             container.setTag(R.id.user_verify_sms_page, v);
         }
         return (View) container.getTag(R.id.user_verify_sms_page);
@@ -59,6 +56,7 @@ public class VerifySMSFragment extends AbsPageFragment implements View.OnClickLi
     @Override
     public void onResume() {
         super.onResume();
+        BaseActivity.changeToolbarStatus();
         if (BaseActivity.toolbar != null) {
             BaseActivity.navigationIconDisplay(true, new View.OnClickListener() {
                 @Override
@@ -77,18 +75,18 @@ public class VerifySMSFragment extends AbsPageFragment implements View.OnClickLi
     }
 
     private void getView(View v) {
-        requestVerifyCodeBtn = v.findViewById(R.id.requestVerifyCodeBtn);
-        submitToRegisteredBun = v.findViewById(R.id.submitToRegisteredBun);
-        privacyPolicyText = v.findViewById(R.id.privacyPolicyText);
+        Button requestVerifyCodeBtn = v.findViewById(R.id.requestVerifyCodeBtn);
+        Button submitToRegisteredBun = v.findViewById(R.id.submitToRegisteredBun);
+        TextView privacyPolicyText = v.findViewById(R.id.privacyPolicyText);
         phoneNamberEdit = v.findViewById(R.id.phoneNamberEdit);
         verifySMSEdit = v.findViewById(R.id.verifySMSEdit);
-    }
 
-    private void setListener() {
+        // setListener
         requestVerifyCodeBtn.setOnClickListener(this);
         submitToRegisteredBun.setOnClickListener(this);
         privacyPolicyText.setOnClickListener(this);
     }
+
 
     private void backToLoginPage() {
         BaseCore.FRAGMENT_TAG = PageType.LOGIN.name();
@@ -147,7 +145,7 @@ public class VerifySMSFragment extends AbsPageFragment implements View.OnClickLi
     }
 
     private void toRegisteredPage() {
-        BaseCore.FRAGMENT_TAG = PageType.REGISTERED.name();
-        getFragmentManager().beginTransaction().remove(this).replace(R.id.baseContainer, PageFragmentFactory.of(PageType.REGISTERED, null)).commit();
+        BaseCore.FRAGMENT_TAG = PageType.REGISTERED_USER.name();
+        getFragmentManager().beginTransaction().remove(this).replace(R.id.baseContainer, PageFragmentFactory.of(PageType.REGISTERED_USER, null)).commit();
     }
 }

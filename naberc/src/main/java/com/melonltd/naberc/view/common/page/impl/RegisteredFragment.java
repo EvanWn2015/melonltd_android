@@ -1,11 +1,8 @@
-package com.melonltd.naberc.view.user.page.impl;
+package com.melonltd.naberc.view.common.page.impl;
 
-import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.annotation.Nullable;
 import android.text.InputType;
 import android.util.Log;
@@ -30,10 +27,12 @@ import com.google.gson.Gson;
 import com.melonltd.naberc.R;
 import com.melonltd.naberc.model.bean.IdentityJsonBean;
 import com.melonltd.naberc.util.VerifyUtil;
+import com.melonltd.naberc.view.common.BaseActivity;
 import com.melonltd.naberc.view.common.BaseCore;
 import com.melonltd.naberc.view.common.abs.AbsPageFragment;
 import com.melonltd.naberc.view.common.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.common.type.PageType;
+import com.melonltd.naberc.view.user.UserMainActivity;
 
 import org.json.JSONArray;
 
@@ -51,7 +50,7 @@ public class RegisteredFragment extends AbsPageFragment implements View.OnClickL
     public static RegisteredFragment FRAGMENT = null;
     private TextView identityEditText, birthdayEditText;
     private EditText nameEditText, addressEditText, emailEditText, passwordEditText, confirmPasswordEditText;
-    private Button submitBtn, backToLoginBtn;
+//    private Button submitBtn, backToLoginBtn;
 
 
     private List<String> options1Items = Lists.newArrayList();
@@ -114,7 +113,6 @@ public class RegisteredFragment extends AbsPageFragment implements View.OnClickL
         if (container.getTag(R.id.user_registered_page) == null) {
             View v = inflater.inflate(R.layout.fragment_registered, container, false);
             getViews(v);
-            setListener();
 //            mHandler.sendEmptyMessage(MSG_LOAD_DATA);
             container.setTag(R.id.user_registered_page, v);
             return v;
@@ -130,23 +128,23 @@ public class RegisteredFragment extends AbsPageFragment implements View.OnClickL
         passwordEditText = v.findViewById(R.id.passwordEditText);
         confirmPasswordEditText = v.findViewById(R.id.confirmPasswordEditText);
         birthdayEditText = v.findViewById(R.id.birthdayEditText);
-        submitBtn = v.findViewById(R.id.submit);
-        backToLoginBtn = v.findViewById(R.id.backToLoginBtn);
 
         birthdayEditText.setInputType(InputType.TYPE_NULL);
         identityEditText.setInputType(InputType.TYPE_NULL);
-    }
 
-    private void setListener() {
+        Button submitBtn = v.findViewById(R.id.submit);
+        Button backToLoginBtn = v.findViewById(R.id.backToLoginBtn);
         submitBtn.setOnClickListener(this);
         backToLoginBtn.setOnClickListener(this);
         identityEditText.setOnClickListener(this);
         birthdayEditText.setOnClickListener(this);
+
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        BaseActivity.changeToolbarStatus();
     }
 
     private void backToLoginPage() {

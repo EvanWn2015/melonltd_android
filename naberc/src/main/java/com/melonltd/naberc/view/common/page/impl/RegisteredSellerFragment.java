@@ -15,6 +15,7 @@ import com.bigkoo.alertview.AlertView;
 import com.google.common.base.Strings;
 import com.melonltd.naberc.R;
 //import com.melonltd.naberc.view.common.page.impl.BaseCore;
+import com.melonltd.naberc.view.common.BaseActivity;
 import com.melonltd.naberc.view.common.BaseCore;
 import com.melonltd.naberc.view.common.abs.AbsPageFragment;
 import com.melonltd.naberc.view.common.factory.PageFragmentFactory;
@@ -28,7 +29,6 @@ public class RegisteredSellerFragment extends AbsPageFragment implements View.On
     private static final String TAG = RegisteredSellerFragment.class.getSimpleName();
     public static RegisteredSellerFragment FRAGMENT = null;
     private EditText nameEdit, addressEdit, contactPersonEdit, contactPhoneEdit;
-    private Button submitBun, backToLoginBtn;
 
     public RegisteredSellerFragment() {
     }
@@ -56,7 +56,6 @@ public class RegisteredSellerFragment extends AbsPageFragment implements View.On
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View v = inflater.inflate(R.layout.fragment_registered_seller, container, false);
         getViews(v);
-        setListener();
         return v;
     }
 
@@ -65,11 +64,8 @@ public class RegisteredSellerFragment extends AbsPageFragment implements View.On
         addressEdit = v.findViewById(R.id.storeAddressEditText);
         contactPersonEdit = v.findViewById(R.id.sellerContactPersonEditText);
         contactPhoneEdit = v.findViewById(R.id.sellerContactPhoneEditText);
-        submitBun = v.findViewById(R.id.sellerSubmitBun);
-        backToLoginBtn = v.findViewById(R.id.sellerBackToLoginBtn);
-    }
-
-    private void setListener() {
+        Button submitBun = v.findViewById(R.id.sellerSubmitBun);
+        Button backToLoginBtn = v.findViewById(R.id.sellerBackToLoginBtn);
         submitBun.setOnClickListener(this);
         backToLoginBtn.setOnClickListener(this);
     }
@@ -77,6 +73,7 @@ public class RegisteredSellerFragment extends AbsPageFragment implements View.On
     @Override
     public void onResume() {
         super.onResume();
+        BaseActivity.changeToolbarStatus();
     }
 
     @Override

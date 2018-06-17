@@ -32,7 +32,7 @@ public class CategoryMenuFragment extends AbsPageFragment {
     public static CategoryMenuFragment FRAGMENT = null;
 
     private TextView categoryNameText;
-    private BGARefreshLayout bgaRefreshLayout;
+//    private BGARefreshLayout bgaRefreshLayout;
     private RecyclerView recyclerView;
     private MenuAdapter adapter;
 
@@ -71,7 +71,6 @@ public class CategoryMenuFragment extends AbsPageFragment {
         if (container.getTag(R.id.user_category_menu_page) == null) {
             View v = inflater.inflate(R.layout.fragment_category_menu, container, false);
             getViews(v);
-            setListener();
             container.setTag(R.id.user_category_menu_page, v);
             return v;
         }
@@ -81,7 +80,7 @@ public class CategoryMenuFragment extends AbsPageFragment {
     private void getViews(View v) {
         categoryNameText = v.findViewById(R.id.categoryNameText);
 
-        bgaRefreshLayout = v.findViewById(R.id.menuBGARefreshLayout);
+        final BGARefreshLayout bgaRefreshLayout = v.findViewById(R.id.menuBGARefreshLayout);
         recyclerView = v.findViewById(R.id.menuRecyclerView);
 
         BGANormalRefreshViewHolder refreshViewHolder = new BGANormalRefreshViewHolder(getContext(), true);
@@ -95,12 +94,11 @@ public class CategoryMenuFragment extends AbsPageFragment {
         final LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
-    }
 
-    private void setListener() {
+        // setListener
+
         adapter.setItemClickListener(new ItemClickListener());
         recyclerView.setAdapter(adapter);
-
 
         bgaRefreshLayout.setDelegate(new BGARefreshLayout.BGARefreshLayoutDelegate() {
             @Override
@@ -171,6 +169,7 @@ public class CategoryMenuFragment extends AbsPageFragment {
     @Override
     public void onResume() {
         super.onResume();
+        UserMainActivity.changeTabAndToolbarStatus();
         if (list.size() == 0) {
             doLoadData(true);
             String categoryName = getArguments().getString("categoryName");

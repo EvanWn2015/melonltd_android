@@ -98,7 +98,7 @@
         android:layout_marginTop="8dp"
         android:background="@android:color/transparent"
         android:text="@string/registered_existing_account_btn_text"
-        android:textColor="@color/naber_basis"
+        android:textColor="@color/naber_basis_orange"
         android:textSize="12sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

@@ -1,6 +1,8 @@
 package com.melonltd.naberc.view.user.page.impl;
 
 import android.os.Bundle;
+import android.os.Parcelable;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -12,6 +14,7 @@ import com.google.common.collect.Lists;
 import com.melonltd.naberc.R;
 import com.melonltd.naberc.model.helper.okhttp.ApiCallback;
 import com.melonltd.naberc.model.helper.okhttp.ApiManager;
+import com.melonltd.naberc.view.common.BaseCore;
 import com.melonltd.naberc.view.common.abs.AbsPageFragment;
 import com.melonltd.naberc.view.common.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.common.type.PageType;
@@ -27,7 +30,7 @@ public class HistoryFragment extends AbsPageFragment {
     private static final String TAG = HomeFragment.class.getSimpleName();
     public static HistoryFragment FRAGMENT = null;
 
-    private BGARefreshLayout bgaRefreshLayout;
+//    private BGARefreshLayout bgaRefreshLayout;
     private RecyclerView recyclerView;
     private HistoryAdapter adapter;
     private List<String> list = Lists.newArrayList();
@@ -64,7 +67,6 @@ public class HistoryFragment extends AbsPageFragment {
         if (container.getTag(R.id.user_history_page) == null) {
             View v = inflater.inflate(R.layout.fragment_history, container, false);
             getViews(v);
-            setListener();
             container.setTag(R.id.user_history_page, v);
             return v;
         } else {
@@ -74,7 +76,7 @@ public class HistoryFragment extends AbsPageFragment {
 
     private void getViews(View v) {
 
-        bgaRefreshLayout = v.findViewById(R.id.historyBGARefreshLayout);
+        final BGARefreshLayout bgaRefreshLayout = v.findViewById(R.id.historyBGARefreshLayout);
         recyclerView = v.findViewById(R.id.historyRecyclerView);
 
         BGANormalRefreshViewHolder refreshViewHolder = new BGANormalRefreshViewHolder(getContext(), true);
@@ -89,10 +91,7 @@ public class HistoryFragment extends AbsPageFragment {
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
 
-    }
-
-
-    private void setListener() {
+        //setListener
         adapter.setListener(new ItemOnClickListener());
         recyclerView.setAdapter(adapter);
         bgaRefreshLayout.setDelegate(new BGARefreshLayout.BGARefreshLayoutDelegate() {
@@ -127,12 +126,11 @@ public class HistoryFragment extends AbsPageFragment {
                             list.add("" + i);
                         }
                         adapter.notifyDataSetChanged();
-
                     }
 
                     @Override
                     public void onFail(Exception error) {
-                        bgaRefreshLayout.endLoadingMore();;
+                        bgaRefreshLayout.endLoadingMore();
                     }
                 });
                 return false;
@@ -141,9 +139,11 @@ public class HistoryFragment extends AbsPageFragment {
 
     }
 
+
     @Override
     public void onResume() {
         super.onResume();
+        UserMainActivity.changeTabAndToolbarStatus();
         if (TO_ORDER_DETAIL_INDEX >= 0) {
             toOrderDetail(TO_ORDER_DETAIL_INDEX);
         } else {
@@ -178,7 +178,7 @@ public class HistoryFragment extends AbsPageFragment {
         b.putString("test", list.get(resultIndex));
         UserMainActivity.FRAGMENT_TAG = PageType.ORDER_DETAIL.name();
         AbsPageFragment f = PageFragmentFactory.of(PageType.ORDER_DETAIL, b);
-        getFragmentManager().beginTransaction().replace(R.id.frameContainer, f).commit();
+        getFragmentManager().beginTransaction().replace(R.id.frameContainer, f).addToBackStack(f.toString()).commit();
     }
 
 

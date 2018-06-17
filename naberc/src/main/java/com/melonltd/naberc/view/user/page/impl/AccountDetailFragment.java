@@ -98,6 +98,8 @@ public class AccountDetailFragment extends AbsPageFragment implements View.OnCli
     @Override
     public void onResume() {
         super.onResume();
+//        UserMainActivity.toolbar.setTitle(getResources().getString(PageType.equalsIdByName(BaseCore.FRAGMENT_TAG)));
+        UserMainActivity.changeTabAndToolbarStatus();
         if (UserMainActivity.toolbar != null) {
             UserMainActivity.navigationIconDisplay(true, new View.OnClickListener() {
                 @Override
@@ -188,13 +190,6 @@ public class AccountDetailFragment extends AbsPageFragment implements View.OnCli
 
         }
     }
-
-
-//    private void toLoginPage() {
-//        BaseCore.FRAGMENT_TAG = PageType.LOGIN.name();
-//        AbsPageFragment f = PageFragmentFactory.of(PageType.LOGIN, null);
-//        getFragmentManager().beginTransaction().remove(this).replace(R.id.frameContainer, f).commit();
-//    }
 
     private void toResetPassword(int i) {
         TO_RESET_PASSWORD_INDEX = i;
