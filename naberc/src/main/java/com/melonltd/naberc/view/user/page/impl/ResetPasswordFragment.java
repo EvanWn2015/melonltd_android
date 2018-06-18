@@ -2,36 +2,30 @@ package com.melonltd.naberc.view.user.page.impl;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.melonltd.naberc.R;
-import com.melonltd.naberc.view.common.BaseCore;
-import com.melonltd.naberc.view.user.UserMainActivity;
-import com.melonltd.naberc.view.common.abs.AbsPageFragment;
 import com.melonltd.naberc.view.common.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.common.type.PageType;
+import com.melonltd.naberc.view.user.UserMainActivity;
 
-public class ResetPasswordFragment extends AbsPageFragment {
+public class ResetPasswordFragment extends Fragment {
     private static final String TAG = ResetPasswordFragment.class.getSimpleName();
     public static ResetPasswordFragment FRAGMENT = null;
 
     public ResetPasswordFragment() {
     }
 
-    @Override
-    public AbsPageFragment getInstance(Bundle bundle) {
+
+    public Fragment getInstance(Bundle bundle) {
         if (FRAGMENT == null) {
             FRAGMENT = new ResetPasswordFragment();
             FRAGMENT.setArguments(bundle);
         }
         return FRAGMENT;
-    }
-
-    @Override
-    public AbsPageFragment newInstance(Object... o) {
-        return new ResetPasswordFragment();
     }
 
     @Override
@@ -78,7 +72,7 @@ public class ResetPasswordFragment extends AbsPageFragment {
     private void backToAccountDetailPage() {
         UserMainActivity.FRAGMENT_TAG = PageType.ACCOUNT_DETAIL.name();
         AccountDetailFragment.TO_RESET_PASSWORD_INDEX = -1;
-        AbsPageFragment f = PageFragmentFactory.of(PageType.ACCOUNT_DETAIL, null);
-        getFragmentManager().beginTransaction().remove(this).replace(R.id.frameContainer, f).commit();
+        Fragment f = PageFragmentFactory.of(PageType.ACCOUNT_DETAIL, null);
+        getFragmentManager().beginTransaction().remove(this).replace(R.id.frameContainer, f).addToBackStack(f.toString()).commit();
     }
 }

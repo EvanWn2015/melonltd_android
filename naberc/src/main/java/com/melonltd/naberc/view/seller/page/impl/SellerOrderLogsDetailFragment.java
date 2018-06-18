@@ -3,27 +3,26 @@ package com.melonltd.naberc.view.seller.page.impl;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.melonltd.naberc.R;
 import com.melonltd.naberc.view.common.BaseCore;
-import com.melonltd.naberc.view.common.abs.AbsPageFragment;
 import com.melonltd.naberc.view.common.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.common.type.PageType;
 import com.melonltd.naberc.view.seller.SellerMainActivity;
 
 
-public class SellerOrderLogsDetailFragment extends AbsPageFragment {
+public class SellerOrderLogsDetailFragment extends Fragment {
     private static final String TAG = SellerOrderLogsDetailFragment.class.getSimpleName();
     public static SellerOrderLogsDetailFragment FRAGMENT = null;
 
     public SellerOrderLogsDetailFragment() {
     }
 
-    @Override
-    public AbsPageFragment getInstance(Bundle bundle) {
+    public Fragment getInstance(Bundle bundle) {
         if (FRAGMENT == null) {
             FRAGMENT = new SellerOrderLogsDetailFragment();
         }
@@ -31,8 +30,7 @@ public class SellerOrderLogsDetailFragment extends AbsPageFragment {
         return FRAGMENT;
     }
 
-    @Override
-    public AbsPageFragment newInstance(Object... o) {
+    public Fragment newInstance(Object... o) {
         return new SellerOrderLogsDetailFragment();
     }
 
@@ -57,6 +55,7 @@ public class SellerOrderLogsDetailFragment extends AbsPageFragment {
     @Override
     public void onResume() {
         super.onResume();
+        SellerMainActivity.changeTabAndToolbarStatus();
         if (SellerMainActivity.toolbar != null) {
             SellerMainActivity.navigationIconDisplay(true, new View.OnClickListener() {
                 @Override
@@ -78,7 +77,7 @@ public class SellerOrderLogsDetailFragment extends AbsPageFragment {
     private void backToSellerOrdersLogsPage(){
         BaseCore.FRAGMENT_TAG = PageType.SELLER_ORDERS_LOGS.name();
         SellerOrdersLogsFragment.TO_ORDERS_LOGS_DETAIL_INDEX = -1;
-        AbsPageFragment f = PageFragmentFactory.of(PageType.SELLER_ORDERS_LOGS, null);
+        Fragment f = PageFragmentFactory.of(PageType.SELLER_ORDERS_LOGS, null);
         getFragmentManager().beginTransaction().remove(this).replace(R.id.sellerFrameContainer, f).commit();
     }
 }

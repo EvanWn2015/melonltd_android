@@ -14,18 +14,12 @@ import android.widget.EditText;
 import com.bigkoo.alertview.AlertView;
 import com.google.common.base.Strings;
 import com.melonltd.naberc.R;
-//import com.melonltd.naberc.view.common.page.impl.BaseCore;
 import com.melonltd.naberc.view.common.BaseActivity;
 import com.melonltd.naberc.view.common.BaseCore;
-import com.melonltd.naberc.view.common.abs.AbsPageFragment;
 import com.melonltd.naberc.view.common.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.common.type.PageType;
 
-
-/**
- * A simple {@link Fragment} subclass.
- */
-public class RegisteredSellerFragment extends AbsPageFragment implements View.OnClickListener {
+public class RegisteredSellerFragment extends Fragment implements View.OnClickListener {
     private static final String TAG = RegisteredSellerFragment.class.getSimpleName();
     public static RegisteredSellerFragment FRAGMENT = null;
     private EditText nameEdit, addressEdit, contactPersonEdit, contactPhoneEdit;
@@ -33,13 +27,11 @@ public class RegisteredSellerFragment extends AbsPageFragment implements View.On
     public RegisteredSellerFragment() {
     }
 
-    @Override
-    public AbsPageFragment newInstance(Object... o) {
+    public Fragment newInstance(Object... o) {
         return new RegisteredSellerFragment();
     }
 
-    @Override
-    public AbsPageFragment getInstance(Bundle bundle) {
+    public Fragment getInstance(Bundle bundle) {
         if (FRAGMENT == null) {
             FRAGMENT = new RegisteredSellerFragment();
             FRAGMENT.setArguments(bundle);
@@ -98,22 +90,22 @@ public class RegisteredSellerFragment extends AbsPageFragment implements View.On
         String message = "";
         // 驗證身份不為空
         if (Strings.isNullOrEmpty(nameEdit.getText().toString())) {
-            message = BaseCore.context.getString(R.string.mail_wrong_format);
+            message = "驗證姓名不為空";
             result = false;
         }
         // 驗證姓名不為空
         if (Strings.isNullOrEmpty(addressEdit.getText().toString())) {
-            message = BaseCore.context.getString(R.string.mail_wrong_format);
+            message = "驗證姓名不為空";
             result = false;
         }
         // 驗證Email不為空
         if (Strings.isNullOrEmpty(contactPersonEdit.getText().toString())) {
-            message = BaseCore.context.getString(R.string.mail_wrong_format);
+            message = "驗證姓名不為空";
             result = false;
         }
         // 驗證Email不為空
         if (Strings.isNullOrEmpty(contactPhoneEdit.getText().toString())) {
-            message = BaseCore.context.getString(R.string.mail_wrong_format);
+            message = "驗證姓名不為空";
             result = false;
         }
 
@@ -132,7 +124,7 @@ public class RegisteredSellerFragment extends AbsPageFragment implements View.On
     }
 
     private void backToLoginPage() {
-        AbsPageFragment fragment = PageFragmentFactory.of(PageType.LOGIN, null);
+        Fragment fragment = PageFragmentFactory.of(PageType.LOGIN, null);
         getFragmentManager().beginTransaction().remove(this).replace(R.id.baseContainer, fragment).addToBackStack(fragment.toString()).commit();
     }
 

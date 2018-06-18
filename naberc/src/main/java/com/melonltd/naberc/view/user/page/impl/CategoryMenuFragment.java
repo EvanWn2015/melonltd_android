@@ -3,6 +3,7 @@ package com.melonltd.naberc.view.user.page.impl;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -16,7 +17,6 @@ import com.melonltd.naberc.R;
 import com.melonltd.naberc.model.helper.okhttp.ApiCallback;
 import com.melonltd.naberc.model.helper.okhttp.ApiManager;
 import com.melonltd.naberc.view.common.BaseCore;
-import com.melonltd.naberc.view.common.abs.AbsPageFragment;
 import com.melonltd.naberc.view.common.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.common.type.PageType;
 import com.melonltd.naberc.view.user.UserMainActivity;
@@ -27,7 +27,7 @@ import java.util.List;
 import cn.bingoogolapple.refreshlayout.BGANormalRefreshViewHolder;
 import cn.bingoogolapple.refreshlayout.BGARefreshLayout;
 
-public class CategoryMenuFragment extends AbsPageFragment {
+public class CategoryMenuFragment extends Fragment {
     private static final String TAG = CategoryMenuFragment.class.getSimpleName();
     public static CategoryMenuFragment FRAGMENT = null;
 
@@ -43,13 +43,8 @@ public class CategoryMenuFragment extends AbsPageFragment {
     public CategoryMenuFragment() {
     }
 
-    @Override
-    public AbsPageFragment newInstance(Object... o) {
-        return new CategoryMenuFragment();
-    }
 
-    @Override
-    public AbsPageFragment getInstance(Bundle bundle) {
+    public Fragment getInstance(Bundle bundle) {
         if (FRAGMENT == null) {
             FRAGMENT = new CategoryMenuFragment();
             TO_MENU_DETAIL_INDEX = -1;
@@ -104,7 +99,7 @@ public class CategoryMenuFragment extends AbsPageFragment {
             @Override
             public void onBGARefreshLayoutBeginRefreshing(BGARefreshLayout refreshLayout) {
                 bgaRefreshLayout.endRefreshing();
-                ApiManager.test(new ApiCallback(getActivity()) {
+                ApiManager.test(new ApiCallback(getContext()) {
                     @Override
                     public void onSuccess(String responseBody) {
                         list.clear();
@@ -116,7 +111,7 @@ public class CategoryMenuFragment extends AbsPageFragment {
                     }
 
                     @Override
-                    public void onFail(Exception error) {
+                    public void onFail(Exception error, String msg) {
                         bgaRefreshLayout.endRefreshing();
                     }
                 });
@@ -125,7 +120,7 @@ public class CategoryMenuFragment extends AbsPageFragment {
             @Override
             public boolean onBGARefreshLayoutBeginLoadingMore(BGARefreshLayout refreshLayout) {
                 bgaRefreshLayout.endLoadingMore();
-                ApiManager.test(new ApiCallback(getActivity()) {
+                ApiManager.test(new ApiCallback(getContext()) {
                     @Override
                     public void onSuccess(String responseBody) {
                         for (int i = 0; i < 30; i++) {
@@ -136,7 +131,7 @@ public class CategoryMenuFragment extends AbsPageFragment {
                     }
 
                     @Override
-                    public void onFail(Exception error) {
+                    public void onFail(Exception error, String msg) {
                         bgaRefreshLayout.endLoadingMore();
                     }
                 });
@@ -150,7 +145,7 @@ public class CategoryMenuFragment extends AbsPageFragment {
             list.clear();
         }
 
-        ApiManager.test(new ApiCallback(getActivity()) {
+        ApiManager.test(new ApiCallback(getContext()) {
             @Override
             public void onSuccess(String responseBody) {
                 for (int i = 0; i < 10; i++) {
@@ -160,7 +155,7 @@ public class CategoryMenuFragment extends AbsPageFragment {
             }
 
             @Override
-            public void onFail(Exception error) {
+            public void onFail(Exception error, String msg) {
 
             }
         });
@@ -193,14 +188,14 @@ public class CategoryMenuFragment extends AbsPageFragment {
     private void toMenuDetailPage(int index) {
         TO_MENU_DETAIL_INDEX = index;
         BaseCore.FRAGMENT_TAG = PageType.MENU_DETAIL.name();
-        AbsPageFragment f = PageFragmentFactory.of(PageType.MENU_DETAIL, null);
+        Fragment f = PageFragmentFactory.of(PageType.MENU_DETAIL, null);
         getFragmentManager().beginTransaction().remove(this).replace(R.id.frameContainer, f).commit();
     }
 
     private void backToRestaurantDetail() {
         BaseCore.FRAGMENT_TAG = PageType.RESTAURANT_DETAIL.name();
         RestaurantDetailFragment.TO_CATEGORY_MENU_INDEX = -1;
-        AbsPageFragment f = PageFragmentFactory.of(PageType.RESTAURANT_DETAIL, null);
+        Fragment f = PageFragmentFactory.of(PageType.RESTAURANT_DETAIL, null);
         getFragmentManager().beginTransaction().remove(this).replace(R.id.frameContainer, f).commit();
     }
 

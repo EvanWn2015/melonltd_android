@@ -4,6 +4,7 @@ package com.melonltd.naberc.view.user.page.impl;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
@@ -25,7 +26,6 @@ import com.bigkoo.alertview.OnItemClickListener;
 import com.google.common.base.Strings;
 import com.melonltd.naberc.R;
 import com.melonltd.naberc.view.common.BaseCore;
-import com.melonltd.naberc.view.common.abs.AbsPageFragment;
 import com.melonltd.naberc.view.common.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.common.type.PageType;
 import com.melonltd.naberc.view.customize.NaberCheckButton;
@@ -33,7 +33,7 @@ import com.melonltd.naberc.view.customize.NaberRadioButton;
 import com.melonltd.naberc.view.user.UserMainActivity;
 
 
-public class MenuDetailFragment extends AbsPageFragment implements View.OnClickListener {
+public class MenuDetailFragment extends Fragment implements View.OnClickListener {
     private static final String TAG = MenuDetailFragment.class.getSimpleName();
     public static MenuDetailFragment FRAGMENT = null;
     private Button addToShopCartBtn;
@@ -51,13 +51,7 @@ public class MenuDetailFragment extends AbsPageFragment implements View.OnClickL
         // Required empty public constructor
     }
 
-    @Override
-    public AbsPageFragment newInstance(Object... o) {
-        return new MenuDetailFragment();
-    }
-
-    @Override
-    public AbsPageFragment getInstance(Bundle bundle) {
+    public Fragment getInstance(Bundle bundle) {
         if (FRAGMENT == null) {
             FRAGMENT = new MenuDetailFragment();
             CATEGORY_MENU_TO_THIS_INDEX = -1;
@@ -276,7 +270,7 @@ public class MenuDetailFragment extends AbsPageFragment implements View.OnClickL
     private void toCategoryMenuPage() {
         BaseCore.FRAGMENT_TAG = PageType.CATEGORY_MENU.name();
         CategoryMenuFragment.TO_MENU_DETAIL_INDEX = -1;
-        AbsPageFragment f = PageFragmentFactory.of(PageType.CATEGORY_MENU, null);
+        Fragment f = PageFragmentFactory.of(PageType.CATEGORY_MENU, null);
         getFragmentManager().beginTransaction().remove(this).replace(R.id.frameContainer, f).commit();
     }
 
@@ -337,7 +331,7 @@ public class MenuDetailFragment extends AbsPageFragment implements View.OnClickL
     private void toPageShoppingCartPage() {
         BaseCore.FRAGMENT_TAG = PageType.SHOPPING_CART.name();
         CategoryMenuFragment.TO_MENU_DETAIL_INDEX = -1;
-        AbsPageFragment f = PageFragmentFactory.of(PageType.SHOPPING_CART, null);
+        Fragment f = PageFragmentFactory.of(PageType.SHOPPING_CART, null);
         getFragmentManager().beginTransaction().remove(this).replace(R.id.frameContainer, f).commit();
     }
 
@@ -345,7 +339,7 @@ public class MenuDetailFragment extends AbsPageFragment implements View.OnClickL
         BaseCore.FRAGMENT_TAG = PageType.RESTAURANT_DETAIL.name();
         RestaurantDetailFragment.TO_CATEGORY_MENU_INDEX = -1;
         CategoryMenuFragment.TO_MENU_DETAIL_INDEX = -1;
-        AbsPageFragment f = PageFragmentFactory.of(PageType.RESTAURANT_DETAIL, null);
+        Fragment f = PageFragmentFactory.of(PageType.RESTAURANT_DETAIL, null);
         getFragmentManager().beginTransaction().remove(this).replace(R.id.frameContainer, f).commit();
     }
 }

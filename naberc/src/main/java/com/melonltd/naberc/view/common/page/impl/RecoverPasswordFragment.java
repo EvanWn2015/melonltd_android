@@ -2,6 +2,7 @@ package com.melonltd.naberc.view.common.page.impl;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,11 +15,10 @@ import com.melonltd.naberc.model.helper.okhttp.ApiManager;
 import com.melonltd.naberc.util.VerifyUtil;
 import com.melonltd.naberc.view.common.BaseActivity;
 import com.melonltd.naberc.view.common.BaseCore;
-import com.melonltd.naberc.view.common.abs.AbsPageFragment;
 import com.melonltd.naberc.view.common.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.common.type.PageType;
 
-public class RecoverPasswordFragment extends AbsPageFragment implements View.OnClickListener {
+public class RecoverPasswordFragment extends Fragment implements View.OnClickListener {
     private static final String TAG = RecoverPasswordFragment.class.getSimpleName();
     public static RecoverPasswordFragment FRAGMENT = null;
     private EditText mailEdit;
@@ -26,8 +26,7 @@ public class RecoverPasswordFragment extends AbsPageFragment implements View.OnC
     public RecoverPasswordFragment() {
     }
 
-    @Override
-    public AbsPageFragment getInstance(Bundle bundle) {
+    public Fragment getInstance(Bundle bundle) {
         if (FRAGMENT == null) {
             FRAGMENT = new RecoverPasswordFragment();
             FRAGMENT.setArguments(bundle);
@@ -35,8 +34,7 @@ public class RecoverPasswordFragment extends AbsPageFragment implements View.OnC
         return FRAGMENT;
     }
 
-    @Override
-    public AbsPageFragment newInstance(Object... o) {
+    public Fragment newInstance(Object... o) {
         return new RecoverPasswordFragment();
     }
 
@@ -93,14 +91,14 @@ public class RecoverPasswordFragment extends AbsPageFragment implements View.OnC
     public void onClick(View v) {
         if (v.getId() == R.id.submitRecoverPasswordBtn) {
             if (VerifyUtil.email(mailEdit.getText().toString())) {
-                ApiManager.test(new ApiCallback(getActivity()) {
+                ApiManager.test(new ApiCallback(getContext()) {
                     @Override
                     public void onSuccess(String responseBody) {
                         backToLoginPage();
                     }
 
                     @Override
-                    public void onFail(Exception error) {
+                    public void onFail(Exception error, String msg) {
 
                     }
                 });
@@ -110,7 +108,7 @@ public class RecoverPasswordFragment extends AbsPageFragment implements View.OnC
 
     private void backToLoginPage() {
         BaseCore.FRAGMENT_TAG = PageType.LOGIN.name();
-        AbsPageFragment f = PageFragmentFactory.of(PageType.LOGIN, null);
+        Fragment f = PageFragmentFactory.of(PageType.LOGIN, null);
         getFragmentManager().beginTransaction().remove(this).replace(R.id.baseContainer, f).commit();
     }
 }

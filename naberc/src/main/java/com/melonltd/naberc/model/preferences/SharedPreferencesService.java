@@ -39,6 +39,16 @@ public class SharedPreferencesService {
         return SERVICE.preferences.getString(String.valueOf(R.string.user_uid),"");
     }
 
+
+    public static void setOauth(String token) {
+        SERVICE.preferences.edit().putString(String.valueOf(R.string.oauth_token), token).commit();
+    }
+
+    public static String getOauth() {
+        return SERVICE.preferences.getString(String.valueOf(R.string.oauth_token),"");
+    }
+
+
     public void setPreferences(SharedPreferences preferences) {
         this.preferences = preferences;
     }

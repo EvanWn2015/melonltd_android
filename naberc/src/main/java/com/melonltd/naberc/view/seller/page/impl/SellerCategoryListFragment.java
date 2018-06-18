@@ -3,6 +3,7 @@ package com.melonltd.naberc.view.seller.page.impl;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -10,7 +11,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.TextView;
 
 import com.bigkoo.alertview.AlertView;
@@ -19,7 +19,6 @@ import com.facebook.drawee.backends.pipeline.Fresco;
 import com.google.common.collect.Lists;
 import com.melonltd.naberc.R;
 import com.melonltd.naberc.view.common.BaseCore;
-import com.melonltd.naberc.view.common.abs.AbsPageFragment;
 import com.melonltd.naberc.view.common.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.common.type.PageType;
 import com.melonltd.naberc.view.customize.SwitchButton;
@@ -31,7 +30,7 @@ import java.util.List;
 import cn.bingoogolapple.refreshlayout.BGANormalRefreshViewHolder;
 import cn.bingoogolapple.refreshlayout.BGARefreshLayout;
 
-public class SellerCategoryListFragment extends AbsPageFragment implements View.OnClickListener {
+public class SellerCategoryListFragment extends Fragment implements View.OnClickListener {
     private static final String TAG = SellerCategoryListFragment.class.getSimpleName();
     public static SellerCategoryListFragment FRAGMENT = null;
 
@@ -48,8 +47,7 @@ public class SellerCategoryListFragment extends AbsPageFragment implements View.
     public SellerCategoryListFragment() {
     }
 
-    @Override
-    public AbsPageFragment getInstance(Bundle bundle) {
+    public Fragment getInstance(Bundle bundle) {
         if (FRAGMENT == null) {
             FRAGMENT = new SellerCategoryListFragment();
             TO_MENU_EDIT_PAGE_INDEX =-1;
@@ -58,8 +56,7 @@ public class SellerCategoryListFragment extends AbsPageFragment implements View.
         return FRAGMENT;
     }
 
-    @Override
-    public AbsPageFragment newInstance(Object... o) {
+    public Fragment newInstance(Object... o) {
         return new SellerCategoryListFragment();
     }
 
@@ -111,6 +108,7 @@ public class SellerCategoryListFragment extends AbsPageFragment implements View.
     @Override
     public void onResume() {
         super.onResume();
+        SellerMainActivity.changeTabAndToolbarStatus();
         for (int i = 0; i < 10; i++) {
             listData.add("menu :: " + i);
         }
@@ -134,14 +132,14 @@ public class SellerCategoryListFragment extends AbsPageFragment implements View.
     private void backToSellerRestaurantPage() {
         BaseCore.FRAGMENT_TAG = PageType.SELLER_RESTAURANT.name();
         SellerRestaurantFragment.TO_CATEGORY_LIST_PAGE_INDEX = -1;
-        AbsPageFragment f = PageFragmentFactory.of(PageType.SELLER_RESTAURANT, null);
+        Fragment f = PageFragmentFactory.of(PageType.SELLER_RESTAURANT, null);
         getFragmentManager().beginTransaction().remove(this).replace(R.id.sellerFrameContainer, f).commit();
     }
 
     private void toMenuEditPage(int index) {
         BaseCore.FRAGMENT_TAG = PageType.SELLER_MENU_EDIT.name();
         TO_MENU_EDIT_PAGE_INDEX = index;
-        AbsPageFragment f = PageFragmentFactory.of(PageType.SELLER_MENU_EDIT, null);
+        Fragment f = PageFragmentFactory.of(PageType.SELLER_MENU_EDIT, null);
         getFragmentManager().beginTransaction().remove(this).replace(R.id.sellerFrameContainer, f).commit();
     }
 

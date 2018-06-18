@@ -2,7 +2,11 @@ package com.melonltd.naberc.util;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
 import android.graphics.Matrix;
+import android.graphics.PixelFormat;
+import android.graphics.drawable.Drawable;
+import android.util.Base64;
 import android.util.Log;
 
 import com.google.firebase.storage.FirebaseStorage;
@@ -12,12 +16,16 @@ import com.melonltd.naberc.model.constant.NaberConstant;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 
 public class PhotoTools {
     private static final String TAG = PhotoTools.class.getSimpleName();
 
+
+    private static final  int MULTIPLE = 4;
     public static Bitmap sampleBitmap(Bitmap bitmap , int minLenDP) {
-        int dp = minLenDP * 4;
+        int dp = minLenDP * MULTIPLE;
         BitmapFactory.Options options = new BitmapFactory.Options();
         options.inJustDecodeBounds = true; // 只获取图片的大小信息，而不是将整张图片载入在内存中，避免内存溢出
         Log.w(TAG, "原圖 ---> size: " + (bitmap.getByteCount() / 1024)  + " width: " + bitmap.getWidth() + " heigth:" + bitmap.getHeight());
@@ -72,6 +80,58 @@ public class PhotoTools {
                 .getInstance(path)
                 .getReference()
                 .child(child + fileName);
+    }
+
+
+    public static Bitmap drawableToBitmap(Drawable drawable) {
+        Bitmap bitmap = Bitmap
+                .createBitmap(
+                        drawable.getIntrinsicWidth(),
+                        drawable.getIntrinsicHeight(),
+                        drawable.getOpacity() != PixelFormat.OPAQUE ? Bitmap.Config.ARGB_8888
+                                : Bitmap.Config.RGB_565);
+        Canvas canvas = new Canvas(bitmap);
+        //canvas.setBitmap(bitmap);
+        drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
+        drawable.draw(canvas);
+        return bitmap;
+    }
+
+    public static Bitmap bytes2Bimap(byte[] b) {
+        if (b.length != 0) {
+            return BitmapFactory.decodeByteArray(b, 0, b.length);
+        } else {
+            return null;
+        }
+    }
+
+    public static byte[] bitmap2Bytes(Bitmap bm) {
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        bm.compress(Bitmap.CompressFormat.PNG, 100, baos);
+        return baos.toByteArray();
+    }
+
+    public static String bitmap2Base64String(Bitmap bm) {
+        byte[] b64file = Base64.encode(bitmap2Bytes(bm), Base64.DEFAULT);
+        return new String(b64file, StandardCharsets.UTF_8);
+    }
+
+    public static byte[] bitmap2Base64(Bitmap bm) {
+        byte[] b64file = Base64.encode(bitmap2Bytes(bm), Base64.DEFAULT);
+        return b64file;
+    }
+
+    public static File bitmap2File(Bitmap bm, File file, String filename) throws IOException {
+        File f = new File(file, filename);
+        f.createNewFile();
+        ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        bm.compress(Bitmap.CompressFormat.JPEG, 100/*ignored for PNG*/, bos);
+        byte[] bitmapdata = bos.toByteArray();
+        FileOutputStream fos = new FileOutputStream(f);
+        fos.write(bitmapdata);
+        fos.flush();
+        fos.close();
+        return f;
     }
 
 }

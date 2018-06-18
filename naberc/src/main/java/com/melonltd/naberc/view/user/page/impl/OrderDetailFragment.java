@@ -10,17 +10,15 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.melonltd.naberc.R;
-import com.melonltd.naberc.view.common.BaseCore;
-import com.melonltd.naberc.view.user.UserMainActivity;
-import com.melonltd.naberc.view.common.abs.AbsPageFragment;
 import com.melonltd.naberc.view.common.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.common.type.PageType;
+import com.melonltd.naberc.view.user.UserMainActivity;
 
 
 /**
  * A simple {@link Fragment} subclass.
  */
-public class OrderDetailFragment extends AbsPageFragment {
+public class OrderDetailFragment extends Fragment {
     private static final String TAG = OrderDetailFragment.class.getSimpleName();
     public static OrderDetailFragment FRAGMENT = null;
 
@@ -28,13 +26,7 @@ public class OrderDetailFragment extends AbsPageFragment {
     public OrderDetailFragment() {
     }
 
-    @Override
-    public AbsPageFragment newInstance(Object... o) {
-        return new HomeFragment();
-    }
-
-    @Override
-    public AbsPageFragment getInstance(Bundle bundle) {
+    public Fragment getInstance(Bundle bundle) {
         if (FRAGMENT == null) {
             FRAGMENT = new OrderDetailFragment();
         }
@@ -89,8 +81,8 @@ public class OrderDetailFragment extends AbsPageFragment {
 
     private void backToHistoryPage() {
         HistoryFragment.TO_ORDER_DETAIL_INDEX = -1;
-        AbsPageFragment f = PageFragmentFactory.of(PageType.HISTORY, null);
-        getFragmentManager().beginTransaction().remove(this).replace(R.id.frameContainer, f).commit();
+        Fragment f = PageFragmentFactory.of(PageType.HISTORY, null);
+        getFragmentManager().beginTransaction().remove(this).replace(R.id.frameContainer, f).addToBackStack(f.toString()).commit();
     }
 
 }

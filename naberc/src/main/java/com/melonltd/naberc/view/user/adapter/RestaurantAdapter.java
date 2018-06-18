@@ -1,5 +1,8 @@
 package com.melonltd.naberc.view.user.adapter;
 
+import android.net.Uri;
+import android.os.Handler;
+import android.os.Looper;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
@@ -14,7 +17,7 @@ import com.melonltd.naberc.R;
 import java.util.List;
 
 public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.ViewHolder> {
-    private static final  String TAG = RestaurantAdapter.class.getSimpleName();
+    private static final String TAG = RestaurantAdapter.class.getSimpleName();
     private List<String> listData;
     private View.OnClickListener itemOnClickListener;
 
@@ -23,9 +26,10 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
     }
 
 
-    public void setItemOnClickListener(View.OnClickListener itemOnClickListener){
+    public void setItemOnClickListener(View.OnClickListener itemOnClickListener) {
         this.itemOnClickListener = itemOnClickListener;
     }
+
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -35,13 +39,19 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
     }
 
     @Override
-    public void onBindViewHolder(@NonNull RestaurantAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final RestaurantAdapter.ViewHolder holder, int position) {
 
         holder.restaurantNameText.setText(listData.get(position) + " XX 店");
-//        Uri uri = Uri.parse("https://sjhexpress.com/wp-content/uploads/2015/02/HannahRidoutFoodPhotography.jpg");
-//        holder.restaurantIcon.setImageURI(uri);
+        new Handler(Looper.getMainLooper()).post(new Runnable() {
+            @Override
+            public void run() {
+                Uri uri = Uri.parse("https://sjhexpress.com/wp-content/uploads/2015/02/HannahRidoutFoodPhotography.jpg");
+                holder.restaurantIcon.setImageURI(uri);
+            }
+        });
+//
         holder.restaurantItem.setTag(position);
-        holder.restaurantItem.setOnClickListener(this.itemOnClickListener );
+        holder.restaurantItem.setOnClickListener(this.itemOnClickListener);
     }
 
 
@@ -55,6 +65,7 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
         SimpleDraweeView restaurantIcon;
         ConstraintLayout restaurantItem;
         TextView restaurantNameText, businessTimeText, addressText, distanceText;
+
         ViewHolder(View v) {
             super(v);
             restaurantItem = v.findViewById(R.id.restaurantItem);

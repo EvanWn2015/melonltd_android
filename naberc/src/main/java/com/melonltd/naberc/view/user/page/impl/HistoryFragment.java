@@ -1,9 +1,8 @@
 package com.melonltd.naberc.view.user.page.impl;
 
 import android.os.Bundle;
-import android.os.Parcelable;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -14,8 +13,6 @@ import com.google.common.collect.Lists;
 import com.melonltd.naberc.R;
 import com.melonltd.naberc.model.helper.okhttp.ApiCallback;
 import com.melonltd.naberc.model.helper.okhttp.ApiManager;
-import com.melonltd.naberc.view.common.BaseCore;
-import com.melonltd.naberc.view.common.abs.AbsPageFragment;
 import com.melonltd.naberc.view.common.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.common.type.PageType;
 import com.melonltd.naberc.view.user.UserMainActivity;
@@ -26,7 +23,7 @@ import java.util.List;
 import cn.bingoogolapple.refreshlayout.BGANormalRefreshViewHolder;
 import cn.bingoogolapple.refreshlayout.BGARefreshLayout;
 
-public class HistoryFragment extends AbsPageFragment {
+public class HistoryFragment extends Fragment {
     private static final String TAG = HomeFragment.class.getSimpleName();
     public static HistoryFragment FRAGMENT = null;
 
@@ -40,19 +37,13 @@ public class HistoryFragment extends AbsPageFragment {
     public HistoryFragment() {
     }
 
-    @Override
-    public AbsPageFragment getInstance(Bundle bundle) {
+    public Fragment getInstance(Bundle bundle) {
         if (FRAGMENT == null) {
             FRAGMENT = new HistoryFragment();
             FRAGMENT.setArguments(bundle);
             TO_ORDER_DETAIL_INDEX = -1;
         }
         return FRAGMENT;
-    }
-
-    @Override
-    public AbsPageFragment newInstance(Object... o) {
-        return new HistoryFragment();
     }
 
 
@@ -98,7 +89,7 @@ public class HistoryFragment extends AbsPageFragment {
             @Override
             public void onBGARefreshLayoutBeginRefreshing(BGARefreshLayout refreshLayout) {
                 bgaRefreshLayout.endRefreshing();
-                ApiManager.test(new ApiCallback(getActivity()) {
+                ApiManager.test(new ApiCallback(getContext()) {
                     @Override
                     public void onSuccess(String responseBody) {
                         list.clear();
@@ -110,7 +101,7 @@ public class HistoryFragment extends AbsPageFragment {
                     }
 
                     @Override
-                    public void onFail(Exception error) {
+                    public void onFail(Exception error, String msg) {
                         bgaRefreshLayout.endRefreshing();
                     }
                 });
@@ -119,7 +110,7 @@ public class HistoryFragment extends AbsPageFragment {
             @Override
             public boolean onBGARefreshLayoutBeginLoadingMore(BGARefreshLayout refreshLayout) {
                 bgaRefreshLayout.endLoadingMore();
-                ApiManager.test(new ApiCallback(getActivity()) {
+                ApiManager.test(new ApiCallback(getContext()) {
                     @Override
                     public void onSuccess(String responseBody) {
                         for (int i = 0; i < 30; i++) {
@@ -129,7 +120,7 @@ public class HistoryFragment extends AbsPageFragment {
                     }
 
                     @Override
-                    public void onFail(Exception error) {
+                    public void onFail(Exception error, String msg) {
                         bgaRefreshLayout.endLoadingMore();
                     }
                 });
@@ -157,7 +148,7 @@ public class HistoryFragment extends AbsPageFragment {
         if (isRefresh) {
             list.clear();
         }
-        ApiManager.test(new ApiCallback(getActivity()) {
+        ApiManager.test(new ApiCallback(getContext()) {
             @Override
             public void onSuccess(String responseBody) {
                 for (int i = 0; i < 5; i++) {
@@ -167,7 +158,7 @@ public class HistoryFragment extends AbsPageFragment {
             }
 
             @Override
-            public void onFail(Exception error) {
+            public void onFail(Exception error, String msg) {
 
             }
         });
@@ -177,7 +168,7 @@ public class HistoryFragment extends AbsPageFragment {
         Bundle b = new Bundle();
         b.putString("test", list.get(resultIndex));
         UserMainActivity.FRAGMENT_TAG = PageType.ORDER_DETAIL.name();
-        AbsPageFragment f = PageFragmentFactory.of(PageType.ORDER_DETAIL, b);
+        Fragment f = PageFragmentFactory.of(PageType.ORDER_DETAIL, b);
         getFragmentManager().beginTransaction().replace(R.id.frameContainer, f).addToBackStack(f.toString()).commit();
     }
 

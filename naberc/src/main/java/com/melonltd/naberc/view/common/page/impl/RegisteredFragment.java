@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.text.InputType;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -29,10 +30,8 @@ import com.melonltd.naberc.model.bean.IdentityJsonBean;
 import com.melonltd.naberc.util.VerifyUtil;
 import com.melonltd.naberc.view.common.BaseActivity;
 import com.melonltd.naberc.view.common.BaseCore;
-import com.melonltd.naberc.view.common.abs.AbsPageFragment;
 import com.melonltd.naberc.view.common.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.common.type.PageType;
-import com.melonltd.naberc.view.user.UserMainActivity;
 
 import org.json.JSONArray;
 
@@ -45,7 +44,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
-public class RegisteredFragment extends AbsPageFragment implements View.OnClickListener {
+public class RegisteredFragment extends Fragment implements View.OnClickListener {
     private static final String TAG = RegisteredFragment.class.getSimpleName();
     public static RegisteredFragment FRAGMENT = null;
     private TextView identityEditText, birthdayEditText;
@@ -88,13 +87,11 @@ public class RegisteredFragment extends AbsPageFragment implements View.OnClickL
     public RegisteredFragment() {
     }
 
-    @Override
-    public AbsPageFragment newInstance(Object... o) {
+    public Fragment newInstance(Object... o) {
         return new RegisteredFragment();
     }
 
-    @Override
-    public AbsPageFragment getInstance(Bundle bundle) {
+    public Fragment getInstance(Bundle bundle) {
         if (FRAGMENT == null) {
             FRAGMENT = new RegisteredFragment();
             FRAGMENT.setArguments(bundle);
@@ -148,7 +145,7 @@ public class RegisteredFragment extends AbsPageFragment implements View.OnClickL
     }
 
     private void backToLoginPage() {
-        AbsPageFragment fragment = PageFragmentFactory.of(PageType.LOGIN, null);
+        Fragment fragment = PageFragmentFactory.of(PageType.LOGIN, null);
         getFragmentManager().beginTransaction().remove(this).replace(R.id.baseContainer, fragment).addToBackStack(fragment.toString()).commit();
     }
 
@@ -304,42 +301,42 @@ public class RegisteredFragment extends AbsPageFragment implements View.OnClickL
         String message = "";
         // 驗證身份不為空
         if (Strings.isNullOrEmpty(identityEditText.getText().toString())) {
-            message = BaseCore.context.getString(R.string.mail_wrong_format);
+            message = "驗證身份不為空";
             result = false;
         }
         // 驗證姓名不為空
         if (Strings.isNullOrEmpty(nameEditText.getText().toString())) {
-            message = BaseCore.context.getString(R.string.mail_wrong_format);
+            message = "驗證姓名不為空";
             result = false;
         }
         // 驗證姓名長度大於二
         if (nameEditText.getText().toString().length() <= 4) {
-            message = BaseCore.context.getString(R.string.mail_wrong_format);
+            message = "驗證姓名不為空";
             result = false;
         }
         // 驗證Email不為空
         if (Strings.isNullOrEmpty(emailEditText.getText().toString())) {
-            message = BaseCore.context.getString(R.string.mail_wrong_format);
+            message = "驗證姓名不為空";
             result = false;
         }
         // 驗證Email錯誤格式
         if (!VerifyUtil.email(emailEditText.getText().toString())) {
-            message = BaseCore.context.getString(R.string.mail_wrong_format);
+            message = "驗證姓名不為空";
             result = false;
         }
         // 驗證密碼不為空 並需要英文大小寫數字 6 ~ 20
         if (!VerifyUtil.password(passwordEditText.getText().toString())) {
-            message = BaseCore.context.getString(R.string.mail_wrong_format);
+            message = "驗證姓名不為空";
             result = false;
         }
         // 驗證密碼與確認密碼一致
         if (!passwordEditText.getText().toString().equals(confirmPasswordEditText.getText().toString())) {
-            message = BaseCore.context.getString(R.string.mail_wrong_format);
+            message = "驗證姓名不為空";
             result = false;
         }
         // 驗證生日不為空
         if (Strings.isNullOrEmpty(birthdayEditText.getText().toString())) {
-            message = BaseCore.context.getString(R.string.mail_wrong_format);
+            message = "驗證姓名不為空";
             result = false;
         }
 

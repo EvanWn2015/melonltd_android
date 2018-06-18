@@ -2,6 +2,7 @@ package com.melonltd.naberc.view.user.page.impl;
 
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -10,14 +11,13 @@ import android.widget.TextView;
 
 import com.melonltd.naberc.R;
 import com.melonltd.naberc.view.common.BaseCore;
-import com.melonltd.naberc.view.common.abs.AbsPageFragment;
 import com.melonltd.naberc.view.common.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.common.type.PageType;
 import com.melonltd.naberc.view.customize.SwitchButton;
 import com.melonltd.naberc.view.user.UserMainActivity;
 
 
-public class SetUpFragment extends AbsPageFragment implements View.OnClickListener {
+public class SetUpFragment extends Fragment implements View.OnClickListener {
     private static final String TAG = HomeFragment.class.getSimpleName();
     public static SetUpFragment FRAGMENT = null;
     private TextView accountNumberText, dividendText;
@@ -29,8 +29,7 @@ public class SetUpFragment extends AbsPageFragment implements View.OnClickListen
     public SetUpFragment() {
     }
 
-    @Override
-    public AbsPageFragment getInstance(Bundle bundle) {
+    public Fragment getInstance(Bundle bundle) {
         if (FRAGMENT == null) {
             FRAGMENT = new SetUpFragment();
             FRAGMENT.setArguments(bundle);
@@ -38,11 +37,6 @@ public class SetUpFragment extends AbsPageFragment implements View.OnClickListen
             TO_SIMPLE_INFO_INDEX = -1;
         }
         return FRAGMENT;
-    }
-
-    @Override
-    public AbsPageFragment newInstance(Object... o) {
-        return new SetUpFragment();
     }
 
     @Override
@@ -94,7 +88,7 @@ public class SetUpFragment extends AbsPageFragment implements View.OnClickListen
         b.putString("user detail", "");
         TO_ACCOUNT_DETAIL_INDEX = i;
         BaseCore.FRAGMENT_TAG = PageType.ACCOUNT_DETAIL.name();
-        AbsPageFragment f = PageFragmentFactory.of(PageType.ACCOUNT_DETAIL, b);
+        Fragment f = PageFragmentFactory.of(PageType.ACCOUNT_DETAIL, b);
         getFragmentManager().beginTransaction().replace(R.id.frameContainer, f).addToBackStack(f.toString()).commit();
     }
 
@@ -103,7 +97,7 @@ public class SetUpFragment extends AbsPageFragment implements View.OnClickListen
         b.putString("user detail", "");
         TO_SIMPLE_INFO_INDEX = i;
         BaseCore.FRAGMENT_TAG = PageType.SIMPLE_INFO.name();
-        AbsPageFragment f = PageFragmentFactory.of(PageType.SIMPLE_INFO, b);
+        Fragment f = PageFragmentFactory.of(PageType.SIMPLE_INFO, b);
         getFragmentManager().beginTransaction().replace(R.id.frameContainer, f).addToBackStack(f.toString()).commit();
     }
 

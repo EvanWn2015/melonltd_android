@@ -46,7 +46,7 @@ public class Tools {
     //    public static GCM gcm = new GCM();
     public static Network NETWORK = new Network();
     public static Longitude LONGITUDE = new Longitude();
-    public static Bitmaps BITMAPS = new Bitmaps();
+//    public static Bitmaps BITMAPS = new Bitmaps();
     public static Gson GSON = new Gson();
     public static MakeUp MAKEUP = new MakeUp();
 
@@ -146,62 +146,6 @@ public class Tools {
             return loc;
         }
     }
-
-
-    public static class Bitmaps {
-
-        public static byte[] bitmap2Bytes(Bitmap bm) {
-            ByteArrayOutputStream baos = new ByteArrayOutputStream();
-            bm.compress(Bitmap.CompressFormat.PNG, 100, baos);
-            return baos.toByteArray();
-        }
-
-        public static Bitmap bytes2Bimap(byte[] b) {
-            if (b.length != 0) {
-                return BitmapFactory.decodeByteArray(b, 0, b.length);
-            } else {
-                return null;
-            }
-        }
-
-        public static Bitmap drawableToBitmap(Drawable drawable) {
-            Bitmap bitmap = Bitmap
-                    .createBitmap(
-                            drawable.getIntrinsicWidth(),
-                            drawable.getIntrinsicHeight(),
-                            drawable.getOpacity() != PixelFormat.OPAQUE ? Bitmap.Config.ARGB_8888
-                                    : Bitmap.Config.RGB_565);
-            Canvas canvas = new Canvas(bitmap);
-            //canvas.setBitmap(bitmap);
-            drawable.setBounds(0, 0, drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight());
-            drawable.draw(canvas);
-            return bitmap;
-        }
-
-        public static String bitmap2Base64String(Bitmap bm) {
-            byte[] b64file = Base64.encode(bitmap2Bytes(bm), Base64.DEFAULT);
-            return new String(b64file, StandardCharsets.UTF_8);
-        }
-
-        public static byte[] bitmap2Base64(Bitmap bm) {
-            byte[] b64file = Base64.encode(bitmap2Bytes(bm), Base64.DEFAULT);
-            return b64file;
-        }
-
-        public static File bitmap2File(Bitmap bm, File file, String filename) throws IOException {
-            File f = new File(file, filename);
-            f.createNewFile();
-            ByteArrayOutputStream bos = new ByteArrayOutputStream();
-            bm.compress(Bitmap.CompressFormat.JPEG, 100/*ignored for PNG*/, bos);
-            byte[] bitmapdata = bos.toByteArray();
-            FileOutputStream fos = new FileOutputStream(f);
-            fos.write(bitmapdata);
-            fos.flush();
-            fos.close();
-            return f;
-        }
-    }
-
 
     public static class GoogleVersion {
         public static boolean checkVersion(Context context, Activity activity) {

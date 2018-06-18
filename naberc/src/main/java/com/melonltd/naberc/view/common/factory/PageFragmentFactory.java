@@ -2,10 +2,11 @@ package com.melonltd.naberc.view.common.factory;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 
-import com.melonltd.naberc.view.common.abs.AbsPageFragment;
 import com.melonltd.naberc.view.common.page.impl.LoginFragment;
 import com.melonltd.naberc.view.common.page.impl.RecoverPasswordFragment;
+import com.melonltd.naberc.view.common.page.impl.RegisteredFragment;
 import com.melonltd.naberc.view.common.page.impl.RegisteredSellerFragment;
 import com.melonltd.naberc.view.common.page.impl.VerifySMSFragment;
 import com.melonltd.naberc.view.common.type.PageType;
@@ -26,7 +27,6 @@ import com.melonltd.naberc.view.user.page.impl.HistoryFragment;
 import com.melonltd.naberc.view.user.page.impl.HomeFragment;
 import com.melonltd.naberc.view.user.page.impl.MenuDetailFragment;
 import com.melonltd.naberc.view.user.page.impl.OrderDetailFragment;
-import com.melonltd.naberc.view.common.page.impl.RegisteredFragment;
 import com.melonltd.naberc.view.user.page.impl.ResetPasswordFragment;
 import com.melonltd.naberc.view.user.page.impl.RestaurantDetailFragment;
 import com.melonltd.naberc.view.user.page.impl.RestaurantFragment;
@@ -38,7 +38,7 @@ import com.melonltd.naberc.view.user.page.impl.SubmitOrdersFragment;
 public class PageFragmentFactory {
     private final static String TAG = PageFragmentFactory.class.getSimpleName();
 
-    public static AbsPageFragment of(@NonNull PageType pageType, Bundle bundle) {
+    public static Fragment of(@NonNull PageType pageType, Bundle bundle) {
 
         switch (pageType) {
             case LOGIN:

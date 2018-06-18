@@ -12,7 +12,7 @@
     <string name="foot_text_2"> \@ 2017 Melon LTD, Inc. 保留所有權利</string>
 
     <!-- popup msg-->
-    <string name="mail_wrong_format">Email格式錯誤</string>
+    <string name="account_wrong_format">Email格式錯誤</string>
     <string name="password_wrong_format">密碼格式錯誤</string>
     <string name="account_does_not_exist">查無此帳號，請確認帳號密碼是否正確！</string>
 

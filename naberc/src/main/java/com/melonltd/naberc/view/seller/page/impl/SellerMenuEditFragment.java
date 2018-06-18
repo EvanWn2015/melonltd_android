@@ -12,6 +12,7 @@ import android.provider.MediaStore;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.ActivityCompat;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -31,15 +32,12 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.common.collect.Lists;
-import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.melonltd.naberc.R;
 import com.melonltd.naberc.model.constant.NaberConstant;
 import com.melonltd.naberc.util.PhotoTools;
-import com.melonltd.naberc.util.Tools;
 import com.melonltd.naberc.view.common.BaseCore;
-import com.melonltd.naberc.view.common.abs.AbsPageFragment;
 import com.melonltd.naberc.view.common.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.common.type.PageType;
 import com.melonltd.naberc.view.seller.SellerMainActivity;
@@ -47,7 +45,7 @@ import com.melonltd.naberc.view.seller.SellerMainActivity;
 import java.io.ByteArrayOutputStream;
 import java.util.List;
 
-public class SellerMenuEditFragment extends AbsPageFragment {
+public class SellerMenuEditFragment extends Fragment {
     private static final String TAG = SellerMenuEditFragment.class.getSimpleName();
     public static SellerMenuEditFragment FRAGMENT = null;
     private Button newDemandBtn, saveBtn;
@@ -63,8 +61,7 @@ public class SellerMenuEditFragment extends AbsPageFragment {
     public SellerMenuEditFragment() {
     }
 
-    @Override
-    public AbsPageFragment getInstance(Bundle bundle) {
+    public Fragment getInstance(Bundle bundle) {
         if (FRAGMENT == null) {
             FRAGMENT = new SellerMenuEditFragment();
         }
@@ -72,8 +69,7 @@ public class SellerMenuEditFragment extends AbsPageFragment {
         return FRAGMENT;
     }
 
-    @Override
-    public AbsPageFragment newInstance(Object... o) {
+    public Fragment newInstance(Object... o) {
         return new SellerMenuEditFragment();
     }
 
@@ -178,6 +174,7 @@ public class SellerMenuEditFragment extends AbsPageFragment {
     @Override
     public void onResume() {
         super.onResume();
+        SellerMainActivity.changeTabAndToolbarStatus();
         if (SellerMainActivity.toolbar != null) {
             SellerMainActivity.navigationIconDisplay(true, new View.OnClickListener() {
                 @Override
@@ -214,7 +211,7 @@ public class SellerMenuEditFragment extends AbsPageFragment {
     private void backToSellerCategoryListPage() {
         SellerCategoryListFragment.TO_MENU_EDIT_PAGE_INDEX = -1;
         BaseCore.FRAGMENT_TAG = PageType.SELLER_CATEGORY_LIST.name();
-        AbsPageFragment f = PageFragmentFactory.of(PageType.SELLER_CATEGORY_LIST, null);
+        Fragment f = PageFragmentFactory.of(PageType.SELLER_CATEGORY_LIST, null);
         getFragmentManager().beginTransaction().remove(this).replace(R.id.sellerFrameContainer, f).commit();
     }
 

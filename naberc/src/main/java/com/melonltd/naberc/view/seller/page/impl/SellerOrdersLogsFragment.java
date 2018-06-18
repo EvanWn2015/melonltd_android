@@ -2,7 +2,6 @@ package com.melonltd.naberc.view.seller.page.impl;
 
 
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,7 +10,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
@@ -20,7 +18,6 @@ import com.bigkoo.pickerview.view.TimePickerView;
 import com.google.common.collect.Lists;
 import com.melonltd.naberc.R;
 import com.melonltd.naberc.view.common.BaseCore;
-import com.melonltd.naberc.view.common.abs.AbsPageFragment;
 import com.melonltd.naberc.view.common.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.common.type.PageType;
 import com.melonltd.naberc.view.seller.SellerMainActivity;
@@ -34,7 +31,7 @@ import java.util.List;
 import cn.bingoogolapple.refreshlayout.BGANormalRefreshViewHolder;
 import cn.bingoogolapple.refreshlayout.BGARefreshLayout;
 
-public class SellerOrdersLogsFragment extends AbsPageFragment implements View.OnClickListener {
+public class SellerOrdersLogsFragment extends Fragment implements View.OnClickListener {
     private static final String TAG = SellerOrdersLogsFragment.class.getSimpleName();
     public static SellerOrdersLogsFragment FRAGMENT = null;
 
@@ -49,8 +46,8 @@ public class SellerOrdersLogsFragment extends AbsPageFragment implements View.On
     public SellerOrdersLogsFragment() {
     }
 
-    @Override
-    public AbsPageFragment getInstance(Bundle bundle) {
+
+    public Fragment getInstance(Bundle bundle) {
         if (FRAGMENT == null) {
             FRAGMENT = new SellerOrdersLogsFragment();
             TO_ORDERS_LOGS_DETAIL_INDEX = -1;
@@ -59,8 +56,8 @@ public class SellerOrdersLogsFragment extends AbsPageFragment implements View.On
         return FRAGMENT;
     }
 
-    @Override
-    public AbsPageFragment newInstance(Object... o) {
+
+    public Fragment newInstance(Object... o) {
         return new SellerOrdersLogsFragment();
     }
 
@@ -128,7 +125,7 @@ public class SellerOrdersLogsFragment extends AbsPageFragment implements View.On
     @Override
     public void onResume() {
         super.onResume();
-
+        SellerMainActivity.changeTabAndToolbarStatus();
         for (int i = 0; i < 10; i++) {
             listData.add("item" + i);
         }
@@ -151,14 +148,14 @@ public class SellerOrdersLogsFragment extends AbsPageFragment implements View.On
     private void toOrderLogsDetailPag(int index) {
         BaseCore.FRAGMENT_TAG = PageType.SELLER_ORDERS_LOGS_DETAIL.name();
         TO_ORDERS_LOGS_DETAIL_INDEX = index;
-        AbsPageFragment f = PageFragmentFactory.of(PageType.SELLER_ORDERS_LOGS_DETAIL, null);
+        Fragment f = PageFragmentFactory.of(PageType.SELLER_ORDERS_LOGS_DETAIL, null);
         getFragmentManager().beginTransaction().remove(this).replace(R.id.sellerFrameContainer, f).commit();
     }
 
     private void backToSellerStatPage() {
         BaseCore.FRAGMENT_TAG = PageType.SELLER_STAT.name();
         SellerStatFragment.TO_SELLER_ORDERS_LOGS_INDEX = -1;
-        AbsPageFragment f = PageFragmentFactory.of(PageType.SELLER_STAT, null);
+        Fragment f = PageFragmentFactory.of(PageType.SELLER_STAT, null);
         getFragmentManager().beginTransaction().remove(this).replace(R.id.sellerFrameContainer, f).commit();
     }
 

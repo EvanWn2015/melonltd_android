@@ -2,38 +2,31 @@ package com.melonltd.naberc.view.user.page.impl;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.melonltd.naberc.R;
 import com.melonltd.naberc.view.common.BaseCore;
-import com.melonltd.naberc.view.user.UserMainActivity;
-import com.melonltd.naberc.view.common.abs.AbsPageFragment;
 import com.melonltd.naberc.view.common.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.common.type.PageType;
+import com.melonltd.naberc.view.user.UserMainActivity;
 
-public class SimpleInformationFragment extends AbsPageFragment {
+public class SimpleInformationFragment extends Fragment {
     private static final String TAG = SimpleInformationFragment.class.getSimpleName();
     public static SimpleInformationFragment FRAGMENT = null;
 
     public SimpleInformationFragment() {
     }
 
-    @Override
-    public AbsPageFragment getInstance(Bundle bundle) {
+    public Fragment getInstance(Bundle bundle) {
         if (FRAGMENT == null) {
             FRAGMENT = new SimpleInformationFragment();
             FRAGMENT.setArguments(bundle);
         }
         return FRAGMENT;
     }
-
-    @Override
-    public AbsPageFragment newInstance(Object... o) {
-        return new ShoppingCartFragment();
-    }
-
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -74,7 +67,7 @@ public class SimpleInformationFragment extends AbsPageFragment {
     private void backToSetUpPage() {
         BaseCore.FRAGMENT_TAG = PageType.SET_UP.name();
         SetUpFragment.TO_SIMPLE_INFO_INDEX = -1;
-        AbsPageFragment f = PageFragmentFactory.of(PageType.SET_UP, null);
-        getFragmentManager().beginTransaction().remove(this).replace(R.id.frameContainer, f).commit();
+        Fragment f = PageFragmentFactory.of(PageType.SET_UP, null);
+        getFragmentManager().beginTransaction().remove(this).replace(R.id.frameContainer, f).addToBackStack(f.toString()).commit();
     }
 }

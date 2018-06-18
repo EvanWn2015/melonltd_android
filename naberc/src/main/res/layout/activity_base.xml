@@ -16,12 +16,21 @@
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:background="?attr/colorPrimary"
-            app:titleTextColor="@android:color/black"
-            app:popupTheme="@style/AppTheme.NoActionBar.PopupOverlay" />
-
+            app:popupTheme="@style/AppTheme.NoActionBar.PopupOverlay"
+            app:titleTextColor="@android:color/black" />
     </android.support.design.widget.AppBarLayout>
 
-    <include layout="@layout/content_base" />
-
+    <FrameLayout
+        android:id="@+id/baseContainer"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="false"
+        android:focusable="false"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </android.support.design.widget.CoordinatorLayout>

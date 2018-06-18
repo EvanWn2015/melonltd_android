@@ -11,12 +11,11 @@ import android.widget.TextView;
 
 import com.melonltd.naberc.R;
 import com.melonltd.naberc.view.common.BaseCore;
-import com.melonltd.naberc.view.common.abs.AbsPageFragment;
 import com.melonltd.naberc.view.common.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.common.type.PageType;
 import com.melonltd.naberc.view.seller.SellerMainActivity;
 
-public class SellerSetUpFragment extends AbsPageFragment implements View.OnClickListener {
+public class SellerSetUpFragment extends Fragment implements View.OnClickListener {
     private static final String TAG = SellerSetUpFragment.class.getSimpleName();
     public static SellerSetUpFragment FRAGMENT = null;
 
@@ -28,8 +27,7 @@ public class SellerSetUpFragment extends AbsPageFragment implements View.OnClick
         // Required empty public constructor
     }
 
-    @Override
-    public AbsPageFragment getInstance(Bundle bundle) {
+    public Fragment getInstance(Bundle bundle) {
         if (FRAGMENT == null) {
             FRAGMENT = new SellerSetUpFragment();
             TO_SELLER_DETAIL_INDEX = -1;
@@ -39,8 +37,7 @@ public class SellerSetUpFragment extends AbsPageFragment implements View.OnClick
         return FRAGMENT;
     }
 
-    @Override
-    public AbsPageFragment newInstance(Object... o) {
+    public Fragment newInstance(Object... o) {
         return new SellerSetUpFragment();
     }
 
@@ -75,6 +72,7 @@ public class SellerSetUpFragment extends AbsPageFragment implements View.OnClick
     @Override
     public void onResume() {
         super.onResume();
+        SellerMainActivity.changeTabAndToolbarStatus();
 //        SellerMainActivity.toolbar.setNavigationIcon(null);
         SellerMainActivity.lockDrawer(true);
         if (TO_SELLER_DETAIL_INDEX > 0) {
@@ -85,7 +83,7 @@ public class SellerSetUpFragment extends AbsPageFragment implements View.OnClick
     private void toSellerDetail(int i) {
         TO_SELLER_DETAIL_INDEX = i;
         BaseCore.FRAGMENT_TAG = PageType.SELLER_DETAIL.name();
-        AbsPageFragment f = PageFragmentFactory.of(PageType.SELLER_DETAIL, null);
+        Fragment f = PageFragmentFactory.of(PageType.SELLER_DETAIL, null);
         getFragmentManager().beginTransaction().replace(R.id.sellerFrameContainer, f).commit();
     }
 
@@ -95,7 +93,7 @@ public class SellerSetUpFragment extends AbsPageFragment implements View.OnClick
         b.putString("user detail", "");
         TO_SELLER_SIMPLE_INFO_INDEX = i;
         BaseCore.FRAGMENT_TAG = PageType.SELLER_SIMPLE_INFO.name();
-        AbsPageFragment f = PageFragmentFactory.of(PageType.SELLER_SIMPLE_INFO, b);
+        Fragment f = PageFragmentFactory.of(PageType.SELLER_SIMPLE_INFO, b);
         getFragmentManager().beginTransaction().replace(R.id.sellerFrameContainer, f).commit();
     }
 

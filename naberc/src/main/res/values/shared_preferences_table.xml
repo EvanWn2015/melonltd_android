@@ -2,4 +2,5 @@
     <string name="shared_preferences_key">NABERC_APP</string>
     <string name="is_first_use">IS_FIRST_USE</string>
     <string name="user_uid">USER_UID</string>
+    <string name="oauth_token">OAUTH_TOKEN</string>
 </resources>

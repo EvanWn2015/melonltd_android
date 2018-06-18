@@ -11,7 +11,6 @@ import android.widget.TextView;
 
 import com.melonltd.naberc.R;
 import com.melonltd.naberc.view.common.BaseCore;
-import com.melonltd.naberc.view.common.abs.AbsPageFragment;
 import com.melonltd.naberc.view.common.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.common.type.PageType;
 import com.melonltd.naberc.view.seller.SellerMainActivity;
@@ -19,7 +18,7 @@ import com.melonltd.naberc.view.seller.SellerMainActivity;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class SellerStatFragment extends AbsPageFragment implements View.OnClickListener {
+public class SellerStatFragment extends Fragment implements View.OnClickListener {
     private static final String TAG = SellerStatFragment.class.getSimpleName();
     public static SellerStatFragment FRAGMENT = null;
     public static int TO_SELLER_ORDERS_LOGS_INDEX = -1;
@@ -30,8 +29,7 @@ public class SellerStatFragment extends AbsPageFragment implements View.OnClickL
         // Required empty public constructor
     }
 
-    @Override
-    public AbsPageFragment getInstance(Bundle bundle) {
+    public Fragment getInstance(Bundle bundle) {
         if (FRAGMENT == null) {
             FRAGMENT = new SellerStatFragment();
             TO_SELLER_ORDERS_LOGS_INDEX = -1;
@@ -40,8 +38,7 @@ public class SellerStatFragment extends AbsPageFragment implements View.OnClickL
         return FRAGMENT;
     }
 
-    @Override
-    public AbsPageFragment newInstance(Object... o) {
+    public Fragment newInstance(Object... o) {
         return new SellerStatFragment();
     }
 
@@ -73,6 +70,7 @@ public class SellerStatFragment extends AbsPageFragment implements View.OnClickL
     @Override
     public void onResume() {
         super.onResume();
+        SellerMainActivity.changeTabAndToolbarStatus();
 //        SellerMainActivity.toolbar.setNavigationIcon(null);
         SellerMainActivity.lockDrawer(true);
         if (TO_SELLER_ORDERS_LOGS_INDEX >= 0) {
@@ -82,7 +80,7 @@ public class SellerStatFragment extends AbsPageFragment implements View.OnClickL
 
     private void toOrdersLogsPage() {
         TO_SELLER_ORDERS_LOGS_INDEX = 1;
-        AbsPageFragment fragment = PageFragmentFactory.of(PageType.SELLER_ORDERS_LOGS, null);
+        Fragment fragment = PageFragmentFactory.of(PageType.SELLER_ORDERS_LOGS, null);
         BaseCore.FRAGMENT_TAG = PageType.SELLER_ORDERS_LOGS.toString();
         getFragmentManager().beginTransaction().remove(this).replace(R.id.sellerFrameContainer, fragment).commit();
     }

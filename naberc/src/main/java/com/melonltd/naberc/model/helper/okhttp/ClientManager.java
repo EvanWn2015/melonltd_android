@@ -3,10 +3,6 @@ package com.melonltd.naberc.model.helper.okhttp;
 import android.annotation.SuppressLint;
 import android.util.Log;
 
-import com.melonltd.naberc.util.Tools;
-
-import java.io.IOException;
-import java.net.URL;
 import java.security.SecureRandom;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
@@ -23,12 +19,9 @@ import okhttp3.Call;
 import okhttp3.ConnectionPool;
 import okhttp3.FormBody;
 import okhttp3.HttpUrl;
-import okhttp3.MediaType;
-import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
-import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
 
 /**
@@ -52,10 +45,11 @@ public class ClientManager {
     private static ClientManager CLIENT_MANAGER = new ClientManager();
 
     private final static String HEADER_KEY = "Authorization";
+    private final static String PARAMETER ="data";
 
-    private static final MediaType X_WWW_FORM = MediaType.parse("application/x-www-form-urlencoded; charset=utf-8");
-    private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-    private static final MediaType TEXT = MediaType.parse("text/plain; charset=utf-8");
+//    private static final MediaType X_WWW_FORM = MediaType.parse("application/x-www-form-urlencoded; charset=utf-8");
+//    private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
+//    private static final MediaType TEXT = MediaType.parse("text/plain; charset=utf-8");
 
     public static ClientManager getInstance() {
         if (CLIENT_MANAGER == null) {
@@ -64,119 +58,83 @@ public class ClientManager {
         return CLIENT_MANAGER;
     }
 
-
-    public static Call get(String url) {
-        Request request = new Request.Builder()
-//                .header(HEADER_KEY, Preference.headervalue)
-//                .header("", "'")
-//                .header("", "")
-                .url(url)
-                .get()
-                .build();
-//        try {
-//            Response response = CLIENT.newCall(request).execute();
-//            return response;
-//        } catch (IOException e) {
-//            Log.e(TAG, "error", e);
-//            return null;
-//        }
-
-        return CLIENT.newCall(request);
-    }
-
-    public static Call get(URL url) {
-        Request request = new Request.Builder()
-//                .header(HEADER_KEY, Preference.headervalue)
-//                .header("", "'")
-//                .header("", "")
-                .url(url)
-                .get()
-                .build();
-
-        return CLIENT.newCall(request);
-    }
-
-    public static Call get(HttpUrl url) {
-        Request request = new Request.Builder()
-                .header(HEADER_KEY, "Bearer f181ab6c-b320-48c1-928c-78282b02ad2d")
-                .url(url)
-                .get()
-                .build();
-
-        return CLIENT.newCall(request);
-    }
-
-    private static Response post(String url, String json) {
-        RequestBody body = RequestBody.create(JSON, json);
-
-        Request request = new Request.Builder()
-//                .header(HEADER_KEY, Preference.headervalue)
-                .url(url)
-                .post(body)
-                .build();
-        try {
-            Response response = CLIENT.newCall(request).execute();
-            return response;
-        } catch (IOException e) {
-            Log.e(TAG, "error", e);
-            return null;
-        }
-    }
-
-    private static Response post(String url, Object object) {
-        RequestBody body = RequestBody.create(JSON, Tools.GSON.toJson(object));
-        Request request = new Request.Builder()
-//                .header(HEADER_KEY, Preference.headervalue)
-                .url(url)
-                .post(body)
-                .build();
-        try {
-            Response response = CLIENT.newCall(request).execute();
-            return response;
-        } catch (IOException e) {
-            Log.e(TAG, "error", e);
-            return null;
-        }
-    }
-
-    public static Call postDate(HttpUrl url, String data) {
-//        RequestBody body = RequestBody.create(X_WWW_FORM, data);
-
-//        RequestBody requestBody = new MultipartBody.Builder()
-//                .setType(X_WWW_FORM)
-//                .addFormDataPart("data", data)
-//                .build();
-
+    public static Call post(String url, String data) {
         RequestBody formBody = new FormBody.Builder()
-                .add("data", data)
+                .add(PARAMETER, data)
                 .build();
 
         Request request = new Request.Builder()
-//                .header(HEADER_KEY, Preference.headervalue)
                 .url(url)
                 .post(formBody)
                 .build();
 
         return CLIENT.newCall(request);
-//        try {
-//            Response response = CLIENT.newCall(request).execute();
-//            return response;
-//        } catch (IOException e) {
-//            Log.e(TAG, "error", e);
-//            return null;
-//        }
     }
 
-    public static Call put(String url, String json) {
-        RequestBody body = RequestBody.create(JSON, json);
+    public static Call post(String url, String token, String data) {
+        RequestBody formBody = new FormBody.Builder()
+                .add(PARAMETER, data)
+                .build();
+
         Request request = new Request.Builder()
-//                .header(HEADER_KEY, Preference.headervalue)
+                .header(HEADER_KEY, token)
                 .url(url)
-                .put(body)
+                .post(formBody)
                 .build();
 
         return CLIENT.newCall(request);
-//        call.enqueue(callback);
+    }
+
+
+//    public static Call get(String url) {
+//        Request request = new Request.Builder()
+////                .header(HEADER_KEY, Preference.headervalue)
+////                .header("", "'")
+////                .header("", "")
+//                .url(url)
+//                .get()
+//                .build();
+////        try {
+////            Response response = CLIENT.newCall(request).execute();
+////            return response;
+////        } catch (IOException e) {
+////            Log.e(TAG, "error", e);
+////            return null;
+////        }
+//
+//        return CLIENT.newCall(request);
+//    }
+
+//    public static Call get(URL url) {
+//        Request request = new Request.Builder()
+////                .header(HEADER_KEY, Preference.headervalue)
+////                .header("", "'")
+////                .header("", "")
+//                .url(url)
+//                .get()
+//                .build();
+//
+//        return CLIENT.newCall(request);
+//    }
+
+//    public static Call get(HttpUrl url) {
+//        Request request = new Request.Builder()
+//                .header(HEADER_KEY, "Bearer f181ab6c-b320-48c1-928c-78282b02ad2d")
+//                .url(url)
+//                .get()
+//                .build();
+//
+//        return CLIENT.newCall(request);
+//    }
+
+//    private static Response post(String url, String json) {
+//        RequestBody body = RequestBody.create(JSON, json);
+//
+//        Request request = new Request.Builder()
+////                .header(HEADER_KEY, Preference.headervalue)
+//                .url(url)
+//                .post(body)
+//                .build();
 //        try {
 //            Response response = CLIENT.newCall(request).execute();
 //            return response;
@@ -184,39 +142,76 @@ public class ClientManager {
 //            Log.e(TAG, "error", e);
 //            return null;
 //        }
-    }
+//    }
 
-    public static Response put(String url, Object object) {
-        RequestBody body = RequestBody.create(JSON, Tools.GSON.toJson(object));
-        Request request = new Request.Builder()
-//                .header(HEADER_KEY, Preference.headervalue)
-                .url(url)
-                .put(body)
-                .build();
-        try {
-            Response response = CLIENT.newCall(request).execute();
-            return response;
-        } catch (IOException e) {
-            Log.e(TAG, "error", e);
-            return null;
-        }
-    }
+//    private static Response post(String url, Object object) {
+//        RequestBody body = RequestBody.create(JSON, Tools.GSON.toJson(object));
+//        Request request = new Request.Builder()
+////                .header(HEADER_KEY, Preference.headervalue)
+//                .url(url)
+//                .post(body)
+//                .build();
+//        try {
+//            Response response = CLIENT.newCall(request).execute();
+//            return response;
+//        } catch (IOException e) {
+//            Log.e(TAG, "error", e);
+//            return null;
+//        }
+//    }
 
 
-    public static Response delete(String url) {
-        Request request = new Request.Builder()
-//                .header(HEADER_KEY, Preference.headervalue)
-                .url(url)
-                .delete()
-                .build();
-        try {
-            Response response = CLIENT.newCall(request).execute();
-            return response;
-        } catch (IOException e) {
-            Log.e(TAG, "error", e);
-            return null;
-        }
-    }
+
+//    public static Call put(String url, String json) {
+//        RequestBody body = RequestBody.create(JSON, json);
+//        Request request = new Request.Builder()
+////                .header(HEADER_KEY, Preference.headervalue)
+//                .url(url)
+//                .put(body)
+//                .build();
+//
+//        return CLIENT.newCall(request);
+////        call.enqueue(callback);
+////        try {
+////            Response response = CLIENT.newCall(request).execute();
+////            return response;
+////        } catch (IOException e) {
+////            Log.e(TAG, "error", e);
+////            return null;
+////        }
+//    }
+//
+//    public static Response put(String url, Object object) {
+//        RequestBody body = RequestBody.create(JSON, Tools.GSON.toJson(object));
+//        Request request = new Request.Builder()
+////                .header(HEADER_KEY, Preference.headervalue)
+//                .url(url)
+//                .put(body)
+//                .build();
+//        try {
+//            Response response = CLIENT.newCall(request).execute();
+//            return response;
+//        } catch (IOException e) {
+//            Log.e(TAG, "error", e);
+//            return null;
+//        }
+//    }
+
+
+//    public static Response delete(String url) {
+//        Request request = new Request.Builder()
+////                .header(HEADER_KEY, Preference.headervalue)
+//                .url(url)
+//                .delete()
+//                .build();
+//        try {
+//            Response response = CLIENT.newCall(request).execute();
+//            return response;
+//        } catch (IOException e) {
+//            Log.e(TAG, "error", e);
+//            return null;
+//        }
+//    }
 
     @SuppressLint("TrulyRandom")
     private static SSLSocketFactory createSSLSocketFactory() {

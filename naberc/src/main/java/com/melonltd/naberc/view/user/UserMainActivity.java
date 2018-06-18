@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.multidex.MultiDex;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
@@ -14,7 +15,6 @@ import android.widget.TextView;
 import com.google.common.collect.Lists;
 import com.melonltd.naberc.R;
 import com.melonltd.naberc.view.common.BaseCore;
-import com.melonltd.naberc.view.common.abs.AbsPageFragment;
 import com.melonltd.naberc.view.common.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.common.type.PageType;
 import com.melonltd.naberc.view.customize.NaberTab;
@@ -55,28 +55,28 @@ public class UserMainActivity extends BaseCore implements View.OnClickListener, 
         context = this;
         getView();
         FRAGMENT_TAG = PageType.HOME.name();
-        AbsPageFragment fragment = PageFragmentFactory.of(PageType.HOME, null);
+        Fragment fragment = PageFragmentFactory.of(PageType.HOME, null);
         getSupportFragmentManager().beginTransaction().replace(R.id.frameContainer, fragment).addToBackStack(fragment.toString()).commit();
     }
 
     private void getView() {
         toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-        TabLayout bottomMenuTabLayout = findViewById(R.id.bottomMenuTabLayout);
-        bottomMenuTabLayout.addOnTabSelectedListener(this);
+        TabLayout tabLayout = findViewById(R.id.bottomMenuTabLayout);
+        tabLayout.addOnTabSelectedListener(this);
 
-        bottomMenuTabLayout.removeAllTabs();
+        tabLayout.removeAllTabs();
         View v0 = new NaberTab(context).Builder().setIcon(R.drawable.naber_tab_home_icon).setTitle(R.string.menu_home_btn).build();
         View v1 = new NaberTab(context).Builder().setIcon(R.drawable.naber_tab_restaurant_icon).setTitle(R.string.menu_restaurant_btn).build();
         View v2 = new NaberTab(context).Builder().setIcon(R.drawable.naber_tab_shopping_cart_icon).setTitle(R.string.menu_shopping_cart_btn).build();
         View v3 = new NaberTab(context).Builder().setIcon(R.drawable.naber_tab_history_icon).setTitle(R.string.menu_history_btn).build();
         View v4 = new NaberTab(context).Builder().setIcon(R.drawable.naber_tab_set_up_icon).setTitle(R.string.menu_set_up_btn).build();
         tabViews = Lists.<View>newArrayList(v0, v1, v2, v3, v4);
-        bottomMenuTabLayout.addTab(bottomMenuTabLayout.newTab().setCustomView(v0).setTag(R.string.menu_home_btn), false);
-        bottomMenuTabLayout.addTab(bottomMenuTabLayout.newTab().setCustomView(v1).setTag(R.string.menu_restaurant_btn), false);
-        bottomMenuTabLayout.addTab(bottomMenuTabLayout.newTab().setCustomView(v2).setTag(R.string.menu_shopping_cart_btn), false);
-        bottomMenuTabLayout.addTab(bottomMenuTabLayout.newTab().setCustomView(v3).setTag(R.string.menu_history_btn), false);
-        bottomMenuTabLayout.addTab(bottomMenuTabLayout.newTab().setCustomView(v4).setTag(R.string.menu_set_up_btn), false);
+        tabLayout.addTab(tabLayout.newTab().setCustomView(v0).setTag(R.string.menu_home_btn), false);
+        tabLayout.addTab(tabLayout.newTab().setCustomView(v1).setTag(R.string.menu_restaurant_btn), false);
+        tabLayout.addTab(tabLayout.newTab().setCustomView(v2).setTag(R.string.menu_shopping_cart_btn), false);
+        tabLayout.addTab(tabLayout.newTab().setCustomView(v3).setTag(R.string.menu_history_btn), false);
+        tabLayout.addTab(tabLayout.newTab().setCustomView(v4).setTag(R.string.menu_set_up_btn), false);
 
     }
 
@@ -138,7 +138,7 @@ public class UserMainActivity extends BaseCore implements View.OnClickListener, 
 
         int index = Integer.parseInt(tab.getTag().toString());
         if (MAIN_PAGE.contains(PageType.ofId(index))) {
-            AbsPageFragment fragment = PageFragmentFactory.of(PageType.ofId(Integer.parseInt(tab.getTag().toString())), null);
+            Fragment fragment = PageFragmentFactory.of(PageType.ofId(Integer.parseInt(tab.getTag().toString())), null);
             FRAGMENT_TAG = PageType.ofId(Integer.parseInt(tab.getTag().toString())).name();
             getSupportFragmentManager().beginTransaction().addToBackStack(fragment.toString()).replace(R.id.frameContainer, fragment).commit();
         }
@@ -165,7 +165,7 @@ public class UserMainActivity extends BaseCore implements View.OnClickListener, 
         int index = Integer.parseInt(tab.getTag().toString());
         if (!FRAGMENT_TAG.equals(PageType.ofId(index).name())) {
             if (MAIN_PAGE.contains(PageType.ofId(index))) {
-                AbsPageFragment fragment = PageFragmentFactory.of(PageType.ofId(Integer.parseInt(tab.getTag().toString())), null);
+                Fragment fragment = PageFragmentFactory.of(PageType.ofId(Integer.parseInt(tab.getTag().toString())), null);
                 FRAGMENT_TAG = PageType.ofId(Integer.parseInt(tab.getTag().toString())).name();
                 getSupportFragmentManager().beginTransaction().addToBackStack(fragment.toString()).replace(R.id.frameContainer, fragment).commit();
             }

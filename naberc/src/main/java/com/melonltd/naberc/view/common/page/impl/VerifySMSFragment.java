@@ -1,6 +1,7 @@
 package com.melonltd.naberc.view.common.page.impl;
 
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,12 +17,11 @@ import com.melonltd.naberc.model.helper.okhttp.ApiCallback;
 import com.melonltd.naberc.model.helper.okhttp.ApiManager;
 import com.melonltd.naberc.view.common.BaseActivity;
 import com.melonltd.naberc.view.common.BaseCore;
-import com.melonltd.naberc.view.common.abs.AbsPageFragment;
 import com.melonltd.naberc.view.common.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.common.type.PageType;
 
 
-public class VerifySMSFragment extends AbsPageFragment implements View.OnClickListener {
+public class VerifySMSFragment extends Fragment implements View.OnClickListener {
     private static final String TAG = VerifySMSFragment.class.getSimpleName();
     public static VerifySMSFragment FRAGMENT = null;
     private EditText phoneNamberEdit, verifySMSEdit;
@@ -29,7 +29,6 @@ public class VerifySMSFragment extends AbsPageFragment implements View.OnClickLi
     public VerifySMSFragment() {
     }
 
-    @Override
     public VerifySMSFragment getInstance(Bundle bundle) {
         if (FRAGMENT == null) {
             FRAGMENT = new VerifySMSFragment();
@@ -38,7 +37,6 @@ public class VerifySMSFragment extends AbsPageFragment implements View.OnClickLi
         return FRAGMENT;
     }
 
-    @Override
     public VerifySMSFragment newInstance(Object... o) {
         return new VerifySMSFragment();
     }
@@ -90,7 +88,7 @@ public class VerifySMSFragment extends AbsPageFragment implements View.OnClickLi
 
     private void backToLoginPage() {
         BaseCore.FRAGMENT_TAG = PageType.LOGIN.name();
-        AbsPageFragment f = PageFragmentFactory.of(PageType.LOGIN, null);
+        Fragment f = PageFragmentFactory.of(PageType.LOGIN, null);
         getFragmentManager().beginTransaction().remove(this).replace(R.id.baseContainer, f).commit();
     }
 
@@ -98,14 +96,14 @@ public class VerifySMSFragment extends AbsPageFragment implements View.OnClickLi
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.requestVerifyCodeBtn:
-                ApiManager.test(new ApiCallback(getActivity()) {
+                ApiManager.test(new ApiCallback(getContext()) {
                     @Override
                     public void onSuccess(String responseBody) {
 
                     }
 
                     @Override
-                    public void onFail(Exception error) {
+                    public void onFail(Exception error, String msg) {
 
                     }
                 });
@@ -129,14 +127,14 @@ public class VerifySMSFragment extends AbsPageFragment implements View.OnClickLi
                         .show();
                 break;
             case R.id.submitToRegisteredBun:
-                ApiManager.test(new ApiCallback(getActivity()) {
+                ApiManager.test(new ApiCallback(getContext()) {
                     @Override
                     public void onSuccess(String responseBody) {
                         toRegisteredPage();
                     }
 
                     @Override
-                    public void onFail(Exception error) {
+                    public void onFail(Exception error, String msg) {
 
                     }
                 });

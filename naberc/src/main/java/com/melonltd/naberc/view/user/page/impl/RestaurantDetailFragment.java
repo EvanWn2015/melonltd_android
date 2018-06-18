@@ -1,17 +1,15 @@
 package com.melonltd.naberc.view.user.page.impl;
 
-import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.facebook.common.util.UriUtil;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.facebook.imagepipeline.request.ImageRequest;
@@ -21,7 +19,6 @@ import com.melonltd.naberc.R;
 import com.melonltd.naberc.model.helper.okhttp.ApiCallback;
 import com.melonltd.naberc.model.helper.okhttp.ApiManager;
 import com.melonltd.naberc.view.common.BaseCore;
-import com.melonltd.naberc.view.common.abs.AbsPageFragment;
 import com.melonltd.naberc.view.common.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.common.type.PageType;
 import com.melonltd.naberc.view.user.UserMainActivity;
@@ -32,7 +29,7 @@ import java.util.List;
 import cn.bingoogolapple.refreshlayout.BGANormalRefreshViewHolder;
 import cn.bingoogolapple.refreshlayout.BGARefreshLayout;
 
-public class RestaurantDetailFragment extends AbsPageFragment {
+public class RestaurantDetailFragment extends Fragment {
     private static final String TAG = RestaurantDetailFragment.class.getSimpleName();
     public static RestaurantDetailFragment FRAGMENT = null;
 //    private SimpleDraweeView  restaurantIcon;
@@ -49,19 +46,12 @@ public class RestaurantDetailFragment extends AbsPageFragment {
     public RestaurantDetailFragment() {
     }
 
-    @Override
-    public AbsPageFragment newInstance(Object... o) {
-        return new RestaurantDetailFragment();
-    }
-
-    @Override
-    public AbsPageFragment getInstance(Bundle bundle) {
+    public Fragment getInstance(Bundle bundle) {
         if (FRAGMENT == null) {
             FRAGMENT = new RestaurantDetailFragment();
             TO_CATEGORY_MENU_INDEX = -1;
             FRAGMENT.setArguments(bundle);
         }
-
         return FRAGMENT;
     }
 
@@ -121,7 +111,7 @@ public class RestaurantDetailFragment extends AbsPageFragment {
             @Override
             public void onBGARefreshLayoutBeginRefreshing(BGARefreshLayout refreshLayout) {
                 bgaRefreshLayout.endRefreshing();
-                ApiManager.test(new ApiCallback(getActivity()) {
+                ApiManager.test(new ApiCallback(getContext()) {
                     @Override
                     public void onSuccess(String responseBody) {
                         list.clear();
@@ -132,7 +122,7 @@ public class RestaurantDetailFragment extends AbsPageFragment {
                     }
 
                     @Override
-                    public void onFail(Exception error) {
+                    public void onFail(Exception error, String msg) {
                         bgaRefreshLayout.endRefreshing();
                     }
                 });
@@ -141,7 +131,7 @@ public class RestaurantDetailFragment extends AbsPageFragment {
             @Override
             public boolean onBGARefreshLayoutBeginLoadingMore(BGARefreshLayout refreshLayout) {
                 bgaRefreshLayout.endLoadingMore();
-                ApiManager.test(new ApiCallback(getActivity()) {
+                ApiManager.test(new ApiCallback(getContext()) {
                     @Override
                     public void onSuccess(String responseBody) {
                         for (int i = 0; i < 30; i++) {
@@ -152,7 +142,7 @@ public class RestaurantDetailFragment extends AbsPageFragment {
                     }
 
                     @Override
-                    public void onFail(Exception error) {
+                    public void onFail(Exception error, String msg) {
 
                     }
                 });
@@ -189,15 +179,15 @@ public class RestaurantDetailFragment extends AbsPageFragment {
         BaseCore.FRAGMENT_TAG = PageType.CATEGORY_MENU.name();
         Bundle b = new Bundle();
         b.putString("categoryName", "XXX " + (Integer.parseInt(list.get(i)) - 1));
-        AbsPageFragment f = PageFragmentFactory.of(PageType.CATEGORY_MENU, b);
-        getFragmentManager().beginTransaction().replace(R.id.frameContainer, f).commit();
+        Fragment f = PageFragmentFactory.of(PageType.CATEGORY_MENU, b);
+        getFragmentManager().beginTransaction().replace(R.id.frameContainer, f).addToBackStack(f.toString()).commit();
     }
 
     private void doLoadData(boolean isRefresh) {
         if (isRefresh) {
             list.clear();
         }
-        ApiManager.test(new ApiCallback(getActivity()) {
+        ApiManager.test(new ApiCallback(getContext()) {
             @Override
             public void onSuccess(String responseBody) {
                 for (int i = 0; i < 10; i++) {
@@ -207,7 +197,7 @@ public class RestaurantDetailFragment extends AbsPageFragment {
             }
 
             @Override
-            public void onFail(Exception error) {
+            public void onFail(Exception error, String msg) {
 
             }
         });
@@ -216,8 +206,8 @@ public class RestaurantDetailFragment extends AbsPageFragment {
     private void backToRegisteredPage() {
         BaseCore.FRAGMENT_TAG = PageType.RESTAURANT.name();
         RestaurantFragment.TO_RESTAURANT_DETAIL_INDEX = -1;
-        AbsPageFragment f = PageFragmentFactory.of(PageType.RESTAURANT, null);
-        getFragmentManager().beginTransaction().remove(this).replace(R.id.frameContainer, f).commit();
+        Fragment f = PageFragmentFactory.of(PageType.RESTAURANT, null);
+        getFragmentManager().beginTransaction().remove(this).replace(R.id.frameContainer, f).addToBackStack(f.toString()).commit();
     }
 
     @Override

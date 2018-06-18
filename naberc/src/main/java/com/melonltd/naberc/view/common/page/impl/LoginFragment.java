@@ -3,6 +3,7 @@ package com.melonltd.naberc.view.common.page.impl;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,17 +16,21 @@ import com.bigkoo.alertview.AlertView;
 import com.google.common.base.Strings;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.melonltd.naberc.R;
-import com.melonltd.naberc.util.VerifyUtil;
+import com.melonltd.naberc.model.helper.okhttp.ApiCallback;
+import com.melonltd.naberc.model.helper.okhttp.ApiManager;
+import com.melonltd.naberc.model.preferences.SharedPreferencesService;
+import com.melonltd.naberc.util.Tools;
 import com.melonltd.naberc.view.common.BaseActivity;
 import com.melonltd.naberc.view.common.BaseCore;
-import com.melonltd.naberc.view.common.abs.AbsPageFragment;
 import com.melonltd.naberc.view.common.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.common.type.PageType;
 import com.melonltd.naberc.view.intro.IntroActivity;
 import com.melonltd.naberc.view.seller.SellerMainActivity;
 import com.melonltd.naberc.view.user.UserMainActivity;
+import com.melonltd.naberc.vo.AccountInfoVo;
+import com.melonltd.naberc.vo.RespData;
 
-public class LoginFragment extends AbsPageFragment implements View.OnClickListener {
+public class LoginFragment extends Fragment implements View.OnClickListener {
     private static final String TAG = LoginFragment.class.getSimpleName();
     public static LoginFragment FRAGMENT = null;
     private EditText accountEdit, passwordEdit;
@@ -33,13 +38,11 @@ public class LoginFragment extends AbsPageFragment implements View.OnClickListen
     public LoginFragment() {
     }
 
-    @Override
-    public AbsPageFragment newInstance(Object... o) {
+    public Fragment newInstance(Object... o) {
         return new LoginFragment();
     }
 
-    @Override
-    public AbsPageFragment getInstance(Bundle bundle) {
+    public Fragment getInstance(Bundle bundle) {
         if (FRAGMENT == null) {
             FRAGMENT = new LoginFragment();
             FRAGMENT.setArguments(bundle);
@@ -83,43 +86,51 @@ public class LoginFragment extends AbsPageFragment implements View.OnClickListen
 
     @Override
     public void onClick(View v) {
-        AbsPageFragment fragment = null;
+        Fragment fragment = null;
         switch (v.getId()) {
             case R.id.loginBtn:
+                if (verifyInput()) {
+                    String token = SharedPreferencesService.getOauth();
+                    Log.i(TAG , "account token" + token);
+                    AccountInfoVo req = new AccountInfoVo();
+                    req.phone = accountEdit.getText().toString();
+                    req.password = "GVGhhGhb";
+//                    req.device_token = FirebaseInstanceId.getInstance().getToken();
+//                    req.device_category = "ANDROID";
+                    ApiManager.login(req, new ApiCallback(getContext()) {
+                        @Override
+                        public void onSuccess(String responseBody) {
+                            AccountInfoVo resp = Tools.GSON.fromJson(responseBody, AccountInfoVo.class);
+                            SharedPreferencesService.setOauth(resp.getAccount_uuid());
 
-                String token = FirebaseInstanceId.getInstance().getToken();
-                Log.d("FCM token" , token + "");
-                if ("1".equals(accountEdit.getText().toString())) {
-                    BaseActivity.context.startActivity(new Intent(BaseActivity.context, SellerMainActivity.class));
-//                    getActivity().startActivity(new Intent(getContext(), SellerMainActivity.class));
-                }else if ("3".equals(accountEdit.getText().toString())){
-                    BaseActivity.context.startActivity(new Intent(BaseActivity.context, IntroActivity.class));
-//                    getActivity().startActivity(new Intent(getContext(), IntroActivity.class));
-                } else {
-//                    BaseCore.FRAGMENT_TAG = PageType.HOME.name();
-                    BaseActivity.context.startActivity(new Intent(BaseActivity.context, UserMainActivity.class));
-//                    getActivity().startActivity(new Intent(getContext(), UserMainActivity.class));
+                        }
 
-//                    getFragmentManager().beginTransaction().replace(R.id.frameContainer, PageFragmentFactory.of(PageType.HOME, null)).commit();
-//                    if (UserMainActivity.bottomMenuTabLayout != null) {
-//                        UserMainActivity.bottomMenuTabLayout.setVisibility(View.VISIBLE);
-//                    }
+                        @Override
+                        public void onFail(Exception error, String msg) {
+                            new AlertView.Builder()
+                                    .setTitle("")
+                                    .setMessage(msg)
+                                    .setContext(getContext())
+                                    .setStyle(AlertView.Style.Alert)
+                                    .setCancelText("取消")
+                                    .build()
+                                    .setCancelable(true)
+                                    .show();
+                        }
+                    });
                 }
-//                if (verifyInput()) {
-//
-////                    ApiManager.test(new ApiCallback(getActivity()) {
-////                        @Override
-////                        public void onSuccess(String responseBody) {
-////
-////                        }
-////
-////                        @Override
-////                        public void onFail(Exception error) {
-////
-////                        }
-////                    });
-//
-////                    AuthService.signInWithEmailAndPassword(mail, password, getFragmentManager(), null);
+
+//                String token = FirebaseInstanceId.getInstance().getToken();
+//                Log.d("FCM token" , token + "");
+
+
+
+//                if ("1".equals(accountEdit.getText().toString())) {
+//                    BaseActivity.context.startActivity(new Intent(BaseActivity.context, SellerMainActivity.class));
+//                }else if ("3".equals(accountEdit.getText().toString())){
+//                    BaseActivity.context.startActivity(new Intent(BaseActivity.context, IntroActivity.class));
+//                } else {
+//                    BaseActivity.context.startActivity(new Intent(BaseActivity.context, UserMainActivity.class));
 //                }
                 break;
             case R.id.toVerifySMSBtn:
@@ -144,19 +155,12 @@ public class LoginFragment extends AbsPageFragment implements View.OnClickListen
     private boolean verifyInput() {
         boolean result = true;
         String message = "";
-        // 驗證帳號不為空
         if (Strings.isNullOrEmpty(accountEdit.getText().toString())) {
-            message = BaseCore.context.getString(R.string.mail_wrong_format);
+            message = "請輸入帳號";
             result = false;
         }
-        // 驗證帳號格式
-        if (!VerifyUtil.phoneNumber(accountEdit.getText().toString())) {
-            message = BaseCore.context.getString(R.string.mail_wrong_format);
-            result = false;
-        }
-        // 驗證密碼不為空
         if (Strings.isNullOrEmpty(passwordEdit.getText().toString())) {
-            message = BaseCore.context.getString(R.string.mail_wrong_format);
+            message = "請輸入帳號";
             result = false;
         }
         if (!result) {
@@ -173,8 +177,4 @@ public class LoginFragment extends AbsPageFragment implements View.OnClickListen
         return result;
     }
 
-//    @Override
-//    public void onDateSet(TimePickerDialog timePickerView, long millseconds) {
-//        Log.d(TAG, "TimePickerDialog  onDateSet");
-//    }
 }

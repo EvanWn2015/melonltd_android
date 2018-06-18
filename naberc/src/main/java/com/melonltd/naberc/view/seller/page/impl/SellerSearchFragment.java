@@ -2,6 +2,7 @@ package com.melonltd.naberc.view.seller.page.impl;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -19,7 +20,6 @@ import com.google.common.collect.Lists;
 import com.melonltd.naberc.R;
 import com.melonltd.naberc.model.helper.okhttp.ApiCallback;
 import com.melonltd.naberc.model.helper.okhttp.ApiManager;
-import com.melonltd.naberc.view.common.abs.AbsPageFragment;
 import com.melonltd.naberc.view.seller.SellerMainActivity;
 import com.melonltd.naberc.view.seller.adapter.SearchAdapter;
 
@@ -28,7 +28,7 @@ import java.util.List;
 import cn.bingoogolapple.refreshlayout.BGANormalRefreshViewHolder;
 import cn.bingoogolapple.refreshlayout.BGARefreshLayout;
 
-public class SellerSearchFragment extends AbsPageFragment {
+public class SellerSearchFragment extends Fragment {
     private static final String TAG = SellerSearchFragment.class.getSimpleName();
     public static SellerSearchFragment FRAGMENT = null;
 
@@ -43,8 +43,7 @@ public class SellerSearchFragment extends AbsPageFragment {
     public SellerSearchFragment() {
     }
 
-    @Override
-    public AbsPageFragment getInstance(Bundle bundle) {
+    public Fragment getInstance(Bundle bundle) {
         if (FRAGMENT == null) {
             FRAGMENT = new SellerSearchFragment();
             FRAGMENT.setArguments(bundle);
@@ -52,8 +51,7 @@ public class SellerSearchFragment extends AbsPageFragment {
         return FRAGMENT;
     }
 
-    @Override
-    public AbsPageFragment newInstance(Object... o) {
+    public Fragment newInstance(Object... o) {
         return new SellerSearchFragment();
     }
 
@@ -82,6 +80,7 @@ public class SellerSearchFragment extends AbsPageFragment {
     public void onResume() {
         super.onResume();
         SellerMainActivity.lockDrawer(true);
+        SellerMainActivity.changeTabAndToolbarStatus();
 //        SellerMainActivity.toolbar.setNavigationIcon(null);
     }
 
@@ -109,7 +108,7 @@ public class SellerSearchFragment extends AbsPageFragment {
         searchRefreshLayout.setDelegate(new BGARefreshLayout.BGARefreshLayoutDelegate() {
             @Override
             public void onBGARefreshLayoutBeginRefreshing(BGARefreshLayout refreshLayout) {
-                ApiManager.test(new ApiCallback(getActivity()) {
+                ApiManager.test(new ApiCallback(getContext()) {
                     @Override
                     public void onSuccess(String responseBody) {
                         listData.clear();
@@ -122,7 +121,7 @@ public class SellerSearchFragment extends AbsPageFragment {
                     }
 
                     @Override
-                    public void onFail(Exception error) {
+                    public void onFail(Exception error, String msg) {
                         searchRefreshLayout.endRefreshing();
                     }
                 });
@@ -137,7 +136,7 @@ public class SellerSearchFragment extends AbsPageFragment {
 //                }
 //                adapter.notifyDataSetChanged();
 //                searchRefreshLayout.endRefreshing();
-                ApiManager.test(new ApiCallback(getActivity()) {
+                ApiManager.test(new ApiCallback(getContext()) {
                     @Override
                     public void onSuccess(String responseBody) {
                         for (int i = 0; i < 10; i++) {
@@ -148,7 +147,7 @@ public class SellerSearchFragment extends AbsPageFragment {
                     }
 
                     @Override
-                    public void onFail(Exception error) {
+                    public void onFail(Exception error, String msg) {
                         searchRefreshLayout.endRefreshing();
                     }
                 });

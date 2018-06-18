@@ -1,12 +1,7 @@
 package com.melonltd.naberc.model.helper.okhttp;
 
-import android.util.Log;
-
 import com.melonltd.naberc.model.api.ApiUrl;
 import com.melonltd.naberc.util.Tools;
-
-import java.io.IOException;
-import java.net.ConnectException;
 
 import okhttp3.Call;
 import okhttp3.HttpUrl;
@@ -26,33 +21,25 @@ public class ApiManager {
         return CLIENT_MANAGER;
     }
 
-
-    public static void getUserInfo(int rule_id, ApiCallback callback) {
-        HttpUrl url = HttpUrl.parse(ApiUrl.userInfo).newBuilder()
-                .addQueryParameter("user_id", "ecadmin")
-                .addQueryParameter("apsystem", "ECA")
-                .build();
-
-        Call call = getClient().get(url);
+    public static void login(Object req, ApiCallback callback) {
+        Call call = getClient().post(ApiUrl.LOGIN,  Tools.GSON.toJson(req));
         call.enqueue(callback);
     }
 
-    public static <T> void test(ApiCallback callback) {
+
+
+    public static void test(ApiCallback callback) {
         TData tt=  new TData();
         String gg = Tools.GSON.toJson(tt);
-        HttpUrl url = HttpUrl.parse(ApiUrl.test).newBuilder()
-                .build();
-
-
-        Call call = getClient().postDate(url, tt.data);
+        Call call = getClient().post(ApiUrl.test, tt.data);
         call.enqueue(callback);
     }
 
 
     public static class TData{
         public String data = Tools.GSON.toJson(new TT("0987654321", "GVGhhGhb"));
-
     }
+
     public static class TT {
 
         private String password;

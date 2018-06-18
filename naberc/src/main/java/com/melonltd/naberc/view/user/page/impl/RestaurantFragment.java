@@ -3,6 +3,7 @@ package com.melonltd.naberc.view.user.page.impl;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -19,7 +20,6 @@ import com.melonltd.naberc.R;
 import com.melonltd.naberc.model.helper.okhttp.ApiCallback;
 import com.melonltd.naberc.model.helper.okhttp.ApiManager;
 import com.melonltd.naberc.view.common.BaseCore;
-import com.melonltd.naberc.view.common.abs.AbsPageFragment;
 import com.melonltd.naberc.view.common.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.common.type.PageType;
 import com.melonltd.naberc.view.user.UserMainActivity;
@@ -30,7 +30,7 @@ import java.util.List;
 import cn.bingoogolapple.refreshlayout.BGANormalRefreshViewHolder;
 import cn.bingoogolapple.refreshlayout.BGARefreshLayout;
 
-public class RestaurantFragment extends AbsPageFragment implements View.OnClickListener {
+public class RestaurantFragment extends Fragment implements View.OnClickListener {
     private static final String TAG = RestaurantFragment.class.getSimpleName();
     public static RestaurantFragment FRAGMENT = null;
 
@@ -49,13 +49,7 @@ public class RestaurantFragment extends AbsPageFragment implements View.OnClickL
     public RestaurantFragment() {
     }
 
-    @Override
-    public AbsPageFragment newInstance(Object... o) {
-        return new RestaurantFragment();
-    }
-
-    @Override
-    public AbsPageFragment getInstance(Bundle bundle) {
+    public Fragment getInstance(Bundle bundle) {
         if (FRAGMENT == null) {
             FRAGMENT = new RestaurantFragment();
             FRAGMENT.setArguments(bundle);
@@ -115,7 +109,7 @@ public class RestaurantFragment extends AbsPageFragment implements View.OnClickL
             @Override
             public void onBGARefreshLayoutBeginRefreshing(BGARefreshLayout refreshLayout) {
                 bgaRefreshLayout.endRefreshing();
-                ApiManager.test(new ApiCallback(getActivity()) {
+                ApiManager.test(new ApiCallback(getContext()) {
                     @Override
                     public void onSuccess(String responseBody) {
                         list.clear();
@@ -127,7 +121,7 @@ public class RestaurantFragment extends AbsPageFragment implements View.OnClickL
                     }
 
                     @Override
-                    public void onFail(Exception error) {
+                    public void onFail(Exception error, String msg) {
                         bgaRefreshLayout.endRefreshing();
                     }
                 });
@@ -135,7 +129,7 @@ public class RestaurantFragment extends AbsPageFragment implements View.OnClickL
 
             @Override
             public boolean onBGARefreshLayoutBeginLoadingMore(BGARefreshLayout refreshLayout) {
-                ApiManager.test(new ApiCallback(getActivity()) {
+                ApiManager.test(new ApiCallback(getContext()) {
                     @Override
                     public void onSuccess(String responseBody) {
                         for (int i = 0; i < 30; i++) {
@@ -146,7 +140,7 @@ public class RestaurantFragment extends AbsPageFragment implements View.OnClickL
                     }
 
                     @Override
-                    public void onFail(Exception error) {
+                    public void onFail(Exception error, String msg) {
                         bgaRefreshLayout.endRefreshing();
                     }
                 });
@@ -161,7 +155,7 @@ public class RestaurantFragment extends AbsPageFragment implements View.OnClickL
             list.clear();
             adapter.notifyDataSetChanged();
         }
-        ApiManager.test(new ApiCallback(getActivity()) {
+        ApiManager.test(new ApiCallback(getContext()) {
             @Override
             public void onSuccess(String responseBody) {
                 for (int i = 0; i < 30; i++) {
@@ -171,7 +165,7 @@ public class RestaurantFragment extends AbsPageFragment implements View.OnClickL
             }
 
             @Override
-            public void onFail(Exception error) {
+            public void onFail(Exception error, String msg) {
 
             }
         });
@@ -186,8 +180,8 @@ public class RestaurantFragment extends AbsPageFragment implements View.OnClickL
             Bundle b = new Bundle();
 //            b.putString("where", "RESTAURANT");
             BaseCore.FRAGMENT_TAG = PageType.RESTAURANT_DETAIL.name();
-            AbsPageFragment f = PageFragmentFactory.of(PageType.RESTAURANT_DETAIL, b);
-            getFragmentManager().beginTransaction().replace(R.id.frameContainer, f).commit();
+            Fragment f = PageFragmentFactory.of(PageType.RESTAURANT_DETAIL, b);
+            getFragmentManager().beginTransaction().replace(R.id.frameContainer, f).addToBackStack(f.toString()).commit();
 //        } else if (HOME_TO_RESTAURANT_DETAIL_INDEX >=0){
 //            Log.d(TAG, "home to this ");
         } else {
@@ -268,8 +262,8 @@ public class RestaurantFragment extends AbsPageFragment implements View.OnClickL
             Bundle b = new Bundle();
             b.putString("where", "RESTAURANT");
             BaseCore.FRAGMENT_TAG = PageType.RESTAURANT_DETAIL.name();
-            AbsPageFragment f = PageFragmentFactory.of(PageType.RESTAURANT_DETAIL, b);
-            getFragmentManager().beginTransaction().replace(R.id.frameContainer, f).commit();
+            Fragment f = PageFragmentFactory.of(PageType.RESTAURANT_DETAIL, b);
+            getFragmentManager().beginTransaction().replace(R.id.frameContainer, f).addToBackStack(f.toString()).commit();
 
         }
     }

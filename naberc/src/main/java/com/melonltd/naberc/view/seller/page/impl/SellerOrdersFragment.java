@@ -3,6 +3,7 @@ package com.melonltd.naberc.view.seller.page.impl;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -22,7 +23,6 @@ import com.google.common.collect.Lists;
 import com.melonltd.naberc.R;
 import com.melonltd.naberc.model.helper.okhttp.ApiCallback;
 import com.melonltd.naberc.model.helper.okhttp.ApiManager;
-import com.melonltd.naberc.view.common.abs.AbsPageFragment;
 import com.melonltd.naberc.view.seller.SellerMainActivity;
 import com.melonltd.naberc.view.seller.adapter.SellerOrdersAdapter;
 
@@ -32,7 +32,7 @@ import java.util.Date;
 import java.util.List;
 
 
-public class SellerOrdersFragment extends AbsPageFragment {
+public class SellerOrdersFragment extends Fragment {
     private static final String TAG = SellerOrdersFragment.class.getSimpleName();
     public static SellerOrdersFragment FRAGMENT = null;
     private TextView searchDateText;
@@ -54,8 +54,7 @@ public class SellerOrdersFragment extends AbsPageFragment {
     public SellerOrdersFragment() {
     }
 
-    @Override
-    public AbsPageFragment getInstance(Bundle bundle) {
+    public Fragment getInstance(Bundle bundle) {
         if (FRAGMENT == null) {
             FRAGMENT = new SellerOrdersFragment();
         }
@@ -63,8 +62,7 @@ public class SellerOrdersFragment extends AbsPageFragment {
         return FRAGMENT;
     }
 
-    @Override
-    public AbsPageFragment newInstance(Object... o) {
+    public Fragment newInstance(Object... o) {
         return new SellerOrdersFragment();
     }
 
@@ -91,6 +89,7 @@ public class SellerOrdersFragment extends AbsPageFragment {
     @Override
     public void onResume() {
         super.onResume();
+        SellerMainActivity.changeTabAndToolbarStatus();
         initData();
         setListCount();
         SellerMainActivity.lockDrawer(false);
@@ -158,7 +157,7 @@ public class SellerOrdersFragment extends AbsPageFragment {
             }
 
             @Override
-            public void onFail(Exception error) {
+            public void onFail(Exception error, String msg) {
 
             }
         });

@@ -1,13 +1,10 @@
 package com.melonltd.naberc.view.seller.adapter;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CompoundButton;
-import android.widget.Switch;
 import android.widget.TextView;
 
 import com.melonltd.naberc.R;
@@ -16,12 +13,10 @@ import com.melonltd.naberc.view.customize.SwitchButton;
 import java.util.List;
 
 public class DateSelectAdapter extends RecyclerView.Adapter<DateSelectAdapter.ViewHolder> {
-    //    private Context context;
     private List<String> list;
     private SwitchButton.OnCheckedChangeListener listener;
 
-    public DateSelectAdapter(Context context, List<String> list, SwitchButton.OnCheckedChangeListener listener) {
-//        this.context = context;
+    public DateSelectAdapter(List<String> list, SwitchButton.OnCheckedChangeListener listener) {
         this.list = list;
         this.listener = listener;
     }

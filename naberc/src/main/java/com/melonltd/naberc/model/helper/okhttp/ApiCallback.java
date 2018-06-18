@@ -1,14 +1,18 @@
 package com.melonltd.naberc.model.helper.okhttp;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
 import android.net.ConnectivityManager;
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 
 import com.bigkoo.alertview.AlertView;
 import com.melonltd.naberc.model.service.Base64Service;
+import com.melonltd.naberc.util.LoadingBarTools;
 import com.melonltd.naberc.util.Tools;
-import com.melonltd.naberc.view.customize.LoadingBar;
+import com.melonltd.naberc.vo.RespData;
 
 import java.io.IOException;
 
@@ -18,49 +22,44 @@ import okhttp3.Response;
 
 public abstract class ApiCallback implements Callback {
     private static final String TAG = ApiCallback.class.getSimpleName();
-//    private static LoadingBar BAR;
+    private AlertDialog DIALOG = null;
 
-    abstract public void onSuccess(final String responseBody);
+    abstract public void onSuccess(String responseBody);
 
-    abstract public void onFail(final Exception error);
+    abstract public void onFail(final Exception error, String msg);
 
-    private Activity activity;
-
-    public ApiCallback(Activity activity) {
-        this.activity = activity;
-//        this.BAR = new LoadingBar(activity);
-    }
+    private Context context;
 
     public ApiCallback(Context context) {
-        this.activity = (Activity) context;
-        if (context instanceof Activity){
+        this.context = context;
+        if (! (context instanceof Activity)) {
             Log.d(TAG, "");
         }
-//        this.BAR = new LoadingBar(activity);
+        this.DIALOG = LoadingBarTools.newLoading(context);
     }
 
 
     @Override
     public void onFailure(Call call, final IOException e) {
-        this.activity.runOnUiThread(
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        // 如果是 network 錯誤
-                        if (checkNetWork()) {
-//                            BAR.hide();
-                            getAlertView().show();
-                            return;
-                        }
-                        e.printStackTrace();
-                        if (e.getMessage().contains("Canceled") || e.getMessage().contains("Socket closed")) {
-                            Log.e(TAG, "fail", e);
-                        } else {
-                            onFail(e);
-                        }
-//                        BAR.hide();
-                    }
-                });
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                // 如果是 network 錯誤
+                if (checkNetWork()) {
+                    DIALOG.hide();
+                    getAlertView();
+                    return;
+                }
+//                e.printStackTrace();
+                if (e.getMessage().contains("Canceled") || e.getMessage().contains("Socket closed")) {
+                    Log.e(TAG, "fail", e);
+                } else {
+                    onFail(e, e.getMessage());
+                }
+                DIALOG.hide();
+            }
+        });
     }
 
     @Override
@@ -69,39 +68,47 @@ public abstract class ApiCallback implements Callback {
             onFailure(call, new IOException("Failed"));
             return;
         }
-        this.activity.runOnUiThread(
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        try {
-                            final String resp = Base64Service.decryptBASE64(response.body().string());
-                            onSuccess(resp);
-                        } catch (IOException e) {
-                            Log.e(TAG, "fail", e);
-                            onFailure(call, new IOException("Failed"));
-                        }
-//                        BAR.hide();
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    final String resp = Base64Service.decryptBASE64(response.body().string());
+                    RespData data = Tools.GSON.fromJson(resp, RespData.class);
+                    if (data.status.toUpperCase().equals("TRUE")){
+                        onSuccess(Tools.GSON.toJson(data.data));
+                    }else {
+                        onFail(new IOException("Failed"), data.err_msg);
                     }
-                });
+
+                } catch (Exception e) {
+                    Log.e(TAG, "fail", e);
+                    onFailure(call, new IOException("Failed"));
+                }
+                DIALOG.hide();
+            }
+        });
     }
 
 
     public boolean checkNetWork() {
-        ConnectivityManager cm = (ConnectivityManager) this.activity.getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager cm = (ConnectivityManager) this.context.getSystemService(Context.CONNECTIVITY_SERVICE);
         return !Tools.NETWORK.hasNetWork(cm);
     }
-//    private void runOnUiThread(Runnable task) {
-//        new Handler(Looper.getMainLooper()).post(task);
-//    }
 
-    private AlertView getAlertView() {
-        return new AlertView.Builder()
-                .setContext(this.activity)
+
+    private void runOnUiThread(Runnable task) {
+        new Handler(Looper.getMainLooper()).post(task);
+    }
+
+    private void getAlertView() {
+        new AlertView.Builder()
+                .setContext(this.context)
                 .setStyle(AlertView.Style.Alert)
                 .setTitle("網路連線錯誤")
                 .setMessage("請檢查 Wi-Fi 或 4G是否已連接。")
                 .setDestructive("確定")
                 .build()
-                .setCancelable(true);
+                .setCancelable(true)
+                .show();
     }
 }

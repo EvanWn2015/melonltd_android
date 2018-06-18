@@ -4,6 +4,7 @@ package com.melonltd.naberc.view.seller.page.impl;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +23,6 @@ import com.google.common.collect.Lists;
 import com.melonltd.naberc.R;
 import com.melonltd.naberc.util.Tools;
 import com.melonltd.naberc.view.common.BaseCore;
-import com.melonltd.naberc.view.common.abs.AbsPageFragment;
 import com.melonltd.naberc.view.common.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.common.type.PageType;
 import com.melonltd.naberc.view.customize.SwitchButton;
@@ -32,7 +32,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
-public class SellerDetailFragment extends AbsPageFragment implements View.OnClickListener {
+public class SellerDetailFragment extends Fragment implements View.OnClickListener {
     private static final String TAG = SellerDetailFragment.class.getSimpleName();
     public static SellerDetailFragment FRAGMENT = null;
 
@@ -47,8 +47,7 @@ public class SellerDetailFragment extends AbsPageFragment implements View.OnClic
         // Required empty public constructor
     }
 
-    @Override
-    public AbsPageFragment getInstance(Bundle bundle) {
+    public Fragment getInstance(Bundle bundle) {
         if (FRAGMENT == null) {
             FRAGMENT = new SellerDetailFragment();
         }
@@ -56,8 +55,7 @@ public class SellerDetailFragment extends AbsPageFragment implements View.OnClic
         return FRAGMENT;
     }
 
-    @Override
-    public AbsPageFragment newInstance(Object... o) {
+    public Fragment newInstance(Object... o) {
         return new SellerDetailFragment();
     }
 
@@ -98,6 +96,7 @@ public class SellerDetailFragment extends AbsPageFragment implements View.OnClic
     @Override
     public void onResume() {
         super.onResume();
+        SellerMainActivity.changeTabAndToolbarStatus();
         if (SellerMainActivity.toolbar != null) {
             SellerMainActivity.navigationIconDisplay(true, new View.OnClickListener() {
                 @Override
@@ -119,7 +118,7 @@ public class SellerDetailFragment extends AbsPageFragment implements View.OnClic
     private void backToSellerSetUpPage() {
         BaseCore.FRAGMENT_TAG = PageType.SELLER_SET_UP.name();
         SellerSetUpFragment.TO_SELLER_DETAIL_INDEX = -1;
-        AbsPageFragment f = PageFragmentFactory.of(PageType.SELLER_SET_UP, null);
+        Fragment f = PageFragmentFactory.of(PageType.SELLER_SET_UP, null);
         getFragmentManager().beginTransaction().remove(this).replace(R.id.sellerFrameContainer, f).commit();
     }
 
