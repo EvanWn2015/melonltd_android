@@ -1,8 +1,11 @@
 package com.melonltd.naberc.model.preferences;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.melonltd.naberc.R;
+
+import java.util.Date;
 
 public class SharedPreferencesService {
     private static SharedPreferencesService SERVICE = null;
@@ -12,12 +15,41 @@ public class SharedPreferencesService {
 
     }
 
-    public static SharedPreferencesService newInstance(SharedPreferences preferences) {
+    public static SharedPreferencesService getInstance(SharedPreferences preferences) {
         if (SERVICE == null) {
             SERVICE = new SharedPreferencesService(preferences);
         }
         return SERVICE;
     }
+
+
+    public static void setOauth(String oauth) {
+        SERVICE.preferences.edit().putString(String.valueOf(R.string.oauth_token), oauth).commit();
+    }
+    public static String getOauth() {
+        return SERVICE.preferences.getString(String.valueOf(R.string.oauth_token),"");
+    }
+
+
+    public static void setLoginLimit(long timeLimit) {
+        SERVICE.preferences.edit().putLong(String.valueOf(R.string.login_limit),timeLimit).commit();
+    }
+    public static long getLoginLimit() {
+        return SERVICE.preferences.getLong(String.valueOf(R.string.login_limit),0L);
+    }
+    public static void setRememberAccount(String account) {
+        SERVICE.preferences.edit().putString(String.valueOf(R.string.remember_account),account).commit();
+    }
+    public static String getRememberAccount() {
+        return SERVICE.preferences.getString(String.valueOf(R.string.remember_account),"");
+    }
+    public static void setRememberIdentity(String identity) {
+        SERVICE.preferences.edit().putString(String.valueOf(R.string.remember_identity),identity).commit();
+    }
+    public static String getRememberIdentity() {
+        return SERVICE.preferences.getString(String.valueOf(R.string.remember_identity),"");
+    }
+
 
     public SharedPreferencesService(SharedPreferences preferences) {
         this.preferences = preferences;
@@ -39,13 +71,8 @@ public class SharedPreferencesService {
         return SERVICE.preferences.getString(String.valueOf(R.string.user_uid),"");
     }
 
-
-    public static void setOauth(String token) {
-        SERVICE.preferences.edit().putString(String.valueOf(R.string.oauth_token), token).commit();
-    }
-
-    public static String getOauth() {
-        return SERVICE.preferences.getString(String.valueOf(R.string.oauth_token),"");
+    public static void removeAll() {
+        SERVICE.preferences.edit().clear().commit();
     }
 
 

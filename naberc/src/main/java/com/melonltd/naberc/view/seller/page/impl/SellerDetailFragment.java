@@ -21,6 +21,7 @@ import com.bigkoo.pickerview.listener.OnOptionsSelectListener;
 import com.bigkoo.pickerview.view.OptionsPickerView;
 import com.google.common.collect.Lists;
 import com.melonltd.naberc.R;
+import com.melonltd.naberc.model.preferences.SharedPreferencesService;
 import com.melonltd.naberc.util.Tools;
 import com.melonltd.naberc.view.common.BaseCore;
 import com.melonltd.naberc.view.common.factory.PageFragmentFactory;
@@ -207,6 +208,7 @@ public class SellerDetailFragment extends Fragment implements View.OnClickListen
                 break;
             case R.id.logoutBtn:
 //                SellerMainActivity.toLoginPage();
+                SharedPreferencesService.removeAll();
                 getActivity().finish();
                 break;
             case R.id.storeStartText:

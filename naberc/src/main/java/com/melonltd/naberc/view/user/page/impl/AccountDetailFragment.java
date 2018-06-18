@@ -169,18 +169,19 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.logoutBtn:
-                ApiManager.test(new ApiCallback(getContext()) {
-                    @Override
-                    public void onSuccess(String responseBody) {
-//                        UserMainActivity.toLoginPage();
-                        getActivity().finish();
-                    }
-
-                    @Override
-                    public void onFail(Exception error, String msg) {
-
-                    }
-                });
+                getActivity().finish();
+//                ApiManager.test(new ApiCallback(getContext()) {
+//                    @Override
+//                    public void onSuccess(String responseBody) {
+////                        UserMainActivity.toLoginPage();
+//                        getActivity().finish();
+//                    }
+//
+//                    @Override
+//                    public void onFail(Exception error, String msg) {
+//
+//                    }
+//                });
                 break;
             case R.id.toResetPasswordBtn:
                 toResetPassword(1);

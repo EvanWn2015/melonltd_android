@@ -141,7 +141,7 @@ public abstract class BaseCore extends AppCompatActivity implements LocationList
 //        Log.d(TAG, "Location : " + loc);
 
         // TODO  init SharedPreferences
-        SharedPreferencesService.newInstance(getSharedPreferences(getString(R.string.shared_preferences_key), Context.MODE_PRIVATE));
+        SharedPreferencesService.getInstance(getSharedPreferences(getString(R.string.shared_preferences_key), Context.MODE_PRIVATE));
     }
 
     public static void getCurrentUser (Activity activity){

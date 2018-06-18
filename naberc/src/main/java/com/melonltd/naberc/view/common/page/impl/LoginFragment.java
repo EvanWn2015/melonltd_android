@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -30,10 +31,13 @@ import com.melonltd.naberc.view.user.UserMainActivity;
 import com.melonltd.naberc.vo.AccountInfoVo;
 import com.melonltd.naberc.vo.RespData;
 
+import java.util.Date;
+
 public class LoginFragment extends Fragment implements View.OnClickListener {
     private static final String TAG = LoginFragment.class.getSimpleName();
     public static LoginFragment FRAGMENT = null;
     private EditText accountEdit, passwordEdit;
+    private CheckBox rememberMe;
 
     public LoginFragment() {
     }
@@ -65,6 +69,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     private void getView(View v) {
         accountEdit = v.findViewById(R.id.accountEdit);
         passwordEdit = v.findViewById(R.id.passwordEdit);
+        rememberMe = v.findViewById(R.id.rememberMeCheckBox);
+
         Button loginBtn = v.findViewById(R.id.loginBtn);
         Button toVerifySMSBtn = v.findViewById(R.id.toVerifySMSBtn);
         Button toRegisteredSellerBtn = v.findViewById(R.id.toRegisteredSellerBtn);
@@ -87,22 +93,32 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         Fragment fragment = null;
+
         switch (v.getId()) {
             case R.id.loginBtn:
                 if (verifyInput()) {
-                    String token = SharedPreferencesService.getOauth();
-                    Log.i(TAG , "account token" + token);
+
                     AccountInfoVo req = new AccountInfoVo();
                     req.phone = accountEdit.getText().toString();
                     req.password = "GVGhhGhb";
-//                    req.device_token = FirebaseInstanceId.getInstance().getToken();
-//                    req.device_category = "ANDROID";
+                    req.device_token = FirebaseInstanceId.getInstance().getToken();
+                    req.device_category = "ANDROID";
                     ApiManager.login(req, new ApiCallback(getContext()) {
                         @Override
                         public void onSuccess(String responseBody) {
                             AccountInfoVo resp = Tools.GSON.fromJson(responseBody, AccountInfoVo.class);
                             SharedPreferencesService.setOauth(resp.getAccount_uuid());
-
+                            Log.i(TAG, rememberMe.isChecked() + "");
+                            if (rememberMe.isChecked()){
+                                SharedPreferencesService.setLoginLimit(new Date().getTime());
+                                SharedPreferencesService.setRememberAccount(resp.phone);
+                                SharedPreferencesService.setRememberIdentity(resp.identity);
+                            }
+                            if (resp.identity.toUpperCase().equals("USER")){
+                                BaseActivity.context.startActivity(new Intent(BaseActivity.context, UserMainActivity.class));
+                            }else if (resp.identity.toUpperCase().equals("SELLERS")){
+                                BaseActivity.context.startActivity(new Intent(BaseActivity.context, SellerMainActivity.class));
+                            }
                         }
 
                         @Override
