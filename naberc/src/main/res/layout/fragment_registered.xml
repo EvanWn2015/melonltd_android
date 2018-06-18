@@ -8,7 +8,7 @@
     android:background="@android:color/white"
     android:overScrollMode="never"
     android:scrollbars="none"
-    tools:context=".view.common.page.impl.RegisteredFragment">
+    tools:context=".view.common.page.RegisteredFragment">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"

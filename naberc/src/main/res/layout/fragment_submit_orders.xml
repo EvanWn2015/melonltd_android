@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/naber_dividing_gray"
-    tools:context=".view.user.page.impl.SubmitOrdersFragment">
+    tools:context=".view.user.page.SubmitOrdersFragment">
 
     <ScrollView
         android:id="@+id/scrollView2"

@@ -2,7 +2,6 @@ package com.melonltd.naberc.view.seller.adapter;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,7 +10,7 @@ import android.widget.TextView;
 
 import com.melonltd.naberc.R;
 import com.melonltd.naberc.util.Tools;
-import com.melonltd.naberc.view.seller.page.impl.SellerOrdersFragment;
+import com.melonltd.naberc.view.seller.page.SellerOrdersFragment;
 
 import java.util.List;
 

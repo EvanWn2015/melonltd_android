@@ -9,13 +9,13 @@
     android:layout_height="match_parent"
     android:overScrollMode="never"
     android:scrollbars="none"
-    tools:context=".view.seller.page.impl.SellerMenuEditFragment">
+    tools:context=".view.seller.page.SellerMenuEditFragment">
 
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        tools:context=".view.seller.page.impl.SellerMenuEditFragment">
+        tools:context=".view.seller.page.SellerMenuEditFragment">
 
         <View
             android:id="@+id/view10"

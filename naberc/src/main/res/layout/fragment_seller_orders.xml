@@ -5,7 +5,7 @@
     android:id="@+id/seller_orders_main_page"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".view.seller.page.impl.SellerOrdersFragment">
+    tools:context=".view.seller.page.SellerOrdersFragment">
 
     <TextView
         android:id="@+id/searchDateText"

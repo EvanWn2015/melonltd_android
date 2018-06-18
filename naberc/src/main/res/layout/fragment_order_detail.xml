@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="700dp"
     android:background="@android:color/transparent"
-    tools:context=".view.user.page.impl.OrderDetailFragment">
+    tools:context=".view.user.page.OrderDetailFragment">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"

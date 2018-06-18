@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:overScrollMode="never"
-    tools:context=".view.user.page.impl.SimpleInformationFragment">
+    tools:context=".view.user.page.SimpleInformationFragment">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"

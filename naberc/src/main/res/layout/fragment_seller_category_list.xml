@@ -6,7 +6,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#00f0f0f0"
-    tools:context=".view.seller.page.impl.SellerCategoryListFragment">
+    tools:context=".view.seller.page.SellerCategoryListFragment">
 
     <TextView
         android:id="@+id/categoryNameText"

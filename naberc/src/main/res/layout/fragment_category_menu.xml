@@ -9,7 +9,7 @@
     app:layout_constraintEnd_toEndOf="parent"
     app:layout_constraintStart_toStartOf="parent"
     app:layout_constraintTop_toTopOf="parent"
-    tools:context=".view.user.page.impl.CategoryMenuFragment">
+    tools:context=".view.user.page.CategoryMenuFragment">
 
     <TextView
         android:id="@+id/categoryNameText"

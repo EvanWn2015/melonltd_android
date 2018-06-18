@@ -3,20 +3,19 @@ package com.melonltd.naberc.view.common;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.CalendarContract;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.melonltd.naberc.R;
 import com.melonltd.naberc.model.preferences.SharedPreferencesService;
-import com.melonltd.naberc.view.common.factory.PageFragmentFactory;
-import com.melonltd.naberc.view.common.page.impl.LoginFragment;
-import com.melonltd.naberc.view.common.page.impl.RecoverPasswordFragment;
-import com.melonltd.naberc.view.common.page.impl.RegisteredFragment;
-import com.melonltd.naberc.view.common.page.impl.RegisteredSellerFragment;
-import com.melonltd.naberc.view.common.page.impl.VerifySMSFragment;
-import com.melonltd.naberc.view.common.type.PageType;
+import com.melonltd.naberc.view.common.page.LoginFragment;
+import com.melonltd.naberc.view.factory.PageFragmentFactory;
+import com.melonltd.naberc.view.common.page.RecoverPasswordFragment;
+import com.melonltd.naberc.view.common.page.RegisteredFragment;
+import com.melonltd.naberc.view.common.page.RegisteredSellerFragment;
+import com.melonltd.naberc.view.common.page.VerifySMSFragment;
+import com.melonltd.naberc.view.factory.PageType;
 import com.melonltd.naberc.view.seller.SellerMainActivity;
 import com.melonltd.naberc.view.user.UserMainActivity;
 

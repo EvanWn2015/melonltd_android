@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@android:color/transparent"
     android:orientation="vertical"
-    tools:context=".view.user.page.impl.HomeFragment">
+    tools:context=".view.user.page.HomeFragment">
 
     <cn.bingoogolapple.refreshlayout.BGARefreshLayout
         android:id="@+id/shoppingCartBGARefreshLayout"

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:id="@+id/seller_stat_main_page"
     android:layout_height="match_parent"
-    tools:context=".view.seller.page.impl.SellerStatFragment">
+    tools:context=".view.seller.page.SellerStatFragment">
 
     <TextView
         android:id="@+id/textView92"

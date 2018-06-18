@@ -6,7 +6,7 @@
     android:id="@+id/seller_set_up_page"
     android:layout_height="match_parent"
     android:overScrollMode="never"
-    tools:context=".view.seller.page.impl.SellerSetUpFragment">
+    tools:context=".view.seller.page.SellerSetUpFragment">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"

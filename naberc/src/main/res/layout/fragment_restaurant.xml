@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:id="@+id/user_restaurant_page"
     android:layout_height="match_parent"
-    tools:context=".view.user.page.impl.RestaurantFragment">
+    tools:context=".view.user.page.RestaurantFragment">
 
 
     <TextView
