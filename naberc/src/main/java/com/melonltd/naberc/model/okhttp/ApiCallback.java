@@ -1,4 +1,4 @@
-package com.melonltd.naberc.model.helper.okhttp;
+package com.melonltd.naberc.model.okhttp;
 
 import android.app.Activity;
 import android.app.AlertDialog;

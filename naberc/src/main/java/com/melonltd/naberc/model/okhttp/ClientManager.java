@@ -1,4 +1,4 @@
-package com.melonltd.naberc.model.helper.okhttp;
+package com.melonltd.naberc.model.okhttp;
 
 import android.annotation.SuppressLint;
 import android.util.Log;
@@ -18,7 +18,6 @@ import javax.net.ssl.X509TrustManager;
 import okhttp3.Call;
 import okhttp3.ConnectionPool;
 import okhttp3.FormBody;
-import okhttp3.HttpUrl;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;

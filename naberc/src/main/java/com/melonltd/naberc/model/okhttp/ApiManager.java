@@ -1,10 +1,9 @@
-package com.melonltd.naberc.model.helper.okhttp;
+package com.melonltd.naberc.model.okhttp;
 
 import com.melonltd.naberc.model.api.ApiUrl;
 import com.melonltd.naberc.util.Tools;
 
 import okhttp3.Call;
-import okhttp3.HttpUrl;
 
 /**
  * Created by evan on 2018/1/5.
