@@ -11,8 +11,8 @@ import android.view.ViewGroup;
 
 import com.google.common.collect.Lists;
 import com.melonltd.naberc.R;
-import com.melonltd.naberc.model.helper.okhttp.ApiCallback;
-import com.melonltd.naberc.model.helper.okhttp.ApiManager;
+import com.melonltd.naberc.model.okhttp.ApiCallback;
+import com.melonltd.naberc.model.okhttp.ApiManager;
 import com.melonltd.naberc.view.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.factory.PageType;
 import com.melonltd.naberc.view.user.UserMainActivity;

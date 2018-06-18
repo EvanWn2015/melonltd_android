@@ -10,8 +10,8 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.melonltd.naberc.R;
-import com.melonltd.naberc.model.helper.okhttp.ApiCallback;
-import com.melonltd.naberc.model.helper.okhttp.ApiManager;
+import com.melonltd.naberc.model.okhttp.ApiCallback;
+import com.melonltd.naberc.model.okhttp.ApiManager;
 import com.melonltd.naberc.util.VerifyUtil;
 import com.melonltd.naberc.view.common.BaseActivity;
 import com.melonltd.naberc.view.common.BaseCore;

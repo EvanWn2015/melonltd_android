@@ -21,8 +21,8 @@ import com.bigkoo.pickerview.view.TimePickerView;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.melonltd.naberc.R;
-import com.melonltd.naberc.model.helper.okhttp.ApiCallback;
-import com.melonltd.naberc.model.helper.okhttp.ApiManager;
+import com.melonltd.naberc.model.okhttp.ApiCallback;
+import com.melonltd.naberc.model.okhttp.ApiManager;
 import com.melonltd.naberc.view.seller.SellerMainActivity;
 import com.melonltd.naberc.view.seller.adapter.SellerOrdersAdapter;
 
