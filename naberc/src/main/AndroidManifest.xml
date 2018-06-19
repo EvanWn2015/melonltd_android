@@ -47,14 +47,14 @@
 
         <!-- FCM -->
         <service
-            android:name=".model.service.fcm.MyFirebaseMessagingService"
+            android:name=".model.service.MyFirebaseMessagingService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
         <service
-            android:name=".model.service.fcm.MyFirebaseInstanceIDService"
+            android:name=".model.service.MyFirebaseInstanceIDService"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.google.firebase.INSTANCE_ID_EVENT" />

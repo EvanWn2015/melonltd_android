@@ -28,6 +28,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.melonltd.naberc.R;
+import com.melonltd.naberc.model.service.SPService;
 import com.melonltd.naberc.view.common.BaseCore;
 import com.melonltd.naberc.view.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.factory.PageType;
@@ -167,8 +168,9 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.logoutBtn:
+                SPService.removeAll();
                 getActivity().finish();
-//                ApiManager.test(new ApiCallback(getContext()) {
+//                ApiManager.test(new ThreadCallback(getContext()) {
 //                    @Override
 //                    public void onSuccess(String responseBody) {
 ////                        UserMainActivity.toLoginPage();

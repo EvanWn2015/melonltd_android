@@ -22,8 +22,8 @@ import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.google.common.collect.Lists;
 import com.melonltd.naberc.R;
-import com.melonltd.naberc.model.okhttp.ApiCallback;
-import com.melonltd.naberc.model.okhttp.ApiManager;
+import com.melonltd.naberc.model.api.ThreadCallback;
+import com.melonltd.naberc.model.api.ApiManager;
 import com.melonltd.naberc.view.common.BaseCore;
 import com.melonltd.naberc.view.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.factory.PageType;
@@ -71,7 +71,7 @@ public class ShoppingCartFragment extends Fragment {
             View v = inflater.inflate(R.layout.fragment_shopping_cart, container, false);
             getViews(v);
             setListener();
-            ApiManager.test(new ApiCallback(getContext()) {
+            ApiManager.test(new ThreadCallback(getContext()) {
                 @Override
                 public void onSuccess(String responseBody) {
                     testLoadData(true);

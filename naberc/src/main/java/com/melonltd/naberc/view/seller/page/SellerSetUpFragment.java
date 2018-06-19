@@ -94,7 +94,7 @@ public class SellerSetUpFragment extends Fragment implements View.OnClickListene
         TO_SELLER_SIMPLE_INFO_INDEX = i;
         BaseCore.FRAGMENT_TAG = PageType.SELLER_SIMPLE_INFO.name();
         Fragment f = PageFragmentFactory.of(PageType.SELLER_SIMPLE_INFO, b);
-        getFragmentManager().beginTransaction().replace(R.id.sellerFrameContainer, f).commit();
+        getFragmentManager().beginTransaction().replace(R.id.sellerFrameContainer, f).addToBackStack(f.toString()).commit();
     }
 
     @Override

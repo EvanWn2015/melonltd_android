@@ -13,8 +13,8 @@ import android.widget.TextView;
 import com.bigkoo.alertview.AlertView;
 import com.bigkoo.alertview.OnDismissListener;
 import com.melonltd.naberc.R;
-import com.melonltd.naberc.model.okhttp.ApiCallback;
-import com.melonltd.naberc.model.okhttp.ApiManager;
+import com.melonltd.naberc.model.api.ThreadCallback;
+import com.melonltd.naberc.model.api.ApiManager;
 import com.melonltd.naberc.view.common.BaseActivity;
 import com.melonltd.naberc.view.common.BaseCore;
 import com.melonltd.naberc.view.factory.PageFragmentFactory;
@@ -96,7 +96,7 @@ public class VerifySMSFragment extends Fragment implements View.OnClickListener 
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.requestVerifyCodeBtn:
-                ApiManager.test(new ApiCallback(getContext()) {
+                ApiManager.test(new ThreadCallback(getContext()) {
                     @Override
                     public void onSuccess(String responseBody) {
 
@@ -127,7 +127,7 @@ public class VerifySMSFragment extends Fragment implements View.OnClickListener 
                         .show();
                 break;
             case R.id.submitToRegisteredBun:
-                ApiManager.test(new ApiCallback(getContext()) {
+                ApiManager.test(new ThreadCallback(getContext()) {
                     @Override
                     public void onSuccess(String responseBody) {
                         toRegisteredPage();

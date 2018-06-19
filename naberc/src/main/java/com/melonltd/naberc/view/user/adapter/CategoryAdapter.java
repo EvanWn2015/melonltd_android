@@ -8,17 +8,18 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.melonltd.naberc.R;
+import com.melonltd.naberc.vo.RestaurantCategoryRelVo;
 
 import java.util.List;
 
 
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHolder> {
     private static final String TAG = CategoryAdapter.class.getSimpleName();
-    private List<String> listData;
+    private List<RestaurantCategoryRelVo> listData;
     private View.OnClickListener itemClickListener;
 
 
-    public CategoryAdapter(List<String> listData) {
+    public CategoryAdapter(List<RestaurantCategoryRelVo> listData) {
         this.listData = listData;
     }
 
@@ -36,10 +37,11 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull CategoryAdapter.ViewHolder holder, int position) {
+
         holder.itemView.setTag(position);
         holder.itemView.setOnClickListener(this.itemClickListener);
-        holder.categoryText.setTag(position);
-        holder.categoryText.setText("XXX " + position);
+//        holder.categoryText.setTag(position);
+        holder.categoryText.setText(listData.get(position).category_name);
     }
 
     @Override

@@ -21,8 +21,8 @@ import com.bigkoo.pickerview.view.TimePickerView;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.melonltd.naberc.R;
-import com.melonltd.naberc.model.okhttp.ApiCallback;
-import com.melonltd.naberc.model.okhttp.ApiManager;
+import com.melonltd.naberc.model.api.ThreadCallback;
+import com.melonltd.naberc.model.api.ApiManager;
 import com.melonltd.naberc.view.seller.SellerMainActivity;
 import com.melonltd.naberc.view.seller.adapter.SellerOrdersAdapter;
 
@@ -150,7 +150,7 @@ public class SellerOrdersFragment extends Fragment {
     }
 
     private void searchByDate(long date) {
-        ApiManager.test(new ApiCallback(getContext()) {
+        ApiManager.test(new ThreadCallback(getContext()) {
             @Override
             public void onSuccess(String responseBody) {
 

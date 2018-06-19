@@ -1,23 +1,20 @@
-package com.melonltd.naberc.model.preferences;
+package com.melonltd.naberc.model.service;
 
-import android.content.Context;
 import android.content.SharedPreferences;
 
 import com.melonltd.naberc.R;
 
-import java.util.Date;
-
-public class SharedPreferencesService {
-    private static SharedPreferencesService SERVICE = null;
+public class SPService {
+    private static SPService SERVICE = null;
     private SharedPreferences preferences = null;
 
-    public SharedPreferencesService() {
+    public SPService() {
 
     }
 
-    public static SharedPreferencesService getInstance(SharedPreferences preferences) {
+    public static SPService getInstance(SharedPreferences preferences) {
         if (SERVICE == null) {
-            SERVICE = new SharedPreferencesService(preferences);
+            SERVICE = new SPService(preferences);
         }
         return SERVICE;
     }
@@ -29,7 +26,6 @@ public class SharedPreferencesService {
     public static String getOauth() {
         return SERVICE.preferences.getString(String.valueOf(R.string.oauth_token),"");
     }
-
 
     public static void setLoginLimit(long timeLimit) {
         SERVICE.preferences.edit().putLong(String.valueOf(R.string.login_limit),timeLimit).commit();
@@ -51,17 +47,34 @@ public class SharedPreferencesService {
     }
 
 
-    public SharedPreferencesService(SharedPreferences preferences) {
+
+    public static void setUserName(String userName) {
+        SERVICE.preferences.edit().putString(String.valueOf(R.string.user_name),userName).commit();
+    }
+    public static String getUserName() {
+        return SERVICE.preferences.getString(String.valueOf(R.string.user_name),"");
+    }
+    public static void setUserPhone(String userPhone) {
+        SERVICE.preferences.edit().putString(String.valueOf(R.string.user_phone),userPhone).commit();
+    }
+    public static String getUserPhone() {
+        return SERVICE.preferences.getString(String.valueOf(R.string.user_phone),"");
+    }
+
+
+    public SPService(SharedPreferences preferences) {
         this.preferences = preferences;
     }
 
-    public static boolean isFirstUse() {
+
+    public static boolean getIsFirstLogin (){
         return SERVICE.preferences.getBoolean(String.valueOf(R.string.is_first_use), true);
     }
 
-    public static void setFirstUse() {
-        SERVICE.preferences.edit().putBoolean(String.valueOf(R.string.is_first_use), false).commit();
+    public static void setIsFirstLogin (boolean isFirst){
+        SERVICE.preferences.edit().putBoolean(String.valueOf(R.string.is_first_use), isFirst).commit();
     }
+
 
     public static void setUserUID(String uid) {
         SERVICE.preferences.edit().putString(String.valueOf(R.string.user_uid), uid).commit();

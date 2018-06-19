@@ -1,4 +1,4 @@
-package com.melonltd.naberc.model.service.fcm;
+package com.melonltd.naberc.model.service;
 
 import android.util.Log;
 

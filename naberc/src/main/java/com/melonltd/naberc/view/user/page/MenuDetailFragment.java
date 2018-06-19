@@ -23,8 +23,11 @@ import android.widget.TextView;
 
 import com.bigkoo.alertview.AlertView;
 import com.bigkoo.alertview.OnItemClickListener;
+import com.google.android.gms.common.api.Api;
 import com.google.common.base.Strings;
 import com.melonltd.naberc.R;
+import com.melonltd.naberc.model.api.ApiManager;
+import com.melonltd.naberc.model.api.ThreadCallback;
 import com.melonltd.naberc.view.common.BaseCore;
 import com.melonltd.naberc.view.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.factory.PageType;
@@ -56,8 +59,9 @@ public class MenuDetailFragment extends Fragment implements View.OnClickListener
             FRAGMENT = new MenuDetailFragment();
             CATEGORY_MENU_TO_THIS_INDEX = -1;
         }
-        FRAGMENT.setArguments(null);
-        FRAGMENT.setArguments(bundle);
+        if (bundle != null){
+            FRAGMENT.setArguments(bundle);
+        }
         return FRAGMENT;
     }
 
@@ -82,6 +86,17 @@ public class MenuDetailFragment extends Fragment implements View.OnClickListener
 
 
     private void getViews(View v) {
+        ApiManager.restaurantFoodDetail("", new ThreadCallback(getContext()) {
+            @Override
+            public void onSuccess(String responseBody) {
+
+            }
+
+            @Override
+            public void onFail(Exception error, String msg) {
+
+            }
+        });
         contentLayout = v.findViewById(R.id.menuDetailContentLinearLayout);
         addToShopCartBtn = v.findViewById(R.id.addToShopCartBtn);
         quantityEditText = v.findViewById(R.id.quantityEditText);

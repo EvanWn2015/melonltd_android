@@ -6,7 +6,7 @@ import android.support.v4.app.Fragment;
 
 import com.github.paolorotolo.appintro.AppIntro;
 import com.melonltd.naberc.R;
-import com.melonltd.naberc.model.preferences.SharedPreferencesService;
+import com.melonltd.naberc.model.service.SPService;
 
 public class IntroActivity extends AppIntro {
 
@@ -29,7 +29,7 @@ public class IntroActivity extends AppIntro {
     @Override
     public void onDonePressed(Fragment currentFragment) {
         super.onDonePressed(currentFragment);
-        SharedPreferencesService.setFirstUse();
+        SPService.setIsFirstLogin(false);
         finish();
     }
 }

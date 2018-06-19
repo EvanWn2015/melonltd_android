@@ -19,8 +19,8 @@ import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
 import com.melonltd.naberc.R;
-import com.melonltd.naberc.model.okhttp.ApiCallback;
-import com.melonltd.naberc.model.okhttp.ApiManager;
+import com.melonltd.naberc.model.api.ThreadCallback;
+import com.melonltd.naberc.model.api.ApiManager;
 import com.melonltd.naberc.view.common.BaseCore;
 import com.melonltd.naberc.view.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.factory.PageType;
@@ -168,7 +168,7 @@ public class SubmitOrdersFragment extends Fragment implements View.OnClickListen
     Runnable showSubmitAlertUrn = new Runnable() {
         @Override
         public void run() {
-            ApiManager.test(new ApiCallback(getContext()) {
+            ApiManager.test(new ThreadCallback(getContext()) {
                 @Override
                 public void onSuccess(String responseBody) {
                     new AlertView.Builder()

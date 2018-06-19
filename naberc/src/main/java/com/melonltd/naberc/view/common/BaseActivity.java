@@ -8,7 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 
 import com.melonltd.naberc.R;
-import com.melonltd.naberc.model.preferences.SharedPreferencesService;
+import com.melonltd.naberc.model.service.SPService;
 import com.melonltd.naberc.view.common.page.LoginFragment;
 import com.melonltd.naberc.view.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.common.page.RecoverPasswordFragment;
@@ -42,13 +42,13 @@ public class BaseActivity extends BaseCore {
     @Override
     protected void onResume() {
         super.onResume();
-        long limit = SharedPreferencesService.getLoginLimit();
+        long limit = SPService.getLoginLimit();
         long now = new Date().getTime();
-        long day7 = 1000 * 60 * 60 * 24 * 7L;
+        long day7 = 1000 * 60 * 60 * 24 * 7L * 2;
         if (now - day7 < limit){
-            String oauth = SharedPreferencesService.getRememberAccount();
-            SharedPreferencesService.setOauth(oauth);
-            String identity = SharedPreferencesService.getRememberIdentity();
+//            String oauth = SPService.getRememberAccount();
+//            SPService.setOauth(oauth);
+            String identity = SPService.getRememberIdentity();
             if (identity.toUpperCase().equals("USER")){
                 startActivity(new Intent(context, UserMainActivity.class));
             }else if (identity.toUpperCase().equals("SELLERS")){

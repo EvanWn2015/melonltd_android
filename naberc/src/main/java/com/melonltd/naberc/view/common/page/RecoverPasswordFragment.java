@@ -10,8 +10,8 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.melonltd.naberc.R;
-import com.melonltd.naberc.model.okhttp.ApiCallback;
-import com.melonltd.naberc.model.okhttp.ApiManager;
+import com.melonltd.naberc.model.api.ThreadCallback;
+import com.melonltd.naberc.model.api.ApiManager;
 import com.melonltd.naberc.util.VerifyUtil;
 import com.melonltd.naberc.view.common.BaseActivity;
 import com.melonltd.naberc.view.common.BaseCore;
@@ -91,7 +91,7 @@ public class RecoverPasswordFragment extends Fragment implements View.OnClickLis
     public void onClick(View v) {
         if (v.getId() == R.id.submitRecoverPasswordBtn) {
             if (VerifyUtil.email(mailEdit.getText().toString())) {
-                ApiManager.test(new ApiCallback(getContext()) {
+                ApiManager.test(new ThreadCallback(getContext()) {
                     @Override
                     public void onSuccess(String responseBody) {
                         backToLoginPage();
@@ -109,6 +109,6 @@ public class RecoverPasswordFragment extends Fragment implements View.OnClickLis
     private void backToLoginPage() {
         BaseCore.FRAGMENT_TAG = PageType.LOGIN.name();
         Fragment f = PageFragmentFactory.of(PageType.LOGIN, null);
-        getFragmentManager().beginTransaction().remove(this).replace(R.id.baseContainer, f).commit();
+        getFragmentManager().beginTransaction().remove(this).replace(R.id.baseContainer, f).addToBackStack(f.toString()).commit();
     }
 }

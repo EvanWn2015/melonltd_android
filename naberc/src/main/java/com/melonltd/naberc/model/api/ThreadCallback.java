@@ -1,4 +1,4 @@
-package com.melonltd.naberc.model.okhttp;
+package com.melonltd.naberc.model.api;
 
 import android.app.Activity;
 import android.app.AlertDialog;
@@ -12,6 +12,7 @@ import com.bigkoo.alertview.AlertView;
 import com.melonltd.naberc.model.service.Base64Service;
 import com.melonltd.naberc.util.LoadingBarTools;
 import com.melonltd.naberc.util.Tools;
+import com.melonltd.naberc.view.common.BaseCore;
 import com.melonltd.naberc.vo.RespData;
 
 import java.io.IOException;
@@ -20,8 +21,8 @@ import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Response;
 
-public abstract class ApiCallback implements Callback {
-    private static final String TAG = ApiCallback.class.getSimpleName();
+public abstract class ThreadCallback implements Callback {
+    private static final String TAG = ThreadCallback.class.getSimpleName();
     private AlertDialog DIALOG = null;
 
     abstract public void onSuccess(String responseBody);
@@ -30,10 +31,10 @@ public abstract class ApiCallback implements Callback {
 
     private Context context;
 
-    public ApiCallback(Context context) {
+    public ThreadCallback(Context context) {
         this.context = context;
         if (! (context instanceof Activity)) {
-            Log.d(TAG, "");
+            Log.d(TAG, "! context instanceof Activity");
         }
         this.DIALOG = LoadingBarTools.newLoading(context);
     }
@@ -47,17 +48,17 @@ public abstract class ApiCallback implements Callback {
             public void run() {
                 // 如果是 network 錯誤
                 if (checkNetWork()) {
-                    DIALOG.hide();
+                    DIALOG.dismiss();
                     getAlertView();
                     return;
                 }
-//                e.printStackTrace();
                 if (e.getMessage().contains("Canceled") || e.getMessage().contains("Socket closed")) {
                     Log.e(TAG, "fail", e);
                 } else {
+                    DIALOG.dismiss();
                     onFail(e, e.getMessage());
                 }
-                DIALOG.hide();
+
             }
         });
     }
@@ -73,18 +74,21 @@ public abstract class ApiCallback implements Callback {
             public void run() {
                 try {
                     final String resp = Base64Service.decryptBASE64(response.body().string());
-                    RespData data = Tools.GSON.fromJson(resp, RespData.class);
+                    RespData data = Tools.JSONPARSE.fromJson(resp, RespData.class);
                     if (data.status.toUpperCase().equals("TRUE")){
-                        onSuccess(Tools.GSON.toJson(data.data));
+                        DIALOG.dismiss();
+                        onSuccess(Tools.JSONPARSE.toJson(data.data));
                     }else {
+                        DIALOG.dismiss();
                         onFail(new IOException("Failed"), data.err_msg);
                     }
 
                 } catch (Exception e) {
                     Log.e(TAG, "fail", e);
+//                    DIALOG.hide();
                     onFailure(call, new IOException("Failed"));
                 }
-                DIALOG.hide();
+
             }
         });
     }

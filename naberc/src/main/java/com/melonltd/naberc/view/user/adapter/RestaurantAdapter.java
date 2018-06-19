@@ -1,5 +1,6 @@
 package com.melonltd.naberc.view.user.adapter;
 
+import android.location.Location;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Looper;
@@ -12,19 +13,29 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.google.common.base.Strings;
 import com.melonltd.naberc.R;
+import com.melonltd.naberc.util.DistanceTools;
+import com.melonltd.naberc.util.Tools;
+import com.melonltd.naberc.vo.LocationVo;
+import com.melonltd.naberc.vo.RestaurantInfoVo;
 
 import java.util.List;
 
 public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.ViewHolder> {
     private static final String TAG = RestaurantAdapter.class.getSimpleName();
-    private List<String> listData;
+    private List<RestaurantInfoVo> listData;
     private View.OnClickListener itemOnClickListener;
+    private Location location;
 
-    public RestaurantAdapter(List<String> listData) {
+
+    public RestaurantAdapter(List<RestaurantInfoVo> listData) {
         this.listData = listData;
     }
 
+    public void setLocation(Location location){
+        this.location = location;
+    }
 
     public void setItemOnClickListener(View.OnClickListener itemOnClickListener) {
         this.itemOnClickListener = itemOnClickListener;
@@ -40,18 +51,24 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
 
     @Override
     public void onBindViewHolder(@NonNull final RestaurantAdapter.ViewHolder holder, int position) {
-
-        holder.restaurantNameText.setText(listData.get(position) + " XX 店");
-        new Handler(Looper.getMainLooper()).post(new Runnable() {
-            @Override
-            public void run() {
-                Uri uri = Uri.parse("https://sjhexpress.com/wp-content/uploads/2015/02/HannahRidoutFoodPhotography.jpg");
-                holder.restaurantIcon.setImageURI(uri);
-            }
-        });
-//
         holder.restaurantItem.setTag(position);
         holder.restaurantItem.setOnClickListener(this.itemOnClickListener);
+
+        if (!Strings.isNullOrEmpty(listData.get(position).photo)){
+            holder.restaurantIcon.setImageURI(Uri.parse(listData.get(position).photo));
+        }else {
+            holder.restaurantIcon.setImageURI(Uri.parse(""));
+        }
+
+        holder.restaurantNameText.setText(listData.get(position).name);
+        holder.businessTimeText.setText("接單時間: " + listData.get(position).store_start + "~" + listData.get(position).store_end);
+        holder.addressText.setText(listData.get(position).address);
+        Double.parseDouble(listData.get(position).latitude);
+        Double.parseDouble(listData.get(position).longitude);
+
+        String distance = DistanceTools.getGoogleDistance(this.location, LocationVo.of(Double.parseDouble(listData.get(position).latitude), Double.parseDouble(listData.get(position).longitude)));
+        holder.distanceText.setText("" + distance);
+
     }
 
 

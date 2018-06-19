@@ -17,13 +17,14 @@ import com.bigkoo.alertview.AlertView;
 import com.bigkoo.alertview.OnItemClickListener;
 import com.google.common.collect.Lists;
 import com.melonltd.naberc.R;
-import com.melonltd.naberc.model.okhttp.ApiCallback;
-import com.melonltd.naberc.model.okhttp.ApiManager;
+import com.melonltd.naberc.model.api.ThreadCallback;
+import com.melonltd.naberc.model.api.ApiManager;
 import com.melonltd.naberc.view.common.BaseCore;
 import com.melonltd.naberc.view.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.factory.PageType;
 import com.melonltd.naberc.view.user.UserMainActivity;
 import com.melonltd.naberc.view.user.adapter.RestaurantAdapter;
+import com.melonltd.naberc.vo.RestaurantInfoVo;
 
 import java.util.List;
 
@@ -40,10 +41,9 @@ public class RestaurantFragment extends Fragment implements View.OnClickListener
     private BGARefreshLayout bgaRefreshLayout;
     private RecyclerView recyclerView;
     private RestaurantAdapter adapter;
-    private List<String> list = Lists.newArrayList();
+    private List<RestaurantInfoVo> list = Lists.newArrayList();
 
     public static int TO_RESTAURANT_DETAIL_INDEX = -1;
-
     public static int HOME_TO_RESTAURANT_DETAIL_INDEX = -1;
 
     public RestaurantFragment() {
@@ -109,12 +109,12 @@ public class RestaurantFragment extends Fragment implements View.OnClickListener
             @Override
             public void onBGARefreshLayoutBeginRefreshing(BGARefreshLayout refreshLayout) {
                 bgaRefreshLayout.endRefreshing();
-                ApiManager.test(new ApiCallback(getContext()) {
+                ApiManager.test(new ThreadCallback(getContext()) {
                     @Override
                     public void onSuccess(String responseBody) {
                         list.clear();
                         for (int i = 0; i < 30; i++) {
-                            list.add("" + i);
+//                            list.add("" + i);
                         }
                         adapter.notifyDataSetChanged();
 
@@ -129,11 +129,11 @@ public class RestaurantFragment extends Fragment implements View.OnClickListener
 
             @Override
             public boolean onBGARefreshLayoutBeginLoadingMore(BGARefreshLayout refreshLayout) {
-                ApiManager.test(new ApiCallback(getContext()) {
+                ApiManager.test(new ThreadCallback(getContext()) {
                     @Override
                     public void onSuccess(String responseBody) {
                         for (int i = 0; i < 30; i++) {
-                            list.add("" + i);
+//                            list.add("" + i);
                         }
                         adapter.notifyDataSetChanged();
                         bgaRefreshLayout.endRefreshing();
@@ -155,11 +155,11 @@ public class RestaurantFragment extends Fragment implements View.OnClickListener
             list.clear();
             adapter.notifyDataSetChanged();
         }
-        ApiManager.test(new ApiCallback(getContext()) {
+        ApiManager.test(new ThreadCallback(getContext()) {
             @Override
             public void onSuccess(String responseBody) {
                 for (int i = 0; i < 30; i++) {
-                    list.add("" + i);
+//                    list.add("" + i);
                 }
                 adapter.notifyDataSetChanged();
             }
@@ -177,19 +177,14 @@ public class RestaurantFragment extends Fragment implements View.OnClickListener
         // TODO Bundle check where to detail page HOME or this
         UserMainActivity.changeTabAndToolbarStatus();
         if (TO_RESTAURANT_DETAIL_INDEX >= 0) {
-            Bundle b = new Bundle();
-//            b.putString("where", "RESTAURANT");
             BaseCore.FRAGMENT_TAG = PageType.RESTAURANT_DETAIL.name();
-            Fragment f = PageFragmentFactory.of(PageType.RESTAURANT_DETAIL, b);
+            Fragment f = PageFragmentFactory.of(PageType.RESTAURANT_DETAIL, null);
             getFragmentManager().beginTransaction().replace(R.id.frameContainer, f).addToBackStack(f.toString()).commit();
-//        } else if (HOME_TO_RESTAURANT_DETAIL_INDEX >=0){
-//            Log.d(TAG, "home to this ");
         } else {
             if (list.size() == 0) {
                 doLoadData(true);
             }
         }
-
     }
 
     @Override

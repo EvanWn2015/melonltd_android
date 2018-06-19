@@ -1,4 +1,4 @@
-package com.melonltd.naberc.model.service.fcm;
+package com.melonltd.naberc.model.service;
 
 import android.util.Log;
 
@@ -18,7 +18,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
     public void onMessageReceived(RemoteMessage remoteMessage) {
         Log.d("FCM", "onMessageReceived:  " + remoteMessage);
         Map<String, String> map  = remoteMessage.getData();
-        Log.d("FCM", "onMessageReceived:  " + Tools.GSON.toJson(map));
+        Log.d("FCM", "onMessageReceived:  " + Tools.JSONPARSE.toJson(map));
     }
 
     private void sendNotification(RemoteMessage.Notification notification, Map<String, String> data) {

@@ -3,23 +3,26 @@ package com.melonltd.naberc.view.user.adapter;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.google.common.base.Strings;
 import com.melonltd.naberc.R;
+import com.melonltd.naberc.vo.CategoryFoodRelVo;
 
 import java.util.List;
 
 
 public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
     private static final String TAG = MenuAdapter.class.getSimpleName();
-    private List<String> listData;
+    private List<CategoryFoodRelVo> listData;
     private View.OnClickListener itemClickListener;
 
-    public MenuAdapter(List<String> listData) {
+    public MenuAdapter(List<CategoryFoodRelVo> listData) {
         this.listData = listData;
     }
 
@@ -37,10 +40,19 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
 
     @Override
     public void onBindViewHolder(@NonNull MenuAdapter.ViewHolder h, int position) {
-        h.itemView.setTag(position);
+
+        h.itemView.setTag(listData.get(position));
         h.itemView.setOnClickListener(this.itemClickListener);
-        h.itemPriceText.setText("3" + position);
-        h.itemIconImageView.setImageURI(Uri.parse("http://zipotesrestaurant.com/images-mexican-salvadorean-restaurant-redwood_city/slides/zipotes_mexican_salvadorean_20.jpg"));
+
+        if (!Strings.isNullOrEmpty(listData.get(position).photo)){
+            h.itemIconImageView.setImageURI(Uri.parse(listData.get(position).photo));
+        }else {
+            h.itemIconImageView.setImageURI(Uri.parse(""));
+        }
+//        Log.d(TAG,listData.get(position).food_data + "" );
+        h.itemNameText.setText(listData.get(position).food_name);
+        h.itemPriceText.setText(listData.get(position).default_price);
+
     }
 
     @Override

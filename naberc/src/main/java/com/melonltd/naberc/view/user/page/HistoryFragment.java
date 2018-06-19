@@ -11,8 +11,8 @@ import android.view.ViewGroup;
 
 import com.google.common.collect.Lists;
 import com.melonltd.naberc.R;
-import com.melonltd.naberc.model.okhttp.ApiCallback;
-import com.melonltd.naberc.model.okhttp.ApiManager;
+import com.melonltd.naberc.model.api.ThreadCallback;
+import com.melonltd.naberc.model.api.ApiManager;
 import com.melonltd.naberc.view.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.factory.PageType;
 import com.melonltd.naberc.view.user.UserMainActivity;
@@ -89,7 +89,7 @@ public class HistoryFragment extends Fragment {
             @Override
             public void onBGARefreshLayoutBeginRefreshing(BGARefreshLayout refreshLayout) {
                 bgaRefreshLayout.endRefreshing();
-                ApiManager.test(new ApiCallback(getContext()) {
+                ApiManager.test(new ThreadCallback(getContext()) {
                     @Override
                     public void onSuccess(String responseBody) {
                         list.clear();
@@ -110,7 +110,7 @@ public class HistoryFragment extends Fragment {
             @Override
             public boolean onBGARefreshLayoutBeginLoadingMore(BGARefreshLayout refreshLayout) {
                 bgaRefreshLayout.endLoadingMore();
-                ApiManager.test(new ApiCallback(getContext()) {
+                ApiManager.test(new ThreadCallback(getContext()) {
                     @Override
                     public void onSuccess(String responseBody) {
                         for (int i = 0; i < 30; i++) {
@@ -148,7 +148,7 @@ public class HistoryFragment extends Fragment {
         if (isRefresh) {
             list.clear();
         }
-        ApiManager.test(new ApiCallback(getContext()) {
+        ApiManager.test(new ThreadCallback(getContext()) {
             @Override
             public void onSuccess(String responseBody) {
                 for (int i = 0; i < 5; i++) {

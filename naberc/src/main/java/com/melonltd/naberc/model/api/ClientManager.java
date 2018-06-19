@@ -1,7 +1,9 @@
-package com.melonltd.naberc.model.okhttp;
+package com.melonltd.naberc.model.api;
 
 import android.annotation.SuppressLint;
 import android.util.Log;
+
+import com.google.common.base.Strings;
 
 import java.security.SecureRandom;
 import java.security.cert.CertificateException;
@@ -44,7 +46,7 @@ public class ClientManager {
     private static ClientManager CLIENT_MANAGER = new ClientManager();
 
     private final static String HEADER_KEY = "Authorization";
-    private final static String PARAMETER ="data";
+    private final static String PARAMETER = "data";
 
 //    private static final MediaType X_WWW_FORM = MediaType.parse("application/x-www-form-urlencoded; charset=utf-8");
 //    private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
@@ -70,11 +72,35 @@ public class ClientManager {
         return CLIENT.newCall(request);
     }
 
-    public static Call post(String url, String token, String data) {
+    public static Call post(String url) {
+        RequestBody formBody = new FormBody.Builder()
+                .build();
+        Request request = new Request.Builder()
+                .url(url)
+                .post(formBody)
+                .build();
+
+        return CLIENT.newCall(request);
+    }
+
+
+    public static Call postHeader(String url, String token, String data) {
         RequestBody formBody = new FormBody.Builder()
                 .add(PARAMETER, data)
                 .build();
 
+        Request request = new Request.Builder()
+                .header(HEADER_KEY, token)
+                .url(url)
+                .post(formBody)
+                .build();
+
+        return CLIENT.newCall(request);
+    }
+
+    public static Call postHeader(String url, String token) {
+        RequestBody formBody = new FormBody.Builder()
+                .build();
         Request request = new Request.Builder()
                 .header(HEADER_KEY, token)
                 .url(url)
@@ -158,7 +184,6 @@ public class ClientManager {
 //            return null;
 //        }
 //    }
-
 
 
 //    public static Call put(String url, String json) {

@@ -17,9 +17,9 @@ import com.bigkoo.alertview.AlertView;
 import com.google.common.base.Strings;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.melonltd.naberc.R;
-import com.melonltd.naberc.model.okhttp.ApiCallback;
-import com.melonltd.naberc.model.okhttp.ApiManager;
-import com.melonltd.naberc.model.preferences.SharedPreferencesService;
+import com.melonltd.naberc.model.api.ThreadCallback;
+import com.melonltd.naberc.model.api.ApiManager;
+import com.melonltd.naberc.model.service.SPService;
 import com.melonltd.naberc.util.Tools;
 import com.melonltd.naberc.view.common.BaseActivity;
 import com.melonltd.naberc.view.common.BaseCore;
@@ -95,27 +95,29 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         switch (v.getId()) {
             case R.id.loginBtn:
                 if (verifyInput()) {
-
                     AccountInfoVo req = new AccountInfoVo();
                     req.phone = accountEdit.getText().toString();
-                    req.password = "GVGhhGhb";
+                    req.password = passwordEdit.getText().toString();
                     req.device_token = FirebaseInstanceId.getInstance().getToken();
                     req.device_category = "ANDROID";
-                    ApiManager.login(req, new ApiCallback(getContext()) {
+                    ApiManager.login(req, new ThreadCallback(getContext()) {
                         @Override
                         public void onSuccess(String responseBody) {
-                            AccountInfoVo resp = Tools.GSON.fromJson(responseBody, AccountInfoVo.class);
-                            SharedPreferencesService.setOauth(resp.getAccount_uuid());
+                            AccountInfoVo resp = Tools.JSONPARSE.fromJson(responseBody, AccountInfoVo.class);
+                            SPService.setOauth(resp.account_uuid);
+                            SPService.setUserName(resp.name);
+                            SPService.setUserPhone(resp.phone);
+                            SPService.setOauth(resp.getAccount_uuid());
                             Log.i(TAG, rememberMe.isChecked() + "");
                             if (rememberMe.isChecked()){
-                                SharedPreferencesService.setLoginLimit(new Date().getTime());
-                                SharedPreferencesService.setRememberAccount(resp.phone);
-                                SharedPreferencesService.setRememberIdentity(resp.identity);
+                                SPService.setLoginLimit(new Date().getTime());
+                                SPService.setRememberAccount(resp.phone);
+                                SPService.setRememberIdentity(resp.identity);
                             }
                             if (resp.identity.toUpperCase().equals("USER")){
-                                BaseActivity.context.startActivity(new Intent(BaseActivity.context, UserMainActivity.class));
+                                startActivity(new Intent(getActivity().getBaseContext(), UserMainActivity.class));
                             }else if (resp.identity.toUpperCase().equals("SELLERS")){
-                                BaseActivity.context.startActivity(new Intent(BaseActivity.context, SellerMainActivity.class));
+                                startActivity(new Intent(getActivity().getBaseContext(), SellerMainActivity.class));
                             }
                         }
 

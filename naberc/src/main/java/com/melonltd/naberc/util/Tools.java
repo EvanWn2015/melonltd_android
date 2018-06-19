@@ -21,6 +21,8 @@ import android.view.KeyEvent;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
+import com.google.common.primitives.Doubles;
 import com.google.gson.Gson;
 
 import java.io.ByteArrayOutputStream;
@@ -32,6 +34,7 @@ import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.TimeZone;
 
@@ -41,13 +44,13 @@ import java.util.TimeZone;
 
 public class Tools {
     public static final String TAG = Tools.class.getSimpleName();
-    public static Parse PARSE = new Parse();
+    public static JsonParse JSONPARSE = new JsonParse();
     public static Format FORMAT = new Format();
     //    public static GCM gcm = new GCM();
     public static Network NETWORK = new Network();
     public static Longitude LONGITUDE = new Longitude();
 //    public static Bitmaps BITMAPS = new Bitmaps();
-    public static Gson GSON = new Gson();
+
     public static MakeUp MAKEUP = new MakeUp();
 
     public static class Format {
@@ -55,8 +58,11 @@ public class Tools {
         private static SimpleDateFormat simpleDate = new SimpleDateFormat();
 
         public static String decimal(String pattern, Number value) {
-            decimal.applyPattern(pattern);
-            return decimal.format(value);
+            if (Doubles.tryParse(value.toString())!= null){
+                decimal.applyPattern(pattern);
+                return decimal.format(value);
+            }
+            return "";
         }
 
         public static String date(Locale locale, String template, Long time) {
@@ -72,9 +78,9 @@ public class Tools {
         }
     }
 
-    public static class Parse {
+    public static class JsonParse {
         private static Gson GSON = new Gson();
-
+//        public static Gson GSON = new Gson();
         public final static String toJson(Object obj) {
             return GSON.toJson(obj);
         }
@@ -82,6 +88,22 @@ public class Tools {
         public final static <T> T fromJson(String json, Class<T> classOfT) {
             GSON.fromJson(json, (Type) classOfT);
             return GSON.fromJson(json, (Type) classOfT);
+        }
+
+        public final static <T> List<T> fromJsonList(String json, Class<T[]> types) {
+            if (Strings.isNullOrEmpty(json)) {
+                return Lists.<T>newArrayList();
+            }
+            final T[] jsonToObject = GSON.fromJson(json, types);
+            return Lists.newArrayList(jsonToObject);
+        }
+
+        public final static <T> T[] fromJsonArray(String json, Class<T[]> types) {
+            if (Strings.isNullOrEmpty(json)) {
+                return null;
+            }
+            final T[] jsonToObject = GSON.fromJson(json, types);
+            return jsonToObject;
         }
     }
 
@@ -131,7 +153,6 @@ public class Tools {
     }
 
     public static class Longitude {
-
         @SuppressLint("MissingPermission")
         public static Location get(Context context) {
             LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);

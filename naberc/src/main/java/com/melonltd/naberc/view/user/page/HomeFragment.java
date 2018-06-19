@@ -1,29 +1,45 @@
 package com.melonltd.naberc.view.user.page;
 
+import android.Manifest;
+import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
 import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.view.SimpleDraweeView;
+import com.google.common.base.Splitter;
+import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.melonltd.naberc.R;
-import com.melonltd.naberc.model.okhttp.ApiCallback;
-import com.melonltd.naberc.model.okhttp.ApiManager;
+import com.melonltd.naberc.model.api.ThreadCallback;
+import com.melonltd.naberc.model.api.ApiManager;
+import com.melonltd.naberc.model.bean.CommonData;
+import com.melonltd.naberc.model.constant.NaberConstant;
+import com.melonltd.naberc.model.service.SPService;
+import com.melonltd.naberc.util.Tools;
 import com.melonltd.naberc.view.common.BaseCore;
 import com.melonltd.naberc.view.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.factory.PageType;
+import com.melonltd.naberc.view.intro.IntroActivity;
 import com.melonltd.naberc.view.user.UserMainActivity;
 import com.melonltd.naberc.view.user.adapter.RestaurantAdapter;
+import com.melonltd.naberc.vo.AdvertisementVo;
+import com.melonltd.naberc.vo.BulletinVo;
+import com.melonltd.naberc.vo.RestaurantInfoVo;
 
+import java.util.Iterator;
 import java.util.List;
 
 import cn.bingoogolapple.bgabanner.BGABanner;
@@ -35,11 +51,8 @@ public class HomeFragment extends Fragment {
     private static final String TAG = HomeFragment.class.getSimpleName();
     public static HomeFragment FRAGMENT = null;
 
-    private BGABanner banner;
-
     private RestaurantAdapter adapter;
-    private List<String> list = Lists.newArrayList();
-    private List<String> images = Lists.<String>newArrayList();
+    private List<RestaurantInfoVo> list = Lists.<RestaurantInfoVo>newArrayList();
 
     public HomeFragment() {
     }
@@ -71,7 +84,8 @@ public class HomeFragment extends Fragment {
     }
 
     private void getViews(View v) {
-        banner = v.findViewById(R.id.homeBanner);
+        final BGABanner banner = v.findViewById(R.id.homeBanner);
+        final TextView bulletinText = v.findViewById(R.id.bulletinText);
 
         final BGARefreshLayout bgaRefreshLayout = v.findViewById(R.id.top30BGARefreshLayout);
         RecyclerView recyclerView = v.findViewById(R.id.top30RecyclerView);
@@ -88,21 +102,54 @@ public class HomeFragment extends Fragment {
         recyclerView.setLayoutManager(layoutManager);
 
         //setListener
-
-        banner.setAdapter(new BGABanner.Adapter<ImageView, String>() {
+        banner.setAdapter(new BGABanner.Adapter<CardView, String>() {
             @Override
-            public void fillBannerItem(BGABanner banner, ImageView itemView, String model, int position) {
-                Glide.with(itemView.getContext())
-                        .load(model)
-                        .apply(new RequestOptions().placeholder(R.drawable.naber_default_image).error(R.drawable.naber_default_image).dontAnimate())
-                        .into(itemView);
+            public void fillBannerItem(BGABanner banner, CardView itemView, String model, int position) {
+                SimpleDraweeView simpleDraweeView = itemView.findViewById(R.id.sdv_item_fresco_content);
+                simpleDraweeView.setImageURI(Uri.parse(model));
             }
         });
 
-        banner.setDelegate(new BGABanner.Delegate<ImageView, String>() {
+        // 輪播圖
+        ApiManager.advertisement(new ThreadCallback(getContext()) {
             @Override
-            public void onBannerItemClick(BGABanner banner, ImageView itemView, String model, int position) {
-                Log.d(TAG, model + position);
+            public void onSuccess(String responseBody) {
+                List<AdvertisementVo> vos = Tools.JSONPARSE.fromJsonList(responseBody, AdvertisementVo[].class);
+                List<String> images = Lists.<String>newArrayList();
+                for (int i = 0; i < vos.size(); i++) {
+                    images.add(vos.get(i).photo);
+                }
+                banner.setData(R.layout.item_fresco, images, null);
+            }
+
+            @Override
+            public void onFail(Exception error, String msg) {
+
+            }
+        });
+
+        // 取得全部公告
+        ApiManager.bulletin(new ThreadCallback(getContext()) {
+            @Override
+            public void onSuccess(String responseBody) {
+                Log.i(TAG, responseBody);
+                CommonData.BULLETIN_VOS = Tools.JSONPARSE.fromJsonList(responseBody, BulletinVo[].class);
+                for (int i = 0; i < CommonData.BULLETIN_VOS.size(); i++) {
+                    if (CommonData.BULLETIN_VOS.get(i).bulletin_category.toUpperCase().equals("HOME")) {
+                        Log.i(TAG, CommonData.BULLETIN_VOS.get(i).content_text);
+                        Iterator<String> iterator =  Splitter.on("$split").split(CommonData.BULLETIN_VOS.get(i).content_text).iterator();
+                        String bulletin = "";
+                        while (iterator.hasNext()){
+                            bulletin += iterator.next() + "\n";
+                        }
+                        bulletinText.setText(bulletin);
+                    }
+                }
+            }
+
+            @Override
+            public void onFail(Exception error, String msg) {
+                bulletinText.setText("");
             }
         });
 
@@ -113,67 +160,26 @@ public class HomeFragment extends Fragment {
             @Override
             public void onBGARefreshLayoutBeginRefreshing(BGARefreshLayout refreshLayout) {
                 bgaRefreshLayout.endRefreshing();
-                ApiManager.test(new ApiCallback(getContext()) {
-                    @Override
-                    public void onSuccess(String responseBody) {
-                        list.clear();
-                        for (int i = 0; i < 30; i++) {
-                            list.add("" + i);
-                        }
-                        adapter.notifyDataSetChanged();
-                    }
-
-                    @Override
-                    public void onFail(Exception error, String msg) {
-                        bgaRefreshLayout.endRefreshing();
-                    }
-                });
+                doLoadData(true);
             }
 
             @Override
             public boolean onBGARefreshLayoutBeginLoadingMore(BGARefreshLayout refreshLayout) {
-                ApiManager.test(new ApiCallback(getContext()) {
-                    @Override
-                    public void onSuccess(String responseBody) {
-                        for (int i = 0; i < 30; i++) {
-                            list.add("" + i);
-                        }
-                        adapter.notifyDataSetChanged();
-                        bgaRefreshLayout.endRefreshing();
-                    }
-
-                    @Override
-                    public void onFail(Exception error, String msg) {
-                        bgaRefreshLayout.endRefreshing();
-                    }
-                });
                 return false;
             }
         });
-    }
-
-
-    private void loadBannerData(){
-        images = Lists.<String>newArrayList(
-                "https://www.mcdonalds.com/content/dam/usa/documents/mcdelivery/mcdelivery_new11.jpg",
-                "http://a57.foxnews.com/media2.foxnews.com/2016/06/09/640/360/060916_chew_crispychicken_1280.jpg",
-                "http://farm5.staticflickr.com/4532/38105655392_0b57dca007_c.jpg",
-                "http://www.mrsteak.com.tw/photos/327_3854411.jpg",
-                "https://ibw.bwnet.com.tw/image/pool/2017/05/c0ee05d61c65709a30621f46e2d22908.jpg"
-                );
-        banner.setData(images,Lists.<String>newArrayList());
     }
 
     private void doLoadData(boolean isRefresh) {
         if (isRefresh) {
             list.clear();
         }
-        ApiManager.test(new ApiCallback(getContext()) {
+        ApiManager.restaurantTop30(new ThreadCallback(getContext()){
             @Override
             public void onSuccess(String responseBody) {
-                for (int i = 0; i < 30; i++) {
-                    list.add("" + i);
-                }
+                List<RestaurantInfoVo> vos = Tools.JSONPARSE.fromJsonList(responseBody, RestaurantInfoVo[].class);
+                list.addAll(vos);
+                adapter.setLocation(CommonData.LOCATION);
                 adapter.notifyDataSetChanged();
             }
 
@@ -193,18 +199,19 @@ public class HomeFragment extends Fragment {
     public void onResume() {
         super.onResume();
         UserMainActivity.changeTabAndToolbarStatus();
-//        if ( RestaurantFragment.TO_RESTAURANT_DETAIL_INDEX >= 0) {
-//            Bundle b = new Bundle();
-//            b.putString("where", "RESTAURANT");
-//            BaseCore.FRAGMENT_TAG = PageType.RESTAURANT_DETAIL.name();
-//            AbsPageFragment f = PageFragmentFactory.of(PageType.RESTAURANT_DETAIL, b);
-//            getFragmentManager().beginTransaction().replace(R.id.frameContainer, f).commit();
-//        }else {
-        if (list.size() == 0) {
-            doLoadData(true);
+        boolean isFirst = SPService.getIsFirstLogin();
+        if (isFirst) {
+            startActivity(new Intent(getActivity().getBaseContext(), IntroActivity.class));
+        } else {
+            if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
+                    ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(getActivity(), BaseCore.LOCATION, BaseCore.LOCATION_CODE);
+            } else {
+                if (list.size() == 0) {
+                    doLoadData(true);
+                }
+            }
         }
-        loadBannerData();
-//        }
     }
 
     @Override
@@ -218,16 +225,17 @@ public class HomeFragment extends Fragment {
         super.onDestroy();
     }
 
-    class ItemOnClickListener implements View.OnClickListener{
+    class ItemOnClickListener implements View.OnClickListener {
         @Override
         public void onClick(View view) {
-            Log.d(TAG, view.getTag() + "");
-            Log.d(TAG, "item on :" + view.getTag());
+            int index = (int)view.getTag();
             Bundle b = new Bundle();
-            b.putString("where", "RESTAURANT");
+            b.putSerializable(NaberConstant.RESTAURANT_INFO, list.get(index));
+            RestaurantFragment.TO_RESTAURANT_DETAIL_INDEX = index;
+            RestaurantDetailFragment.TO_CATEGORY_MENU_INDEX = -1;
             BaseCore.FRAGMENT_TAG = PageType.RESTAURANT_DETAIL.name();
             Fragment f = PageFragmentFactory.of(PageType.RESTAURANT_DETAIL, b);
-            getFragmentManager().beginTransaction().replace(R.id.frameContainer, f).commit();
+            getFragmentManager().beginTransaction().replace(R.id.frameContainer, f).addToBackStack(f.toString()).commit();
 
         }
     }

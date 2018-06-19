@@ -18,8 +18,8 @@ import com.bigkoo.alertview.OnItemClickListener;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.melonltd.naberc.R;
-import com.melonltd.naberc.model.okhttp.ApiCallback;
-import com.melonltd.naberc.model.okhttp.ApiManager;
+import com.melonltd.naberc.model.api.ThreadCallback;
+import com.melonltd.naberc.model.api.ApiManager;
 import com.melonltd.naberc.view.seller.SellerMainActivity;
 import com.melonltd.naberc.view.seller.adapter.SearchAdapter;
 
@@ -108,7 +108,7 @@ public class SellerSearchFragment extends Fragment {
         searchRefreshLayout.setDelegate(new BGARefreshLayout.BGARefreshLayoutDelegate() {
             @Override
             public void onBGARefreshLayoutBeginRefreshing(BGARefreshLayout refreshLayout) {
-                ApiManager.test(new ApiCallback(getContext()) {
+                ApiManager.test(new ThreadCallback(getContext()) {
                     @Override
                     public void onSuccess(String responseBody) {
                         listData.clear();
@@ -136,7 +136,7 @@ public class SellerSearchFragment extends Fragment {
 //                }
 //                adapter.notifyDataSetChanged();
 //                searchRefreshLayout.endRefreshing();
-                ApiManager.test(new ApiCallback(getContext()) {
+                ApiManager.test(new ThreadCallback(getContext()) {
                     @Override
                     public void onSuccess(String responseBody) {
                         for (int i = 0; i < 10; i++) {

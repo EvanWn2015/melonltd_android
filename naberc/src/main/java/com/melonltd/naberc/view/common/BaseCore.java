@@ -26,7 +26,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.melonltd.naberc.R;
-import com.melonltd.naberc.model.preferences.SharedPreferencesService;
+import com.melonltd.naberc.model.bean.CommonData;
+import com.melonltd.naberc.model.service.SPService;
 import com.melonltd.naberc.util.Tools;
 import com.melonltd.naberc.view.factory.PageType;
 
@@ -42,7 +43,7 @@ public abstract class BaseCore extends AppCompatActivity implements LocationList
     public static final int CAMERA_CODE = 8765;
     public static final String[] CAMERA = new String[]{Manifest.permission.CAMERA};
 
-    private static final int LOCATION_CODE = 9876;
+    public static final int LOCATION_CODE = 9876;
     public static final String[] LOCATION = new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION};
 
     public static final int IO_STREAM_CODE = 1987;
@@ -113,7 +114,7 @@ public abstract class BaseCore extends AppCompatActivity implements LocationList
 //        Log.d(TAG, "Location : " + loc);
 
         // TODO  init SharedPreferences
-        SharedPreferencesService.getInstance(getSharedPreferences(getString(R.string.shared_preferences_key), Context.MODE_PRIVATE));
+        SPService.getInstance(getSharedPreferences(getString(R.string.shared_preferences_key), Context.MODE_PRIVATE));
     }
 
     public static void getCurrentUser (Activity activity){
@@ -199,23 +200,23 @@ public abstract class BaseCore extends AppCompatActivity implements LocationList
 
     @SuppressLint("MissingPermission")
     private void setLocationListener() {
-//        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-//        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
-//        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
+        locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
+        locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
 
         locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 0, 0, this);
         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
         locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
         locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
+        CommonData.LOCATION = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
     }
 
 
     @Override
     public void onLocationChanged(Location loc) {
         if (loc != null) {
-//            Log.d(TAG, "Latitude: " + loc.getLatitude());
-//            Log.d(TAG, "Longitude: " + loc.getLongitude());
+            CommonData.LOCATION = loc;
         }
     }
 
