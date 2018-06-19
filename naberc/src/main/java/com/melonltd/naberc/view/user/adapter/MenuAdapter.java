@@ -10,6 +10,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.facebook.imagepipeline.request.ImageRequest;
+import com.facebook.imagepipeline.request.ImageRequestBuilder;
 import com.google.common.base.Strings;
 import com.melonltd.naberc.R;
 import com.melonltd.naberc.vo.CategoryFoodRelVo;
@@ -41,15 +43,15 @@ public class MenuAdapter extends RecyclerView.Adapter<MenuAdapter.ViewHolder> {
     @Override
     public void onBindViewHolder(@NonNull MenuAdapter.ViewHolder h, int position) {
 
-        h.itemView.setTag(listData.get(position));
+        h.itemView.setTag(position);
         h.itemView.setOnClickListener(this.itemClickListener);
 
         if (!Strings.isNullOrEmpty(listData.get(position).photo)){
             h.itemIconImageView.setImageURI(Uri.parse(listData.get(position).photo));
         }else {
-            h.itemIconImageView.setImageURI(Uri.parse(""));
+            ImageRequest imageRequest = ImageRequestBuilder.newBuilderWithResourceId(R.drawable.naber_icon_logo_reverse).build();
+            h.itemIconImageView.setImageURI(imageRequest.getSourceUri());
         }
-//        Log.d(TAG,listData.get(position).food_data + "" );
         h.itemNameText.setText(listData.get(position).food_name);
         h.itemPriceText.setText(listData.get(position).default_price);
 

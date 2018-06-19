@@ -46,10 +46,9 @@ public class BaseActivity extends BaseCore {
         long now = new Date().getTime();
         long day7 = 1000 * 60 * 60 * 24 * 7L * 2;
         if (now - day7 < limit){
-//            String oauth = SPService.getRememberAccount();
-//            SPService.setOauth(oauth);
             String identity = SPService.getRememberIdentity();
             if (identity.toUpperCase().equals("USER")){
+                loadRestaurantTemplate(context);
                 startActivity(new Intent(context, UserMainActivity.class));
             }else if (identity.toUpperCase().equals("SELLERS")){
                startActivity(new Intent(context, SellerMainActivity.class));

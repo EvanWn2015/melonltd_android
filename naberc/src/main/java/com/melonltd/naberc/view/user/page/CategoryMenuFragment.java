@@ -17,6 +17,7 @@ import com.google.common.collect.Lists;
 import com.melonltd.naberc.R;
 import com.melonltd.naberc.model.api.ThreadCallback;
 import com.melonltd.naberc.model.api.ApiManager;
+import com.melonltd.naberc.model.bean.Model;
 import com.melonltd.naberc.model.constant.NaberConstant;
 import com.melonltd.naberc.util.Tools;
 import com.melonltd.naberc.view.common.BaseCore;
@@ -41,7 +42,7 @@ public class CategoryMenuFragment extends Fragment {
     private MenuAdapter adapter;
     private ViewHolder holder;
 
-    private List<CategoryFoodRelVo> list = Lists.<CategoryFoodRelVo>newArrayList();
+//    private List<CategoryFoodRelVo> list = Lists.<CategoryFoodRelVo>newArrayList();
     public static int TO_MENU_DETAIL_INDEX = -1;
 
 
@@ -63,7 +64,7 @@ public class CategoryMenuFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        adapter = new MenuAdapter(list);
+        adapter = new MenuAdapter(Model.CATEGORY_FOOD_REL_LIST);
         Fresco.initialize(getContext());
     }
 
@@ -127,13 +128,13 @@ public class CategoryMenuFragment extends Fragment {
 
     private void doLoadData(boolean isRefresh) {
         if (isRefresh) {
-            list.clear();
+            Model.CATEGORY_FOOD_REL_LIST.clear();
         }
         ApiManager.restaurantFoodList(holder.uuid ,new ThreadCallback(getContext()) {
             @Override
             public void onSuccess(String responseBody) {
                 List<CategoryFoodRelVo> vos = Tools.JSONPARSE.fromJsonList(responseBody , CategoryFoodRelVo[].class);
-                list.addAll(vos);
+                Model.CATEGORY_FOOD_REL_LIST.addAll(vos);
                 adapter.notifyDataSetChanged();
             }
 
@@ -161,15 +162,16 @@ public class CategoryMenuFragment extends Fragment {
             });
         }
         if (TO_MENU_DETAIL_INDEX >= 0) {
-            toMenuDetailPage(list.get(TO_MENU_DETAIL_INDEX));
+            toMenuDetailPage(TO_MENU_DETAIL_INDEX);
         }
     }
 
-    private void toMenuDetailPage(CategoryFoodRelVo vo) {
-        TO_MENU_DETAIL_INDEX = list.indexOf(vo);
+    private void toMenuDetailPage(int index) {
+        TO_MENU_DETAIL_INDEX = index;
+//                Model.CATEGORY_FOOD_REL_LIST.indexOf(vo);
         BaseCore.FRAGMENT_TAG = PageType.MENU_DETAIL.name();
         Bundle bundle = new  Bundle();
-        bundle.putSerializable("", vo);
+        bundle.putSerializable("", Model.CATEGORY_FOOD_REL_LIST.get(index));
         Fragment f = PageFragmentFactory.of(PageType.MENU_DETAIL, bundle);
         getFragmentManager().beginTransaction().remove(this).replace(R.id.frameContainer, f).addToBackStack(f.toString()).commit();
     }
@@ -196,7 +198,7 @@ public class CategoryMenuFragment extends Fragment {
     class ItemClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
-            toMenuDetailPage((CategoryFoodRelVo)v.getTag());
+            toMenuDetailPage((int)v.getTag());
         }
     }
 

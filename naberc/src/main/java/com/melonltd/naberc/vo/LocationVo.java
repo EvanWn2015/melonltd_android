@@ -10,4 +10,11 @@ public class LocationVo {
         vo.longitude = longitude;
         return  vo;
     }
+
+    public static LocationVo of (String latitude, String longitude){
+        LocationVo vo = new LocationVo();
+        vo.latitude = Double.parseDouble(latitude);
+        vo.longitude = Double.parseDouble(longitude);
+        return  vo;
+    }
 }

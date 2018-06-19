@@ -115,6 +115,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                                 SPService.setRememberIdentity(resp.identity);
                             }
                             if (resp.identity.toUpperCase().equals("USER")){
+                                BaseCore.loadRestaurantTemplate(getContext());
                                 startActivity(new Intent(getActivity().getBaseContext(), UserMainActivity.class));
                             }else if (resp.identity.toUpperCase().equals("SELLERS")){
                                 startActivity(new Intent(getActivity().getBaseContext(), SellerMainActivity.class));

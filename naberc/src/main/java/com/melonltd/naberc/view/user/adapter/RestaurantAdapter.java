@@ -13,6 +13,8 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.facebook.imagepipeline.request.ImageRequest;
+import com.facebook.imagepipeline.request.ImageRequestBuilder;
 import com.google.common.base.Strings;
 import com.melonltd.naberc.R;
 import com.melonltd.naberc.util.DistanceTools;
@@ -57,15 +59,13 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
         if (!Strings.isNullOrEmpty(listData.get(position).photo)){
             holder.restaurantIcon.setImageURI(Uri.parse(listData.get(position).photo));
         }else {
-            holder.restaurantIcon.setImageURI(Uri.parse(""));
+            ImageRequest imageRequest = ImageRequestBuilder.newBuilderWithResourceId(R.drawable.naber_icon_logo_reverse).build();
+            holder.restaurantIcon.setImageURI(imageRequest.getSourceUri());
         }
 
         holder.restaurantNameText.setText(listData.get(position).name);
         holder.businessTimeText.setText("接單時間: " + listData.get(position).store_start + "~" + listData.get(position).store_end);
         holder.addressText.setText(listData.get(position).address);
-        Double.parseDouble(listData.get(position).latitude);
-        Double.parseDouble(listData.get(position).longitude);
-
         String distance = DistanceTools.getGoogleDistance(this.location, LocationVo.of(Double.parseDouble(listData.get(position).latitude), Double.parseDouble(listData.get(position).longitude)));
         holder.distanceText.setText("" + distance);
 

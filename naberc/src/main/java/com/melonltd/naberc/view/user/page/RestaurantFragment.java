@@ -15,16 +15,25 @@ import android.widget.TextView;
 
 import com.bigkoo.alertview.AlertView;
 import com.bigkoo.alertview.OnItemClickListener;
+import com.google.common.base.Function;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Ordering;
 import com.melonltd.naberc.R;
 import com.melonltd.naberc.model.api.ThreadCallback;
 import com.melonltd.naberc.model.api.ApiManager;
+import com.melonltd.naberc.model.bean.Model;
+import com.melonltd.naberc.model.constant.NaberConstant;
+import com.melonltd.naberc.util.DistanceTools;
+import com.melonltd.naberc.util.Tools;
 import com.melonltd.naberc.view.common.BaseCore;
 import com.melonltd.naberc.view.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.factory.PageType;
 import com.melonltd.naberc.view.user.UserMainActivity;
 import com.melonltd.naberc.view.user.adapter.RestaurantAdapter;
+import com.melonltd.naberc.vo.LocationVo;
+import com.melonltd.naberc.vo.ReqData;
 import com.melonltd.naberc.vo.RestaurantInfoVo;
+import com.melonltd.naberc.vo.RestaurantTemplate;
 
 import java.util.List;
 
@@ -37,11 +46,8 @@ public class RestaurantFragment extends Fragment implements View.OnClickListener
 
     private TextView filterTypeText;
     private Button filterCategoryBtn, filterAreaBtn, filterDistanceBtn;
-
-    private BGARefreshLayout bgaRefreshLayout;
-    private RecyclerView recyclerView;
+    private ReqData reqData = new ReqData();
     private RestaurantAdapter adapter;
-    private List<RestaurantInfoVo> list = Lists.newArrayList();
 
     public static int TO_RESTAURANT_DETAIL_INDEX = -1;
     public static int HOME_TO_RESTAURANT_DETAIL_INDEX = -1;
@@ -60,7 +66,7 @@ public class RestaurantFragment extends Fragment implements View.OnClickListener
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        adapter = new RestaurantAdapter(list);
+        adapter = new RestaurantAdapter(Model.RESTAURANT_INFO_FILTER_LIST);
         adapter.setItemOnClickListener(new ItemOnClickListener());
     }
 
@@ -69,7 +75,6 @@ public class RestaurantFragment extends Fragment implements View.OnClickListener
         if (container.getTag(R.id.user_restaurant_page) == null) {
             View v = inflater.inflate(R.layout.fragment_restaurant, container, false);
             getViews(v);
-            setListener();
             container.setTag(R.id.user_restaurant_page, v);
             return v;
         }
@@ -82,8 +87,8 @@ public class RestaurantFragment extends Fragment implements View.OnClickListener
         filterAreaBtn = v.findViewById(R.id.filterAreaBtn);
         filterDistanceBtn = v.findViewById(R.id.filterDistanceBtn);
 
-        bgaRefreshLayout = v.findViewById(R.id.restaurantBGARefreshLayout);
-        recyclerView = v.findViewById(R.id.restaurantRecyclerView);
+        final BGARefreshLayout bgaRefreshLayout = v.findViewById(R.id.restaurantBGARefreshLayout);
+        RecyclerView recyclerView = v.findViewById(R.id.restaurantRecyclerView);
 
         BGANormalRefreshViewHolder refreshViewHolder = new BGANormalRefreshViewHolder(getContext(), true);
         refreshViewHolder.setPullDownRefreshText("Pull");
@@ -96,10 +101,8 @@ public class RestaurantFragment extends Fragment implements View.OnClickListener
         final LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
-    }
 
-
-    private void setListener() {
+        // setListener
         recyclerView.setAdapter(adapter);
         filterCategoryBtn.setOnClickListener(this);
         filterAreaBtn.setOnClickListener(this);
@@ -109,57 +112,49 @@ public class RestaurantFragment extends Fragment implements View.OnClickListener
             @Override
             public void onBGARefreshLayoutBeginRefreshing(BGARefreshLayout refreshLayout) {
                 bgaRefreshLayout.endRefreshing();
-                ApiManager.test(new ThreadCallback(getContext()) {
-                    @Override
-                    public void onSuccess(String responseBody) {
-                        list.clear();
-                        for (int i = 0; i < 30; i++) {
-//                            list.add("" + i);
-                        }
-                        adapter.notifyDataSetChanged();
-
-                    }
-
-                    @Override
-                    public void onFail(Exception error, String msg) {
-                        bgaRefreshLayout.endRefreshing();
-                    }
-                });
+                reqData.loadingMore = true;
+                doLoadData(true);
             }
 
             @Override
             public boolean onBGARefreshLayoutBeginLoadingMore(BGARefreshLayout refreshLayout) {
-                ApiManager.test(new ThreadCallback(getContext()) {
-                    @Override
-                    public void onSuccess(String responseBody) {
-                        for (int i = 0; i < 30; i++) {
-//                            list.add("" + i);
-                        }
-                        adapter.notifyDataSetChanged();
-                        bgaRefreshLayout.endRefreshing();
-                    }
+                bgaRefreshLayout.endLoadingMore();
+                if (!reqData.loadingMore){
+                    return false;
+                }
 
-                    @Override
-                    public void onFail(Exception error, String msg) {
-                        bgaRefreshLayout.endRefreshing();
-                    }
-                });
+                reqData.page ++;
+                if (reqData.search_type.equals("DISTANCE")){
+                    reqData.uuids.addAll(getTemplate(reqData.page));
+                }
+                doLoadData(false);
                 return false;
             }
         });
-
     }
 
     private void doLoadData(boolean isRefresh) {
         if (isRefresh) {
-            list.clear();
+            Model.RESTAURANT_INFO_FILTER_LIST.clear();
             adapter.notifyDataSetChanged();
         }
-        ApiManager.test(new ThreadCallback(getContext()) {
+        adapter.setLocation(Model.LOCATION);
+        ApiManager.restaurantList(reqData, new ThreadCallback(getContext()) {
             @Override
             public void onSuccess(String responseBody) {
-                for (int i = 0; i < 30; i++) {
-//                    list.add("" + i);
+                List<RestaurantInfoVo> list = Tools.JSONPARSE.fromJsonList(responseBody, RestaurantInfoVo[].class);
+                if (list.size() % 10 != 0){
+                    reqData.loadingMore = false;
+                }
+                if (reqData.search_type.equals("DISTANCE")){
+                    Ordering<RestaurantInfoVo> ordering = Ordering.natural().nullsFirst().onResultOf(new Function<RestaurantInfoVo, Double>() {
+                        public Double apply(RestaurantInfoVo info) {
+                            return DistanceTools.getDistance(Model.LOCATION, LocationVo.of(info.latitude, info.longitude));
+                        }
+                    });
+                    Model.RESTAURANT_INFO_FILTER_LIST.addAll(ordering.sortedCopy(list));
+                }else {
+                    Model.RESTAURANT_INFO_FILTER_LIST.addAll(list);
                 }
                 adapter.notifyDataSetChanged();
             }
@@ -174,15 +169,15 @@ public class RestaurantFragment extends Fragment implements View.OnClickListener
     @Override
     public void onResume() {
         super.onResume();
-        // TODO Bundle check where to detail page HOME or this
         UserMainActivity.changeTabAndToolbarStatus();
         if (TO_RESTAURANT_DETAIL_INDEX >= 0) {
             BaseCore.FRAGMENT_TAG = PageType.RESTAURANT_DETAIL.name();
             Fragment f = PageFragmentFactory.of(PageType.RESTAURANT_DETAIL, null);
             getFragmentManager().beginTransaction().replace(R.id.frameContainer, f).addToBackStack(f.toString()).commit();
         } else {
-            if (list.size() == 0) {
-                doLoadData(true);
+            if (Model.RESTAURANT_INFO_FILTER_LIST.size() == 0) {
+//                doLoadData(true);
+                filterDistanceBtn.callOnClick();
             }
         }
     }
@@ -199,7 +194,10 @@ public class RestaurantFragment extends Fragment implements View.OnClickListener
     }
 
     @Override
-    public void onClick(View v) {
+    public void onClick(final View v) {
+        filterCategoryBtn.setBackground(getResources().getDrawable(R.drawable.naber_reverse_gary_button_style));
+        filterAreaBtn.setBackground(getResources().getDrawable(R.drawable.naber_reverse_gary_button_style));
+        filterDistanceBtn.setBackground(getResources().getDrawable(R.drawable.naber_reverse_gary_button_style));
         switch (v.getId()) {
             case R.id.filterCategoryBtn:
                 final String[] categorys = new String[]{"火鍋", "燒烤/居酒屋", "鐵板燒", "素蔬食", "早午餐", "下午茶", "西式/牛排", "中式", "港式", "日式", "韓式", "異國", "美式", "義式", "熱炒", "小吃", "泰式", "咖啡輕食", "甜點", "冰飲"};
@@ -207,12 +205,22 @@ public class RestaurantFragment extends Fragment implements View.OnClickListener
                         .setContext(getContext())
                         .setStyle(AlertView.Style.ActionSheet)
                         .setTitle("請選擇種類")
+                        .setCancelText("取消")
                         .setOthers(categorys)
                         .setOnItemClickListener(new OnItemClickListener() {
                             @Override
                             public void onItemClick(Object o, int position) {
-                                filterTypeText.setText(categorys[position]);
-                                doLoadData(true);
+                                if (position != -1){
+                                    v.setBackgroundColor(getResources().getColor(R.color.naber_basis));
+                                    if (!reqData.category.equals(categorys[position])){
+                                        filterTypeText.setText(categorys[position]);
+                                        reqData = new ReqData();
+                                        reqData.search_type = "CATEGORY";
+                                        reqData.category = categorys[position];
+                                        reqData.page = 1;
+                                        doLoadData(true);
+                                    }
+                                }
                             }
                         })
                         .build()
@@ -225,13 +233,22 @@ public class RestaurantFragment extends Fragment implements View.OnClickListener
                         .setContext(getContext())
                         .setStyle(AlertView.Style.ActionSheet)
                         .setTitle("請選擇區域")
-//                        .setDestructive(areas)
                         .setOthers(areas)
+                        .setCancelText("取消")
                         .setOnItemClickListener(new OnItemClickListener() {
                             @Override
                             public void onItemClick(Object o, int position) {
-                                filterTypeText.setText(areas[position]);
-                                doLoadData(true);
+                                if (position != -1){
+                                    v.setBackgroundColor(getResources().getColor(R.color.naber_basis));
+                                    if (!reqData.area.equals(areas[position])){
+                                        filterTypeText.setText(areas[position]);
+                                        reqData = new ReqData();
+                                        reqData.search_type = "AREA";
+                                        reqData.area = areas[position];
+                                        reqData.page = 1;
+                                        doLoadData(true);
+                                    }
+                                }
                             }
                         })
                         .build()
@@ -239,27 +256,38 @@ public class RestaurantFragment extends Fragment implements View.OnClickListener
                         .show();
                 break;
             case R.id.filterDistanceBtn:
-                filterTypeText.setText("離我最近");
-                doLoadData(true);
-
-//                restaurantListView.setSelection(10);
-
+                v.setBackgroundColor(getResources().getColor(R.color.naber_basis));
+                if (reqData.search_type == null || !reqData.search_type.equals("DISTANCE")){
+                    filterTypeText.setText("離我最近");
+                    reqData = new ReqData();
+                    reqData.search_type = "DISTANCE";
+                    reqData.uuids = Lists.newArrayList();
+                    reqData.page = 1;
+                    reqData.uuids.addAll(getTemplate(reqData.page));
+                    doLoadData(true);
+                }
                 break;
         }
+    }
+
+    private static List<String> getTemplate (int page){
+        List<String> uuids = Lists.<String>newArrayList();
+        for(int i=0; i<Model.RESTAURANT_TEMPLATE.get(page - 1).size(); i++){
+            uuids.add(Model.RESTAURANT_TEMPLATE.get(page - 1).get(i).restaurant_uuid);
+        }
+        return  uuids;
     }
 
     class ItemOnClickListener implements View.OnClickListener{
         @Override
         public void onClick(View view) {
-            Log.d(TAG, view.getTag() + "");
-            Log.d(TAG, "item on :" + view.getTag());
-            TO_RESTAURANT_DETAIL_INDEX = (int)view.getTag();
-            Bundle b = new Bundle();
-            b.putString("where", "RESTAURANT");
+            int index = (int)view.getTag();
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(NaberConstant.RESTAURANT_INFO, Model.RESTAURANT_INFO_FILTER_LIST.get(index));
+            TO_RESTAURANT_DETAIL_INDEX = index;
             BaseCore.FRAGMENT_TAG = PageType.RESTAURANT_DETAIL.name();
-            Fragment f = PageFragmentFactory.of(PageType.RESTAURANT_DETAIL, b);
+            Fragment f = PageFragmentFactory.of(PageType.RESTAURANT_DETAIL, bundle);
             getFragmentManager().beginTransaction().replace(R.id.frameContainer, f).addToBackStack(f.toString()).commit();
-
         }
     }
 

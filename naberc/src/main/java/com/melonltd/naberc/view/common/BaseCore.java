@@ -21,15 +21,28 @@ import android.view.KeyEvent;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.common.base.Function;
+import com.google.common.collect.Lists;
+import com.google.common.collect.Ordering;
+import com.google.common.primitives.Ints;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.melonltd.naberc.R;
-import com.melonltd.naberc.model.bean.CommonData;
+import com.melonltd.naberc.model.api.ApiCallback;
+import com.melonltd.naberc.model.api.ApiManager;
+import com.melonltd.naberc.model.api.ThreadCallback;
+import com.melonltd.naberc.model.bean.Model;
 import com.melonltd.naberc.model.service.SPService;
+import com.melonltd.naberc.util.DistanceTools;
 import com.melonltd.naberc.util.Tools;
 import com.melonltd.naberc.view.factory.PageType;
+import com.melonltd.naberc.vo.LocationVo;
+import com.melonltd.naberc.vo.RestaurantTemplate;
+
+import java.util.Arrays;
+import java.util.List;
 
 
 public abstract class BaseCore extends AppCompatActivity implements LocationListener {
@@ -209,14 +222,14 @@ public abstract class BaseCore extends AppCompatActivity implements LocationList
         locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 0, 0, this);
         locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER);
         locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER);
-        CommonData.LOCATION = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+        Model.LOCATION = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
     }
 
 
     @Override
     public void onLocationChanged(Location loc) {
         if (loc != null) {
-            CommonData.LOCATION = loc;
+            Model.LOCATION = loc;
         }
     }
 
@@ -241,6 +254,33 @@ public abstract class BaseCore extends AppCompatActivity implements LocationList
             return true;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+
+    public static void loadRestaurantTemplate (Context context){
+        Model.RESTAURANT_TEMPLATE.clear();
+        ApiManager.restaurantTemplate(new ApiCallback(context) {
+            @Override
+            public void onSuccess(String responseBody) {
+                Log.d(TAG, responseBody);
+                List<RestaurantTemplate> list = Tools.JSONPARSE.fromJsonList(responseBody, RestaurantTemplate[].class);
+                for (int i=0; i<list.size(); i++){
+                   list.get(i).distance =  DistanceTools.getDistance(Model.LOCATION, LocationVo.of(list.get(i).latitude, list.get(i).longitude));
+                }
+                Ordering<RestaurantTemplate> ordering = Ordering.natural().nullsFirst().onResultOf(new Function<RestaurantTemplate, Double>() {
+                    public Double apply(RestaurantTemplate template) {
+                        return template.distance;
+                    }
+                });
+                Model.RESTAURANT_TEMPLATE.addAll(Lists.partition(ordering.sortedCopy(list), 10));
+                Log.d(TAG, Model.RESTAURANT_TEMPLATE.toString());
+            }
+
+            @Override
+            public void onFail(Exception error, String msg) {
+
+            }
+        });
     }
 
 //    public void removeFragment(){

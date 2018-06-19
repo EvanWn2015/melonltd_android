@@ -24,6 +24,8 @@ public class RestaurantInfoVo implements Serializable {
     public String background_photo;
     public String top;
 
+    public boolean isShowOne = true;
+
     public String getRestaurant_uuid() {
         return restaurant_uuid;
     }

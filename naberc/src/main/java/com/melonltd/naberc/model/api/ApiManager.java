@@ -43,15 +43,13 @@ public class ApiManager {
         call.enqueue(callback);
     }
 
-    // 餐館列表 top30
-    public static void restaurantList(String data, ThreadCallback callback) {
-        Call call = getClient().postHeader(ApiUrl.RESTAURANT_LIST, SPService.getOauth(),  data);
+    public static void restaurantTemplate(ApiCallback callback) {
+        Call call = getClient().postHeader(ApiUrl.RESTAURANT_TEMPLATE, SPService.getOauth());
         call.enqueue(callback);
     }
 
-    public static void restaurantTop30(ThreadCallback callback) {
-        ReqData req = new ReqData();
-        req.search_type="TOP";
+    // 餐館列表 TOP, AREA, CATEGORY, DISTANCE
+    public static void restaurantList(ReqData req, ThreadCallback callback) {
         Call call = getClient().postHeader(ApiUrl.RESTAURANT_LIST, SPService.getOauth(),  Tools.JSONPARSE.toJson(req));
         call.enqueue(callback);
     }

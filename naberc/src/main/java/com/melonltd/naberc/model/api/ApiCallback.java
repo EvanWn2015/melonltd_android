@@ -21,7 +21,6 @@ import okhttp3.Response;
 public abstract class ApiCallback implements Callback {
 
     private static final String TAG = ThreadCallback.class.getSimpleName();
-//    private AlertDialog DIALOG = null;
 
     abstract public void onSuccess(String responseBody);
 
@@ -31,27 +30,19 @@ public abstract class ApiCallback implements Callback {
 
     public ApiCallback(Context context) {
         this.context = context;
-        if (! (context instanceof Activity)) {
-            Log.d(TAG, "");
-        }
-//        this.DIALOG = LoadingBarTools.newLoading(context);
     }
-
 
     @Override
     public void onFailure(Call call, final IOException e) {
         if (checkNetWork()) {
-//            DIALOG.hide();
             getAlertView();
             return;
         }
-//                e.printStackTrace();
         if (e.getMessage().contains("Canceled") || e.getMessage().contains("Socket closed")) {
             Log.e(TAG, "fail", e);
         } else {
             onFail(e, e.getMessage());
         }
-//        DIALOG.hide();
     }
 
     @Override
@@ -73,19 +64,12 @@ public abstract class ApiCallback implements Callback {
             Log.e(TAG, "fail", e);
             onFailure(call, new IOException("Failed"));
         }
-//        DIALOG.hide();
     }
-
 
     public boolean checkNetWork() {
         ConnectivityManager cm = (ConnectivityManager) this.context.getSystemService(Context.CONNECTIVITY_SERVICE);
         return !Tools.NETWORK.hasNetWork(cm);
     }
-
-
-//    private void runOnUiThread(Runnable task) {
-//        new Handler(Looper.getMainLooper()).post(task);
-//    }
 
     private void getAlertView() {
         new AlertView.Builder()

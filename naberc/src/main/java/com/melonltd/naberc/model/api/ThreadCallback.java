@@ -48,14 +48,14 @@ public abstract class ThreadCallback implements Callback {
             public void run() {
                 // 如果是 network 錯誤
                 if (checkNetWork()) {
-                    DIALOG.dismiss();
+                    DIALOG.cancel();
                     getAlertView();
                     return;
                 }
                 if (e.getMessage().contains("Canceled") || e.getMessage().contains("Socket closed")) {
                     Log.e(TAG, "fail", e);
                 } else {
-                    DIALOG.dismiss();
+                    DIALOG.cancel();
                     onFail(e, e.getMessage());
                 }
 
@@ -76,10 +76,10 @@ public abstract class ThreadCallback implements Callback {
                     final String resp = Base64Service.decryptBASE64(response.body().string());
                     RespData data = Tools.JSONPARSE.fromJson(resp, RespData.class);
                     if (data.status.toUpperCase().equals("TRUE")){
-                        DIALOG.dismiss();
+                        DIALOG.cancel();
                         onSuccess(Tools.JSONPARSE.toJson(data.data));
                     }else {
-                        DIALOG.dismiss();
+                        DIALOG.cancel();
                         onFail(new IOException("Failed"), data.err_msg);
                     }
 

@@ -20,12 +20,11 @@ import android.widget.TextView;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.google.common.base.Splitter;
-import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.melonltd.naberc.R;
 import com.melonltd.naberc.model.api.ThreadCallback;
 import com.melonltd.naberc.model.api.ApiManager;
-import com.melonltd.naberc.model.bean.CommonData;
+import com.melonltd.naberc.model.bean.Model;
 import com.melonltd.naberc.model.constant.NaberConstant;
 import com.melonltd.naberc.model.service.SPService;
 import com.melonltd.naberc.util.Tools;
@@ -37,6 +36,7 @@ import com.melonltd.naberc.view.user.UserMainActivity;
 import com.melonltd.naberc.view.user.adapter.RestaurantAdapter;
 import com.melonltd.naberc.vo.AdvertisementVo;
 import com.melonltd.naberc.vo.BulletinVo;
+import com.melonltd.naberc.vo.ReqData;
 import com.melonltd.naberc.vo.RestaurantInfoVo;
 
 import java.util.Iterator;
@@ -52,7 +52,6 @@ public class HomeFragment extends Fragment {
     public static HomeFragment FRAGMENT = null;
 
     private RestaurantAdapter adapter;
-    private List<RestaurantInfoVo> list = Lists.<RestaurantInfoVo>newArrayList();
 
     public HomeFragment() {
     }
@@ -69,7 +68,7 @@ public class HomeFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Fresco.initialize(getContext());
-        adapter = new RestaurantAdapter(list);
+        adapter = new RestaurantAdapter(Model.RESTAURANT_INFO_LIST);
     }
 
     @Override
@@ -115,11 +114,11 @@ public class HomeFragment extends Fragment {
             @Override
             public void onSuccess(String responseBody) {
                 List<AdvertisementVo> vos = Tools.JSONPARSE.fromJsonList(responseBody, AdvertisementVo[].class);
-                List<String> images = Lists.<String>newArrayList();
+                Model.BANNER_IMAGES = Lists.<String>newArrayList();
                 for (int i = 0; i < vos.size(); i++) {
-                    images.add(vos.get(i).photo);
+                    Model.BANNER_IMAGES.add(vos.get(i).photo);
                 }
-                banner.setData(R.layout.item_fresco, images, null);
+                banner.setData(R.layout.item_fresco, Model.BANNER_IMAGES, null);
             }
 
             @Override
@@ -132,19 +131,16 @@ public class HomeFragment extends Fragment {
         ApiManager.bulletin(new ThreadCallback(getContext()) {
             @Override
             public void onSuccess(String responseBody) {
-                Log.i(TAG, responseBody);
-                CommonData.BULLETIN_VOS = Tools.JSONPARSE.fromJsonList(responseBody, BulletinVo[].class);
-                for (int i = 0; i < CommonData.BULLETIN_VOS.size(); i++) {
-                    if (CommonData.BULLETIN_VOS.get(i).bulletin_category.toUpperCase().equals("HOME")) {
-                        Log.i(TAG, CommonData.BULLETIN_VOS.get(i).content_text);
-                        Iterator<String> iterator =  Splitter.on("$split").split(CommonData.BULLETIN_VOS.get(i).content_text).iterator();
-                        String bulletin = "";
-                        while (iterator.hasNext()){
-                            bulletin += iterator.next() + "\n";
-                        }
-                        bulletinText.setText(bulletin);
+                List<BulletinVo> list = Tools.JSONPARSE.fromJsonList(responseBody, BulletinVo[].class);
+                for (int i = 0; i < list.size(); i++) {
+                    Iterator<String> iterator =  Splitter.on("$split").split(list.get(i).content_text).iterator();
+                    String content_text = "";
+                    while (iterator.hasNext()){
+                        content_text += iterator.next() + "\n";
                     }
+                    Model.BULLETIN_VOS.put(list.get(i).bulletin_category,content_text);
                 }
+                bulletinText.setText(Model.BULLETIN_VOS.get("HOME"));
             }
 
             @Override
@@ -172,14 +168,17 @@ public class HomeFragment extends Fragment {
 
     private void doLoadData(boolean isRefresh) {
         if (isRefresh) {
-            list.clear();
+            RestaurantFragment.TO_RESTAURANT_DETAIL_INDEX = -1;
+            Model.RESTAURANT_INFO_LIST.clear();
         }
-        ApiManager.restaurantTop30(new ThreadCallback(getContext()){
+        ReqData req = new ReqData();
+        req.search_type="TOP";
+        ApiManager.restaurantList(req, new ThreadCallback(getContext()){
             @Override
             public void onSuccess(String responseBody) {
                 List<RestaurantInfoVo> vos = Tools.JSONPARSE.fromJsonList(responseBody, RestaurantInfoVo[].class);
-                list.addAll(vos);
-                adapter.setLocation(CommonData.LOCATION);
+                Model.RESTAURANT_INFO_LIST.addAll(vos);
+                adapter.setLocation(Model.LOCATION);
                 adapter.notifyDataSetChanged();
             }
 
@@ -207,7 +206,7 @@ public class HomeFragment extends Fragment {
                     ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
                 ActivityCompat.requestPermissions(getActivity(), BaseCore.LOCATION, BaseCore.LOCATION_CODE);
             } else {
-                if (list.size() == 0) {
+                if (Model.RESTAURANT_INFO_LIST.size() == 0) {
                     doLoadData(true);
                 }
             }
@@ -229,12 +228,12 @@ public class HomeFragment extends Fragment {
         @Override
         public void onClick(View view) {
             int index = (int)view.getTag();
-            Bundle b = new Bundle();
-            b.putSerializable(NaberConstant.RESTAURANT_INFO, list.get(index));
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(NaberConstant.RESTAURANT_INFO, Model.RESTAURANT_INFO_LIST.get(index));
             RestaurantFragment.TO_RESTAURANT_DETAIL_INDEX = index;
             RestaurantDetailFragment.TO_CATEGORY_MENU_INDEX = -1;
             BaseCore.FRAGMENT_TAG = PageType.RESTAURANT_DETAIL.name();
-            Fragment f = PageFragmentFactory.of(PageType.RESTAURANT_DETAIL, b);
+            Fragment f = PageFragmentFactory.of(PageType.RESTAURANT_DETAIL, bundle);
             getFragmentManager().beginTransaction().replace(R.id.frameContainer, f).addToBackStack(f.toString()).commit();
 
         }
