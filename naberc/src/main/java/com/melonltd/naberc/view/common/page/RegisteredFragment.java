@@ -48,40 +48,9 @@ public class RegisteredFragment extends Fragment implements View.OnClickListener
     public static RegisteredFragment FRAGMENT = null;
     private TextView identityEditText, birthdayEditText;
     private EditText nameEditText, addressEditText, emailEditText, passwordEditText, confirmPasswordEditText;
-//    private Button submitBtn, backToLoginBtn;
-
 
     private List<String> options1Items = Lists.newArrayList();
     private List<List<String>> options2Items = Lists.newArrayList();
-    private static final int MSG_LOAD_DATA = 0x0001;
-    private static final int MSG_LOAD_SUCCESS = 0x0002;
-    private static final int MSG_LOAD_FAILED = 0x0003;
-    private Thread thread;
-    private boolean isLoaded = false;
-
-//    @SuppressLint("HandlerLeak")
-//    private Handler mHandler = new Handler() {
-//        public void handleMessage(Message msg) {
-//            switch (msg.what) {
-//                case MSG_LOAD_DATA:
-//                    if (thread == null) {
-//                        thread = new Thread(new Runnable() {
-//                            @Override
-//                            public void run() {
-//                                initJsonData();
-//                            }
-//                        });
-//                        thread.start();
-//                    }
-//                    break;
-//                case MSG_LOAD_SUCCESS:
-//                    isLoaded = true;
-//                    break;
-//                case MSG_LOAD_FAILED:
-//                    break;
-//            }
-//        }
-//    };
 
     public RegisteredFragment() {
     }
@@ -109,7 +78,6 @@ public class RegisteredFragment extends Fragment implements View.OnClickListener
         if (container.getTag(R.id.user_registered_page) == null) {
             View v = inflater.inflate(R.layout.fragment_registered, container, false);
             getViews(v);
-//            mHandler.sendEmptyMessage(MSG_LOAD_DATA);
             container.setTag(R.id.user_registered_page, v);
             return v;
         }
@@ -151,8 +119,6 @@ public class RegisteredFragment extends Fragment implements View.OnClickListener
     private void showOptIdentity() {
         InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(identityEditText.getWindowToken(), 0);
-//        mHandler.sendEmptyMessage(MSG_LOAD_DATA);
-//        if (isLoaded) {
             OptionsPickerView pvOptions = new OptionsPickerBuilder(getContext(), new OnOptionsSelectListener() {
                 @Override
                 public void onOptionsSelect(int options1, int option2, int options3, View v) {
@@ -188,24 +154,14 @@ public class RegisteredFragment extends Fragment implements View.OnClickListener
             }
         })
                 .setType(new boolean[]{true, true, true, false, false, false})//"year","month","day","hours","minutes","seconds "
-//                .setCancelText("Cancel")//取消按钮文字
-//                .setSubmitText("Sure")//确认按钮文字
-//                .setContentSize(18)//滚轮文字大小
                 .setTitleSize(20)//标题文字大小
-//                .setTitleText("Title")//标题文字
                 .setOutSideCancelable(true)//点击屏幕，点在控件外部范围时，是否取消显示
                 .isCyclic(false)//是否循环滚动
                 .setTitleBgColor(getResources().getColor(R.color.naber_dividing_line_gray))
                 .setCancelColor(getResources().getColor(R.color.naber_dividing_gray))
                 .setSubmitColor(getResources().getColor(R.color.naber_dividing_gray))
-//                .setTitleColor(Color.BLACK)//标题文字颜色
-//                .setSubmitColor(Color.BLUE)//确定按钮文字颜色
-//                .setCancelColor(Color.BLUE)//取消按钮文字颜色
-//                .setTitleBgColor(0xFF666666)//标题背景颜色 Night mode
-//                .setBgColor(0xFF333333)//滚轮背景颜色 Night mode
                 .setDate(selectedDate)// 如果不设置的话，默认是系统时间*/
                 .setRangDate(startDate, endDate)//起始终止年月日设定
-//                .setLabel("年", "月", "日", "时", "分", "秒")//默认设置为年月日时分秒
                 .isCenterLabel(false) //是否只显示中间选中项的label文字，false则每项item全部都带有label。
                 .isDialog(false)//是否显示为对话框样式
                 .build();
@@ -216,9 +172,6 @@ public class RegisteredFragment extends Fragment implements View.OnClickListener
     @Override
     public void onDestroy() {
         super.onDestroy();
-//        if (mHandler != null) {
-//            mHandler.removeCallbacksAndMessages(null);
-//        }
     }
 
     @Override
@@ -289,7 +242,6 @@ public class RegisteredFragment extends Fragment implements View.OnClickListener
             }
         } catch (Exception e) {
             e.printStackTrace();
-//            mHandler.sendEmptyMessage(MSG_LOAD_FAILED);
         }
         return detail;
     }
