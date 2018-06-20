@@ -1,14 +1,11 @@
 package com.melonltd.naberc.model.api;
 
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.util.Log;
 
 import com.bigkoo.alertview.AlertView;
 import com.melonltd.naberc.model.service.Base64Service;
-import com.melonltd.naberc.util.LoadingBarTools;
 import com.melonltd.naberc.util.Tools;
 import com.melonltd.naberc.vo.RespData;
 

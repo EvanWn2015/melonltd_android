@@ -107,7 +107,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                             SPService.setOauth(resp.account_uuid);
                             SPService.setUserName(resp.name);
                             SPService.setUserPhone(resp.phone);
-                            SPService.setOauth(resp.getAccount_uuid());
+                            SPService.setOauth(resp.account_uuid);
                             Log.i(TAG, rememberMe.isChecked() + "");
                             if (rememberMe.isChecked()){
                                 SPService.setLoginLimit(new Date().getTime());

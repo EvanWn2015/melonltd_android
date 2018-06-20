@@ -6,6 +6,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.content.res.AssetManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -29,10 +30,12 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.gson.Gson;
 import com.melonltd.naberc.R;
 import com.melonltd.naberc.model.api.ApiCallback;
 import com.melonltd.naberc.model.api.ApiManager;
 import com.melonltd.naberc.model.api.ThreadCallback;
+import com.melonltd.naberc.model.bean.IdentityJsonBean;
 import com.melonltd.naberc.model.bean.Model;
 import com.melonltd.naberc.model.service.SPService;
 import com.melonltd.naberc.util.DistanceTools;
@@ -41,6 +44,12 @@ import com.melonltd.naberc.view.factory.PageType;
 import com.melonltd.naberc.vo.LocationVo;
 import com.melonltd.naberc.vo.RestaurantTemplate;
 
+import org.json.JSONArray;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -282,6 +291,28 @@ public abstract class BaseCore extends AppCompatActivity implements LocationList
             }
         });
     }
+
+
+    public static void loadJsonData (Context context){
+        String JsonData = Tools.JSONPARSE.getJson(context, "identity.json");
+        ArrayList<IdentityJsonBean> identityBean = Tools.JSONPARSE.parseData(JsonData);
+        List<String> opt1 = Lists.newArrayList();
+        List<List<String>> opt2 = Lists.newArrayList();
+        for (IdentityJsonBean b : identityBean) {
+            opt1.add(b.getName());
+            List<String> datas = Lists.newArrayList();
+            for (String d : b.getDatas()) {
+                datas.add(d);
+            }
+            opt2.add(datas);
+        }
+        Model.OPT_ITEM_1.clear();
+        Model.OPT_ITEM_1.addAll(opt1);
+        Model.OPT_ITEM_2.clear();
+        Model.OPT_ITEM_2.addAll(opt2);
+    }
+
+
 
 //    public void removeFragment(){
 //        LoginFragment.FRAGMENT = null;

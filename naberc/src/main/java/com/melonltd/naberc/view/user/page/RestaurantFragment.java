@@ -272,9 +272,12 @@ public class RestaurantFragment extends Fragment implements View.OnClickListener
 
     private static List<String> getTemplate (int page){
         List<String> uuids = Lists.<String>newArrayList();
-        for(int i=0; i<Model.RESTAURANT_TEMPLATE.get(page - 1).size(); i++){
-            uuids.add(Model.RESTAURANT_TEMPLATE.get(page - 1).get(i).restaurant_uuid);
+        if (!Model.RESTAURANT_TEMPLATE.isEmpty()){
+            for(int i=0; i<Model.RESTAURANT_TEMPLATE.get(page - 1).size(); i++){
+                uuids.add(Model.RESTAURANT_TEMPLATE.get(page - 1).get(i).restaurant_uuid);
+            }
         }
+
         return  uuids;
     }
 

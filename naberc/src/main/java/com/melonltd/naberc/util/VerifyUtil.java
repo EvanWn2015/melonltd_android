@@ -17,7 +17,8 @@ public class VerifyUtil {
         if (Strings.isNullOrEmpty(number)) {
             return false;
         }
-        return android.util.Patterns.PHONE.matcher(number).matches();
+//        return android.util.Patterns.PHONE.matcher(number).matches();
+        return  number.matches("(09)+[\\d]{8}");
     }
 
     public static boolean password(String password) {

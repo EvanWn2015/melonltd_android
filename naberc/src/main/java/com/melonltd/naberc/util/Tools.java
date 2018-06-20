@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
@@ -24,15 +25,22 @@ import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.primitives.Doubles;
 import com.google.gson.Gson;
+import com.melonltd.naberc.model.bean.IdentityJsonBean;
 
+import org.json.JSONArray;
+
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.lang.reflect.Type;
 import java.nio.charset.StandardCharsets;
 import java.text.DecimalFormat;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -70,11 +78,23 @@ public class Tools {
             return simpleDate.format(time);
         }
 
+        public static String format(String pattern, String formatPattern, String format) {
+            simpleDate = new SimpleDateFormat(pattern);
+            simpleDate.setTimeZone(TimeZone.getTimeZone("UTC"));
+            try {
+                SimpleDateFormat f = new SimpleDateFormat(formatPattern);
+                f.setTimeZone(TimeZone.getTimeZone("GMT"));
+                return f.format(simpleDate.parse(format));
+            } catch (ParseException e) {
+                return simpleDate.format(format);
+            }
+        }
+
 
         public static String toUTCDateTime(Date date){
-            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:SS.sss'Z'");
-            format.setTimeZone(TimeZone.getTimeZone("UTC"));
-            return format.format(date);
+            simpleDate = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:SS.ssss'Z'");
+            simpleDate.setTimeZone(TimeZone.getTimeZone("UTC"));
+            return simpleDate.format(date);
         }
     }
 
@@ -104,6 +124,35 @@ public class Tools {
             }
             final T[] jsonToObject = GSON.fromJson(json, types);
             return jsonToObject;
+        }
+
+        public static String getJson(Context context, String fileName) {
+            StringBuilder stringBuilder = new StringBuilder();
+            try {
+                AssetManager assetManager = context.getAssets();
+                BufferedReader bf = new BufferedReader(new InputStreamReader(assetManager.open(fileName)));
+                String line;
+                while ((line = bf.readLine()) != null) {
+                    stringBuilder.append(line);
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return stringBuilder.toString();
+        }
+
+        public static ArrayList<IdentityJsonBean> parseData(String result) {
+            ArrayList<IdentityJsonBean> detail = new ArrayList<>();
+            try {
+                JSONArray data = new JSONArray(result);
+                for (int i = 0; i < data.length(); i++) {
+                    IdentityJsonBean entity = GSON.fromJson(data.optJSONObject(i).toString(), IdentityJsonBean.class);
+                    detail.add(entity);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return detail;
         }
     }
 

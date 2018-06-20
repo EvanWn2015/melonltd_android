@@ -2,17 +2,29 @@ package com.melonltd.naberc.view.user.page;
 
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
 
+import com.google.common.collect.Lists;
 import com.melonltd.naberc.R;
+import com.melonltd.naberc.model.constant.NaberConstant;
+import com.melonltd.naberc.util.Tools;
+import com.melonltd.naberc.util.UiUtil;
 import com.melonltd.naberc.view.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.factory.PageType;
 import com.melonltd.naberc.view.user.UserMainActivity;
+import com.melonltd.naberc.vo.OrderDetail;
+import com.melonltd.naberc.vo.OrderVo;
+
+import java.util.List;
 
 
 /**
@@ -21,8 +33,10 @@ import com.melonltd.naberc.view.user.UserMainActivity;
 public class OrderDetailFragment extends Fragment {
     private static final String TAG = OrderDetailFragment.class.getSimpleName();
     public static OrderDetailFragment FRAGMENT = null;
+    private ViewHolder holder;
+//    private BaseAdapter adapter;
 
-
+    private List<OrderDetail.OrderData> orders = Lists.newArrayList();
     public OrderDetailFragment() {
     }
 
@@ -30,8 +44,9 @@ public class OrderDetailFragment extends Fragment {
         if (FRAGMENT == null) {
             FRAGMENT = new OrderDetailFragment();
         }
-        FRAGMENT.setArguments(bundle);
-        Bundle b = FRAGMENT.getArguments();
+        if (bundle != null) {
+            FRAGMENT.setArguments(bundle);
+        }
         return FRAGMENT;
     }
 
@@ -44,10 +59,42 @@ public class OrderDetailFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         if (container.getTag(R.id.user_order_detail_page) == null) {
             View v = inflater.inflate(R.layout.fragment_order_detail, container, false);
+            holder = new ViewHolder(v);
+            setValue();
             container.setTag(R.id.user_order_detail_page, v);
             return v;
-        } else {
-            return (View) container.getTag(R.id.user_order_detail_page);
+        }
+        setValue();
+        return (View) container.getTag(R.id.user_order_detail_page);
+    }
+
+    public void setValue() {
+        OrderVo vo = (OrderVo) getArguments().getSerializable(NaberConstant.ORDER_INFO);
+        if (vo != null){
+            orders.clear();
+            OrderDetail orderDetail = Tools.JSONPARSE.fromJson(vo.order_data, OrderDetail.class);
+
+            // TODO 合併相同
+            for (OrderDetail.OrderData data :  orderDetail.orders){
+            }
+            orders.addAll(orderDetail.orders);
+//            adapter.notifyDataSetChanged();
+            new Handler().post(new Runnable(){
+                @Override
+                public void run() {
+                    UiUtil.setListViewHeightBasedOnChildren(holder.orderDatas);
+                }
+            });
+
+            holder.sellerNameText.setText(vo.restaurant_name);
+            holder.priceText.setText("$" + vo.order_price);
+            holder.addressText.setText(vo.restaurant_address);
+            holder.messageText.setText(vo.user_message);
+            holder.bonusText.setText(vo.order_bonus);
+
+            holder.orderingTimeText.setText(Tools.FORMAT.format(NaberConstant.DATE_FORMAT_PATTERN, "dd日 hh時 mm分", vo.create_date));
+            holder.fetchDateText.setText(Tools.FORMAT.format(NaberConstant.DATE_FORMAT_PATTERN, "dd日 hh時 mm分", vo.fetch_date));
+
         }
     }
 
@@ -83,6 +130,93 @@ public class OrderDetailFragment extends Fragment {
         HistoryFragment.TO_ORDER_DETAIL_INDEX = -1;
         Fragment f = PageFragmentFactory.of(PageType.HISTORY, null);
         getFragmentManager().beginTransaction().remove(this).replace(R.id.frameContainer, f).addToBackStack(f.toString()).commit();
+    }
+
+
+    class ViewHolder {
+        TextView sellerNameText, priceText, addressText, messageText, bonusText, orderingTimeText, fetchDateText;
+        ListView orderDatas;
+        ViewHolder(View v) {
+            this.orderDatas = v.findViewById(R.id.orderDatas);
+            this.orderDatas.setAdapter(new OrderAdapter());
+            this.sellerNameText = v.findViewById(R.id.sellerNameText);
+            this.priceText = v.findViewById(R.id.priceText);
+            this.addressText = v.findViewById(R.id.addressText);
+            this.messageText = v.findViewById(R.id.messageText);
+            this.bonusText = v.findViewById(R.id.bonusText);
+            this.orderingTimeText = v.findViewById(R.id.orderingTimeText);
+            this.fetchDateText = v.findViewById(R.id.fetchDateText);
+        }
+    }
+
+
+    class OrderAdapter extends BaseAdapter {
+        @Override
+        public int getCount() {
+            return orders.size();
+        }
+
+        @Override
+        public Object getItem(int i) {
+            return orders.get(i);
+        }
+
+        @Override
+        public long getItemId(int i) {
+            return i;
+        }
+
+        @Override
+        public View getView(int i, View view, ViewGroup viewGroup) {
+            ViewHolder holder;
+            if (view == null){
+                view = LayoutInflater.from(getContext()).inflate(R.layout.order_detail_datas_item,viewGroup, false);
+                holder = new ViewHolder(view);
+                view.setTag(holder);
+            }else {
+                holder = (ViewHolder)view.getTag();
+            }
+
+            holder.countText.setText("X 1");
+            holder.foodNameText.setText(orders.get(i).item.food_name);
+            String datas = "";
+            datas += "規格 :" ;
+            if (!orders.get(i).item.scopes.isEmpty()){
+                for(int ii=0; ii<orders.get(i).item.scopes.size(); ii++){
+                    datas += orders.get(i).item.scopes.get(ii).name + ", ";
+                }
+                datas += "\n";
+            }else {
+                datas += "預設, ";
+                datas += "\n";
+            }
+
+            if (!orders.get(i).item.opts.isEmpty()){
+                datas += "追加 :" ;
+                for(int ii=0; ii<orders.get(i).item.opts.size(); ii++){
+                    datas += orders.get(i).item.opts.get(ii).name + ", ";
+                }
+                datas += "\n";
+            }
+            for(int ii=0; ii<orders.get(i).item.demands.size(); ii++){
+                datas += orders.get(i).item.demands.get(ii).name + " ：";
+                for(int jj=0; jj< orders.get(i).item.demands.get(ii).datas.size(); jj++){
+                    datas += orders.get(i).item.demands.get(ii).datas.get(jj).name;
+                }
+                datas +="\n";
+            }
+            holder.datasText.setText(datas);
+            return view;
+        }
+
+        class ViewHolder {
+            TextView foodNameText, countText, datasText;
+            ViewHolder(View v){
+                this.foodNameText = v.findViewById(R.id.foodNameText);
+                this.countText = v.findViewById(R.id.countText);
+                this.datasText = v.findViewById(R.id.datasText);
+            }
+        }
     }
 
 }

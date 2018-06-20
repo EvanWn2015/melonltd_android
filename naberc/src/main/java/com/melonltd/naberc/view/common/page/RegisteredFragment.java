@@ -1,7 +1,6 @@
 package com.melonltd.naberc.view.common.page;
 
 import android.content.Context;
-import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -24,21 +23,18 @@ import com.bigkoo.pickerview.view.OptionsPickerView;
 import com.bigkoo.pickerview.view.TimePickerView;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
-import com.google.gson.Gson;
 import com.melonltd.naberc.R;
-import com.melonltd.naberc.model.bean.IdentityJsonBean;
+import com.melonltd.naberc.model.api.ApiManager;
+import com.melonltd.naberc.model.api.ThreadCallback;
+import com.melonltd.naberc.model.bean.Model;
+import com.melonltd.naberc.model.type.Identity;
 import com.melonltd.naberc.util.VerifyUtil;
 import com.melonltd.naberc.view.common.BaseActivity;
 import com.melonltd.naberc.view.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.factory.PageType;
+import com.melonltd.naberc.vo.AccountInfoVo;
 
-import org.json.JSONArray;
-
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -46,11 +42,10 @@ import java.util.List;
 public class RegisteredFragment extends Fragment implements View.OnClickListener {
     private static final String TAG = RegisteredFragment.class.getSimpleName();
     public static RegisteredFragment FRAGMENT = null;
+
+    private AccountInfoVo account = new AccountInfoVo();
     private TextView identityEditText, birthdayEditText;
     private EditText nameEditText, addressEditText, emailEditText, passwordEditText, confirmPasswordEditText;
-
-    private List<String> options1Items = Lists.newArrayList();
-    private List<List<String>> options2Items = Lists.newArrayList();
 
     public RegisteredFragment() {
     }
@@ -62,6 +57,8 @@ public class RegisteredFragment extends Fragment implements View.OnClickListener
     public Fragment getInstance(Bundle bundle) {
         if (FRAGMENT == null) {
             FRAGMENT = new RegisteredFragment();
+        }
+        if (bundle != null) {
             FRAGMENT.setArguments(bundle);
         }
         return FRAGMENT;
@@ -70,7 +67,6 @@ public class RegisteredFragment extends Fragment implements View.OnClickListener
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        initJsonData();
     }
 
     @Override
@@ -86,28 +82,28 @@ public class RegisteredFragment extends Fragment implements View.OnClickListener
 
     private void getViews(View v) {
         identityEditText = v.findViewById(R.id.identityEditText);
+        birthdayEditText = v.findViewById(R.id.birthdayEditText);
         nameEditText = v.findViewById(R.id.nameEditText);
         addressEditText = v.findViewById(R.id.addressEditText);
         emailEditText = v.findViewById(R.id.emailEditText);
         passwordEditText = v.findViewById(R.id.passwordEditText);
         confirmPasswordEditText = v.findViewById(R.id.confirmPasswordEditText);
-        birthdayEditText = v.findViewById(R.id.birthdayEditText);
-
-        birthdayEditText.setInputType(InputType.TYPE_NULL);
-        identityEditText.setInputType(InputType.TYPE_NULL);
 
         Button submitBtn = v.findViewById(R.id.submit);
         Button backToLoginBtn = v.findViewById(R.id.backToLoginBtn);
+
+        // setListener
         submitBtn.setOnClickListener(this);
         backToLoginBtn.setOnClickListener(this);
-        identityEditText.setOnClickListener(this);
-        birthdayEditText.setOnClickListener(this);
+        identityEditText.setOnClickListener(new IdentityClick());
+        birthdayEditText.setOnClickListener(new BirthdayClick());
 
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        removeAllData();
         BaseActivity.changeToolbarStatus();
     }
 
@@ -116,57 +112,13 @@ public class RegisteredFragment extends Fragment implements View.OnClickListener
         getFragmentManager().beginTransaction().remove(this).replace(R.id.baseContainer, fragment).addToBackStack(fragment.toString()).commit();
     }
 
-    private void showOptIdentity() {
+    private void hideKeyboard() {
         InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(identityEditText.getWindowToken(), 0);
-            OptionsPickerView pvOptions = new OptionsPickerBuilder(getContext(), new OnOptionsSelectListener() {
-                @Override
-                public void onOptionsSelect(int options1, int option2, int options3, View v) {
-                    String tx = options1Items.get(options1) + " : " + options2Items.get(options1).get(option2);
-                    Log.d(TAG, tx);
-                    identityEditText.setText(tx);
-                }
-            })
-                    .setTitleSize(20)
-                    .setTitleBgColor(getResources().getColor(R.color.naber_dividing_line_gray))
-                    .setCancelColor(getResources().getColor(R.color.naber_dividing_gray))
-                    .setSubmitColor(getResources().getColor(R.color.naber_dividing_gray))
-                    .build();
-            pvOptions.setPicker(options1Items, options2Items);
-            pvOptions.show();
-//        }
-    }
-
-
-    private void showBirthday() {
-        InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-//        imm.toggleSoftInput(1, InputMethodManager.HIDE_NOT_ALWAYS);
-        imm.hideSoftInputFromWindow(birthdayEditText.getWindowToken(), 0);
-        Calendar selectedDate = Calendar.getInstance();
-        Calendar startDate = Calendar.getInstance();
-        startDate.set(1948, 1, 1);
-        Calendar endDate = Calendar.getInstance();
-        TimePickerView tp = new TimePickerBuilder(getContext(), new OnTimeSelectListener() {
-            @Override
-            public void onTimeSelect(Date date, View v) {
-                Log.d(TAG, date.toString());
-                birthdayEditText.setText(new SimpleDateFormat("yyyy-MM-dd").format(date));
-            }
-        })
-                .setType(new boolean[]{true, true, true, false, false, false})//"year","month","day","hours","minutes","seconds "
-                .setTitleSize(20)//标题文字大小
-                .setOutSideCancelable(true)//点击屏幕，点在控件外部范围时，是否取消显示
-                .isCyclic(false)//是否循环滚动
-                .setTitleBgColor(getResources().getColor(R.color.naber_dividing_line_gray))
-                .setCancelColor(getResources().getColor(R.color.naber_dividing_gray))
-                .setSubmitColor(getResources().getColor(R.color.naber_dividing_gray))
-                .setDate(selectedDate)// 如果不设置的话，默认是系统时间*/
-                .setRangDate(startDate, endDate)//起始终止年月日设定
-                .isCenterLabel(false) //是否只显示中间选中项的label文字，false则每项item全部都带有label。
-                .isDialog(false)//是否显示为对话框样式
-                .build();
-
-        tp.show();
+        imm.hideSoftInputFromWindow(nameEditText.getWindowToken(), 0);
+        imm.hideSoftInputFromWindow(addressEditText.getWindowToken(), 0);
+        imm.hideSoftInputFromWindow(emailEditText.getWindowToken(), 0);
+        imm.hideSoftInputFromWindow(passwordEditText.getWindowToken(), 0);
+        imm.hideSoftInputFromWindow(confirmPasswordEditText.getWindowToken(), 0);
     }
 
     @Override
@@ -179,79 +131,97 @@ public class RegisteredFragment extends Fragment implements View.OnClickListener
         switch (v.getId()) {
             case R.id.submit:
                 if (verifyInput()) {
-                    backToLoginPage();
+                    account.password = passwordEditText.getText().toString();
+                    account.name = nameEditText.getText().toString();
+                    account.email = emailEditText.getText().toString();
+                    account.phone = getArguments().getString("phone");
+                    account.address = addressEditText.getText().toString();
+                    account.level = "USER";
+                    ApiManager.userRegistered(account, new ThreadCallback(getContext()) {
+                        @Override
+                        public void onSuccess(String responseBody) {
+                            backToLoginPage();
+                        }
+                        @Override
+                        public void onFail(Exception error, String msg) {
+                            // TODO
+                        }
+                    });
                 }
-                break;
-            case R.id.identityEditText:
-                Log.d(TAG, " identityEditText");
-                showOptIdentity();
                 break;
             case R.id.backToLoginBtn:
                 backToLoginPage();
                 break;
-            case R.id.birthdayEditText:
-                showBirthday();
-                break;
+        }
+    }
+    private void removeAllData(){
+        account = new AccountInfoVo();
+        identityEditText.setText("");
+        birthdayEditText.setText("");
+        nameEditText.setText("");
+        addressEditText.setText("");
+        emailEditText.setText("");
+        passwordEditText.setText("");
+        confirmPasswordEditText.setText("");
+    }
+
+    class IdentityClick implements View.OnClickListener {
+        @Override
+        public void onClick(final View view) {
+            hideKeyboard();
+            OptionsPickerView pvOptions = new OptionsPickerBuilder(getContext(), new OnOptionsSelectListener() {
+                @Override
+                public void onOptionsSelect(int options1, int option2, int options3, View v) {
+                    account.identity = Identity.of(Model.OPT_ITEM_1.get(options1)).name();
+                    account.school_name = Model.OPT_ITEM_2.get(options1).get(option2);
+                    identityEditText.setText(Model.OPT_ITEM_1.get(options1) + " " + Model.OPT_ITEM_2.get(options1).get(option2));
+                }
+            }).setTitleSize(20)
+                    .setTitleBgColor(getResources().getColor(R.color.naber_dividing_line_gray))
+                    .setCancelColor(getResources().getColor(R.color.naber_dividing_gray))
+                    .setSubmitColor(getResources().getColor(R.color.naber_dividing_gray))
+                    .build();
+            pvOptions.setPicker(Model.OPT_ITEM_1, Model.OPT_ITEM_2);
+            pvOptions.show();
         }
     }
 
+    class BirthdayClick implements View.OnClickListener {
+        @Override
+        public void onClick(final View view) {
+            hideKeyboard();
+            Calendar selectedDate = Calendar.getInstance();
+            Calendar startDate = Calendar.getInstance();
+            startDate.set(1948, 1, 1);
+            Calendar endDate = Calendar.getInstance();
+            TimePickerView tp = new TimePickerBuilder(getContext(), new OnTimeSelectListener() {
+                @Override
+                public void onTimeSelect(Date date, View v) {
+                    account.birth_day = new SimpleDateFormat("yyyy-MM-dd").format(date);
+                    birthdayEditText.setText(account.birth_day);
+                }
+            }).setType(new boolean[]{true, true, true, false, false, false})//"year","month","day","hours","minutes","seconds "
+                    .setTitleSize(20)
+                    .setOutSideCancelable(true)//点击屏幕，点在控件外部范围时，是否取消显示
+                    .isCyclic(false)//是否循环滚动
+                    .setTitleBgColor(getResources().getColor(R.color.naber_dividing_line_gray))
+                    .setCancelColor(getResources().getColor(R.color.naber_dividing_gray))
+                    .setSubmitColor(getResources().getColor(R.color.naber_dividing_gray))
+                    .setDate(selectedDate)// 如果不设置的话，默认是系统时间*/
+                    .setRangDate(startDate, endDate)//起始终止年月日设定
+                    .isCenterLabel(false) //是否只显示中间选中项的label文字，false则每项item全部都带有label。
+                    .isDialog(false)//是否显示为对话框样式
+                    .build();
 
-    private String getJson(Context context, String fileName) {
-        StringBuilder stringBuilder = new StringBuilder();
-        try {
-            AssetManager assetManager = context.getAssets();
-            BufferedReader bf = new BufferedReader(new InputStreamReader(assetManager.open(fileName)));
-            String line;
-            while ((line = bf.readLine()) != null) {
-                stringBuilder.append(line);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+            tp.show();
         }
-        return stringBuilder.toString();
     }
-
-    private void initJsonData() {
-        String JsonData = getJson(getContext(), "identity.json");
-        ArrayList<IdentityJsonBean> identityBean = parseData(JsonData);
-        List<String> opt1 = Lists.newArrayList();
-        List<List<String>> opt2 = Lists.newArrayList();
-        for (IdentityJsonBean b : identityBean) {
-            opt1.add(b.getName());
-            List<String> datas = Lists.newArrayList();
-            for (String d : b.getDatas()) {
-                datas.add(d);
-            }
-            opt2.add(datas);
-        }
-        options1Items.clear();
-        options1Items.addAll(opt1);
-        options2Items.clear();
-        options2Items.addAll(opt2);
-//        mHandler.sendEmptyMessage(MSG_LOAD_SUCCESS);
-    }
-
-    public ArrayList<IdentityJsonBean> parseData(String result) {//Gson 解析
-        ArrayList<IdentityJsonBean> detail = new ArrayList<>();
-        try {
-            JSONArray data = new JSONArray(result);
-            Gson gson = new Gson();
-            for (int i = 0; i < data.length(); i++) {
-                IdentityJsonBean entity = gson.fromJson(data.optJSONObject(i).toString(), IdentityJsonBean.class);
-                detail.add(entity);
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return detail;
-    }
-
 
     private boolean verifyInput() {
         boolean result = true;
         String message = "";
         // 驗證身份不為空
-        if (Strings.isNullOrEmpty(identityEditText.getText().toString())) {
+        if (Strings.isNullOrEmpty(identityEditText.getText().toString())){
             message = "驗證身份不為空";
             result = false;
         }
@@ -262,34 +232,41 @@ public class RegisteredFragment extends Fragment implements View.OnClickListener
         }
         // 驗證姓名長度大於二
         if (nameEditText.getText().toString().length() <= 4) {
-            message = "驗證姓名不為空";
+            message = "驗證姓名長度大於二";
             result = false;
         }
         // 驗證Email不為空
         if (Strings.isNullOrEmpty(emailEditText.getText().toString())) {
-            message = "驗證姓名不為空";
+            message = "驗證Email不為空";
             result = false;
         }
         // 驗證Email錯誤格式
         if (!VerifyUtil.email(emailEditText.getText().toString())) {
-            message = "驗證姓名不為空";
+            message = "驗證Email錯誤格式";
             result = false;
         }
         // 驗證密碼不為空 並需要英文大小寫數字 6 ~ 20
         if (!VerifyUtil.password(passwordEditText.getText().toString())) {
-            message = "驗證姓名不為空";
+            message = "驗證密碼不為空 並需要英文大小寫數字 6 ~ 20";
             result = false;
         }
         // 驗證密碼與確認密碼一致
         if (!passwordEditText.getText().toString().equals(confirmPasswordEditText.getText().toString())) {
-            message = "驗證姓名不為空";
+            message = "驗證密碼與確認密碼一致";
             result = false;
         }
         // 驗證生日不為空
         if (Strings.isNullOrEmpty(birthdayEditText.getText().toString())) {
-            message = "驗證姓名不為空";
+            message = "驗證生日不為空";
             result = false;
         }
+
+//        List<String> needs =  Lists.<String>newArrayList("國中生","高中生","大學/大專院校生");
+//        if (needs.contains(identityEditText.getText().toString())){
+//            if (Strings.isNullOrEmpty(account.school_name)){
+//
+//            }
+//        }
 
         if (!result) {
             new AlertView.Builder()
@@ -302,6 +279,7 @@ public class RegisteredFragment extends Fragment implements View.OnClickListener
                     .setCancelable(true)
                     .show();
         }
+
         return result;
     }
 }
