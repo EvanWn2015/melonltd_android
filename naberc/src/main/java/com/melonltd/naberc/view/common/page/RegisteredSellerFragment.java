@@ -1,6 +1,7 @@
 package com.melonltd.naberc.view.common.page;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -8,15 +9,27 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 
 import com.bigkoo.alertview.AlertView;
+import com.bigkoo.alertview.OnDismissListener;
+import com.bigkoo.alertview.OnItemClickListener;
 import com.google.common.base.Strings;
+import com.google.common.collect.Maps;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.melonltd.naberc.R;
+import com.melonltd.naberc.model.api.ApiManager;
+import com.melonltd.naberc.model.api.ThreadCallback;
+import com.melonltd.naberc.util.VerifyUtil;
 import com.melonltd.naberc.view.common.BaseActivity;
+import com.melonltd.naberc.view.common.BaseCore;
 import com.melonltd.naberc.view.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.factory.PageType;
+import com.melonltd.naberc.vo.AccountInfoVo;
+
+import java.util.Map;
 
 public class RegisteredSellerFragment extends Fragment implements View.OnClickListener {
     private static final String TAG = RegisteredSellerFragment.class.getSimpleName();
@@ -45,9 +58,13 @@ public class RegisteredSellerFragment extends Fragment implements View.OnClickLi
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.fragment_registered_seller, container, false);
-        getViews(v);
-        return v;
+        if (container.getTag(R.id.seller_registered_page) == null){
+            View v = inflater.inflate(R.layout.fragment_registered_seller, container, false);
+            getViews(v);
+            container.setTag(R.id.seller_registered_page,v);
+            return v;
+        }
+        return (View) container.getTag(R.id.seller_registered_page);
     }
 
     private void getViews(View v) {
@@ -57,28 +74,70 @@ public class RegisteredSellerFragment extends Fragment implements View.OnClickLi
         contactPhoneEdit = v.findViewById(R.id.sellerContactPhoneEditText);
         Button submitBun = v.findViewById(R.id.sellerSubmitBun);
         Button backToLoginBtn = v.findViewById(R.id.sellerBackToLoginBtn);
+        HideKeyboard hideKeyboard = new HideKeyboard();
+        nameEdit.setOnFocusChangeListener(hideKeyboard);
+        addressEdit.setOnFocusChangeListener(hideKeyboard);
+        contactPersonEdit.setOnFocusChangeListener(hideKeyboard);
+        contactPhoneEdit.setOnFocusChangeListener(hideKeyboard);
         submitBun.setOnClickListener(this);
         backToLoginBtn.setOnClickListener(this);
+        v.setOnClickListener(this);
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        removeAllData();
         BaseActivity.changeToolbarStatus();
+    }
+
+    private void removeAllData(){
+        nameEdit.setText("");
+        addressEdit.setText("");
+        contactPersonEdit.setText("");
+        contactPhoneEdit.setText("");
     }
 
     @Override
     public void onClick(View v) {
+        InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
         switch (v.getId()) {
             case R.id.sellerSubmitBun:
                 if (verifyInput()){
-                    backToLoginPage();
+                    Map<String, String> map = Maps.newHashMap();
+                    map.put("seller_name", nameEdit.getText().toString());
+                    map.put("phone", contactPhoneEdit.getText().toString());
+                    map.put("address", addressEdit.getText().toString());
+                    map.put("device_id", FirebaseInstanceId.getInstance().getToken());
+                    map.put("name", contactPersonEdit.getText().toString());
+                    ApiManager.sellerRegistered(map, new ThreadCallback(getContext()) {
+                        @Override
+                        public void onSuccess(String responseBody) {
+                            new AlertView.Builder()
+                                    .setTitle("")
+                                    .setMessage("感謝你註冊成為商家你，\n您的信息已經提交成功，\n請待客服與您聯繫!!")
+                                    .setContext(getContext())
+                                    .setStyle(AlertView.Style.Alert)
+                                    .setOthers(new String[]{"確定"})
+                                    .build()
+                                    .setOnDismissListener(new OnDismissListener() {
+                                        @Override
+                                        public void onDismiss(Object o) {
+                                            backToLoginPage();
+                                        }
+                                    })
+                                    .setCancelable(true)
+                                    .show();
+                        }
+                        @Override
+                        public void onFail(Exception error, String msg) {
+                            backToLoginPage();
+                        }
+                    });
                 }
-                Log.d(TAG, "");
-
                 break;
             case R.id.sellerBackToLoginBtn:
-                Log.d(TAG, "");
                 backToLoginPage();
                 break;
         }
@@ -87,27 +146,22 @@ public class RegisteredSellerFragment extends Fragment implements View.OnClickLi
     private boolean verifyInput() {
         boolean result = true;
         String message = "";
-        // 驗證身份不為空
         if (Strings.isNullOrEmpty(nameEdit.getText().toString())) {
-            message = "驗證姓名不為空";
+            message = "請輸入商店名稱";
             result = false;
         }
-        // 驗證姓名不為空
         if (Strings.isNullOrEmpty(addressEdit.getText().toString())) {
-            message = "驗證姓名不為空";
+            message = "請輸入地址";
             result = false;
         }
-        // 驗證Email不為空
         if (Strings.isNullOrEmpty(contactPersonEdit.getText().toString())) {
-            message = "驗證姓名不為空";
+            message = "請輸入聯絡人";
             result = false;
         }
-        // 驗證Email不為空
-        if (Strings.isNullOrEmpty(contactPhoneEdit.getText().toString())) {
-            message = "驗證姓名不為空";
+        if (!VerifyUtil.phoneNumber(contactPhoneEdit.getText().toString())) {
+            message = "請輸入手機號碼，以便客服與您聯繫!";
             result = false;
         }
-
         if (!result) {
             new AlertView.Builder()
                     .setTitle("")
@@ -122,7 +176,18 @@ public class RegisteredSellerFragment extends Fragment implements View.OnClickLi
         return result;
     }
 
+    class HideKeyboard implements View.OnFocusChangeListener{
+        @Override
+        public void onFocusChange(View v, boolean hasFocus) {
+            if (!hasFocus){
+                InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+            }
+        }
+    }
+
     private void backToLoginPage() {
+        BaseCore.FRAGMENT_TAG = PageType.LOGIN.name();
         Fragment fragment = PageFragmentFactory.of(PageType.LOGIN, null);
         getFragmentManager().beginTransaction().remove(this).replace(R.id.baseContainer, fragment).addToBackStack(fragment.toString()).commit();
     }

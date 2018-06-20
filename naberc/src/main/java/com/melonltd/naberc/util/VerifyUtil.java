@@ -1,5 +1,7 @@
 package com.melonltd.naberc.util;
 
+import android.util.Log;
+
 import com.google.common.base.Strings;
 
 import java.util.regex.Pattern;
@@ -17,7 +19,6 @@ public class VerifyUtil {
         if (Strings.isNullOrEmpty(number)) {
             return false;
         }
-//        return android.util.Patterns.PHONE.matcher(number).matches();
         return  number.matches("(09)+[\\d]{8}");
     }
 

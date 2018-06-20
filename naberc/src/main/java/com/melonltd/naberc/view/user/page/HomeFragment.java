@@ -109,6 +109,16 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        // 輪播圖 點擊事件
+        banner.setDelegate(new BGABanner.Delegate() {
+            @Override
+            public void onBannerItemClick(BGABanner banner, View itemView, @Nullable Object model, int position) {
+//                Uri uriUrl = Uri.parse("https://google.com.tw");
+//                Intent launchBrowser = new Intent(Intent.ACTION_VIEW, uriUrl);
+//                startActivity(launchBrowser);
+            }
+        });
+
         // 輪播圖
         ApiManager.advertisement(new ThreadCallback(getContext()) {
             @Override

@@ -9,6 +9,7 @@ import android.view.View;
 
 import com.melonltd.naberc.R;
 import com.melonltd.naberc.model.service.SPService;
+import com.melonltd.naberc.model.type.Identity;
 import com.melonltd.naberc.view.common.page.LoginFragment;
 import com.melonltd.naberc.view.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.common.page.RecoverPasswordFragment;
@@ -45,15 +46,20 @@ public class BaseActivity extends BaseCore {
         long limit = SPService.getLoginLimit();
         long now = new Date().getTime();
         long day7 = 1000 * 60 * 60 * 24 * 7L * 2;
-        if (now - day7 < limit){
+        if (now - day7 < limit) {
             String identity = SPService.getRememberIdentity();
-            if (identity.toUpperCase().equals("USER")){
+            if (Identity.getUserValues().contains(Identity.of(identity))) {
                 loadRestaurantTemplate(context);
                 startActivity(new Intent(context, UserMainActivity.class));
-            }else if (identity.toUpperCase().equals("SELLERS")){
-               startActivity(new Intent(context, SellerMainActivity.class));
+            } else if (Identity.SELLERS.equals(Identity.of(identity))) {
+                startActivity(new Intent(context, SellerMainActivity.class));
+            } else {
+                SPService.removeAll();
+                BaseCore.FRAGMENT_TAG = PageType.LOGIN.name();
+                Fragment fragment = PageFragmentFactory.of(PageType.LOGIN, null);
+                getSupportFragmentManager().beginTransaction().replace(R.id.baseContainer, fragment).addToBackStack(fragment.toString()).commit();
             }
-        }else {
+        } else {
             BaseCore.FRAGMENT_TAG = PageType.LOGIN.name();
             Fragment fragment = PageFragmentFactory.of(PageType.LOGIN, null);
             getSupportFragmentManager().beginTransaction().replace(R.id.baseContainer, fragment).addToBackStack(fragment.toString()).commit();

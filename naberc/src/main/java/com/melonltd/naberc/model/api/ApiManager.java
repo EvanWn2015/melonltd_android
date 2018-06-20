@@ -43,9 +43,9 @@ public class ApiManager {
         call.enqueue(callback);
     }
 
-    // 使用者註冊
-    public static void sellerRegistered(AccountInfoVo req, ThreadCallback callback) {
-        Call call = getClient().post(ApiUrl.SELLER_REGISTERED,  Base64Service.encryptBASE64(Tools.JSONPARSE.toJson(req)));
+    // 商家註冊
+    public static void sellerRegistered(Map<String, String> map , ThreadCallback callback) {
+        Call call = getClient().post(ApiUrl.SELLER_REGISTERED,  Base64Service.encryptBASE64(Tools.JSONPARSE.toJson(map)));
         call.enqueue(callback);
     }
 

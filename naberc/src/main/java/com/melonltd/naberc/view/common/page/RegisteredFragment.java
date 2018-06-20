@@ -4,8 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.text.InputType;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +20,6 @@ import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.OptionsPickerView;
 import com.bigkoo.pickerview.view.TimePickerView;
 import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
 import com.melonltd.naberc.R;
 import com.melonltd.naberc.model.api.ApiManager;
 import com.melonltd.naberc.model.api.ThreadCallback;
@@ -37,14 +34,13 @@ import com.melonltd.naberc.vo.AccountInfoVo;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 public class RegisteredFragment extends Fragment implements View.OnClickListener {
     private static final String TAG = RegisteredFragment.class.getSimpleName();
     public static RegisteredFragment FRAGMENT = null;
 
     private AccountInfoVo account = new AccountInfoVo();
-    private TextView identityEditText, birthdayEditText;
+    private TextView identityText, birthdayText;
     private EditText nameEditText, addressEditText, emailEditText, passwordEditText, confirmPasswordEditText;
 
     public RegisteredFragment() {
@@ -81,8 +77,8 @@ public class RegisteredFragment extends Fragment implements View.OnClickListener
     }
 
     private void getViews(View v) {
-        identityEditText = v.findViewById(R.id.identityEditText);
-        birthdayEditText = v.findViewById(R.id.birthdayEditText);
+        identityText = v.findViewById(R.id.identityEditText);
+        birthdayText = v.findViewById(R.id.birthdayEditText);
         nameEditText = v.findViewById(R.id.nameEditText);
         addressEditText = v.findViewById(R.id.addressEditText);
         emailEditText = v.findViewById(R.id.emailEditText);
@@ -93,10 +89,20 @@ public class RegisteredFragment extends Fragment implements View.OnClickListener
         Button backToLoginBtn = v.findViewById(R.id.backToLoginBtn);
 
         // setListener
+        HideKeyboard hideKeyboard = new HideKeyboard();
+        identityText.setOnFocusChangeListener(hideKeyboard);
+        birthdayText.setOnFocusChangeListener(hideKeyboard);
+        nameEditText.setOnFocusChangeListener(hideKeyboard);
+        addressEditText.setOnFocusChangeListener(hideKeyboard);
+        emailEditText.setOnFocusChangeListener(hideKeyboard);
+        passwordEditText.setOnFocusChangeListener(hideKeyboard);
+        confirmPasswordEditText.setOnFocusChangeListener(hideKeyboard);
+
         submitBtn.setOnClickListener(this);
         backToLoginBtn.setOnClickListener(this);
-        identityEditText.setOnClickListener(new IdentityClick());
-        birthdayEditText.setOnClickListener(new BirthdayClick());
+        v.setOnClickListener(this);
+        identityText.setOnClickListener(new IdentityClick());
+        birthdayText.setOnClickListener(new BirthdayClick());
 
     }
 
@@ -110,15 +116,6 @@ public class RegisteredFragment extends Fragment implements View.OnClickListener
     private void backToLoginPage() {
         Fragment fragment = PageFragmentFactory.of(PageType.LOGIN, null);
         getFragmentManager().beginTransaction().remove(this).replace(R.id.baseContainer, fragment).addToBackStack(fragment.toString()).commit();
-    }
-
-    private void hideKeyboard() {
-        InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(nameEditText.getWindowToken(), 0);
-        imm.hideSoftInputFromWindow(addressEditText.getWindowToken(), 0);
-        imm.hideSoftInputFromWindow(emailEditText.getWindowToken(), 0);
-        imm.hideSoftInputFromWindow(passwordEditText.getWindowToken(), 0);
-        imm.hideSoftInputFromWindow(confirmPasswordEditText.getWindowToken(), 0);
     }
 
     @Override
@@ -156,8 +153,8 @@ public class RegisteredFragment extends Fragment implements View.OnClickListener
     }
     private void removeAllData(){
         account = new AccountInfoVo();
-        identityEditText.setText("");
-        birthdayEditText.setText("");
+        identityText.setText("");
+        birthdayText.setText("");
         nameEditText.setText("");
         addressEditText.setText("");
         emailEditText.setText("");
@@ -168,13 +165,14 @@ public class RegisteredFragment extends Fragment implements View.OnClickListener
     class IdentityClick implements View.OnClickListener {
         @Override
         public void onClick(final View view) {
-            hideKeyboard();
+            InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
             OptionsPickerView pvOptions = new OptionsPickerBuilder(getContext(), new OnOptionsSelectListener() {
                 @Override
                 public void onOptionsSelect(int options1, int option2, int options3, View v) {
                     account.identity = Identity.of(Model.OPT_ITEM_1.get(options1)).name();
                     account.school_name = Model.OPT_ITEM_2.get(options1).get(option2);
-                    identityEditText.setText(Model.OPT_ITEM_1.get(options1) + " " + Model.OPT_ITEM_2.get(options1).get(option2));
+                    identityText.setText(Model.OPT_ITEM_1.get(options1) + " " + Model.OPT_ITEM_2.get(options1).get(option2));
                 }
             }).setTitleSize(20)
                     .setTitleBgColor(getResources().getColor(R.color.naber_dividing_line_gray))
@@ -189,7 +187,8 @@ public class RegisteredFragment extends Fragment implements View.OnClickListener
     class BirthdayClick implements View.OnClickListener {
         @Override
         public void onClick(final View view) {
-            hideKeyboard();
+            InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
             Calendar selectedDate = Calendar.getInstance();
             Calendar startDate = Calendar.getInstance();
             startDate.set(1948, 1, 1);
@@ -198,7 +197,7 @@ public class RegisteredFragment extends Fragment implements View.OnClickListener
                 @Override
                 public void onTimeSelect(Date date, View v) {
                     account.birth_day = new SimpleDateFormat("yyyy-MM-dd").format(date);
-                    birthdayEditText.setText(account.birth_day);
+                    identityText.setText(account.birth_day);
                 }
             }).setType(new boolean[]{true, true, true, false, false, false})//"year","month","day","hours","minutes","seconds "
                     .setTitleSize(20)
@@ -217,11 +216,20 @@ public class RegisteredFragment extends Fragment implements View.OnClickListener
         }
     }
 
+    class HideKeyboard implements View.OnFocusChangeListener{
+        @Override
+        public void onFocusChange(View v, boolean hasFocus) {
+            if (!hasFocus){
+                InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+            }
+        }
+    }
     private boolean verifyInput() {
         boolean result = true;
         String message = "";
         // 驗證身份不為空
-        if (Strings.isNullOrEmpty(identityEditText.getText().toString())){
+        if (Strings.isNullOrEmpty(identityText.getText().toString())){
             message = "驗證身份不為空";
             result = false;
         }
@@ -256,18 +264,10 @@ public class RegisteredFragment extends Fragment implements View.OnClickListener
             result = false;
         }
         // 驗證生日不為空
-        if (Strings.isNullOrEmpty(birthdayEditText.getText().toString())) {
+        if (Strings.isNullOrEmpty(birthdayText.getText().toString())) {
             message = "驗證生日不為空";
             result = false;
         }
-
-//        List<String> needs =  Lists.<String>newArrayList("國中生","高中生","大學/大專院校生");
-//        if (needs.contains(identityEditText.getText().toString())){
-//            if (Strings.isNullOrEmpty(account.school_name)){
-//
-//            }
-//        }
-
         if (!result) {
             new AlertView.Builder()
                     .setTitle("")

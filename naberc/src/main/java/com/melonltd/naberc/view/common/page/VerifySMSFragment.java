@@ -16,6 +16,7 @@ import android.widget.TextView;
 
 import com.bigkoo.alertview.AlertView;
 import com.bigkoo.alertview.OnDismissListener;
+import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 import com.melonltd.naberc.R;
 import com.melonltd.naberc.model.api.ThreadCallback;
@@ -194,7 +195,18 @@ public class VerifySMSFragment extends Fragment implements View.OnClickListener 
                         .show();
                 break;
             case R.id.submitToRegisteredBun:
-                toRegisteredPage();
+                if (Strings.isNullOrEmpty(map.get("batch_id")) || Strings.isNullOrEmpty(phoneNamberEdit.getText().toString()) || Strings.isNullOrEmpty(verifySMSEdit.getText().toString())){
+                    new AlertView.Builder()
+                            .setContext(getContext())
+                            .setStyle(AlertView.Style.Alert)
+                            .setTitle("")
+                            .setMessage("請取得驗證碼後再送出驗證!")
+                            .setCancelText("關閉")
+                            .build()
+                            .setCancelable(true)
+                            .show();
+                    break;
+                }
                 map.put("phone", phoneNamberEdit.getText().toString());
                 map.put("code", verifySMSEdit.getText().toString());
                 ApiManager.verifySMSCode(map, new ThreadCallback(getContext()) {
