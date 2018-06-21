@@ -96,12 +96,16 @@ public class HistoryFragment extends Fragment {
             @Override
             public void onBGARefreshLayoutBeginRefreshing(BGARefreshLayout refreshLayout) {
                 bgaRefreshLayout.endRefreshing();
+                reqData.loadingMore = true;
                 doLoadData(true);
             }
 
             @Override
             public boolean onBGARefreshLayoutBeginLoadingMore(BGARefreshLayout refreshLayout) {
                 bgaRefreshLayout.endLoadingMore();
+                if (!reqData.loadingMore) {
+                    return false;
+                }
                 reqData.page ++;
                 doLoadData(false);
                 return false;
@@ -115,14 +119,8 @@ public class HistoryFragment extends Fragment {
         UserMainActivity.changeTabAndToolbarStatus();
         if (TO_ORDER_DETAIL_INDEX >= 0) {
             Bundle bundle = new Bundle();
-//            OrderVo vo = Model.USER_ORDER_HISTORY_LIST.get(TO_ORDER_DETAIL_INDEX);
             bundle.putSerializable(NaberConstant.ORDER_INFO, Model.USER_ORDER_HISTORY_LIST.get(TO_ORDER_DETAIL_INDEX));
-
             UserMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.ORDER_DETAIL, bundle);
-//            UserMainActivity.FRAGMENT_TAG = PageType.ORDER_DETAIL.name();
-//            Fragment f = PageFragmentFactory.of(PageType.ORDER_DETAIL, bundle);
-//            getFragmentManager().beginTransaction().replace(R.id.frameContainer, f).addToBackStack(f.toString()).commit();
-//            toOrderDetail(TO_ORDER_DETAIL_INDEX);
         } else {
             if (Model.USER_ORDER_HISTORY_LIST.size() == 0) {
                 doLoadData(true);
@@ -139,6 +137,9 @@ public class HistoryFragment extends Fragment {
             @Override
             public void onSuccess(String responseBody) {
                 List<OrderVo> list = Tools.JSONPARSE.fromJsonList(responseBody, OrderVo[].class);
+                if (list.size() % 10 != 0) {
+                    reqData.loadingMore = false;
+                }
                 Model.USER_ORDER_HISTORY_LIST.addAll(list);
                 adapter.notifyDataSetChanged();
             }
@@ -150,30 +151,13 @@ public class HistoryFragment extends Fragment {
         });
     }
 
-//    private void toOrderDetail(int index) {
-//        TO_ORDER_DETAIL_INDEX = index;
-//        Bundle bundle = new Bundle();
-//        OrderVo vo = Model.USER_ORDER_HISTORY_LIST.get(index);
-//        bundle.putSerializable(NaberConstant.ORDER_INFO, vo);
-//        UserMainActivity.FRAGMENT_TAG = PageType.ORDER_DETAIL.name();
-//        Fragment f = PageFragmentFactory.of(PageType.ORDER_DETAIL, bundle);
-//        getFragmentManager().beginTransaction().replace(R.id.frameContainer, f).addToBackStack(f.toString()).commit();
-//    }
-
-
     class ItemOnClickListener implements View.OnClickListener {
         @Override
         public void onClick(View view) {
             TO_ORDER_DETAIL_INDEX = (int) view.getTag();
             Bundle bundle = new Bundle();
-//            OrderVo vo = Model.USER_ORDER_HISTORY_LIST.get(TO_ORDER_DETAIL_INDEX);
             bundle.putSerializable(NaberConstant.ORDER_INFO, Model.USER_ORDER_HISTORY_LIST.get(TO_ORDER_DETAIL_INDEX));
-
             UserMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.ORDER_DETAIL, bundle);
-//            UserMainActivity.FRAGMENT_TAG = PageType.ORDER_DETAIL.name();
-//            Fragment f = PageFragmentFactory.of(PageType.ORDER_DETAIL, bundle);
-//            getFragmentManager().beginTransaction().replace(R.id.frameContainer, f).addToBackStack(f.toString()).commit();
-//            toOrderDetail((int) view.getTag());
         }
     }
 }

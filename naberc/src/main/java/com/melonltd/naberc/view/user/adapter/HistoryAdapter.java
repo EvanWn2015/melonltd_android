@@ -46,7 +46,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
         holder.itemView.setOnClickListener(this.itemClickListener);
         OrderDetail detail = Tools.JSONPARSE.fromJson(Model.USER_ORDER_HISTORY_LIST.get(position).order_data, OrderDetail.class);
         Log.d(TAG, detail.toString());
-        holder.getOrderTimeText.setText(Tools.FORMAT.format(NaberConstant.DATE_FORMAT_PATTERN, "dd日 hh時 mm分", Model.USER_ORDER_HISTORY_LIST.get(position).fetch_date));
+        holder.getOrderTimeText.setText(Tools.FORMAT.format(NaberConstant.DATE_FORMAT_PATTERN, "dd日 HH時 mm分", Model.USER_ORDER_HISTORY_LIST.get(position).fetch_date));
         holder.restaurantNameText.setText(Model.USER_ORDER_HISTORY_LIST.get(position).restaurant_name);
         OrderStatus status = OrderStatus.of(Model.USER_ORDER_HISTORY_LIST.get(position).status);
         if (status != null){

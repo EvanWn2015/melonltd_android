@@ -68,12 +68,9 @@ public class OrderDetailFragment extends Fragment {
         if (vo != null){
             orders.clear();
             OrderDetail orderDetail = Tools.JSONPARSE.fromJson(vo.order_data, OrderDetail.class);
-
-            // TODO 合併相同
-            for (OrderDetail.OrderData data :  orderDetail.orders){
-            }
             orders.addAll(orderDetail.orders);
-//            adapter.notifyDataSetChanged();
+//            UiUtil.setListViewHeightBasedOnChildren(getActivity(), holder.orderDatas);
+////            adapter.notifyDataSetChanged();
             new Handler().post(new Runnable(){
                 @Override
                 public void run() {
@@ -87,8 +84,8 @@ public class OrderDetailFragment extends Fragment {
             holder.messageText.setText(vo.user_message);
             holder.bonusText.setText(vo.order_bonus);
 
-            holder.orderingTimeText.setText(Tools.FORMAT.format(NaberConstant.DATE_FORMAT_PATTERN, "dd日 hh時 mm分", vo.create_date));
-            holder.fetchDateText.setText(Tools.FORMAT.format(NaberConstant.DATE_FORMAT_PATTERN, "dd日 hh時 mm分", vo.fetch_date));
+            holder.orderingTimeText.setText(Tools.FORMAT.format(NaberConstant.DATE_FORMAT_PATTERN, "dd日 HH時 mm分", vo.create_date));
+            holder.fetchDateText.setText(Tools.FORMAT.format(NaberConstant.DATE_FORMAT_PATTERN, "dd日 HH時 mm分", vo.fetch_date));
 
         }
     }
@@ -111,7 +108,6 @@ public class OrderDetailFragment extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
-        Log.d(TAG, "stop");
         UserMainActivity.navigationIconDisplay(false, null);
     }
 

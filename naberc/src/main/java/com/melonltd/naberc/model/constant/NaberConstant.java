@@ -23,5 +23,5 @@ public class NaberConstant {
 
 
     //
-    public static final String DATE_FORMAT_PATTERN = "yyyy-MM-dd'T'hh:mm:SS.ssss'Z'";
+    public static final String DATE_FORMAT_PATTERN = "yyyy-MM-dd'T'HH:mm:ss.SSSS'Z'";
 }

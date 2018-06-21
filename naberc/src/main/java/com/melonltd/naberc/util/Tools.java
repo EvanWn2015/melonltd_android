@@ -54,7 +54,6 @@ public class Tools {
     public static final String TAG = Tools.class.getSimpleName();
     public static JsonParse JSONPARSE = new JsonParse();
     public static Format FORMAT = new Format();
-    //    public static GCM gcm = new GCM();
     public static Network NETWORK = new Network();
     public static Longitude LONGITUDE = new Longitude();
 //    public static Bitmaps BITMAPS = new Bitmaps();
@@ -80,7 +79,7 @@ public class Tools {
 
         public static String format(String pattern, String formatPattern, String format) {
             simpleDate = new SimpleDateFormat(pattern);
-            simpleDate.setTimeZone(TimeZone.getTimeZone("UTC"));
+            simpleDate.setTimeZone(TimeZone.getTimeZone("GMT"));
             try {
                 SimpleDateFormat f = new SimpleDateFormat(formatPattern);
                 f.setTimeZone(TimeZone.getTimeZone("GMT"));
@@ -90,17 +89,15 @@ public class Tools {
             }
         }
 
-
         public static String toUTCDateTime(Date date){
             simpleDate = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:SS.ssss'Z'");
-            simpleDate.setTimeZone(TimeZone.getTimeZone("UTC"));
+            simpleDate.setTimeZone(TimeZone.getTimeZone("GMT"));
             return simpleDate.format(date);
         }
     }
 
     public static class JsonParse {
         private static Gson GSON = new Gson();
-//        public static Gson GSON = new Gson();
         public final static String toJson(Object obj) {
             return GSON.toJson(obj);
         }
@@ -116,14 +113,6 @@ public class Tools {
             }
             final T[] jsonToObject = GSON.fromJson(json, types);
             return Lists.newArrayList(jsonToObject);
-        }
-
-        public final static <T> T[] fromJsonArray(String json, Class<T[]> types) {
-            if (Strings.isNullOrEmpty(json)) {
-                return null;
-            }
-            final T[] jsonToObject = GSON.fromJson(json, types);
-            return jsonToObject;
         }
 
         public static String getJson(Context context, String fileName) {
@@ -155,39 +144,6 @@ public class Tools {
             return detail;
         }
     }
-
-//    public static class GCM {
-//        private static final String SenderID = "361595324240";
-//
-//        public static void deleteToken(final Context context) throws RuntimeException {
-//            new Thread(new Runnable() {
-//                @Override
-//                public void run() {
-//                    try {
-//                        InstanceID.getInstance(context).deleteToken(SenderID, GoogleCloudMessaging.INSTANCE_ID_SCOPE);
-//                    } catch (IOException e) {
-//                        Log.e(TAG, "delete GCM token fail !!", e);
-//                        throw new RuntimeException("delete GCM token fail !!", e);
-//                    }
-//                }
-//            }).start();
-//        }
-//
-//        public static void getToken(final Context context) throws RuntimeException {
-//            new Thread(new Runnable() {
-//                @Override
-//                public void run() {
-//                    try {
-//                        String token = InstanceID.getInstance(context).getToken(SenderID, GoogleCloudMessaging.INSTANCE_ID_SCOPE, null);
-//                        Log.d(TAG, token);
-//                    } catch (IOException e) {
-//                        Log.e(TAG, "get GCM token fail !!", e);
-//                        throw new RuntimeException("get GCM token fail !!", e);
-//                    }
-//                }
-//            }).start();
-//        }
-//    }
 
     public static class Network {
         public static boolean hasNetWork(ConnectivityManager cm) {
@@ -244,13 +200,11 @@ public class Tools {
             String result = "";
             if (Strings.isNullOrEmpty(src)) {
                 for (int i = 0; i < min; i++) {
-//                    result = result + "\u3000";
                     result = result + "\u0020";
                 }
             } else if (src.toCharArray().length - min < 0) {
                 for (int i = 0; i < min - src.toCharArray().length; i++) {
                     result = result + "\u0020";
-//                    result = result + "\u3000";
                 }
                 result = direction.equals(Direction.RIGHT) ? src + result : result + src;
             } else {
