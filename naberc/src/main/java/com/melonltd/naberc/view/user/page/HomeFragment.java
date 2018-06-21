@@ -21,6 +21,7 @@ import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.view.SimpleDraweeView;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.melonltd.naberc.R;
 import com.melonltd.naberc.model.api.ThreadCallback;
 import com.melonltd.naberc.model.api.ApiManager;
@@ -41,6 +42,7 @@ import com.melonltd.naberc.vo.RestaurantInfoVo;
 
 import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
 
 import cn.bingoogolapple.bgabanner.BGABanner;
 import cn.bingoogolapple.refreshlayout.BGANormalRefreshViewHolder;
@@ -50,7 +52,6 @@ import cn.bingoogolapple.refreshlayout.BGARefreshLayout;
 public class HomeFragment extends Fragment {
     private static final String TAG = HomeFragment.class.getSimpleName();
     public static HomeFragment FRAGMENT = null;
-
     private RestaurantAdapter adapter;
 
     public HomeFragment() {
@@ -68,7 +69,7 @@ public class HomeFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Fresco.initialize(getContext());
-        adapter = new RestaurantAdapter(Model.RESTAURANT_INFO_LIST);
+        adapter = new RestaurantAdapter();
     }
 
     @Override
@@ -148,9 +149,12 @@ public class HomeFragment extends Fragment {
                     while (iterator.hasNext()){
                         content_text += iterator.next() + "\n";
                     }
-                    Model.BULLETIN_VOS.put(list.get(i).bulletin_category,content_text);
+                    Map<String, String> m = Maps.newHashMap();
+                    m.put("title", list.get(i).title);
+                    m.put("content_text", content_text);
+                    Model.BULLETIN_VOS.put(list.get(i).bulletin_category,m);
                 }
-                bulletinText.setText(Model.BULLETIN_VOS.get("HOME"));
+                bulletinText.setText(Model.BULLETIN_VOS.get("HOME").get("content_text"));
             }
 
             @Override
@@ -242,10 +246,7 @@ public class HomeFragment extends Fragment {
             bundle.putSerializable(NaberConstant.RESTAURANT_INFO, Model.RESTAURANT_INFO_LIST.get(index));
             RestaurantFragment.TO_RESTAURANT_DETAIL_INDEX = index;
             RestaurantDetailFragment.TO_CATEGORY_MENU_INDEX = -1;
-            BaseCore.FRAGMENT_TAG = PageType.RESTAURANT_DETAIL.name();
-            Fragment f = PageFragmentFactory.of(PageType.RESTAURANT_DETAIL, bundle);
-            getFragmentManager().beginTransaction().replace(R.id.frameContainer, f).addToBackStack(f.toString()).commit();
-
+            UserMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.RESTAURANT_DETAIL, bundle);
         }
     }
 }

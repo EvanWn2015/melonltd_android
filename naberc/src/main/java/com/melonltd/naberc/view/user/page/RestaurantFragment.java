@@ -66,7 +66,7 @@ public class RestaurantFragment extends Fragment implements View.OnClickListener
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        adapter = new RestaurantAdapter(Model.RESTAURANT_INFO_FILTER_LIST);
+        adapter = new RestaurantAdapter();
         adapter.setItemOnClickListener(new ItemOnClickListener());
     }
 

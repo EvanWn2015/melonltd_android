@@ -61,7 +61,6 @@ public class ShoppingCartFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Fresco.initialize(getContext());
-//        adapter = new ShoppingCartAdapter(getContext(), list);
         adapter = new ShoppingCartAdapter(listData);
     }
 

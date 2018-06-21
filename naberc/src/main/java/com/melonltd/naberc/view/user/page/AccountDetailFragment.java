@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.annotation.NonNull;
@@ -17,33 +18,49 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 
 import com.bigkoo.alertview.AlertView;
 import com.bigkoo.alertview.OnItemClickListener;
+import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.facebook.imagepipeline.request.ImageRequest;
+import com.facebook.imagepipeline.request.ImageRequestBuilder;
+import com.google.android.gms.common.api.Api;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.common.base.Strings;
 import com.google.firebase.FirebaseApp;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.melonltd.naberc.R;
+import com.melonltd.naberc.model.api.ApiManager;
+import com.melonltd.naberc.model.api.ThreadCallback;
+import com.melonltd.naberc.model.constant.NaberConstant;
 import com.melonltd.naberc.model.service.SPService;
+import com.melonltd.naberc.model.type.Identity;
+import com.melonltd.naberc.util.PhotoTools;
+import com.melonltd.naberc.util.UpLoadCallBack;
 import com.melonltd.naberc.view.common.BaseCore;
 import com.melonltd.naberc.view.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.factory.PageType;
 import com.melonltd.naberc.view.user.UserMainActivity;
+import com.melonltd.naberc.vo.AccountInfoVo;
+import com.melonltd.naberc.vo.ReqData;
 
 import java.io.ByteArrayOutputStream;
 
 public class AccountDetailFragment extends Fragment implements View.OnClickListener {
     private static final String TAG = AccountDetailFragment.class.getSimpleName();
     public static AccountDetailFragment FRAGMENT = null;
-    private Button logoutBtn, toResetPasswordBtn;
-    private SimpleDraweeView avatarImage;
     public static int TO_RESET_PASSWORD_INDEX = -1;
     private static final int PICK_FROM_CAMERA = 9902;
     private static final int PICK_FROM_GALLERY = 9909;
+    private ViewHolder holder;
 
     public AccountDetailFragment() {
     }
@@ -51,20 +68,18 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
     public Fragment getInstance(Bundle bundle) {
         if (FRAGMENT == null) {
             FRAGMENT = new AccountDetailFragment();
-            FRAGMENT.setArguments(bundle);
             TO_RESET_PASSWORD_INDEX = -1;
+        }
+        if (bundle != null) {
+            FRAGMENT.setArguments(bundle);
         }
         return FRAGMENT;
     }
 
-    public Fragment newInstance(Object... o) {
-        return new AccountDetailFragment();
-    }
-
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Fresco.initialize(getContext());
     }
 
     @Override
@@ -72,7 +87,6 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
         if (container.getTag(R.id.user_account_detail_page) == null) {
             View v = inflater.inflate(R.layout.fragment_account_detail, container, false);
             getView(v);
-            setListener();
             container.setTag(R.id.user_account_detail_page, v);
             return v;
         } else {
@@ -81,21 +95,17 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
     }
 
     private void getView(View v) {
-        avatarImage = v.findViewById(R.id.avatarImage);
-        logoutBtn = v.findViewById(R.id.logoutBtn);
-        toResetPasswordBtn = v.findViewById(R.id.toResetPasswordBtn);
-    }
-
-    private void setListener() {
+        holder = new ViewHolder(v);
+        Button logoutBtn = v.findViewById(R.id.logoutBtn);
+        Button toResetPasswordBtn = v.findViewById(R.id.toResetPasswordBtn);
         logoutBtn.setOnClickListener(this);
         toResetPasswordBtn.setOnClickListener(this);
-        avatarImage.setOnClickListener(new UpLoadAccountImage());
     }
+
 
     @Override
     public void onResume() {
         super.onResume();
-//        UserMainActivity.toolbar.setTitle(getResources().getString(PageType.equalsIdByName(BaseCore.FRAGMENT_TAG)));
         UserMainActivity.changeTabAndToolbarStatus();
         if (UserMainActivity.toolbar != null) {
             UserMainActivity.navigationIconDisplay(true, new View.OnClickListener() {
@@ -108,6 +118,24 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
         }
         if (TO_RESET_PASSWORD_INDEX >= 0) {
             toResetPassword(1);
+        } else {
+            holder.accountInfo = (AccountInfoVo) getArguments().getSerializable(NaberConstant.ACCOUNT_INFO);
+            Log.d(TAG, holder.accountInfo.toString());
+            if (holder.accountInfo != null) {
+                holder.nameText.setText(holder.accountInfo.name);
+                holder.phoneText.setText(holder.accountInfo.phone);
+                holder.emailText.setText(holder.accountInfo.email);
+                holder.birthdayText.setText(holder.accountInfo.birth_day);
+                holder.bonusText.setText(holder.accountInfo.bonus);
+
+                holder.identityText.setText(Identity.of(holder.accountInfo.identity).name);
+                if (!Strings.isNullOrEmpty(holder.accountInfo.photo)) {
+                    holder.avatarImage.setImageURI(Uri.parse(holder.accountInfo.photo));
+                } else {
+                    ImageRequest request = ImageRequestBuilder.newBuilderWithResourceId(R.drawable.naber_icon_logo).build();
+                    holder.avatarImage.setImageURI(request.getSourceUri());
+                }
+            }
         }
     }
 
@@ -115,38 +143,55 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == Activity.RESULT_OK) {
+            Bitmap bitmap = null;
             switch (requestCode) {
                 case PICK_FROM_CAMERA:
-                    Bitmap mbmp = (Bitmap) data.getExtras().get("data");
-//                    avatarImage.setImageBitmap(mbmp);
-                    FirebaseApp api = FirebaseApp.getInstance();
-                    FirebaseStorage storage = FirebaseStorage.getInstance("gs://naber-test.appspot.com");
-                    StorageReference storageRef = storage.getReference();
-                    StorageReference mountainsRef = storageRef.child("users/mountains.jpg");
-//                    Bitmap bitmap = ((BitmapDrawable) imageView.getDrawable()).getBitmap();
-                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                    mbmp.compress(Bitmap.CompressFormat.JPEG, 100, baos);
-                    byte[] datas = baos.toByteArray();
-                    UploadTask uploadTask = mountainsRef.putBytes(datas);
-                    uploadTask.addOnFailureListener(new OnFailureListener() {
-                        @Override
-                        public void onFailure(@NonNull Exception e) {
-                            // Handle unsuccessful uploads
-                            Log.e(TAG, "" + e.getMessage());
-                        }
-                    }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                        @Override
-                        public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                            // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
-                            // ...3
-                            Log.d(TAG, "");
-                        }
-                    });
+                    bitmap = (Bitmap) data.getExtras().get("data");
                     break;
                 case PICK_FROM_GALLERY:
-                    Uri uri = data.getData();
-                    avatarImage.setImageURI(uri);
+                    Uri pickedImage = data.getData();
+                    try {
+                        bitmap = MediaStore.Images.Media.getBitmap(getContext().getContentResolver(), pickedImage);
+                    } catch (Exception e) {
+                        // Manage exception ...
+                    }
                     break;
+            }
+
+            if (bitmap != null && bitmap.getByteCount() != 0){
+                ByteArrayOutputStream out = new ByteArrayOutputStream();
+                bitmap = PhotoTools.sampleBitmap(bitmap, 120);
+                bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
+                byte[] bytes = out.toByteArray();
+
+                PhotoTools.upLoadImage(bytes, NaberConstant.STORAGE_PATH_USER, holder.accountInfo.account_uuid + ".jpg", new UpLoadCallBack() {
+                    @Override
+                    public void getUri(final Uri uri) {
+                        ReqData req = new ReqData();
+                        req.date = uri.toString();
+                        req.uuid = holder.accountInfo.account_uuid;
+                        req.type = "USER";
+                        ApiManager.uploadPhoto(req, new ThreadCallback(getContext()) {
+                            @Override
+                            public void onSuccess(String responseBody) {
+                                holder.accountInfo.photo = uri.toString();
+                                holder.avatarImage.setImageURI(uri);
+                            }
+
+                            @Override
+                            public void onFail(Exception error, String msg) {
+
+                            }
+                        });
+                    }
+                    @Override
+                    public void failure(String errMsg) {
+                        ImageRequest request = ImageRequestBuilder.newBuilderWithResourceId(R.drawable.naber_icon_logo).build();
+                        holder.avatarImage.setImageURI(request.getSourceUri());
+                    }
+                });
+            }else {
+                // TODO 圖片上傳失敗
             }
         }
     }
@@ -158,10 +203,8 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
     }
 
     private void backToSetUpPage() {
-        BaseCore.FRAGMENT_TAG = PageType.SET_UP.name();
         SetUpFragment.TO_ACCOUNT_DETAIL_INDEX = -1;
-        Fragment f = PageFragmentFactory.of(PageType.SET_UP, null);
-        getFragmentManager().beginTransaction().remove(this).replace(R.id.frameContainer, f).commit();
+        UserMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.SET_UP, null);
     }
 
     @Override
@@ -170,18 +213,7 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
             case R.id.logoutBtn:
                 SPService.removeAll();
                 getActivity().finish();
-//                ApiManager.test(new ThreadCallback(getContext()) {
-//                    @Override
-//                    public void onSuccess(String responseBody) {
-////                        UserMainActivity.toLoginPage();
-//                        getActivity().finish();
-//                    }
-//
-//                    @Override
-//                    public void onFail(Exception error, String msg) {
-//
-//                    }
-//                });
+                UserMainActivity.clearAllFragment();
                 break;
             case R.id.toResetPasswordBtn:
                 toResetPassword(1);
@@ -192,13 +224,11 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
 
     private void toResetPassword(int i) {
         TO_RESET_PASSWORD_INDEX = i;
-        BaseCore.FRAGMENT_TAG = PageType.RESET_PASSWORD.name();
-        Fragment f = PageFragmentFactory.of(PageType.RESET_PASSWORD, null);
-        getFragmentManager().beginTransaction().remove(this).replace(R.id.frameContainer, f).commit();
+        UserMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.RESET_PASSWORD, null);
     }
 
 
-    class UpLoadAccountImage implements View.OnClickListener{
+    class UpLoadAccountImage implements View.OnClickListener {
         @Override
         public void onClick(View view) {
             new AlertView.Builder()
@@ -219,13 +249,12 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
                                     intent.setAction(Intent.ACTION_GET_CONTENT);
                                     startActivityForResult(intent, PICK_FROM_GALLERY);
                                 }
-                            } else if (position ==0) {
+                            } else if (position == 0) {
                                 // 相機權限
                                 if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                                     ActivityCompat.requestPermissions(getActivity(), BaseCore.CAMERA, BaseCore.CAMERA_CODE);
                                 } else {
                                     Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                                    intent.putExtra(MediaStore.EXTRA_OUTPUT, false);
                                     startActivityForResult(intent, PICK_FROM_CAMERA);
                                 }
                             }
@@ -234,6 +263,24 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
                     .build()
                     .setCancelable(true)
                     .show();
+        }
+    }
+
+
+    class ViewHolder {
+        private AccountInfoVo accountInfo;
+        private SimpleDraweeView avatarImage;
+        private TextView nameText, phoneText, emailText, birthdayText, identityText, bonusText;
+
+        ViewHolder(View v) {
+            this.avatarImage = v.findViewById(R.id.avatarImage);
+            this.nameText = v.findViewById(R.id.nameText);
+            this.phoneText = v.findViewById(R.id.phoneText);
+            this.emailText = v.findViewById(R.id.emailText);
+            this.birthdayText = v.findViewById(R.id.birthdayText);
+            this.identityText = v.findViewById(R.id.identityText);
+            this.bonusText = v.findViewById(R.id.bonusText);
+            this.avatarImage.setOnClickListener(new UpLoadAccountImage());
         }
     }
 }

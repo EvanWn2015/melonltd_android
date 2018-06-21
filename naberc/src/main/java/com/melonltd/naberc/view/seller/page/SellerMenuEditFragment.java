@@ -117,7 +117,7 @@ public class SellerMenuEditFragment extends Fragment {
             switch (requestCode) {
                 case PICK_FROM_CAMERA:
                     bitmap = (Bitmap) data.getExtras().get("data");
-                    menuIconImage.setImageBitmap(bitmap);
+//                    menuIconImage.setImageBitmap(bitmap);
                     break;
                 case PICK_FROM_GALLERY:
                     Uri pickedImage = data.getData();
@@ -244,7 +244,7 @@ public class SellerMenuEditFragment extends Fragment {
                                     ActivityCompat.requestPermissions(getActivity(), BaseCore.CAMERA, BaseCore.CAMERA_CODE);
                                 } else {
                                     Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                                    intent.putExtra(MediaStore.EXTRA_OUTPUT, false);
+//                                    intent.putExtra(MediaStore.EXTRA_OUTPUT, false);
                                     startActivityForResult(intent, PICK_FROM_CAMERA);
                                 }
                             }

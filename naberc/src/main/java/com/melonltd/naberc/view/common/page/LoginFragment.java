@@ -100,7 +100,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-        Fragment fragment = null;
+//        Fragment fragment = null;
         switch (v.getId()) {
             case R.id.loginBtn:
                 if (verifyInput()) {
@@ -158,20 +158,13 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                 }
                 break;
             case R.id.toVerifySMSBtn:
-//                UserMainActivity.bottomMenuTabLayout.setVisibility(View.VISIBLE);
-                BaseCore.FRAGMENT_TAG = PageType.VERIFY_SMS.name();
-                fragment = PageFragmentFactory.of(PageType.VERIFY_SMS, null);
-                getFragmentManager().beginTransaction().remove(this).replace(R.id.baseContainer, fragment).addToBackStack(fragment.toString()).commit();
+                BaseActivity.removeAndReplaceWhere(FRAGMENT, PageType.VERIFY_SMS, null);
                 break;
             case R.id.toRegisteredSellerBtn:
-                BaseCore.FRAGMENT_TAG = PageType.REGISTERED_SELLER.name();
-                fragment = PageFragmentFactory.of(PageType.REGISTERED_SELLER, null);
-                getFragmentManager().beginTransaction().remove(this).replace(R.id.baseContainer, fragment).addToBackStack(fragment.toString()).commit();
+                BaseActivity.removeAndReplaceWhere(FRAGMENT, PageType.REGISTERED_SELLER, null);
                 break;
             case R.id.recoverPasswordText:
-                BaseCore.FRAGMENT_TAG = PageType.RECOVER_PASSWORD.name();
-                fragment = PageFragmentFactory.of(PageType.RECOVER_PASSWORD, null);
-                getFragmentManager().beginTransaction().remove(this).replace(R.id.baseContainer, fragment).addToBackStack(fragment.toString()).commit();
+                BaseActivity.removeAndReplaceWhere(FRAGMENT, PageType.RECOVER_PASSWORD, null);
                 break;
         }
     }

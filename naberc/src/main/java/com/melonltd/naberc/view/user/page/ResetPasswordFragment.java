@@ -51,8 +51,10 @@ public class ResetPasswordFragment extends Fragment {
             UserMainActivity.navigationIconDisplay(true, new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    backToAccountDetailPage();
+//                    backToAccountDetailPage();
                     UserMainActivity.navigationIconDisplay(false, null);
+                    AccountDetailFragment.TO_RESET_PASSWORD_INDEX = -1;
+                    UserMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.ACCOUNT_DETAIL, null);
                 }
             });
         }
@@ -69,10 +71,12 @@ public class ResetPasswordFragment extends Fragment {
         super.onDestroy();
     }
 
-    private void backToAccountDetailPage() {
-        UserMainActivity.FRAGMENT_TAG = PageType.ACCOUNT_DETAIL.name();
-        AccountDetailFragment.TO_RESET_PASSWORD_INDEX = -1;
-        Fragment f = PageFragmentFactory.of(PageType.ACCOUNT_DETAIL, null);
-        getFragmentManager().beginTransaction().remove(this).replace(R.id.frameContainer, f).addToBackStack(f.toString()).commit();
-    }
+//    private void backToAccountDetailPage() {
+//        AccountDetailFragment.TO_RESET_PASSWORD_INDEX = -1;
+//        UserMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.ACCOUNT_DETAIL, null);
+//
+//        UserMainActivity.FRAGMENT_TAG = PageType.ACCOUNT_DETAIL.name();
+//        Fragment f = PageFragmentFactory.of(PageType.ACCOUNT_DETAIL, null);
+//        getFragmentManager().beginTransaction().remove(this).replace(R.id.frameContainer, f).addToBackStack(f.toString()).commit();
+//    }
 }

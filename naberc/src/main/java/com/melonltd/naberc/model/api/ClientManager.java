@@ -34,9 +34,9 @@ public class ClientManager {
     private static final ConnectionPool CONNECTION_POOL = new ConnectionPool();
     private static final HttpLoggingInterceptor LOGGING = new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY);
     private static final OkHttpClient CLIENT = new OkHttpClient.Builder()
-            .connectTimeout(25, TimeUnit.SECONDS)
-            .readTimeout(25, TimeUnit.SECONDS)
-            .writeTimeout(25, TimeUnit.SECONDS)
+            .connectTimeout(15, TimeUnit.SECONDS)
+            .readTimeout(15, TimeUnit.SECONDS)
+            .writeTimeout(15, TimeUnit.SECONDS)
             .addInterceptor(LOGGING)
             .connectionPool(CONNECTION_POOL)
             .hostnameVerifier(new TrustAllHostnameVerifier())
@@ -48,10 +48,6 @@ public class ClientManager {
     private final static String HEADER_KEY = "Authorization";
     private final static String PARAMETER = "data";
 
-//    private static final MediaType X_WWW_FORM = MediaType.parse("application/x-www-form-urlencoded; charset=utf-8");
-//    private static final MediaType JSON = MediaType.parse("application/json; charset=utf-8");
-//    private static final MediaType TEXT = MediaType.parse("text/plain; charset=utf-8");
-
     public static ClientManager getInstance() {
         if (CLIENT_MANAGER == null) {
             CLIENT_MANAGER = new ClientManager();
@@ -60,41 +56,20 @@ public class ClientManager {
     }
 
     public static Call post(String url, String data) {
-        RequestBody formBody = new FormBody.Builder()
-                .add(PARAMETER, data)
-                .build();
-
-        Request request = new Request.Builder()
-                .url(url)
-                .post(formBody)
-                .build();
-
+        RequestBody formBody = new FormBody.Builder() .add(PARAMETER, data)  .build();
+        Request request = new Request.Builder()  .url(url)  .post(formBody) .build();
         return CLIENT.newCall(request);
     }
 
     public static Call post(String url) {
-        RequestBody formBody = new FormBody.Builder()
-                .build();
-        Request request = new Request.Builder()
-                .url(url)
-                .post(formBody)
-                .build();
-
+        RequestBody formBody = new FormBody.Builder().build();
+        Request request = new Request.Builder().url(url).post(formBody).build();
         return CLIENT.newCall(request);
     }
 
-
     public static Call postHeader(String url, String token, String data) {
-        RequestBody formBody = new FormBody.Builder()
-                .add(PARAMETER, data)
-                .build();
-
-        Request request = new Request.Builder()
-                .header(HEADER_KEY, token)
-                .url(url)
-                .post(formBody)
-                .build();
-
+        RequestBody formBody = new FormBody.Builder().add(PARAMETER, data).build();
+        Request request = new Request.Builder().header(HEADER_KEY, token).url(url).post(formBody).build();
         return CLIENT.newCall(request);
     }
 
@@ -109,133 +84,6 @@ public class ClientManager {
 
         return CLIENT.newCall(request);
     }
-
-
-//    public static Call get(String url) {
-//        Request request = new Request.Builder()
-////                .header(HEADER_KEY, Preference.headervalue)
-////                .header("", "'")
-////                .header("", "")
-//                .url(url)
-//                .get()
-//                .build();
-////        try {
-////            Response response = CLIENT.newCall(request).execute();
-////            return response;
-////        } catch (IOException e) {
-////            Log.e(TAG, "error", e);
-////            return null;
-////        }
-//
-//        return CLIENT.newCall(request);
-//    }
-
-//    public static Call get(URL url) {
-//        Request request = new Request.Builder()
-////                .header(HEADER_KEY, Preference.headervalue)
-////                .header("", "'")
-////                .header("", "")
-//                .url(url)
-//                .get()
-//                .build();
-//
-//        return CLIENT.newCall(request);
-//    }
-
-//    public static Call get(HttpUrl url) {
-//        Request request = new Request.Builder()
-//                .header(HEADER_KEY, "Bearer f181ab6c-b320-48c1-928c-78282b02ad2d")
-//                .url(url)
-//                .get()
-//                .build();
-//
-//        return CLIENT.newCall(request);
-//    }
-
-//    private static Response post(String url, String json) {
-//        RequestBody body = RequestBody.create(JSON, json);
-//
-//        Request request = new Request.Builder()
-////                .header(HEADER_KEY, Preference.headervalue)
-//                .url(url)
-//                .post(body)
-//                .build();
-//        try {
-//            Response response = CLIENT.newCall(request).execute();
-//            return response;
-//        } catch (IOException e) {
-//            Log.e(TAG, "error", e);
-//            return null;
-//        }
-//    }
-
-//    private static Response post(String url, Object object) {
-//        RequestBody body = RequestBody.create(JSON, Tools.GSON.toJson(object));
-//        Request request = new Request.Builder()
-////                .header(HEADER_KEY, Preference.headervalue)
-//                .url(url)
-//                .post(body)
-//                .build();
-//        try {
-//            Response response = CLIENT.newCall(request).execute();
-//            return response;
-//        } catch (IOException e) {
-//            Log.e(TAG, "error", e);
-//            return null;
-//        }
-//    }
-
-
-//    public static Call put(String url, String json) {
-//        RequestBody body = RequestBody.create(JSON, json);
-//        Request request = new Request.Builder()
-////                .header(HEADER_KEY, Preference.headervalue)
-//                .url(url)
-//                .put(body)
-//                .build();
-//
-//        return CLIENT.newCall(request);
-////        call.enqueue(callback);
-////        try {
-////            Response response = CLIENT.newCall(request).execute();
-////            return response;
-////        } catch (IOException e) {
-////            Log.e(TAG, "error", e);
-////            return null;
-////        }
-//    }
-//
-//    public static Response put(String url, Object object) {
-//        RequestBody body = RequestBody.create(JSON, Tools.GSON.toJson(object));
-//        Request request = new Request.Builder()
-////                .header(HEADER_KEY, Preference.headervalue)
-//                .url(url)
-//                .put(body)
-//                .build();
-//        try {
-//            Response response = CLIENT.newCall(request).execute();
-//            return response;
-//        } catch (IOException e) {
-//            Log.e(TAG, "error", e);
-//            return null;
-//        }
-//    }
-
-
-//    public static Response delete(String url) {
-//        Request request = new Request.Builder()
-////                .header(HEADER_KEY, Preference.headervalue)
-//                .url(url)
-//                .delete()
-//                .build();
-//        try {
-//            Response response = CLIENT.newCall(request).execute();
-//            return response;
-//        } catch (IOException e) {
-//            Log.e(TAG, "error", e);
-//            return null;
-//        }
-//    }
 
     @SuppressLint("TrulyRandom")
     private static SSLSocketFactory createSSLSocketFactory() {

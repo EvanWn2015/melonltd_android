@@ -10,12 +10,10 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.melonltd.naberc.R;
-import com.melonltd.naberc.model.api.ThreadCallback;
 import com.melonltd.naberc.model.api.ApiManager;
+import com.melonltd.naberc.model.api.ThreadCallback;
 import com.melonltd.naberc.util.VerifyUtil;
 import com.melonltd.naberc.view.common.BaseActivity;
-import com.melonltd.naberc.view.common.BaseCore;
-import com.melonltd.naberc.view.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.factory.PageType;
 
 public class RecoverPasswordFragment extends Fragment implements View.OnClickListener {
@@ -45,13 +43,9 @@ public class RecoverPasswordFragment extends Fragment implements View.OnClickLis
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        if (container.getTag(R.id.common_recover_password_page) == null) {
-            View v = inflater.inflate(R.layout.fragment_recover_password, container, false);
-            getView(v);
-            container.setTag(R.id.common_recover_password_page, v);
-            return v;
-        }
-        return (View) container.getTag(R.id.common_recover_password_page);
+        View v = inflater.inflate(R.layout.fragment_recover_password, container, false);
+        getView(v);
+        return v;
     }
 
     private void getView(View v) {
@@ -69,7 +63,7 @@ public class RecoverPasswordFragment extends Fragment implements View.OnClickLis
             BaseActivity.navigationIconDisplay(true, new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    backToLoginPage();
+                    BaseActivity.removeAndReplaceWhere(FRAGMENT, PageType.LOGIN, null);
                     BaseActivity.navigationIconDisplay(false, null);
                 }
             });
@@ -94,7 +88,7 @@ public class RecoverPasswordFragment extends Fragment implements View.OnClickLis
                 ApiManager.test(new ThreadCallback(getContext()) {
                     @Override
                     public void onSuccess(String responseBody) {
-                        backToLoginPage();
+                        BaseActivity.removeAndReplaceWhere(FRAGMENT, PageType.LOGIN, null);
                     }
 
                     @Override
@@ -104,11 +98,5 @@ public class RecoverPasswordFragment extends Fragment implements View.OnClickLis
                 });
             }
         }
-    }
-
-    private void backToLoginPage() {
-        BaseCore.FRAGMENT_TAG = PageType.LOGIN.name();
-        Fragment f = PageFragmentFactory.of(PageType.LOGIN, null);
-        getFragmentManager().beginTransaction().remove(this).replace(R.id.baseContainer, f).addToBackStack(f.toString()).commit();
     }
 }

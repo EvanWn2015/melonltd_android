@@ -4,10 +4,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 
 import com.melonltd.naberc.R;
+import com.melonltd.naberc.model.api.ThreadCallback;
 import com.melonltd.naberc.model.service.SPService;
 import com.melonltd.naberc.model.type.Identity;
 import com.melonltd.naberc.view.common.page.LoginFragment;
@@ -26,12 +29,14 @@ public class BaseActivity extends BaseCore {
     private static final String TAG = BaseActivity.class.getSimpleName();
     public static Context context;
     public static Toolbar toolbar;
+    public static FragmentManager FM;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base);
         context = this;
+        FM = getSupportFragmentManager();
         getViews();
     }
 
@@ -57,7 +62,7 @@ public class BaseActivity extends BaseCore {
                 SPService.removeAll();
                 BaseCore.FRAGMENT_TAG = PageType.LOGIN.name();
                 Fragment fragment = PageFragmentFactory.of(PageType.LOGIN, null);
-                getSupportFragmentManager().beginTransaction().replace(R.id.baseContainer, fragment).addToBackStack(fragment.toString()).commit();
+                getSupportFragmentManager().beginTransaction().replace(R.id.baseContainer, fragment, PageType.LOGIN.toClass().getSimpleName()).addToBackStack(fragment.toString()).commit();
             }
         } else {
             BaseCore.FRAGMENT_TAG = PageType.LOGIN.name();
@@ -99,4 +104,14 @@ public class BaseActivity extends BaseCore {
         toolbar.setTitle(context.getResources().getString(PageType.equalsIdByName(FRAGMENT_TAG)));
     }
 
+
+    public static void removeAndReplaceWhere (Fragment fm, PageType pageType, Bundle bundle){
+        BaseCore.FRAGMENT_TAG = pageType.name();
+        Fragment fragment = PageFragmentFactory.of(pageType, bundle);
+        FM.beginTransaction()
+                .remove(fm)
+                .replace(R.id.baseContainer, fragment)
+                .addToBackStack(pageType.toClass().getSimpleName())
+                .commit();
+    }
 }

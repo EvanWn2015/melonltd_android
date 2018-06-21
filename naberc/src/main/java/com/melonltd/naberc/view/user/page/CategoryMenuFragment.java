@@ -38,11 +38,11 @@ public class CategoryMenuFragment extends Fragment {
     private static final String TAG = CategoryMenuFragment.class.getSimpleName();
     public static CategoryMenuFragment FRAGMENT = null;
 
-//    private TextView categoryNameText;
+    //    private TextView categoryNameText;
     private MenuAdapter adapter;
     private ViewHolder holder;
 
-//    private List<CategoryFoodRelVo> list = Lists.<CategoryFoodRelVo>newArrayList();
+    //    private List<CategoryFoodRelVo> list = Lists.<CategoryFoodRelVo>newArrayList();
     public static int TO_MENU_DETAIL_INDEX = -1;
 
 
@@ -55,7 +55,7 @@ public class CategoryMenuFragment extends Fragment {
             FRAGMENT = new CategoryMenuFragment();
             TO_MENU_DETAIL_INDEX = -1;
         }
-        if (bundle != null){
+        if (bundle != null) {
             FRAGMENT.setArguments(bundle);
         }
         return FRAGMENT;
@@ -130,10 +130,10 @@ public class CategoryMenuFragment extends Fragment {
         if (isRefresh) {
             Model.CATEGORY_FOOD_REL_LIST.clear();
         }
-        ApiManager.restaurantFoodList(holder.uuid ,new ThreadCallback(getContext()) {
+        ApiManager.restaurantFoodList(holder.uuid, new ThreadCallback(getContext()) {
             @Override
             public void onSuccess(String responseBody) {
-                List<CategoryFoodRelVo> vos = Tools.JSONPARSE.fromJsonList(responseBody , CategoryFoodRelVo[].class);
+                List<CategoryFoodRelVo> vos = Tools.JSONPARSE.fromJsonList(responseBody, CategoryFoodRelVo[].class);
                 Model.CATEGORY_FOOD_REL_LIST.addAll(vos);
                 adapter.notifyDataSetChanged();
             }
@@ -149,39 +149,45 @@ public class CategoryMenuFragment extends Fragment {
     public void onResume() {
         super.onResume();
         UserMainActivity.changeTabAndToolbarStatus();
-        if (TO_MENU_DETAIL_INDEX == -1){
+        if (TO_MENU_DETAIL_INDEX == -1) {
             doLoadData(true);
         }
         if (UserMainActivity.toolbar != null) {
             UserMainActivity.navigationIconDisplay(true, new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    backToRestaurantDetail();
+//                    backToRestaurantDetail();
+                    RestaurantDetailFragment.TO_CATEGORY_MENU_INDEX = -1;
+                    UserMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.RESTAURANT_DETAIL, null);
                     UserMainActivity.navigationIconDisplay(false, null);
                 }
             });
         }
         if (TO_MENU_DETAIL_INDEX >= 0) {
-            toMenuDetailPage(TO_MENU_DETAIL_INDEX);
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("", Model.CATEGORY_FOOD_REL_LIST.get(TO_MENU_DETAIL_INDEX));
+            UserMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.MENU_DETAIL, bundle);
         }
     }
 
-    private void toMenuDetailPage(int index) {
-        TO_MENU_DETAIL_INDEX = index;
-//                Model.CATEGORY_FOOD_REL_LIST.indexOf(vo);
-        BaseCore.FRAGMENT_TAG = PageType.MENU_DETAIL.name();
-        Bundle bundle = new  Bundle();
-        bundle.putSerializable("", Model.CATEGORY_FOOD_REL_LIST.get(index));
-        Fragment f = PageFragmentFactory.of(PageType.MENU_DETAIL, bundle);
-        getFragmentManager().beginTransaction().remove(this).replace(R.id.frameContainer, f).addToBackStack(f.toString()).commit();
-    }
+//    private void toMenuDetailPage(int index) {
+//        TO_MENU_DETAIL_INDEX = index;
+////                Model.CATEGORY_FOOD_REL_LIST.indexOf(vo);
+//        Bundle bundle = new  Bundle();
+//        bundle.putSerializable("", Model.CATEGORY_FOOD_REL_LIST.get(index));
+//        UserMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.MENU_DETAIL, bundle);
+////        BaseCore.FRAGMENT_TAG = PageType.MENU_DETAIL.name();
+////        Fragment f = PageFragmentFactory.of(PageType.MENU_DETAIL, bundle);
+////        getFragmentManager().beginTransaction().remove(this).replace(R.id.frameContainer, f).addToBackStack(f.toString()).commit();
+//    }
 
-    private void backToRestaurantDetail() {
-        BaseCore.FRAGMENT_TAG = PageType.RESTAURANT_DETAIL.name();
-        RestaurantDetailFragment.TO_CATEGORY_MENU_INDEX = -1;
-        Fragment f = PageFragmentFactory.of(PageType.RESTAURANT_DETAIL, null);
-        getFragmentManager().beginTransaction().remove(this).replace(R.id.frameContainer, f).addToBackStack(f.toString()).commit();
-    }
+//    private void backToRestaurantDetail() {
+//        RestaurantDetailFragment.TO_CATEGORY_MENU_INDEX = -1;
+//        UserMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.RESTAURANT_DETAIL, null);
+////        BaseCore.FRAGMENT_TAG = PageType.RESTAURANT_DETAIL.name();
+////        Fragment f = PageFragmentFactory.of(PageType.RESTAURANT_DETAIL, null);
+////        getFragmentManager().beginTransaction().remove(this).replace(R.id.frameContainer, f).addToBackStack(f.toString()).commit();
+//    }
 
     @Override
     public void onStop() {
@@ -198,15 +204,19 @@ public class CategoryMenuFragment extends Fragment {
     class ItemClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
-            toMenuDetailPage((int)v.getTag());
+            TO_MENU_DETAIL_INDEX = (int) v.getTag();
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("", Model.CATEGORY_FOOD_REL_LIST.get(TO_MENU_DETAIL_INDEX));
+            UserMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.MENU_DETAIL, bundle);
         }
     }
 
 
     private class ViewHolder {
         private String uuid;
-        private  TextView categoryNameText;
-        ViewHolder(View v){
+        private TextView categoryNameText;
+
+        ViewHolder(View v) {
             this.categoryNameText = v.findViewById(R.id.categoryNameText);
         }
 

@@ -7,7 +7,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:overScrollMode="never"
-    tools:context=".view.user.page.impl.AccountDetailFragment">
+    tools:context=".view.user.page.AccountDetailFragment">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
@@ -36,12 +36,9 @@
             app:layout_constraintEnd_toEndOf="@+id/linearLayout"
             app:layout_constraintStart_toStartOf="@+id/linearLayout"
             app:layout_constraintTop_toTopOf="@+id/linearLayout"
-            fresco:backgroundImage="@drawable/naber_icon_logo"
             fresco:failureImage="@drawable/naber_icon_logo"
-            fresco:overlayImage="@drawable/naber_icon_logo"
             fresco:roundWithOverlayColor="@color/naber_basis"
             fresco:roundedCornerRadius="60dp" />
-
 
         <TextView
             android:id="@+id/textView53"
@@ -156,7 +153,7 @@
             android:layout_marginTop="8dp"
             android:background="@android:color/transparent"
             android:text="修改密碼"
-            android:textColor="@color/naber_basis"
+            android:textColor="@color/naber_basis_orange"
             android:textSize="12sp"
             app:layout_constraintBottom_toTopOf="@+id/view"
             app:layout_constraintEnd_toEndOf="parent"
@@ -174,69 +171,74 @@
             app:layout_constraintTop_toBottomOf="@+id/toResetPasswordBtn" />
 
         <TextView
-            android:id="@+id/textView68"
+            android:id="@+id/nameText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:layout_marginStart="100dp"
             android:layout_marginTop="8dp"
-            android:text="某某某"
             app:layout_constraintBottom_toBottomOf="@+id/textView53"
             app:layout_constraintStart_toStartOf="@+id/textView53"
             app:layout_constraintTop_toTopOf="@+id/textView53"
             app:layout_constraintVertical_bias="0.0" />
 
         <TextView
-            android:id="@+id/textView69"
+            android:id="@+id/phoneText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:layout_marginStart="100dp"
             android:layout_marginTop="8dp"
-            android:text="xxx- xxxx- xxxx"
             app:layout_constraintBottom_toBottomOf="@+id/textView63"
             app:layout_constraintStart_toStartOf="@+id/textView63"
             app:layout_constraintTop_toTopOf="@+id/textView63"
             app:layout_constraintVertical_bias="0.0" />
 
         <TextView
-            android:id="@+id/textView70"
+            android:id="@+id/emailText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:layout_marginStart="100dp"
             android:layout_marginTop="8dp"
-            android:text="abc@gggg.com"
             app:layout_constraintBottom_toBottomOf="@+id/textView64"
             app:layout_constraintStart_toStartOf="@+id/textView64"
             app:layout_constraintTop_toTopOf="@+id/textView64"
             app:layout_constraintVertical_bias="0.0" />
 
         <TextView
-            android:id="@+id/textView71"
+            android:id="@+id/birthdayText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:layout_marginStart="100dp"
             android:layout_marginTop="8dp"
-            android:text="2018-01-01"
             app:layout_constraintBottom_toBottomOf="@+id/textView65"
             app:layout_constraintStart_toStartOf="@+id/textView65"
             app:layout_constraintTop_toTopOf="@+id/textView65"
             app:layout_constraintVertical_bias="0.0" />
 
         <TextView
-            android:id="@+id/textView72"
+            android:id="@+id/identityText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:layout_marginStart="100dp"
             android:layout_marginTop="8dp"
-            android:text="身份"
             app:layout_constraintBottom_toBottomOf="@+id/textView66"
             app:layout_constraintStart_toStartOf="@+id/textView66"
             app:layout_constraintTop_toTopOf="@+id/textView66"
             app:layout_constraintVertical_bias="0.0" />
+
+
+        <TextView
+            android:id="@+id/bonusText"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="100dp"
+            app:layout_constraintBottom_toBottomOf="@+id/textView67"
+            app:layout_constraintStart_toStartOf="@+id/textView67"
+            app:layout_constraintTop_toTopOf="@+id/textView67" />
 
 
     </android.support.constraint.ConstraintLayout>

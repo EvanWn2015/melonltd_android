@@ -26,15 +26,10 @@ import com.melonltd.naberc.vo.OrderVo;
 
 import java.util.List;
 
-
-/**
- * A simple {@link Fragment} subclass.
- */
 public class OrderDetailFragment extends Fragment {
     private static final String TAG = OrderDetailFragment.class.getSimpleName();
     public static OrderDetailFragment FRAGMENT = null;
     private ViewHolder holder;
-//    private BaseAdapter adapter;
 
     private List<OrderDetail.OrderData> orders = Lists.newArrayList();
     public OrderDetailFragment() {
@@ -177,7 +172,7 @@ public class OrderDetailFragment extends Fragment {
                 holder = (ViewHolder)view.getTag();
             }
 
-            holder.countText.setText("X 1");
+            holder.countText.setText("X " + orders.get(i).count);
             holder.foodNameText.setText(orders.get(i).item.food_name);
             String datas = "";
             datas += "規格 :" ;

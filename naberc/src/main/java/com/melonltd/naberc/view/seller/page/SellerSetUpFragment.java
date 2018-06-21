@@ -33,7 +33,9 @@ public class SellerSetUpFragment extends Fragment implements View.OnClickListene
             TO_SELLER_DETAIL_INDEX = -1;
             TO_SELLER_SIMPLE_INFO_INDEX = -1;
         }
-        FRAGMENT.setArguments(bundle);
+        if (bundle != null){
+            FRAGMENT.setArguments(bundle);
+        }
         return FRAGMENT;
     }
 
@@ -59,7 +61,7 @@ public class SellerSetUpFragment extends Fragment implements View.OnClickListene
     }
 
     private void getViews(View v) {
-        toSellerEdit = v.findViewById(R.id.toSellerEdit);
+        toSellerEdit = v.findViewById(R.id.toAccountEdit);
         toAboutUsText = v.findViewById(R.id.toAboutUsText);
     }
 
@@ -101,7 +103,7 @@ public class SellerSetUpFragment extends Fragment implements View.OnClickListene
     public void onClick(View view) {
 
         switch (view.getId()) {
-            case R.id.toSellerEdit:
+            case R.id.toAccountEdit:
                 toSellerDetail(1);
                 break;
             case R.id.toAboutUsText:

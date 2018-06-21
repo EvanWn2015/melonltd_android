@@ -6,11 +6,21 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
+import android.os.Handler;
+import android.support.annotation.NonNull;
 import android.util.Base64;
 import android.util.Log;
 
+import com.facebook.drawee.view.SimpleDraweeView;
+import com.google.android.gms.tasks.Continuation;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.melonltd.naberc.model.constant.NaberConstant;
 
 import java.io.ByteArrayOutputStream;
@@ -132,6 +142,38 @@ public class PhotoTools {
         fos.flush();
         fos.close();
         return f;
+    }
+
+
+    public static void upLoadImage(byte[] bytes, String sourcePath, String fileName, final UpLoadCallBack callback){
+        final StorageReference ref = PhotoTools.getReference(NaberConstant.STORAGE_PATH, sourcePath, fileName);
+        ref.putBytes(bytes).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                callback.failure(exception.getMessage());
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot task) {
+
+            }
+        }).continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
+            @Override
+            public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                if (!task.isSuccessful()) {
+                    throw task.getException();
+                }
+                return ref.getDownloadUrl();
+            }
+        }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+            @Override
+            public void onComplete(@NonNull Task<Uri> task) {
+                if (task.isSuccessful()) {
+                    Uri downloadUri = task.getResult();
+                    callback.getUri(downloadUri);
+                }
+            }
+        });
     }
 
 }

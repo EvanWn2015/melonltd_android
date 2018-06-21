@@ -17,6 +17,7 @@ import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.imagepipeline.request.ImageRequestBuilder;
 import com.google.common.base.Strings;
 import com.melonltd.naberc.R;
+import com.melonltd.naberc.model.bean.Model;
 import com.melonltd.naberc.util.DistanceTools;
 import com.melonltd.naberc.util.Tools;
 import com.melonltd.naberc.vo.LocationVo;
@@ -26,14 +27,8 @@ import java.util.List;
 
 public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.ViewHolder> {
     private static final String TAG = RestaurantAdapter.class.getSimpleName();
-    private List<RestaurantInfoVo> listData;
     private View.OnClickListener itemOnClickListener;
     private Location location;
-
-
-    public RestaurantAdapter(List<RestaurantInfoVo> listData) {
-        this.listData = listData;
-    }
 
     public void setLocation(Location location){
         this.location = location;
@@ -56,25 +51,32 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
         holder.restaurantItem.setTag(position);
         holder.restaurantItem.setOnClickListener(this.itemOnClickListener);
 
-        if (!Strings.isNullOrEmpty(listData.get(position).photo)){
-            holder.restaurantIcon.setImageURI(Uri.parse(listData.get(position).photo));
+        if (!Strings.isNullOrEmpty(Model.RESTAURANT_INFO_LIST.get(position).photo)){
+            holder.restaurantIcon.setImageURI(Uri.parse(Model.RESTAURANT_INFO_LIST.get(position).photo));
         }else {
             ImageRequest imageRequest = ImageRequestBuilder.newBuilderWithResourceId(R.drawable.naber_icon_logo_reverse).build();
             holder.restaurantIcon.setImageURI(imageRequest.getSourceUri());
         }
 
-        holder.restaurantNameText.setText(listData.get(position).name);
-        holder.businessTimeText.setText("接單時間: " + listData.get(position).store_start + "~" + listData.get(position).store_end);
-        holder.addressText.setText(listData.get(position).address);
-        String distance = DistanceTools.getGoogleDistance(this.location, LocationVo.of(Double.parseDouble(listData.get(position).latitude), Double.parseDouble(listData.get(position).longitude)));
+        holder.restaurantNameText.setText(Model.RESTAURANT_INFO_LIST.get(position).name);
+        holder.businessTimeText.setText("接單時間: " +
+                Model.RESTAURANT_INFO_LIST.get(position).store_start + "~" +
+                Model.RESTAURANT_INFO_LIST.get(position).store_end);
+
+        holder.addressText.setText(Model.RESTAURANT_INFO_LIST.get(position).address);
+        String distance = DistanceTools.getGoogleDistance(
+                this.location,
+                LocationVo.of(
+                        Double.parseDouble(Model.RESTAURANT_INFO_LIST.get(position).latitude),
+                        Double.parseDouble(Model.RESTAURANT_INFO_LIST.get(position).longitude)
+                )
+        );
         holder.distanceText.setText("" + distance);
-
     }
-
 
     @Override
     public int getItemCount() {
-        return listData.size();
+        return Model.RESTAURANT_INFO_LIST.size();
     }
 
 

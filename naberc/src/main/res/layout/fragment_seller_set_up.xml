@@ -21,13 +21,13 @@
             android:background="@color/naber_dividing_line_gray"
             android:padding="8dp"
             android:text="帳號"
-            app:layout_constraintBottom_toTopOf="@+id/toSellerEdit"
+            app:layout_constraintBottom_toTopOf="@+id/toAccountEdit"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="parent" />
 
         <TextView
-            android:id="@+id/toSellerEdit"
+            android:id="@+id/toAccountEdit"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
@@ -52,7 +52,7 @@
             app:layout_constraintBottom_toTopOf="@+id/textView55"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/toSellerEdit" />
+            app:layout_constraintTop_toBottomOf="@+id/toAccountEdit" />
 
         <TextView
             android:id="@+id/textView55"
@@ -192,18 +192,18 @@
             android:layout_marginEnd="32dp"
             android:layout_marginTop="8dp"
             android:text="0987-654-321"
-            app:layout_constraintBottom_toBottomOf="@+id/toSellerEdit"
-            app:layout_constraintEnd_toEndOf="@+id/toSellerEdit"
-            app:layout_constraintTop_toTopOf="@+id/toSellerEdit" />
+            app:layout_constraintBottom_toBottomOf="@+id/toAccountEdit"
+            app:layout_constraintEnd_toEndOf="@+id/toAccountEdit"
+            app:layout_constraintTop_toTopOf="@+id/toAccountEdit" />
 
         <ImageView
             android:layout_width="16dp"
             android:layout_height="16dp"
             android:layout_marginEnd="8dp"
             android:background="@drawable/naber_arrow_right"
-            app:layout_constraintBottom_toBottomOf="@+id/toSellerEdit"
-            app:layout_constraintEnd_toEndOf="@+id/toSellerEdit"
-            app:layout_constraintTop_toTopOf="@+id/toSellerEdit" />
+            app:layout_constraintBottom_toBottomOf="@+id/toAccountEdit"
+            app:layout_constraintEnd_toEndOf="@+id/toAccountEdit"
+            app:layout_constraintTop_toTopOf="@+id/toAccountEdit" />
 
         <TextView
             android:id="@+id/dividendText"

@@ -19,16 +19,13 @@ import com.bigkoo.alertview.OnDismissListener;
 import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
 import com.melonltd.naberc.R;
-import com.melonltd.naberc.model.api.ThreadCallback;
 import com.melonltd.naberc.model.api.ApiManager;
+import com.melonltd.naberc.model.api.ThreadCallback;
 import com.melonltd.naberc.util.Tools;
 import com.melonltd.naberc.util.VerifyUtil;
 import com.melonltd.naberc.view.common.BaseActivity;
 import com.melonltd.naberc.view.common.BaseCore;
-import com.melonltd.naberc.view.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.factory.PageType;
-import com.melonltd.naberc.vo.AccountInfoVo;
-import com.melonltd.naberc.vo.ReqData;
 
 import java.util.Map;
 
@@ -48,7 +45,7 @@ public class VerifySMSFragment extends Fragment implements View.OnClickListener 
         if (FRAGMENT == null) {
             FRAGMENT = new VerifySMSFragment();
         }
-        if (bundle != null){
+        if (bundle != null) {
             FRAGMENT.setArguments(bundle);
         }
         return FRAGMENT;
@@ -60,12 +57,9 @@ public class VerifySMSFragment extends Fragment implements View.OnClickListener 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        if (container.getTag(R.id.user_verify_sms_page) == null) {
-            View v = inflater.inflate(R.layout.fragment_verify_sms, container, false);
-            getView(v);
-            container.setTag(R.id.user_verify_sms_page, v);
-        }
-        return (View) container.getTag(R.id.user_verify_sms_page);
+        View v = inflater.inflate(R.layout.fragment_verify_sms, container, false);
+        getView(v);
+        return v;
     }
 
     @Override
@@ -77,21 +71,24 @@ public class VerifySMSFragment extends Fragment implements View.OnClickListener 
                 BaseCore.loadJsonData(getContext());
             }
         });
-        map = Maps.newHashMap();
-        phoneNamberEdit.setText("");
-        verifySMSEdit.setText("");
-        verifySMSEdit.setEnabled(false);
-        readCheckBox.setChecked(false);
         BaseActivity.changeToolbarStatus();
         if (BaseActivity.toolbar != null) {
             BaseActivity.navigationIconDisplay(true, new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    backToLoginPage();
+                    BaseActivity.removeAndReplaceWhere(FRAGMENT, PageType.LOGIN, null);
                     BaseActivity.navigationIconDisplay(false, null);
                 }
             });
         }
+    }
+
+    private void remoreAllData() {
+//        map = Maps.newHashMap();
+//        phoneNamberEdit.setText("");
+//        verifySMSEdit.setText("");
+//        verifySMSEdit.setEnabled(false);
+//        readCheckBox.setChecked(false);
     }
 
     @Override
@@ -114,13 +111,6 @@ public class VerifySMSFragment extends Fragment implements View.OnClickListener 
         privacyPolicyText.setOnClickListener(this);
     }
 
-
-    private void backToLoginPage() {
-        BaseCore.FRAGMENT_TAG = PageType.LOGIN.name();
-        Fragment f = PageFragmentFactory.of(PageType.LOGIN, null);
-        getFragmentManager().beginTransaction().remove(this).replace(R.id.baseContainer, f).commit();
-    }
-
     @Override
     public void onClick(View v) {
         InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -129,7 +119,7 @@ public class VerifySMSFragment extends Fragment implements View.OnClickListener 
         switch (v.getId()) {
             case R.id.requestVerifyCodeBtn:
 
-                if (!readCheckBox.isChecked()){
+                if (!readCheckBox.isChecked()) {
                     new AlertView.Builder()
                             .setContext(getContext())
                             .setStyle(AlertView.Style.Alert)
@@ -141,7 +131,7 @@ public class VerifySMSFragment extends Fragment implements View.OnClickListener 
                             .show();
                     break;
                 }
-                if (!VerifyUtil.phoneNumber(phoneNamberEdit.getText().toString())){
+                if (!VerifyUtil.phoneNumber(phoneNamberEdit.getText().toString())) {
                     new AlertView.Builder()
                             .setContext(getContext())
                             .setStyle(AlertView.Style.Alert)
@@ -151,7 +141,7 @@ public class VerifySMSFragment extends Fragment implements View.OnClickListener 
                             .build()
                             .setCancelable(true)
                             .show();
-                }else {
+                } else {
                     map.put("phone", phoneNamberEdit.getText().toString());
                     ApiManager.getSMSCode(map, new ThreadCallback(getContext()) {
                         @Override
@@ -160,6 +150,7 @@ public class VerifySMSFragment extends Fragment implements View.OnClickListener 
                             map.put("batch_id", response.get("batch_id"));
                             verifySMSEdit.setEnabled(true);
                         }
+
                         @Override
                         public void onFail(Exception error, String msg) {
                             Log.d(TAG, msg);
@@ -195,7 +186,7 @@ public class VerifySMSFragment extends Fragment implements View.OnClickListener 
                         .show();
                 break;
             case R.id.submitToRegisteredBun:
-                if (Strings.isNullOrEmpty(map.get("batch_id")) || Strings.isNullOrEmpty(phoneNamberEdit.getText().toString()) || Strings.isNullOrEmpty(verifySMSEdit.getText().toString())){
+                if (Strings.isNullOrEmpty(map.get("batch_id")) || Strings.isNullOrEmpty(phoneNamberEdit.getText().toString()) || Strings.isNullOrEmpty(verifySMSEdit.getText().toString())) {
                     new AlertView.Builder()
                             .setContext(getContext())
                             .setStyle(AlertView.Style.Alert)
@@ -212,7 +203,9 @@ public class VerifySMSFragment extends Fragment implements View.OnClickListener 
                 ApiManager.verifySMSCode(map, new ThreadCallback(getContext()) {
                     @Override
                     public void onSuccess(String responseBody) {
-                        toRegisteredPage();
+                        Bundle bundle = new Bundle();
+                        bundle.putString("phone", phoneNamberEdit.getText().toString());
+                        BaseActivity.removeAndReplaceWhere(FRAGMENT, PageType.REGISTERED_USER, bundle);
                     }
 
                     @Override
@@ -231,12 +224,5 @@ public class VerifySMSFragment extends Fragment implements View.OnClickListener 
                 });
                 break;
         }
-    }
-
-    private void toRegisteredPage() {
-        BaseCore.FRAGMENT_TAG = PageType.REGISTERED_USER.name();
-        Bundle bundle = new Bundle();
-        bundle.putString("phone", phoneNamberEdit.getText().toString());
-        getFragmentManager().beginTransaction().remove(this).replace(R.id.baseContainer, PageFragmentFactory.of(PageType.REGISTERED_USER, bundle)).commit();
     }
 }

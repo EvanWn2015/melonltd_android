@@ -31,8 +31,8 @@ public abstract class ApiCallback implements Callback {
 
     @Override
     public void onFailure(Call call, final IOException e) {
-        if (checkNetWork()) {
-            getAlertView();
+        if (checkNetWork(context)) {
+            getAlertView(context);
             return;
         }
         if (e.getMessage().contains("Canceled") || e.getMessage().contains("Socket closed")) {
@@ -63,14 +63,14 @@ public abstract class ApiCallback implements Callback {
         }
     }
 
-    public boolean checkNetWork() {
-        ConnectivityManager cm = (ConnectivityManager) this.context.getSystemService(Context.CONNECTIVITY_SERVICE);
+    public static boolean checkNetWork(Context context) {
+        ConnectivityManager cm = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
         return !Tools.NETWORK.hasNetWork(cm);
     }
 
-    private void getAlertView() {
+    private static void getAlertView(Context context) {
         new AlertView.Builder()
-                .setContext(this.context)
+                .setContext(context)
                 .setStyle(AlertView.Style.Alert)
                 .setTitle("網路連線錯誤")
                 .setMessage("請檢查 Wi-Fi 或 4G是否已連接。")

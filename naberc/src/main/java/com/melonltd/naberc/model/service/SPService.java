@@ -3,6 +3,8 @@ package com.melonltd.naberc.model.service;
 import android.content.SharedPreferences;
 
 import com.melonltd.naberc.R;
+import com.melonltd.naberc.util.Tools;
+import com.melonltd.naberc.vo.AccountInfoVo;
 
 public class SPService {
     private static SPService SERVICE = null;
@@ -39,6 +41,7 @@ public class SPService {
     public static String getRememberAccount() {
         return SERVICE.preferences.getString(String.valueOf(R.string.remember_account),"");
     }
+
     public static void setRememberIdentity(String identity) {
         SERVICE.preferences.edit().putString(String.valueOf(R.string.remember_identity),identity).commit();
     }
@@ -46,6 +49,19 @@ public class SPService {
         return SERVICE.preferences.getString(String.valueOf(R.string.remember_identity),"");
     }
 
+    // Notify setUp
+    public static void setNotifySound(boolean isSound){
+        SERVICE.preferences.edit().putBoolean(String.valueOf(R.string.user_notify_sound),isSound).commit();
+    }
+    public static boolean getNotifySound(){
+        return SERVICE.preferences.getBoolean(String.valueOf(R.string.user_notify_sound),true);
+    }
+    public static void setNotifyShake(boolean isShake){
+        SERVICE.preferences.edit().putBoolean(String.valueOf(R.string.user_notify_shake),isShake).commit();
+    }
+    public static boolean getNotifyShake(){
+        return SERVICE.preferences.getBoolean(String.valueOf(R.string.user_notify_shake),true);
+    }
 
 
     public static void setUserName(String userName) {
@@ -60,7 +76,6 @@ public class SPService {
     public static String getUserPhone() {
         return SERVICE.preferences.getString(String.valueOf(R.string.user_phone),"");
     }
-
 
     public SPService(SharedPreferences preferences) {
         this.preferences = preferences;

@@ -6,8 +6,8 @@ package com.melonltd.naberc.model.api;
 
 public class ApiUrl {
 
-    public final static String DOMAIN = "http://192.168.31.252:8080/melonltd-ap";
-//    public final static String DOMAIN = "http://192.168.1.104:8080/melonltd-ap";
+//    public final static String DOMAIN = "http://192.168.31.252:8080/melonltd-ap";
+    public final static String DOMAIN = "http://192.168.1.104:8080/melonltd-ap";
     public final static String LOGIN = DOMAIN + "/login";
     public final static String GET_SMS_CODE = DOMAIN + "/sms/get/code";
     public final static String SMS_VERIFY_CODE = DOMAIN + "/sms/verify/code";
@@ -24,6 +24,9 @@ public class ApiUrl {
     public final static String RESTAURANT_FOOD_LIST = DOMAIN + "/restaurant/food/list";
     public final static String RESTAURANT_FOOD_DETAIL = DOMAIN + "/restaurant/food/detail";
     public final static String USER_ORDER_HISTORY = DOMAIN + "/user/order/history";
+    public final static String FIND_ACCOUNT_INFO = DOMAIN  + "/account/find/info";
+
+    public final static String IMAGE_UPLOAD = DOMAIN +"/image/upload";
 
 
 

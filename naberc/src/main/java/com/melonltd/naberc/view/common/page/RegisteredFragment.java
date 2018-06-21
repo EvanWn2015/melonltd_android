@@ -27,7 +27,6 @@ import com.melonltd.naberc.model.bean.Model;
 import com.melonltd.naberc.model.type.Identity;
 import com.melonltd.naberc.util.VerifyUtil;
 import com.melonltd.naberc.view.common.BaseActivity;
-import com.melonltd.naberc.view.factory.PageFragmentFactory;
 import com.melonltd.naberc.view.factory.PageType;
 import com.melonltd.naberc.vo.AccountInfoVo;
 
@@ -67,13 +66,9 @@ public class RegisteredFragment extends Fragment implements View.OnClickListener
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        if (container.getTag(R.id.user_registered_page) == null) {
-            View v = inflater.inflate(R.layout.fragment_registered, container, false);
-            getViews(v);
-            container.setTag(R.id.user_registered_page, v);
-            return v;
-        }
-        return (View) container.getTag(R.id.user_registered_page);
+        View v = inflater.inflate(R.layout.fragment_registered, container, false);
+        getViews(v);
+        return v;
     }
 
     private void getViews(View v) {
@@ -109,13 +104,7 @@ public class RegisteredFragment extends Fragment implements View.OnClickListener
     @Override
     public void onResume() {
         super.onResume();
-        removeAllData();
         BaseActivity.changeToolbarStatus();
-    }
-
-    private void backToLoginPage() {
-        Fragment fragment = PageFragmentFactory.of(PageType.LOGIN, null);
-        getFragmentManager().beginTransaction().remove(this).replace(R.id.baseContainer, fragment).addToBackStack(fragment.toString()).commit();
     }
 
     @Override
@@ -137,8 +126,9 @@ public class RegisteredFragment extends Fragment implements View.OnClickListener
                     ApiManager.userRegistered(account, new ThreadCallback(getContext()) {
                         @Override
                         public void onSuccess(String responseBody) {
-                            backToLoginPage();
+                            BaseActivity.removeAndReplaceWhere(FRAGMENT, PageType.LOGIN, null);
                         }
+
                         @Override
                         public void onFail(Exception error, String msg) {
                             // TODO
@@ -147,19 +137,9 @@ public class RegisteredFragment extends Fragment implements View.OnClickListener
                 }
                 break;
             case R.id.backToLoginBtn:
-                backToLoginPage();
+                BaseActivity.removeAndReplaceWhere(FRAGMENT, PageType.LOGIN, null);
                 break;
         }
-    }
-    private void removeAllData(){
-        account = new AccountInfoVo();
-        identityText.setText("");
-        birthdayText.setText("");
-        nameEditText.setText("");
-        addressEditText.setText("");
-        emailEditText.setText("");
-        passwordEditText.setText("");
-        confirmPasswordEditText.setText("");
     }
 
     class IdentityClick implements View.OnClickListener {
@@ -170,7 +150,7 @@ public class RegisteredFragment extends Fragment implements View.OnClickListener
             OptionsPickerView pvOptions = new OptionsPickerBuilder(getContext(), new OnOptionsSelectListener() {
                 @Override
                 public void onOptionsSelect(int options1, int option2, int options3, View v) {
-                    account.identity = Identity.of(Model.OPT_ITEM_1.get(options1)).name();
+                    account.identity = Identity.ofName(Model.OPT_ITEM_1.get(options1)).name();
                     account.school_name = Model.OPT_ITEM_2.get(options1).get(option2);
                     identityText.setText(Model.OPT_ITEM_1.get(options1) + " " + Model.OPT_ITEM_2.get(options1).get(option2));
                 }
@@ -216,20 +196,21 @@ public class RegisteredFragment extends Fragment implements View.OnClickListener
         }
     }
 
-    class HideKeyboard implements View.OnFocusChangeListener{
+    class HideKeyboard implements View.OnFocusChangeListener {
         @Override
         public void onFocusChange(View v, boolean hasFocus) {
-            if (!hasFocus){
+            if (!hasFocus) {
                 InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
             }
         }
     }
+
     private boolean verifyInput() {
         boolean result = true;
         String message = "";
         // 驗證身份不為空
-        if (Strings.isNullOrEmpty(identityText.getText().toString())){
+        if (Strings.isNullOrEmpty(identityText.getText().toString())) {
             message = "驗證身份不為空";
             result = false;
         }

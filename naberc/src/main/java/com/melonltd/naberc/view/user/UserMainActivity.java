@@ -7,6 +7,7 @@ import android.support.annotation.NonNull;
 import android.support.design.widget.TabLayout;
 import android.support.multidex.MultiDex;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.ImageView;
@@ -40,6 +41,7 @@ public class UserMainActivity extends BaseCore implements View.OnClickListener, 
     private static Context context;
     public static Toolbar toolbar;
     public static List<View> tabViews = Lists.<View>newArrayList();
+    private static FragmentManager FM;
     private static final List<PageType> MAIN_PAGE = Lists.newArrayList(PageType.HOME, PageType.RESTAURANT, PageType.SHOPPING_CART, PageType.HISTORY, PageType.SET_UP);
 
     @Override
@@ -54,9 +56,8 @@ public class UserMainActivity extends BaseCore implements View.OnClickListener, 
         setContentView(R.layout.activity_user);
         context = this;
         getView();
-        FRAGMENT_TAG = PageType.HOME.name();
-        Fragment fragment = PageFragmentFactory.of(PageType.HOME, null);
-        getSupportFragmentManager().beginTransaction().replace(R.id.frameContainer, fragment).addToBackStack(fragment.toString()).commit();
+        FM = getSupportFragmentManager();
+        removeAndReplaceWhere(null, PageType.HOME, null);
     }
 
     private void getView() {
@@ -77,7 +78,6 @@ public class UserMainActivity extends BaseCore implements View.OnClickListener, 
         tabLayout.addTab(tabLayout.newTab().setCustomView(v2).setTag(R.string.menu_shopping_cart_btn), false);
         tabLayout.addTab(tabLayout.newTab().setCustomView(v3).setTag(R.string.menu_history_btn), false);
         tabLayout.addTab(tabLayout.newTab().setCustomView(v4).setTag(R.string.menu_set_up_btn), false);
-
     }
 
     @Override
@@ -89,19 +89,6 @@ public class UserMainActivity extends BaseCore implements View.OnClickListener, 
     @Override
     protected void onStop() {
         super.onStop();
-        AccountDetailFragment.FRAGMENT = null;
-        CategoryMenuFragment.FRAGMENT = null;
-        HistoryFragment.FRAGMENT = null;
-        HomeFragment.FRAGMENT = null;
-        MenuDetailFragment.FRAGMENT = null;
-        OrderDetailFragment.FRAGMENT = null;
-        ResetPasswordFragment.FRAGMENT = null;
-        RestaurantDetailFragment.FRAGMENT = null;
-        RestaurantFragment.FRAGMENT = null;
-        SetUpFragment.FRAGMENT = null;
-        ShoppingCartFragment.FRAGMENT = null;
-        SimpleInformationFragment.FRAGMENT = null;
-        SubmitOrdersFragment.FRAGMENT = null;
     }
 
     @Override
@@ -138,9 +125,7 @@ public class UserMainActivity extends BaseCore implements View.OnClickListener, 
 
         int index = Integer.parseInt(tab.getTag().toString());
         if (MAIN_PAGE.contains(PageType.ofId(index))) {
-            Fragment fragment = PageFragmentFactory.of(PageType.ofId(Integer.parseInt(tab.getTag().toString())), null);
-            FRAGMENT_TAG = PageType.ofId(Integer.parseInt(tab.getTag().toString())).name();
-            getSupportFragmentManager().beginTransaction().addToBackStack(fragment.toString()).replace(R.id.frameContainer, fragment).commit();
+            removeAndReplaceWhere(null, PageType.ofId(Integer.parseInt(tab.getTag().toString())), null);
         }
 
         View v = tab.getCustomView();
@@ -165,9 +150,7 @@ public class UserMainActivity extends BaseCore implements View.OnClickListener, 
         int index = Integer.parseInt(tab.getTag().toString());
         if (!FRAGMENT_TAG.equals(PageType.ofId(index).name())) {
             if (MAIN_PAGE.contains(PageType.ofId(index))) {
-                Fragment fragment = PageFragmentFactory.of(PageType.ofId(Integer.parseInt(tab.getTag().toString())), null);
-                FRAGMENT_TAG = PageType.ofId(Integer.parseInt(tab.getTag().toString())).name();
-                getSupportFragmentManager().beginTransaction().addToBackStack(fragment.toString()).replace(R.id.frameContainer, fragment).commit();
+                removeAndReplaceWhere(null, PageType.ofId(Integer.parseInt(tab.getTag().toString())), null);
             }
             View v = tab.getCustomView();
             ImageView icon = v.findViewById(R.id.tabIcon);
@@ -184,7 +167,39 @@ public class UserMainActivity extends BaseCore implements View.OnClickListener, 
             toolbar.setNavigationIcon(context.getResources().getDrawable(R.drawable.naber_back_icon));
         }
         toolbar.setNavigationOnClickListener(listener);
+    }
 
+    public static void removeAndReplaceWhere(Fragment fm, PageType pageType, Bundle bundle) {
+        FRAGMENT_TAG = pageType.name();
+        Fragment fragment = PageFragmentFactory.of(pageType, bundle);
+        if (fm != null) {
+            FM.beginTransaction()
+                    .remove(fm)
+                    .replace(R.id.frameContainer, fragment)
+                    .addToBackStack(pageType.toClass().getSimpleName())
+                    .commit();
+        } else {
+            FM.beginTransaction()
+                    .replace(R.id.frameContainer, fragment)
+                    .addToBackStack(pageType.toClass().getSimpleName())
+                    .commit();
+        }
+    }
+
+    public static void clearAllFragment() {
+        AccountDetailFragment.FRAGMENT = null;
+        CategoryMenuFragment.FRAGMENT = null;
+        HistoryFragment.FRAGMENT = null;
+        HomeFragment.FRAGMENT = null;
+        MenuDetailFragment.FRAGMENT = null;
+        OrderDetailFragment.FRAGMENT = null;
+        ResetPasswordFragment.FRAGMENT = null;
+        RestaurantDetailFragment.FRAGMENT = null;
+        RestaurantFragment.FRAGMENT = null;
+        SetUpFragment.FRAGMENT = null;
+        ShoppingCartFragment.FRAGMENT = null;
+        SimpleInformationFragment.FRAGMENT = null;
+        SubmitOrdersFragment.FRAGMENT = null;
     }
 
 }

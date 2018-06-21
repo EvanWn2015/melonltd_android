@@ -9,10 +9,10 @@ public enum Identity {
     INTERMEDIATE("國中生"),
     SENIOR("高中生"),
     UNIVERSITY("大學/大專院校生"),
-    NON_STUDENT("社會人士"),
+    NON_STUDENT("社會人士/其它"),
     SELLERS("SELLERS");
 
-    private String name;
+    public String name;
 
     Identity(String name) {
         this.name = name;
@@ -21,6 +21,15 @@ public enum Identity {
     public static Identity of(String name) {
         for (Identity type : getEnumValues()) {
             if (type.name().equals(name.toUpperCase())) {
+                return type;
+            }
+        }
+        return null;
+    }
+
+    public static Identity ofName(String name) {
+        for (Identity type : getEnumValues()) {
+            if (type.name.equals(name)) {
                 return type;
             }
         }
