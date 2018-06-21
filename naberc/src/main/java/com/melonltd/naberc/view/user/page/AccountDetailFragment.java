@@ -2,6 +2,7 @@ package com.melonltd.naberc.view.user.page;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -43,6 +44,7 @@ import com.melonltd.naberc.model.api.ThreadCallback;
 import com.melonltd.naberc.model.constant.NaberConstant;
 import com.melonltd.naberc.model.service.SPService;
 import com.melonltd.naberc.model.type.Identity;
+import com.melonltd.naberc.util.LoadingBarTools;
 import com.melonltd.naberc.util.PhotoTools;
 import com.melonltd.naberc.util.UpLoadCallBack;
 import com.melonltd.naberc.view.common.BaseCore;
@@ -163,7 +165,7 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
                 bitmap = PhotoTools.sampleBitmap(bitmap, 120);
                 bitmap.compress(Bitmap.CompressFormat.JPEG, 100, out);
                 byte[] bytes = out.toByteArray();
-
+                final AlertDialog dialog = LoadingBarTools.newLoading(getContext());
                 PhotoTools.upLoadImage(bytes, NaberConstant.STORAGE_PATH_USER, holder.accountInfo.account_uuid + ".jpg", new UpLoadCallBack() {
                     @Override
                     public void getUri(final Uri uri) {
@@ -176,11 +178,12 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
                             public void onSuccess(String responseBody) {
                                 holder.accountInfo.photo = uri.toString();
                                 holder.avatarImage.setImageURI(uri);
+                                dialog.dismiss();
                             }
 
                             @Override
                             public void onFail(Exception error, String msg) {
-
+                                dialog.dismiss();
                             }
                         });
                     }

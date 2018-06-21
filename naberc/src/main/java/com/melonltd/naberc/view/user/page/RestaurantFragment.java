@@ -66,8 +66,7 @@ public class RestaurantFragment extends Fragment implements View.OnClickListener
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        adapter = new RestaurantAdapter();
-        adapter.setItemOnClickListener(new ItemOnClickListener());
+        adapter = new RestaurantAdapter(Model.RESTAURANT_INFO_FILTER_LIST, new ItemOnClickListener());
     }
 
     @Override
@@ -119,12 +118,12 @@ public class RestaurantFragment extends Fragment implements View.OnClickListener
             @Override
             public boolean onBGARefreshLayoutBeginLoadingMore(BGARefreshLayout refreshLayout) {
                 bgaRefreshLayout.endLoadingMore();
-                if (!reqData.loadingMore){
+                if (!reqData.loadingMore) {
                     return false;
                 }
 
-                reqData.page ++;
-                if (reqData.search_type.equals("DISTANCE")){
+                reqData.page++;
+                if (reqData.search_type.equals("DISTANCE")) {
                     reqData.uuids.addAll(getTemplate(reqData.page));
                 }
                 doLoadData(false);
@@ -143,17 +142,19 @@ public class RestaurantFragment extends Fragment implements View.OnClickListener
             @Override
             public void onSuccess(String responseBody) {
                 List<RestaurantInfoVo> list = Tools.JSONPARSE.fromJsonList(responseBody, RestaurantInfoVo[].class);
-                if (list.size() % 10 != 0){
+                if (list.size() % 10 != 0) {
                     reqData.loadingMore = false;
                 }
-                if (reqData.search_type.equals("DISTANCE")){
-                    Ordering<RestaurantInfoVo> ordering = Ordering.natural().nullsFirst().onResultOf(new Function<RestaurantInfoVo, Double>() {
-                        public Double apply(RestaurantInfoVo info) {
-                            return DistanceTools.getDistance(Model.LOCATION, LocationVo.of(info.latitude, info.longitude));
-                        }
-                    });
+                if (reqData.search_type.equals("DISTANCE")) {
+                    Ordering<RestaurantInfoVo> ordering = Ordering.natural()
+                            .nullsFirst()
+                            .onResultOf(new Function<RestaurantInfoVo, Double>() {
+                                public Double apply(RestaurantInfoVo info) {
+                                    return DistanceTools.getDistance(Model.LOCATION, LocationVo.of(info.latitude, info.longitude));
+                                }
+                            });
                     Model.RESTAURANT_INFO_FILTER_LIST.addAll(ordering.sortedCopy(list));
-                }else {
+                } else {
                     Model.RESTAURANT_INFO_FILTER_LIST.addAll(list);
                 }
                 adapter.notifyDataSetChanged();
@@ -175,8 +176,7 @@ public class RestaurantFragment extends Fragment implements View.OnClickListener
             Fragment f = PageFragmentFactory.of(PageType.RESTAURANT_DETAIL, null);
             getFragmentManager().beginTransaction().replace(R.id.frameContainer, f).addToBackStack(f.toString()).commit();
         } else {
-            if (Model.RESTAURANT_INFO_FILTER_LIST.size() == 0) {
-//                doLoadData(true);
+            if (Model.RESTAURANT_INFO_FILTER_LIST.size() == 0){
                 filterDistanceBtn.callOnClick();
             }
         }
@@ -195,9 +195,7 @@ public class RestaurantFragment extends Fragment implements View.OnClickListener
 
     @Override
     public void onClick(final View v) {
-        filterCategoryBtn.setBackground(getResources().getDrawable(R.drawable.naber_reverse_gary_button_style));
-        filterAreaBtn.setBackground(getResources().getDrawable(R.drawable.naber_reverse_gary_button_style));
-        filterDistanceBtn.setBackground(getResources().getDrawable(R.drawable.naber_reverse_gary_button_style));
+
         switch (v.getId()) {
             case R.id.filterCategoryBtn:
                 final String[] categorys = new String[]{"火鍋", "燒烤/居酒屋", "鐵板燒", "素蔬食", "早午餐", "下午茶", "西式/牛排", "中式", "港式", "日式", "韓式", "異國", "美式", "義式", "熱炒", "小吃", "泰式", "咖啡輕食", "甜點", "冰飲"};
@@ -210,9 +208,11 @@ public class RestaurantFragment extends Fragment implements View.OnClickListener
                         .setOnItemClickListener(new OnItemClickListener() {
                             @Override
                             public void onItemClick(Object o, int position) {
-                                if (position != -1){
+                                if (position != -1) {
+                                    filterAreaBtn.setBackground(getResources().getDrawable(R.drawable.naber_reverse_gary_button_style));
+                                    filterDistanceBtn.setBackground(getResources().getDrawable(R.drawable.naber_reverse_gary_button_style));
                                     v.setBackgroundColor(getResources().getColor(R.color.naber_basis));
-                                    if (!reqData.category.equals(categorys[position])){
+                                    if (!reqData.category.equals(categorys[position])) {
                                         filterTypeText.setText(categorys[position]);
                                         reqData = new ReqData();
                                         reqData.search_type = "CATEGORY";
@@ -238,9 +238,11 @@ public class RestaurantFragment extends Fragment implements View.OnClickListener
                         .setOnItemClickListener(new OnItemClickListener() {
                             @Override
                             public void onItemClick(Object o, int position) {
-                                if (position != -1){
+                                if (position != -1) {
+                                    filterCategoryBtn.setBackground(getResources().getDrawable(R.drawable.naber_reverse_gary_button_style));
+                                    filterDistanceBtn.setBackground(getResources().getDrawable(R.drawable.naber_reverse_gary_button_style));
                                     v.setBackgroundColor(getResources().getColor(R.color.naber_basis));
-                                    if (!reqData.area.equals(areas[position])){
+                                    if (!reqData.area.equals(areas[position])) {
                                         filterTypeText.setText(areas[position]);
                                         reqData = new ReqData();
                                         reqData.search_type = "AREA";
@@ -256,8 +258,10 @@ public class RestaurantFragment extends Fragment implements View.OnClickListener
                         .show();
                 break;
             case R.id.filterDistanceBtn:
+                filterCategoryBtn.setBackground(getResources().getDrawable(R.drawable.naber_reverse_gary_button_style));
+                filterAreaBtn.setBackground(getResources().getDrawable(R.drawable.naber_reverse_gary_button_style));
                 v.setBackgroundColor(getResources().getColor(R.color.naber_basis));
-                if (reqData.search_type == null || !reqData.search_type.equals("DISTANCE")){
+                if (reqData.search_type == null || !reqData.search_type.equals("DISTANCE")) {
                     filterTypeText.setText("離我最近");
                     reqData = new ReqData();
                     reqData.search_type = "DISTANCE";
@@ -270,21 +274,21 @@ public class RestaurantFragment extends Fragment implements View.OnClickListener
         }
     }
 
-    private static List<String> getTemplate (int page){
+    private static List<String> getTemplate(int page) {
         List<String> uuids = Lists.<String>newArrayList();
-        if (!Model.RESTAURANT_TEMPLATE.isEmpty()){
-            for(int i=0; i<Model.RESTAURANT_TEMPLATE.get(page - 1).size(); i++){
+        if (!Model.RESTAURANT_TEMPLATE.isEmpty()) {
+            for (int i = 0; i < Model.RESTAURANT_TEMPLATE.get(page - 1).size(); i++) {
                 uuids.add(Model.RESTAURANT_TEMPLATE.get(page - 1).get(i).restaurant_uuid);
             }
         }
 
-        return  uuids;
+        return uuids;
     }
 
-    class ItemOnClickListener implements View.OnClickListener{
+    class ItemOnClickListener implements View.OnClickListener {
         @Override
         public void onClick(View view) {
-            int index = (int)view.getTag();
+            int index = (int) view.getTag();
             Bundle bundle = new Bundle();
             bundle.putSerializable(NaberConstant.RESTAURANT_INFO, Model.RESTAURANT_INFO_FILTER_LIST.get(index));
             TO_RESTAURANT_DETAIL_INDEX = index;

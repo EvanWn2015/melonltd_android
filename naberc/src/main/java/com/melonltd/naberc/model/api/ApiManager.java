@@ -128,6 +128,12 @@ public class ApiManager {
         call.enqueue(callback);
     }
 
+    // 更新密碼
+    public static void reseatPassword(Map<String, String> req, ThreadCallback callback) {
+        Call call = getClient().postHeader(ApiUrl.RESEAT_PSW, SPService.getOauth(), Base64Service.encryptBASE64(Tools.JSONPARSE.toJson(req)));
+        call.enqueue(callback);
+    }
+
     public static void test(ThreadCallback callback) {
         TData tt = new TData();
         String gg = Tools.JSONPARSE.toJson(tt);

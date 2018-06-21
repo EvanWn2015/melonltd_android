@@ -69,7 +69,7 @@ public class HomeFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Fresco.initialize(getContext());
-        adapter = new RestaurantAdapter();
+        adapter = new RestaurantAdapter(Model.RESTAURANT_INFO_LIST, new ItemOnClickListener());
     }
 
     @Override
@@ -144,15 +144,15 @@ public class HomeFragment extends Fragment {
             public void onSuccess(String responseBody) {
                 List<BulletinVo> list = Tools.JSONPARSE.fromJsonList(responseBody, BulletinVo[].class);
                 for (int i = 0; i < list.size(); i++) {
-                    Iterator<String> iterator =  Splitter.on("$split").split(list.get(i).content_text).iterator();
+                    Iterator<String> iterator = Splitter.on("$split").split(list.get(i).content_text).iterator();
                     String content_text = "";
-                    while (iterator.hasNext()){
+                    while (iterator.hasNext()) {
                         content_text += iterator.next() + "\n";
                     }
                     Map<String, String> m = Maps.newHashMap();
                     m.put("title", list.get(i).title);
                     m.put("content_text", content_text);
-                    Model.BULLETIN_VOS.put(list.get(i).bulletin_category,m);
+                    Model.BULLETIN_VOS.put(list.get(i).bulletin_category, m);
                 }
                 bulletinText.setText(Model.BULLETIN_VOS.get("HOME").get("content_text"));
             }
@@ -164,7 +164,7 @@ public class HomeFragment extends Fragment {
         });
 
         recyclerView.setAdapter(adapter);
-        adapter.setItemOnClickListener(new ItemOnClickListener());
+//        adapter.setItemOnClickListener(new ItemOnClickListener());
 
         bgaRefreshLayout.setDelegate(new BGARefreshLayout.BGARefreshLayoutDelegate() {
             @Override
@@ -186,8 +186,8 @@ public class HomeFragment extends Fragment {
             Model.RESTAURANT_INFO_LIST.clear();
         }
         ReqData req = new ReqData();
-        req.search_type="TOP";
-        ApiManager.restaurantList(req, new ThreadCallback(getContext()){
+        req.search_type = "TOP";
+        ApiManager.restaurantList(req, new ThreadCallback(getContext()) {
             @Override
             public void onSuccess(String responseBody) {
                 List<RestaurantInfoVo> vos = Tools.JSONPARSE.fromJsonList(responseBody, RestaurantInfoVo[].class);
@@ -241,7 +241,7 @@ public class HomeFragment extends Fragment {
     class ItemOnClickListener implements View.OnClickListener {
         @Override
         public void onClick(View view) {
-            int index = (int)view.getTag();
+            int index = (int) view.getTag();
             Bundle bundle = new Bundle();
             bundle.putSerializable(NaberConstant.RESTAURANT_INFO, Model.RESTAURANT_INFO_LIST.get(index));
             RestaurantFragment.TO_RESTAURANT_DETAIL_INDEX = index;

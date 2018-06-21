@@ -16,6 +16,7 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.imagepipeline.request.ImageRequestBuilder;
 import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
 import com.melonltd.naberc.R;
 import com.melonltd.naberc.model.bean.Model;
 import com.melonltd.naberc.util.DistanceTools;
@@ -28,13 +29,15 @@ import java.util.List;
 public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.ViewHolder> {
     private static final String TAG = RestaurantAdapter.class.getSimpleName();
     private View.OnClickListener itemOnClickListener;
+    private List<RestaurantInfoVo> list;
     private Location location;
 
     public void setLocation(Location location){
         this.location = location;
     }
 
-    public void setItemOnClickListener(View.OnClickListener itemOnClickListener) {
+    public RestaurantAdapter(List<RestaurantInfoVo> list, View.OnClickListener itemOnClickListener) {
+        this.list = list;
         this.itemOnClickListener = itemOnClickListener;
     }
 
@@ -51,24 +54,24 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
         holder.restaurantItem.setTag(position);
         holder.restaurantItem.setOnClickListener(this.itemOnClickListener);
 
-        if (!Strings.isNullOrEmpty(Model.RESTAURANT_INFO_LIST.get(position).photo)){
-            holder.restaurantIcon.setImageURI(Uri.parse(Model.RESTAURANT_INFO_LIST.get(position).photo));
+        if (!Strings.isNullOrEmpty(list.get(position).photo)){
+            holder.restaurantIcon.setImageURI(Uri.parse(list.get(position).photo));
         }else {
             ImageRequest imageRequest = ImageRequestBuilder.newBuilderWithResourceId(R.drawable.naber_icon_logo_reverse).build();
             holder.restaurantIcon.setImageURI(imageRequest.getSourceUri());
         }
 
-        holder.restaurantNameText.setText(Model.RESTAURANT_INFO_LIST.get(position).name);
+        holder.restaurantNameText.setText(list.get(position).name);
         holder.businessTimeText.setText("接單時間: " +
-                Model.RESTAURANT_INFO_LIST.get(position).store_start + "~" +
-                Model.RESTAURANT_INFO_LIST.get(position).store_end);
+                list.get(position).store_start + "~" +
+                list.get(position).store_end);
 
-        holder.addressText.setText(Model.RESTAURANT_INFO_LIST.get(position).address);
+        holder.addressText.setText(list.get(position).address);
         String distance = DistanceTools.getGoogleDistance(
                 this.location,
                 LocationVo.of(
-                        Double.parseDouble(Model.RESTAURANT_INFO_LIST.get(position).latitude),
-                        Double.parseDouble(Model.RESTAURANT_INFO_LIST.get(position).longitude)
+                        Double.parseDouble(list.get(position).latitude),
+                        Double.parseDouble(list.get(position).longitude)
                 )
         );
         holder.distanceText.setText("" + distance);
@@ -76,7 +79,7 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
 
     @Override
     public int getItemCount() {
-        return Model.RESTAURANT_INFO_LIST.size();
+        return list.size();
     }
 
 
