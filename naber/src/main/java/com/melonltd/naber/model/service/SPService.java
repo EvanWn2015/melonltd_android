@@ -3,6 +3,10 @@ package com.melonltd.naber.model.service;
 import android.content.SharedPreferences;
 
 import com.melonltd.naber.R;
+import com.melonltd.naber.util.Tools;
+import com.melonltd.naber.vo.OrderDetail;
+
+import java.util.List;
 
 public class SPService {
     private static SPService SERVICE = null;
@@ -60,6 +64,17 @@ public class SPService {
     public static boolean getNotifyShake(){
         return SERVICE.preferences.getBoolean(String.valueOf(R.string.user_notify_shake),true);
     }
+
+
+    // 緩存使用者購物車訂單
+    public static void setUserCacheShoppingCarData(List<OrderDetail> data) {
+        SERVICE.preferences.edit().putString(String.valueOf(R.string.user_cache_shopping_car_data),Tools.JSONPARSE.toJson(data)).commit();
+    }
+    public static List<OrderDetail> getUserCacheShoppingCarData() {
+        String data = SERVICE.preferences.getString(String.valueOf(R.string.user_cache_shopping_car_data),null);
+        return Tools.JSONPARSE.fromJsonList(data,OrderDetail[].class);
+    }
+
 
 
     public static void setUserName(String userName) {

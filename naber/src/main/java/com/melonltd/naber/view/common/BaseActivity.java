@@ -8,6 +8,9 @@ import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 
+import com.melonltd.naber.R;
+import com.melonltd.naber.model.bean.Model;
+import com.melonltd.naber.model.constant.NaberConstant;
 import com.melonltd.naber.model.service.SPService;
 import com.melonltd.naber.model.type.Identity;
 import com.melonltd.naber.view.common.page.LoginFragment;
@@ -19,7 +22,6 @@ import com.melonltd.naber.view.factory.PageFragmentFactory;
 import com.melonltd.naber.view.factory.PageType;
 import com.melonltd.naber.view.seller.SellerMainActivity;
 import com.melonltd.naber.view.user.UserMainActivity;
-import com.melonltd.naber.R;
 
 import java.util.Date;
 
@@ -48,10 +50,10 @@ public class BaseActivity extends BaseCore {
         super.onResume();
         long limit = SPService.getLoginLimit();
         long now = new Date().getTime();
-        long day7 = 1000 * 60 * 60 * 24 * 7L * 2;
-        if (now - day7 < limit) {
+        if (now - NaberConstant.REMEMBER_DAY < limit) {
             String identity = SPService.getRememberIdentity();
             if (Identity.getUserValues().contains(Identity.of(identity))) {
+                Model.USER_CACHE_SHOPPING_CART = SPService.getUserCacheShoppingCarData();
                 loadRestaurantTemplate(context);
                 startActivity(new Intent(context, UserMainActivity.class));
             } else if (Identity.SELLERS.equals(Identity.of(identity))) {

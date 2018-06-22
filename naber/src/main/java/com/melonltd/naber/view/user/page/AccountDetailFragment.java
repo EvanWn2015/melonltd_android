@@ -1,10 +1,8 @@
 package com.melonltd.naber.view.user.page;
 
-import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
@@ -26,6 +24,7 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.imagepipeline.request.ImageRequestBuilder;
 import com.google.common.base.Strings;
+import com.melonltd.naber.R;
 import com.melonltd.naber.model.api.ApiManager;
 import com.melonltd.naber.model.api.ThreadCallback;
 import com.melonltd.naber.model.constant.NaberConstant;
@@ -39,7 +38,6 @@ import com.melonltd.naber.view.factory.PageType;
 import com.melonltd.naber.view.user.UserMainActivity;
 import com.melonltd.naber.vo.AccountInfoVo;
 import com.melonltd.naber.vo.ReqData;
-import com.melonltd.naber.R;
 
 import java.io.ByteArrayOutputStream;
 
@@ -231,21 +229,17 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
                         public void onItemClick(Object o, int position) {
                             if (position == 1) {
                                 // 確認寫入權限
-                                if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                                if (BaseCore.checkWritePermission(getContext())){
                                     ActivityCompat.requestPermissions(getActivity(), BaseCore.IO_STREAM, BaseCore.IO_STREAM_CODE);
-                                } else {
-                                    Intent intent = new Intent();
-                                    intent.setType("image/*");
-                                    intent.setAction(Intent.ACTION_GET_CONTENT);
-                                    startActivityForResult(intent, PICK_FROM_GALLERY);
+                                }else {
+                                    intentToPick();
                                 }
                             } else if (position == 0) {
                                 // 相機權限
-                                if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                                    ActivityCompat.requestPermissions(getActivity(), BaseCore.CAMERA, BaseCore.CAMERA_CODE);
-                                } else {
-                                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                                    startActivityForResult(intent, PICK_FROM_CAMERA);
+                                if (BaseCore.checkCameraPermission(getContext())){
+                                    ActivityCompat.requestPermissions(getActivity(), BaseCore.CAMERA_PERMISSION, BaseCore.CAMERA_CODE);
+                                }else {
+                                    intentToCamera();
                                 }
                             }
                         }
@@ -256,6 +250,17 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
         }
     }
 
+    public void intentToPick (){
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(intent, PICK_FROM_GALLERY);
+    }
+
+    public void intentToCamera (){
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        startActivityForResult(intent, PICK_FROM_CAMERA);
+    }
 
     class ViewHolder {
         private AccountInfoVo accountInfo;

@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -154,6 +155,10 @@ public class CategoryMenuFragment extends Fragment {
         }
         if (TO_MENU_DETAIL_INDEX >= 0) {
             Bundle bundle = new Bundle();
+            Log.i(TAG,holder.categoryInfo.restaurant_uuid);
+
+            bundle.putString(NaberConstant.RESTAURANT_NAME, getArguments().getString(NaberConstant.RESTAURANT_NAME));
+            bundle.putString(NaberConstant.RESTAURANT_UUID, holder.categoryInfo.restaurant_uuid);
             bundle.putSerializable(NaberConstant.FOOD_INFO, Model.CATEGORY_FOOD_REL_LIST.get(TO_MENU_DETAIL_INDEX));
             UserMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.MENU_DETAIL, bundle);
         }
@@ -177,6 +182,9 @@ public class CategoryMenuFragment extends Fragment {
         public void onClick(View v) {
             TO_MENU_DETAIL_INDEX = (int) v.getTag();
             Bundle bundle = new Bundle();
+            Log.i(TAG,holder.categoryInfo.restaurant_uuid);
+            bundle.putString(NaberConstant.RESTAURANT_NAME, getArguments().getString(NaberConstant.RESTAURANT_NAME));
+            bundle.putString(NaberConstant.RESTAURANT_UUID, holder.categoryInfo.restaurant_uuid);
             bundle.putSerializable(NaberConstant.FOOD_INFO, Model.CATEGORY_FOOD_REL_LIST.get(TO_MENU_DETAIL_INDEX));
             UserMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.MENU_DETAIL, bundle);
         }

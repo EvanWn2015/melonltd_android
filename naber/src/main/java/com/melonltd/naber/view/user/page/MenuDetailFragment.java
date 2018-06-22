@@ -25,6 +25,7 @@ import com.melonltd.naber.model.api.ApiManager;
 import com.melonltd.naber.model.api.ThreadCallback;
 import com.melonltd.naber.model.bean.Model;
 import com.melonltd.naber.model.constant.NaberConstant;
+import com.melonltd.naber.model.service.SPService;
 import com.melonltd.naber.util.Tools;
 import com.melonltd.naber.view.customize.NaberCheckButton;
 import com.melonltd.naber.view.customize.NaberRadioButton;
@@ -43,7 +44,7 @@ public class MenuDetailFragment extends Fragment implements View.OnClickListener
     public static MenuDetailFragment FRAGMENT = null;
     private TextView totalAmountText;
     private TextView quantityEditText;
-    private int totalAmount = 0;
+//    private int totalAmount = 0;
     private LinearLayout contentLayout;
     private OrderDetail.OrderData orderData = new OrderDetail.OrderData();
 
@@ -107,19 +108,23 @@ public class MenuDetailFragment extends Fragment implements View.OnClickListener
         }
 
         contentLayout.removeAllViews();
-        orderData.count = 1;
-        totalAmount = 0;
+//        totalAmount = 0;
 
         final CategoryFoodRelVo vo = (CategoryFoodRelVo) getArguments().getSerializable(NaberConstant.FOOD_INFO);
+
         if (vo != null) {
             UserMainActivity.toolbar.setTitle(vo.food_name);
             contentLayout.removeAllViews();
             orderData = new OrderDetail.OrderData();
             orderData.count = 1;
+            orderData.category_uuid = vo.category_uuid;
+            orderData.food_uuid = vo.food_uuid;
+            orderData.item.food_uuid = vo.food_uuid;
             ApiManager.restaurantFoodDetail(vo.food_uuid, new ThreadCallback(getContext()) {
                 @Override
                 public void onSuccess(String responseBody) {
                     CategoryFoodRelVo food = Tools.JSONPARSE.fromJson(responseBody, CategoryFoodRelVo.class);
+                    getArguments().putString("FOOd_PHOTO", food.photo);
                     setScopeView(food.food_data.scopes);
                     setDemandView(food.food_data.demands);
                     setOptView(food.food_data.opts);
@@ -142,7 +147,7 @@ public class MenuDetailFragment extends Fragment implements View.OnClickListener
             optPrice += Integer.parseInt(opt.price);
         }
         quantityEditText.setText(orderData.count + "");
-        totalAmountText.setText(((scopes + optPrice) * orderData.count) + "$");
+        totalAmountText.setText(((scopes + optPrice) * orderData.count) + "");
     }
 
     private void setScopeView(final List<ItemVo> scopes) {
@@ -252,16 +257,47 @@ public class MenuDetailFragment extends Fragment implements View.OnClickListener
 
     @Override
     public void onClick(View v) {
+        String uuid = getArguments().getString(NaberConstant.RESTAURANT_UUID);
+        orderData.item.price = totalAmountText.getText().toString();
 
-        OrderDetail orderDetail = OrderDetail.ofOrders(Lists.newArrayList(orderData));
-        Log.d(TAG,orderDetail.toString());
-        if(Model.USER_CACH_SHOPPING_CART.get("") == null){
+        OrderDetail.OrderData data = new OrderDetail.OrderData();
+        data.item.price = totalAmountText.getText().toString();
+        data.count = orderData.count;
+        data.item = orderData.item;
+        data.item.food_name = UserMainActivity.toolbar.getTitle().toString();
+        data.item.food_photo = getArguments().getString("FOOd_PHOTO");
+        boolean has = false;
+        for (OrderDetail o : Model.USER_CACHE_SHOPPING_CART) {
+            if (uuid.equals(o.restaurant_uuid)) {
+                o.restaurant_name = getArguments().getString(NaberConstant.RESTAURANT_NAME);
+                o.orders.add(data);
+                has = true;
+            }
+        }
+        if (!has) {
+            OrderDetail orderDetail = OrderDetail.ofOrders(Lists.newArrayList(data));
+            orderDetail.restaurant_name = getArguments().getString(NaberConstant.RESTAURANT_NAME);
+            orderDetail.restaurant_uuid = uuid;
+            Model.USER_CACHE_SHOPPING_CART.add(orderDetail);
+        }
+        String msg = "規格：";
+        msg += orderData.item.scopes.get(0).name + "\n";
 
+        for (int i = 0; i < orderData.item.demands.size(); i++) {
+            msg += orderData.item.demands.get(i).name + ":";
+            msg += orderData.item.demands.get(i).datas.get(0).name + "\n";
         }
 
-        Log.d(TAG,Model.USER_CACH_SHOPPING_CART.get("").toString());
+        if (orderData.item.opts.size() > 0) {
+            msg += "追加項目：";
+            for (int i = 0; i < orderData.item.opts.size(); i++) {
+                msg += orderData.item.opts.get(i).name + ",";
+            }
+            msg += "\n";
+        }
+        msg += "數量：" + orderData.count + "\n";
+        msg += "金額：" + totalAmountText.getText().toString();
 
-        String msg = "品項：珍珠奶茶\n規格：大杯\n溫度：正常冰\n甜度：正常甜\n追加:布丁\n數量:2\n金額：90$";
         new AlertView.Builder()
                 .setContext(getContext())
                 .setStyle(AlertView.Style.Alert)
@@ -271,18 +307,17 @@ public class MenuDetailFragment extends Fragment implements View.OnClickListener
                 .setOnItemClickListener(new OnItemClickListener() {
                     @Override
                     public void onItemClick(Object o, int position) {
+                        SPService.setUserCacheShoppingCarData(Model.USER_CACHE_SHOPPING_CART);
                         if (position == 0) {
                             //TODO 選填內容存入SQLite，並導向購物車畫面
                             CategoryMenuFragment.TO_MENU_DETAIL_INDEX = -1;
                             UserMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.SHOPPING_CART, null);
                         } else {
                             //TODO 暫存選去內容，導系列頁面
-
                             RestaurantDetailFragment.TO_CATEGORY_MENU_INDEX = -1;
                             CategoryMenuFragment.TO_MENU_DETAIL_INDEX = -1;
                             UserMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.RESTAURANT_DETAIL, null);
                         }
-                        Log.d(TAG, o.toString());
                     }
                 })
                 .build()

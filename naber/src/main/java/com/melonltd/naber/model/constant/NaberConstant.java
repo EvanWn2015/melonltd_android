@@ -3,7 +3,9 @@ package com.melonltd.naber.model.constant;
 public class NaberConstant {
     public static boolean IS_DEBUG = true;
 
-//    public static final String STORAGE_PATH = "gs://naber-test.appspot.com";
+    public static long REMEMBER_DAY = 1000 * 60 * 60 * 24 * 7L * 2;
+
+    //    public static final String STORAGE_PATH = "gs://naber-test.appspot.com";
     public static final String STORAGE_PATH = "gs://naber-20180622.appspot.com";
     public static final String STORAGE_PATH_USER = "/user";
     public static final String STORAGE_PATH_FOOD = "/food";
@@ -17,6 +19,8 @@ public class NaberConstant {
     public static final String SIMPLE_INFO = "SIMPLE_INFO";
     public static final String TOOLBAR_TITLE = "TOOLBAR_TITLE";
     public static final String ACCOUNT_INFO = "ACCOUNT_INFO";
+    public static final String RESTAURANT_UUID = "RESTAURANT_UUID";
+    public static final String RESTAURANT_NAME = "RESTAURANT_NAME";
 
 
 

@@ -233,6 +233,7 @@ public class RestaurantDetailFragment extends Fragment {
         TO_CATEGORY_MENU_INDEX = index;
         BaseCore.FRAGMENT_TAG = PageType.CATEGORY_MENU.name();
         Bundle bundle = new Bundle();
+        bundle.putString(NaberConstant.RESTAURANT_NAME,holder.restaurantNameText.getText().toString());
         bundle.putSerializable(NaberConstant.RESTAURANT_CATEGORY_REL, Model.RESTAURANT_CATEGORY_REL_LIST.get(index));
         Fragment f = PageFragmentFactory.of(PageType.CATEGORY_MENU, bundle);
         getFragmentManager().beginTransaction().replace(R.id.frameContainer, f).addToBackStack(f.toString()).commit();

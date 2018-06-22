@@ -30,6 +30,6 @@ public class Model {
     public static List<OrderVo> USER_ORDER_HISTORY_LIST = Lists.newArrayList();
 
     // key restaurant_uuid
-    public static Map<String, OrderDetail> USER_CACH_SHOPPING_CART = Maps.<String, OrderDetail>newHashMap();
+    public static List<OrderDetail> USER_CACHE_SHOPPING_CART = Lists.<OrderDetail>newArrayList();
 
 }

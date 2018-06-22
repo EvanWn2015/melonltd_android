@@ -9,6 +9,9 @@ public class DistanceTools {
     private static final String TAG = DistanceTools.class.getSimpleName();
 
     public static double getDistance(Location start, LocationVo end) {
+        if (start == null){
+            return 0.0;
+        }
         double lat1 = (Math.PI / 180) * start.getLatitude();
         double lat2 = (Math.PI / 180) * end.latitude;
         double lon1 = (Math.PI / 180) * start.getLongitude();

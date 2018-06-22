@@ -1,8 +1,13 @@
 package com.melonltd.naber.view.user.page;
 
 
+import android.Manifest;
+import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -37,6 +42,8 @@ import java.util.List;
 
 import cn.bingoogolapple.refreshlayout.BGANormalRefreshViewHolder;
 import cn.bingoogolapple.refreshlayout.BGARefreshLayout;
+
+import static com.melonltd.naber.view.common.BaseCore.LOCATION_MG;
 
 public class RestaurantFragment extends Fragment implements View.OnClickListener {
     private static final String TAG = RestaurantFragment.class.getSimpleName();
@@ -135,7 +142,7 @@ public class RestaurantFragment extends Fragment implements View.OnClickListener
             Model.RESTAURANT_INFO_FILTER_LIST.clear();
             adapter.notifyDataSetChanged();
         }
-        adapter.setLocation(Model.LOCATION);
+
         ApiManager.restaurantList(reqData, new ThreadCallback(getContext()) {
             @Override
             public void onSuccess(String responseBody) {
@@ -154,6 +161,15 @@ public class RestaurantFragment extends Fragment implements View.OnClickListener
                     Model.RESTAURANT_INFO_FILTER_LIST.addAll(ordering.sortedCopy(list));
                 } else {
                     Model.RESTAURANT_INFO_FILTER_LIST.addAll(list);
+                }
+
+                if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                    if (Model.LOCATION == null){
+                        Location location = LOCATION_MG.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                        adapter.setLocation(location);
+                    }else {
+                        adapter.setLocation(Model.LOCATION);
+                    }
                 }
                 adapter.notifyDataSetChanged();
             }

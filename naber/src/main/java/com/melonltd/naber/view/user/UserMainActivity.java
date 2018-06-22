@@ -14,6 +14,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.common.collect.Lists;
+import com.melonltd.naber.R;
 import com.melonltd.naber.view.common.BaseCore;
 import com.melonltd.naber.view.customize.NaberTab;
 import com.melonltd.naber.view.factory.PageFragmentFactory;
@@ -31,7 +32,6 @@ import com.melonltd.naber.view.user.page.SetUpFragment;
 import com.melonltd.naber.view.user.page.ShoppingCartFragment;
 import com.melonltd.naber.view.user.page.SimpleInformationFragment;
 import com.melonltd.naber.view.user.page.SubmitOrdersFragment;
-import com.melonltd.naber.R;
 
 import java.util.List;
 
@@ -85,6 +85,33 @@ public class UserMainActivity extends BaseCore implements View.OnClickListener, 
         super.onResume();
     }
 
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode) {
+            case LOCATION_CODE:
+                if (BaseCore.checkGrantResults(grantResults)){
+                    if (BaseCore.FRAGMENT_TAG.equals(PageType.HOME.name())){
+                        HomeFragment.FRAGMENT.doLoadData(true);
+                    }
+                }
+                break;
+            case CAMERA_CODE:
+                if (BaseCore.checkGrantResults(grantResults)){
+                    if (BaseCore.FRAGMENT_TAG.equals(PageType.ACCOUNT_DETAIL.name())){
+                        AccountDetailFragment.FRAGMENT.intentToCamera();
+                    }
+                }
+                break;
+            case IO_STREAM_CODE:
+                if (BaseCore.checkGrantResults(grantResults)){
+                    if (BaseCore.FRAGMENT_TAG.equals(PageType.ACCOUNT_DETAIL.name())){
+                        AccountDetailFragment.FRAGMENT.intentToPick();
+                    }
+                }
+                break;
+        }
+    }
 
     @Override
     protected void onStop() {

@@ -3,6 +3,8 @@ package com.melonltd.naber.view.user.page;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.location.Location;
+import android.location.LocationManager;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -21,6 +23,7 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.melonltd.naber.R;
 import com.melonltd.naber.model.api.ApiManager;
 import com.melonltd.naber.model.api.ThreadCallback;
 import com.melonltd.naber.model.bean.Model;
@@ -36,7 +39,6 @@ import com.melonltd.naber.vo.AdvertisementVo;
 import com.melonltd.naber.vo.BulletinVo;
 import com.melonltd.naber.vo.ReqData;
 import com.melonltd.naber.vo.RestaurantInfoVo;
-import com.melonltd.naber.R;
 
 import java.util.Iterator;
 import java.util.List;
@@ -45,6 +47,9 @@ import java.util.Map;
 import cn.bingoogolapple.bgabanner.BGABanner;
 import cn.bingoogolapple.refreshlayout.BGANormalRefreshViewHolder;
 import cn.bingoogolapple.refreshlayout.BGARefreshLayout;
+
+import static com.melonltd.naber.view.common.BaseCore.LOCATION_CODE;
+import static com.melonltd.naber.view.common.BaseCore.LOCATION_MG;
 
 
 public class HomeFragment extends Fragment {
@@ -78,6 +83,7 @@ public class HomeFragment extends Fragment {
             container.setTag(R.id.user_home_page, v);
             return v;
         }
+
         return (View) container.getTag(R.id.user_home_page);
     }
 
@@ -178,7 +184,7 @@ public class HomeFragment extends Fragment {
         });
     }
 
-    private void doLoadData(boolean isRefresh) {
+    public void doLoadData(boolean isRefresh) {
         if (isRefresh) {
             RestaurantFragment.TO_RESTAURANT_DETAIL_INDEX = -1;
             Model.RESTAURANT_INFO_LIST.clear();
@@ -190,7 +196,14 @@ public class HomeFragment extends Fragment {
             public void onSuccess(String responseBody) {
                 List<RestaurantInfoVo> vos = Tools.JSONPARSE.fromJsonList(responseBody, RestaurantInfoVo[].class);
                 Model.RESTAURANT_INFO_LIST.addAll(vos);
-                adapter.setLocation(Model.LOCATION);
+                if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                    if (Model.LOCATION == null){
+                        Location location = LOCATION_MG.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+                        adapter.setLocation(location);
+                    }else {
+                        adapter.setLocation(Model.LOCATION);
+                    }
+                }
                 adapter.notifyDataSetChanged();
             }
 
@@ -204,6 +217,12 @@ public class HomeFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+        if (BaseCore.checkLocationPermission(getContext())){
+            ActivityCompat.requestPermissions(getActivity(), BaseCore.LOCATION_PERMISSION, LOCATION_CODE);
+        }
+        if (Model.RESTAURANT_INFO_LIST.size() == 0) {
+            doLoadData(true);
+        }
     }
 
     @Override
@@ -213,17 +232,9 @@ public class HomeFragment extends Fragment {
         boolean isFirst = SPService.getIsFirstLogin();
         if (isFirst) {
             startActivity(new Intent(getActivity().getBaseContext(), IntroActivity.class));
-        } else {
-            if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
-                    ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions(getActivity(), BaseCore.LOCATION, BaseCore.LOCATION_CODE);
-            } else {
-                if (Model.RESTAURANT_INFO_LIST.size() == 0) {
-                    doLoadData(true);
-                }
-            }
         }
     }
+
 
     @Override
     public void onStop() {

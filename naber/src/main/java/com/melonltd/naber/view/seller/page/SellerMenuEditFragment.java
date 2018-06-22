@@ -241,7 +241,7 @@ public class SellerMenuEditFragment extends Fragment {
                             } else if (position == 0) {
                                 // 相機權限
                                 if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                                    ActivityCompat.requestPermissions(getActivity(), BaseCore.CAMERA, BaseCore.CAMERA_CODE);
+                                    ActivityCompat.requestPermissions(getActivity(), BaseCore.CAMERA_PERMISSION, BaseCore.CAMERA_CODE);
                                 } else {
                                     Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
 //                                    intent.putExtra(MediaStore.EXTRA_OUTPUT, false);

@@ -11,6 +11,7 @@ public class FoodItemVo implements Serializable{
     public String food_uuid;
     public String food_name;
     public String price;
+    public String food_photo = "";
 
     public List<ItemVo> scopes = Lists.<ItemVo>newArrayList();
     public List<ItemVo> opts = Lists.<ItemVo>newArrayList();
