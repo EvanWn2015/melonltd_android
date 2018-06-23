@@ -40,7 +40,6 @@ import com.melonltd.naber.view.factory.PageType;
 import com.melonltd.naber.vo.LocationVo;
 import com.melonltd.naber.vo.RestaurantTemplate;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -268,11 +267,12 @@ public abstract class BaseCore extends AppCompatActivity implements LocationList
 
 
     public static void loadJsonData(Context context) {
-        String JsonData = Tools.JSONPARSE.getJson(context, "identity.json");
-        ArrayList<IdentityJsonBean> identityBean = Tools.JSONPARSE.parseData(JsonData);
+        String jsonData = Tools.JSONPARSE.getJson(context, "identity.json");
+//        ArrayList<IdentityJsonBean> identityBean = Tools.JSONPARSE.parseData(JsonData);
+        List<IdentityJsonBean> identityBeans= Tools.JSONPARSE.fromJsonList(jsonData, IdentityJsonBean[].class);
         List<String> opt1 = Lists.newArrayList();
         List<List<String>> opt2 = Lists.newArrayList();
-        for (IdentityJsonBean b : identityBean) {
+        for (IdentityJsonBean b : identityBeans) {
             opt1.add(b.getName());
             List<String> datas = Lists.newArrayList();
             for (String d : b.getDatas()) {

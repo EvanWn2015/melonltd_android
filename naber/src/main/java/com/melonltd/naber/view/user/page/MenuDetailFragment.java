@@ -44,7 +44,6 @@ public class MenuDetailFragment extends Fragment implements View.OnClickListener
     public static MenuDetailFragment FRAGMENT = null;
     private TextView totalAmountText;
     private TextView quantityEditText;
-//    private int totalAmount = 0;
     private LinearLayout contentLayout;
     private OrderDetail.OrderData orderData = new OrderDetail.OrderData();
 
@@ -118,7 +117,6 @@ public class MenuDetailFragment extends Fragment implements View.OnClickListener
             orderData = new OrderDetail.OrderData();
             orderData.count = 1;
             orderData.category_uuid = vo.category_uuid;
-            orderData.food_uuid = vo.food_uuid;
             orderData.item.food_uuid = vo.food_uuid;
             ApiManager.restaurantFoodDetail(vo.food_uuid, new ThreadCallback(getContext()) {
                 @Override
@@ -261,16 +259,15 @@ public class MenuDetailFragment extends Fragment implements View.OnClickListener
         orderData.item.price = totalAmountText.getText().toString();
 
         OrderDetail.OrderData data = new OrderDetail.OrderData();
+        data = orderData;
         data.item.price = totalAmountText.getText().toString();
-        data.count = orderData.count;
-        data.item = orderData.item;
         data.item.food_name = UserMainActivity.toolbar.getTitle().toString();
         data.item.food_photo = getArguments().getString("FOOd_PHOTO");
         boolean has = false;
         for (OrderDetail o : Model.USER_CACHE_SHOPPING_CART) {
             if (uuid.equals(o.restaurant_uuid)) {
                 o.restaurant_name = getArguments().getString(NaberConstant.RESTAURANT_NAME);
-                o.orders.add(data);
+                o.orders.add(0,data);
                 has = true;
             }
         }
@@ -278,7 +275,7 @@ public class MenuDetailFragment extends Fragment implements View.OnClickListener
             OrderDetail orderDetail = OrderDetail.ofOrders(Lists.newArrayList(data));
             orderDetail.restaurant_name = getArguments().getString(NaberConstant.RESTAURANT_NAME);
             orderDetail.restaurant_uuid = uuid;
-            Model.USER_CACHE_SHOPPING_CART.add(orderDetail);
+            Model.USER_CACHE_SHOPPING_CART.add(0,orderDetail);
         }
         String msg = "規格：";
         msg += orderData.item.scopes.get(0).name + "\n";

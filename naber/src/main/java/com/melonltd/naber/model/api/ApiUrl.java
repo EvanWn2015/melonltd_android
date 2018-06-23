@@ -24,6 +24,7 @@ public class ApiUrl {
     public final static String RESTAURANT_FOOD_LIST = DOMAIN + "/restaurant/food/list";
     public final static String RESTAURANT_FOOD_DETAIL = DOMAIN + "/restaurant/food/detail";
     public final static String USER_ORDER_HISTORY = DOMAIN + "/user/order/history";
+    public final static String ORDER_SUBMIT = DOMAIN +"/user/order/subimt";
     public final static String FIND_ACCOUNT_INFO = DOMAIN  + "/account/find/info";
     public final static String RESEAT_PSW = DOMAIN +"/account/update/password";
 

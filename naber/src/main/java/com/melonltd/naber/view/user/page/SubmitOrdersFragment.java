@@ -14,17 +14,24 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.bigkoo.alertview.AlertView;
+import com.bigkoo.alertview.OnDismissListener;
 import com.bigkoo.alertview.OnItemClickListener;
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
+import com.bigkoo.pickerview.listener.OnTimeSelectChangeListener;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
+import com.google.common.base.Strings;
+import com.melonltd.naber.R;
 import com.melonltd.naber.model.api.ApiManager;
 import com.melonltd.naber.model.api.ThreadCallback;
+import com.melonltd.naber.model.bean.Model;
+import com.melonltd.naber.model.constant.NaberConstant;
+import com.melonltd.naber.model.service.SPService;
+import com.melonltd.naber.util.Tools;
 import com.melonltd.naber.view.common.BaseCore;
 import com.melonltd.naber.view.factory.PageFragmentFactory;
 import com.melonltd.naber.view.factory.PageType;
 import com.melonltd.naber.view.user.UserMainActivity;
-import com.melonltd.naber.R;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -36,7 +43,9 @@ public class SubmitOrdersFragment extends Fragment implements View.OnClickListen
     public static SubmitOrdersFragment FRAGMENT = null;
     private TextView selectDateText, userNameText, userPhoneNumberText, ordersPriceText, ordersBonusText;
     private EditText remarkText;
-    private Button submitOrdersBtn;
+    private TimePickerView timePickerView;
+    private int dataIndex = -1;
+    private Handler handler = new Handler();
 
     public SubmitOrdersFragment() {
     }
@@ -45,8 +54,10 @@ public class SubmitOrdersFragment extends Fragment implements View.OnClickListen
         if (FRAGMENT == null) {
             FRAGMENT = new SubmitOrdersFragment();
         }
-        FRAGMENT.setArguments(null);
-        FRAGMENT.setArguments(bundle);
+        if (bundle != null) {
+            FRAGMENT.setArguments(bundle);
+        }
+
         return FRAGMENT;
     }
 
@@ -68,13 +79,14 @@ public class SubmitOrdersFragment extends Fragment implements View.OnClickListen
 
     private void getViews(View v) {
         selectDateText = v.findViewById(R.id.selectDateText);
-        selectDateText.setOnClickListener(this);
         userNameText = v.findViewById(R.id.userNameText);
         userPhoneNumberText = v.findViewById(R.id.userPhoneNumberText);
         ordersPriceText = v.findViewById(R.id.ordersPriceText);
         ordersBonusText = v.findViewById(R.id.ordersBonusText);
         remarkText = v.findViewById(R.id.remarkText);
-        submitOrdersBtn = v.findViewById(R.id.submitOrdersBtn);
+        Button submitOrdersBtn = v.findViewById(R.id.submitOrdersBtn);
+
+        selectDateText.setOnClickListener(this);
         submitOrdersBtn.setOnClickListener(this);
     }
 
@@ -91,6 +103,18 @@ public class SubmitOrdersFragment extends Fragment implements View.OnClickListen
                 }
             });
         }
+
+        dataIndex = getArguments().getInt(NaberConstant.ORDER_DETAIL_INDEX);
+        Model.USER_CACHE_SHOPPING_CART.get(dataIndex).fetch_date = "";
+        userNameText.setText(Model.USER_CACHE_SHOPPING_CART.get(dataIndex).user_name);
+        userPhoneNumberText.setText(Model.USER_CACHE_SHOPPING_CART.get(dataIndex).user_phone);
+        remarkText.setText(Model.USER_CACHE_SHOPPING_CART.get(dataIndex).user_message);
+        int amount = 0;
+        for (int i = 0; i < Model.USER_CACHE_SHOPPING_CART.get(dataIndex).orders.size(); i++) {
+            amount += Integer.parseInt(Model.USER_CACHE_SHOPPING_CART.get(dataIndex).orders.get(i).item.price);
+        }
+        ordersPriceText.setText("$ " + amount);
+        ordersBonusText.setText("應得紅利 " + ((int) Math.floor(amount / 10d)) + "");
     }
 
     private void backToShoppingCartPage() {
@@ -104,26 +128,42 @@ public class SubmitOrdersFragment extends Fragment implements View.OnClickListen
     public void onStop() {
         super.onStop();
         UserMainActivity.navigationIconDisplay(false, null);
+        selectDateText.setText("");
+        remarkText.setText("");
     }
 
 
     private void showTimePicker() {
+
         long minutes_20 = 1000 * 60 * 20L;
-        long day_3 = 1000 * 60 * 60 * 24 * 2L;
+        long day_3 = 1000 * 60 * 60 * 24 * 3L;
         Calendar now = Calendar.getInstance();
-        Calendar startDate = Calendar.getInstance();
+        final Calendar startDate = Calendar.getInstance();
         startDate.setTimeInMillis(now.getTime().getTime() + minutes_20);
-        Calendar endDate = Calendar.getInstance();
+        final Calendar endDate = Calendar.getInstance();
         endDate.setTimeInMillis(now.getTime().getTime() + day_3);
 
-        TimePickerView tp = new TimePickerBuilder(getContext(), new OnTimeSelectListener() {
-            @Override
-            public void onTimeSelect(Date date, View v) {
-                Log.d(TAG, date.toString());
-                selectDateText.setText(new SimpleDateFormat("yyyy-MM-dd hh:mm").format(date));
-            }
-        })
-                .setType(new boolean[]{true, true, true, true, true, false})//"year","month","day","hours","minutes","seconds "
+        timePickerView = new TimePickerBuilder(getContext(),
+                new OnTimeSelectListener() {
+                    @Override
+                    public void onTimeSelect(Date date, View v) {
+                        Model.USER_CACHE_SHOPPING_CART.get(dataIndex).fetch_date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:SS.ssss'Z'").format(date);
+                        selectDateText.setText(new SimpleDateFormat("yyyy-MM-dd HH:mm").format(date));
+                    }
+                })
+                .setTimeSelectChangeListener(new OnTimeSelectChangeListener() {
+                    @Override
+                    public void onTimeSelectChanged(Date date) {
+                        if (startDate.getTime().getTime() > date.getTime()) {
+                            Model.USER_CACHE_SHOPPING_CART.get(dataIndex).fetch_date = "";
+                            setDate(startDate);
+                        }
+                        if (endDate.getTime().getTime() < date.getTime()) {
+                            Model.USER_CACHE_SHOPPING_CART.get(dataIndex).fetch_date = "";
+                            setDate(endDate);
+                        }
+                    }
+                }).setType(new boolean[]{true, true, true, true, true, false})//"year","month","day","hours","minutes","seconds "
                 .setTitleSize(20)
                 .setOutSideCancelable(true)
                 .isCyclic(false)
@@ -135,93 +175,104 @@ public class SubmitOrdersFragment extends Fragment implements View.OnClickListen
                 .isCenterLabel(false)
                 .isDialog(false)
                 .build();
-        tp.show();
 
-
-//        new TimePickerDialog.Builder()
-//                .setTitleStringId("")
-//                .setTitleStringId("取餐時間")
-//                .setYearText(getResources().getString(R.string.data_time_picker_years_text))
-//                .setMonthText(getResources().getString(R.string.data_time_picker_month_text))
-//                .setDayText(getResources().getString(R.string.data_time_picker_day_text))
-//                .setCyclic(false)
-//                .setToolBarTextColor(getResources().getColor(R.color.naber_basis_blue))
-//                .setMinMillseconds(System.currentTimeMillis() + minutes_20)
-//                .setMaxMillseconds(System.currentTimeMillis() + day_3)
-//                .setCurrentMillseconds(System.currentTimeMillis() + minutes_20)
-//                .setThemeColor(getResources().getColor(R.color.naber_dividing_line_gray))
-//                .setType(Type.MONTH_DAY_HOUR_MIN)
-//                .setWheelItemTextNormalColor(getResources().getColor(R.color.naber_dividing_line_gray))
-//                .setWheelItemTextSize(16)
-//                .setCallBack(new OnDateSetListener() {
-//                    @Override
-//                    public void onDateSet(TimePickerDialog timePickerView, long millseconds) {
-//                        Log.d(TAG, "");
-//                        selectDateText.setText(new SimpleDateFormat("yyyy-MM-dd hh:mm").format(new Date(millseconds)));
-//                    }
-//                })
-//                .build()
-//                .show(getFragmentManager(), "MONTH_DAY_HOUR_MIN");
+        timePickerView.show();
     }
 
-    Handler h = new Handler();
-    Runnable showSubmitAlertUrn = new Runnable() {
-        @Override
-        public void run() {
-            ApiManager.test(new ThreadCallback(getContext()) {
+    /**
+     * 重要function 因為無法六及聯動，強制返回時間範圍限制
+     *
+     * @param date
+     */
+    private void setDate(Calendar date) {
+        timePickerView.setDate(date);
+        timePickerView.returnData();
+    }
+
+    private void submitOrder() {
+        Model.USER_CACHE_SHOPPING_CART.get(dataIndex).user_message = remarkText.getText().toString();
+        Log.i(TAG, Tools.JSONPARSE.toJson(Model.USER_CACHE_SHOPPING_CART.get(dataIndex)));
+        if (Strings.isNullOrEmpty(Model.USER_CACHE_SHOPPING_CART.get(dataIndex).fetch_date)) {
+
+        } else {
+            ApiManager.userOrderSubmit(Model.USER_CACHE_SHOPPING_CART.get(dataIndex), new ThreadCallback(getContext()) {
                 @Override
                 public void onSuccess(String responseBody) {
-                    new AlertView.Builder()
-                            .setTitle("")
-                            .setMessage("商家看到你囉，請準時拿餐\n你可以到訂單頁面中，查看商品狀態")
-                            .setContext(getContext())
-                            .setStyle(AlertView.Style.Alert)
-                            .setOthers(new String[]{"我知道了"})
-                            .build().show();
+                    Log.i(TAG, responseBody);
+                    handler.postDelayed(new OnResponseAlert("商家看到你囉，請準時拿餐\n你可以到訂單頁面中，查看商品狀態", true), 500);
                 }
 
                 @Override
                 public void onFail(Exception error, String msg) {
-
+                    handler.postDelayed(new OnResponseAlert(msg,false), 500);
                 }
             });
-
         }
-    };
-
-    private void showSubmitAlert() {
-        new AlertView.Builder()
-                .setTitle("")
-                .setMessage("確定要送出訂單嗎？")
-                .setContext(getContext())
-                .setStyle(AlertView.Style.Alert)
-                .setOthers(new String[]{"確定", "返回"})
-                .setOnItemClickListener(new OnItemClickListener() {
-                    @Override
-                    public void onItemClick(Object o, int position) {
-                        if (position == 0) {
-                            h.postDelayed(showSubmitAlertUrn, 300);
-                        }
-                    }
-                })
-                .build().show();
     }
-
 
     @Override
     public void onDestroy() {
         super.onDestroy();
     }
 
+    class OnResponseAlert implements Runnable {
+        private String msg;
+        private boolean isSuccess;
+
+        OnResponseAlert(String msg, boolean isSuccess) {
+            this.msg = msg;
+            this.isSuccess = isSuccess;
+        }
+
+        @Override
+        public void run() {
+            if (this.isSuccess){
+                Model.USER_CACHE_SHOPPING_CART.remove(dataIndex);
+                SPService.setUserCacheShoppingCarData(Model.USER_CACHE_SHOPPING_CART);
+            }
+
+            new AlertView.Builder()
+                    .setTitle("")
+                    .setMessage(this.msg)
+                    .setContext(getContext())
+                    .setStyle(AlertView.Style.Alert)
+                    .setOthers(new String[]{"我知道了"})
+                    .build()
+                    .setOnDismissListener(new OnDismissListener() {
+                        @Override
+                        public void onDismiss(Object o) {
+                            if (isSuccess){
+                                ShoppingCartFragment.TO_SUBMIT_ORDERS_PAGE_INDEX = -1;
+                                UserMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.HISTORY, null);
+                            }
+                        }
+                    })
+                    .show();
+        }
+    }
+
     @Override
     public void onClick(View view) {
-
         switch (view.getId()) {
             case R.id.selectDateText:
                 showTimePicker();
                 break;
             case R.id.submitOrdersBtn:
-                showSubmitAlert();
+                new AlertView.Builder()
+                        .setContext(getContext())
+                        .setTitle("")
+                        .setMessage("確定要送出訂單嗎？")
+                        .setStyle(AlertView.Style.Alert)
+                        .setOthers(new String[]{"確定", "返回"})
+                        .setOnItemClickListener(new OnItemClickListener() {
+                            @Override
+                            public void onItemClick(Object o, int position) {
+                                if (position == 0) {
+                                    submitOrder();
+                                }
+                            }
+                        })
+                        .build().show();
                 break;
         }
     }

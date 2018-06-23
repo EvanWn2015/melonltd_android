@@ -36,6 +36,7 @@ public class BaseActivity extends BaseCore {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_base);
         context = this;
+        UserMainActivity.clearAllFragment();
         FM = getSupportFragmentManager();
         getViews();
     }

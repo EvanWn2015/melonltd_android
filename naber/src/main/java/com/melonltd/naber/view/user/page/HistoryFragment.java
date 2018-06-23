@@ -118,9 +118,7 @@ public class HistoryFragment extends Fragment {
             bundle.putSerializable(NaberConstant.ORDER_INFO, Model.USER_ORDER_HISTORY_LIST.get(TO_ORDER_DETAIL_INDEX));
             UserMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.ORDER_DETAIL, bundle);
         } else {
-            if (Model.USER_ORDER_HISTORY_LIST.size() == 0) {
-                doLoadData(true);
-            }
+            doLoadData(true);
         }
     }
 

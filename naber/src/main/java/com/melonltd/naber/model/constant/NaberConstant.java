@@ -21,7 +21,7 @@ public class NaberConstant {
     public static final String ACCOUNT_INFO = "ACCOUNT_INFO";
     public static final String RESTAURANT_UUID = "RESTAURANT_UUID";
     public static final String RESTAURANT_NAME = "RESTAURANT_NAME";
-
+    public static final String ORDER_DETAIL_INDEX = "ORDER_DETAIL_INDEX";
 
 
 

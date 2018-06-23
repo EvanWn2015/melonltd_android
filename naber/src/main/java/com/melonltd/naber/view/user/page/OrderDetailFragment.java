@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +13,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.google.common.collect.Lists;
+import com.melonltd.naber.R;
 import com.melonltd.naber.model.constant.NaberConstant;
 import com.melonltd.naber.util.Tools;
 import com.melonltd.naber.util.UiUtil;
@@ -23,7 +23,6 @@ import com.melonltd.naber.view.user.UserMainActivity;
 import com.melonltd.naber.vo.OrderDetail;
 import com.melonltd.naber.vo.OrderVo;
 
-import com.melonltd.naber.R;
 import java.util.List;
 
 public class OrderDetailFragment extends Fragment {
@@ -69,8 +68,6 @@ public class OrderDetailFragment extends Fragment {
             orders.clear();
             OrderDetail orderDetail = Tools.JSONPARSE.fromJson(vo.order_data, OrderDetail.class);
             orders.addAll(orderDetail.orders);
-//            UiUtil.setListViewHeightBasedOnChildren(getActivity(), holder.orderDatas);
-////            adapter.notifyDataSetChanged();
             new Handler().post(new Runnable(){
                 @Override
                 public void run() {
@@ -79,7 +76,7 @@ public class OrderDetailFragment extends Fragment {
             });
 
             holder.sellerNameText.setText(vo.restaurant_name);
-            holder.priceText.setText("$" + vo.order_price);
+            holder.priceText.setText("$ " + vo.order_price);
             holder.addressText.setText(vo.restaurant_address);
             holder.messageText.setText(vo.user_message);
             holder.bonusText.setText(vo.order_bonus);
@@ -114,7 +111,6 @@ public class OrderDetailFragment extends Fragment {
     @Override
     public void onDestroy() {
         super.onDestroy();
-        Log.d(TAG, "destroy");
     }
 
     private void backToHistoryPage() {

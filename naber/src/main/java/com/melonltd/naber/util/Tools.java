@@ -18,9 +18,6 @@ import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.primitives.Doubles;
 import com.google.gson.Gson;
-import com.melonltd.naber.model.bean.IdentityJsonBean;
-
-import org.json.JSONArray;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -29,7 +26,6 @@ import java.lang.reflect.Type;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -79,7 +75,7 @@ public class Tools {
         }
 
         public static String toUTCDateTime(Date date) {
-            simpleDate = new SimpleDateFormat("yyyy-MM-dd'T'hh:mm:SS.ssss'Z'");
+            simpleDate = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:SS.ssss'Z'");
             simpleDate.setTimeZone(TimeZone.getTimeZone("GMT"));
             return simpleDate.format(date);
         }
@@ -120,19 +116,19 @@ public class Tools {
             return stringBuilder.toString();
         }
 
-        public static ArrayList<IdentityJsonBean> parseData(String result) {
-            ArrayList<IdentityJsonBean> detail = new ArrayList<>();
-            try {
-                JSONArray data = new JSONArray(result);
-                for (int i = 0; i < data.length(); i++) {
-                    IdentityJsonBean entity = GSON.fromJson(data.optJSONObject(i).toString(), IdentityJsonBean.class);
-                    detail.add(entity);
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return detail;
-        }
+//        public static ArrayList<IdentityJsonBean> parseData(String result) {
+//            ArrayList<IdentityJsonBean> detail = new ArrayList<>();
+//            try {
+//                JSONArray data = new JSONArray(result);
+//                for (int i = 0; i < data.length(); i++) {
+//                    IdentityJsonBean entity = GSON.fromJson(data.optJSONObject(i).toString(), IdentityJsonBean.class);
+//                    detail.add(entity);
+//                }
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//            return detail;
+//        }
     }
 
     public static class Network {

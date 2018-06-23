@@ -49,7 +49,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
             holder.orderStatusText.setText(status.getText());
             holder.orderStatusText.setTextColor(this.context.getResources().getColor(status.getColor()));
         }
-        holder.totalAmountText.setText(Model.USER_ORDER_HISTORY_LIST.get(position).order_price);
+        holder.totalAmountText.setText("$" + Model.USER_ORDER_HISTORY_LIST.get(position).order_price);
     }
 
     @Override

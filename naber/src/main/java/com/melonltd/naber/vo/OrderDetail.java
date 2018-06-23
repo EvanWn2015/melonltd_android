@@ -11,6 +11,8 @@ public class OrderDetail implements Serializable {
     public String restaurant_uuid;
     public String restaurant_name = "";
     public String fetch_date;
+    public String user_name;
+    public String user_phone;
     public String user_message;
     public List<OrderData> orders;
 
@@ -34,7 +36,7 @@ public class OrderDetail implements Serializable {
         private static final long serialVersionUID = -7710327114343945469L;
         public int count;
         public String category_uuid;
-        public String food_uuid;
+//        public String food_uuid;
         public FoodItemVo item = new FoodItemVo();
 
         @Override
@@ -42,7 +44,7 @@ public class OrderDetail implements Serializable {
             return MoreObjects.toStringHelper(this.getClass())
                     .add("category_uuid", category_uuid)
                     .add("count", count)
-                    .add("food_uuid", food_uuid)
+//                    .add("food_uuid", food_uuid)
                     .add("item", item)
                     .toString();
         }
