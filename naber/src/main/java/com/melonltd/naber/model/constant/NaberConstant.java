@@ -7,7 +7,7 @@ public class NaberConstant {
 
     //    public static final String STORAGE_PATH = "gs://naber-test.appspot.com";
     public static final String STORAGE_PATH = "gs://naber-20180622.appspot.com";
-    public static final String STORAGE_PATH_USER = "/user";
+    public static final String STORAGE_PATH_USER = "/user/";
     public static final String STORAGE_PATH_FOOD = "/food";
 
 
