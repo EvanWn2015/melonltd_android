@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,6 +19,7 @@ import android.widget.TextView;
 import com.bigkoo.alertview.AlertView;
 import com.google.common.base.Strings;
 import com.google.firebase.iid.FirebaseInstanceId;
+import com.melonltd.naber.R;
 import com.melonltd.naber.model.api.ApiManager;
 import com.melonltd.naber.model.api.ThreadCallback;
 import com.melonltd.naber.model.bean.Model;
@@ -30,7 +32,6 @@ import com.melonltd.naber.view.factory.PageType;
 import com.melonltd.naber.view.seller.SellerMainActivity;
 import com.melonltd.naber.view.user.UserMainActivity;
 import com.melonltd.naber.vo.AccountInfoVo;
-import com.melonltd.naber.R;
 
 import java.util.Date;
 
@@ -76,17 +77,18 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         Button toVerifySMSBtn = v.findViewById(R.id.toVerifySMSBtn);
         Button toRegisteredSellerBtn = v.findViewById(R.id.toRegisteredSellerBtn);
         TextView recoverPasswordText = v.findViewById(R.id.recoverPasswordText);
-
+        ConstraintLayout largeLabel = v.findViewById(R.id.largeLabel);
         // setListener
         HideKeyboard hideKeyboard = new HideKeyboard();
         accountEdit.setOnFocusChangeListener(hideKeyboard);
         passwordEdit.setOnFocusChangeListener(hideKeyboard);
         rememberMe.setOnFocusChangeListener(hideKeyboard);
         loginBtn.setOnClickListener(this);
+
         toVerifySMSBtn.setOnClickListener(this);
         toRegisteredSellerBtn.setOnClickListener(this);
         recoverPasswordText.setOnClickListener(this);
-        v.setOnClickListener(this);
+        largeLabel.setOnClickListener(this);
     }
 
     @Override
@@ -177,6 +179,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
             }
         }
     }
+
     private boolean verifyInput() {
         boolean result = true;
         String message = "";

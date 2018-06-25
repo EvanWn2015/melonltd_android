@@ -3,6 +3,7 @@ package com.melonltd.naber.view.common.page;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -83,6 +84,8 @@ public class RegisteredFragment extends Fragment implements View.OnClickListener
         Button submitBtn = v.findViewById(R.id.submit);
         Button backToLoginBtn = v.findViewById(R.id.backToLoginBtn);
 
+        ConstraintLayout largeLabel = v.findViewById(R.id.largeLabel);
+
         // setListener
         HideKeyboard hideKeyboard = new HideKeyboard();
         identityText.setOnFocusChangeListener(hideKeyboard);
@@ -95,7 +98,7 @@ public class RegisteredFragment extends Fragment implements View.OnClickListener
 
         submitBtn.setOnClickListener(this);
         backToLoginBtn.setOnClickListener(this);
-        v.setOnClickListener(this);
+        largeLabel.setOnClickListener(this);
         identityText.setOnClickListener(new IdentityClick());
         birthdayText.setOnClickListener(new BirthdayClick());
 
@@ -114,6 +117,8 @@ public class RegisteredFragment extends Fragment implements View.OnClickListener
 
     @Override
     public void onClick(View v) {
+        InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
         switch (v.getId()) {
             case R.id.submit:
                 if (verifyInput()) {

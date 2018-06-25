@@ -10,7 +10,6 @@ import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -107,7 +106,7 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
             toResetPassword(1);
         } else {
             holder.accountInfo = (AccountInfoVo) getArguments().getSerializable(NaberConstant.ACCOUNT_INFO);
-            Log.d(TAG, holder.accountInfo.toString());
+//            Log.d(TAG, holder.accountInfo.toString());
             if (holder.accountInfo != null) {
                 holder.nameText.setText(holder.accountInfo.name);
                 holder.phoneText.setText(holder.accountInfo.phone);

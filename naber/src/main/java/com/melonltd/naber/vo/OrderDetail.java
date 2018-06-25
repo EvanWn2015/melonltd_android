@@ -36,7 +36,6 @@ public class OrderDetail implements Serializable {
         private static final long serialVersionUID = -7710327114343945469L;
         public int count;
         public String category_uuid;
-//        public String food_uuid;
         public FoodItemVo item = new FoodItemVo();
 
         @Override
@@ -44,7 +43,6 @@ public class OrderDetail implements Serializable {
             return MoreObjects.toStringHelper(this.getClass())
                     .add("category_uuid", category_uuid)
                     .add("count", count)
-//                    .add("food_uuid", food_uuid)
                     .add("item", item)
                     .toString();
         }

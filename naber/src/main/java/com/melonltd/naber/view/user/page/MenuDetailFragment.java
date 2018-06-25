@@ -216,30 +216,32 @@ public class MenuDetailFragment extends Fragment implements View.OnClickListener
     }
 
     private void setOptView(final List<ItemVo> opts) {
-        View v = LayoutInflater.from(getContext()).inflate(R.layout.menu_detail_optional, null);
-        final LinearLayout optLayout = v.findViewById(R.id.optsLayout);
-        for (int i = 0; i < opts.size(); i++) {
-            CheckBox box = new NaberCheckButton().Builder(getContext())
-                    .setTitle(opts.get(i).name)
-                    .setTag(opts.get(i))
-                    .setSymbol("$")
-                    .setPrice(opts.get(i).price)
-                    .setChecked(false)
-                    .setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                        @Override
-                        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                            if (isChecked) {
-                                orderData.item.opts.add((ItemVo) buttonView.getTag());
-                            } else {
-                                orderData.item.opts.remove(buttonView.getTag());
+        if (opts.size() < 0) {
+            View v = LayoutInflater.from(getContext()).inflate(R.layout.menu_detail_optional, null);
+            final LinearLayout optLayout = v.findViewById(R.id.optsLayout);
+            for (int i = 0; i < opts.size(); i++) {
+                CheckBox box = new NaberCheckButton().Builder(getContext())
+                        .setTitle(opts.get(i).name)
+                        .setTag(opts.get(i))
+                        .setSymbol("$")
+                        .setPrice(opts.get(i).price)
+                        .setChecked(false)
+                        .setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                            @Override
+                            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                                if (isChecked) {
+                                    orderData.item.opts.add((ItemVo) buttonView.getTag());
+                                } else {
+                                    orderData.item.opts.remove(buttonView.getTag());
+                                }
+                                countTotalAmount();
                             }
-                            countTotalAmount();
-                        }
-                    }).build();
+                        }).build();
 
-            optLayout.addView(box);
+                optLayout.addView(box);
+            }
+            contentLayout.addView(v);
         }
-        contentLayout.addView(v);
     }
 
     @Override
@@ -267,7 +269,7 @@ public class MenuDetailFragment extends Fragment implements View.OnClickListener
         for (OrderDetail o : Model.USER_CACHE_SHOPPING_CART) {
             if (uuid.equals(o.restaurant_uuid)) {
                 o.restaurant_name = getArguments().getString(NaberConstant.RESTAURANT_NAME);
-                o.orders.add(0,data);
+                o.orders.add(0, data);
                 has = true;
             }
         }
@@ -275,7 +277,7 @@ public class MenuDetailFragment extends Fragment implements View.OnClickListener
             OrderDetail orderDetail = OrderDetail.ofOrders(Lists.newArrayList(data));
             orderDetail.restaurant_name = getArguments().getString(NaberConstant.RESTAURANT_NAME);
             orderDetail.restaurant_uuid = uuid;
-            Model.USER_CACHE_SHOPPING_CART.add(0,orderDetail);
+            Model.USER_CACHE_SHOPPING_CART.add(0, orderDetail);
         }
         String msg = "規格：";
         msg += orderData.item.scopes.get(0).name + "\n";

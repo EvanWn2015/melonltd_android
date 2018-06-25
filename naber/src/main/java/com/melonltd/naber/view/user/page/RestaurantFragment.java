@@ -201,7 +201,6 @@ public class RestaurantFragment extends Fragment implements View.OnClickListener
         super.onStop();
     }
 
-
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -212,13 +211,13 @@ public class RestaurantFragment extends Fragment implements View.OnClickListener
 
         switch (v.getId()) {
             case R.id.filterCategoryBtn:
-                final String[] categorys = new String[]{"火鍋", "燒烤/居酒屋", "鐵板燒", "素蔬食", "早午餐", "下午茶", "西式/牛排", "中式", "港式", "日式", "韓式", "異國", "美式", "義式", "熱炒", "小吃", "泰式", "咖啡輕食", "甜點", "冰飲"};
                 new AlertView.Builder()
+
                         .setContext(getContext())
                         .setStyle(AlertView.Style.ActionSheet)
                         .setTitle("請選擇種類")
                         .setCancelText("取消")
-                        .setOthers(categorys)
+                        .setOthers(NaberConstant.FILTER_CATEGORYS)
                         .setOnItemClickListener(new OnItemClickListener() {
                             @Override
                             public void onItemClick(Object o, int position) {
@@ -226,11 +225,11 @@ public class RestaurantFragment extends Fragment implements View.OnClickListener
                                     filterAreaBtn.setBackground(getResources().getDrawable(R.drawable.naber_reverse_gary_button_style));
                                     filterDistanceBtn.setBackground(getResources().getDrawable(R.drawable.naber_reverse_gary_button_style));
                                     v.setBackgroundColor(getResources().getColor(R.color.naber_basis));
-                                    if (!reqData.category.equals(categorys[position])) {
-                                        filterTypeText.setText(categorys[position]);
+                                    if (!reqData.category.equals(NaberConstant.FILTER_CATEGORYS[position])) {
+                                        filterTypeText.setText(NaberConstant.FILTER_CATEGORYS[position]);
                                         reqData = new ReqData();
                                         reqData.search_type = "CATEGORY";
-                                        reqData.category = categorys[position];
+                                        reqData.category = NaberConstant.FILTER_CATEGORYS[position];
                                         reqData.page = 1;
                                         doLoadData(true);
                                     }
@@ -242,12 +241,11 @@ public class RestaurantFragment extends Fragment implements View.OnClickListener
                         .show();
                 break;
             case R.id.filterAreaBtn:
-                final String[] areas = new String[]{"桃園區", "中壢區", "平鎮區", "龍潭區", "楊梅區", "新屋區", "觀音區", "龜山區", "八德區", "大溪區", "大園區", "蘆竹區", "復興區"};
                 new AlertView.Builder()
                         .setContext(getContext())
                         .setStyle(AlertView.Style.ActionSheet)
                         .setTitle("請選擇區域")
-                        .setOthers(areas)
+                        .setOthers(NaberConstant.FILTER_AREAS)
                         .setCancelText("取消")
                         .setOnItemClickListener(new OnItemClickListener() {
                             @Override
@@ -256,11 +254,11 @@ public class RestaurantFragment extends Fragment implements View.OnClickListener
                                     filterCategoryBtn.setBackground(getResources().getDrawable(R.drawable.naber_reverse_gary_button_style));
                                     filterDistanceBtn.setBackground(getResources().getDrawable(R.drawable.naber_reverse_gary_button_style));
                                     v.setBackgroundColor(getResources().getColor(R.color.naber_basis));
-                                    if (!reqData.area.equals(areas[position])) {
-                                        filterTypeText.setText(areas[position]);
+                                    if (!reqData.area.equals(NaberConstant.FILTER_AREAS[position])) {
+                                        filterTypeText.setText(NaberConstant.FILTER_AREAS[position]);
                                         reqData = new ReqData();
                                         reqData.search_type = "AREA";
-                                        reqData.area = areas[position];
+                                        reqData.area = NaberConstant.FILTER_AREAS[position];
                                         reqData.page = 1;
                                         doLoadData(true);
                                     }

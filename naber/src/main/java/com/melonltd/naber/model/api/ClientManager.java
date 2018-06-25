@@ -32,9 +32,9 @@ public class ClientManager {
     private static final ConnectionPool CONNECTION_POOL = new ConnectionPool();
     private static final HttpLoggingInterceptor LOGGING = new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY);
     private static final OkHttpClient CLIENT = new OkHttpClient.Builder()
-            .connectTimeout(15, TimeUnit.SECONDS)
-            .readTimeout(15, TimeUnit.SECONDS)
-            .writeTimeout(15, TimeUnit.SECONDS)
+            .connectTimeout(25, TimeUnit.SECONDS)
+            .readTimeout(25, TimeUnit.SECONDS)
+            .writeTimeout(25, TimeUnit.SECONDS)
             .addInterceptor(LOGGING)
             .connectionPool(CONNECTION_POOL)
             .hostnameVerifier(new TrustAllHostnameVerifier())

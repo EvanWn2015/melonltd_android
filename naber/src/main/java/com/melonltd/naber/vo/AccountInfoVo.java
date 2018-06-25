@@ -5,7 +5,7 @@ import com.google.common.base.MoreObjects;
 import java.io.Serializable;
 
 public class AccountInfoVo implements Serializable{
-    private static final long serialVersionUID = -5356164145117232634L;
+    private static final long serialVersionUID = 7659391411455993337L;
     public String account_uuid;
     public String restaurant_uuid;
     public String password;

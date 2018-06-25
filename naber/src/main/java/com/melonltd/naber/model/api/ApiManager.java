@@ -1,5 +1,7 @@
 package com.melonltd.naber.model.api;
 
+import android.util.Log;
+
 import com.melonltd.naber.model.service.Base64Service;
 import com.melonltd.naber.model.service.SPService;
 import com.melonltd.naber.util.Tools;
@@ -54,7 +56,12 @@ public class ApiManager {
     }
 
     // 登入
-    public static void login(Object req, ThreadCallback callback) {
+    public static void login(AccountInfoVo req, ThreadCallback callback) {
+
+        String json = Tools.JSONPARSE.toJson(req);
+        Log.i(TAG, json);
+        String ss = Base64Service.encryptBASE64(Tools.JSONPARSE.toJson(req));
+        Log.i(TAG, ss);
         Call call = getClient().post(ApiUrl.LOGIN, Base64Service.encryptBASE64(Tools.JSONPARSE.toJson(req)));
         call.enqueue(callback);
     }
@@ -132,6 +139,12 @@ public class ApiManager {
     // 更新密碼
     public static void reseatPassword(Map<String, String> req, ThreadCallback callback) {
         Call call = getClient().postHeader(ApiUrl.RESEAT_PSW, SPService.getOauth(), Base64Service.encryptBASE64(Tools.JSONPARSE.toJson(req)));
+        call.enqueue(callback);
+    }
+
+    // 忘記密碼
+    public static void forgetPassword(Map<String, String> req, ThreadCallback callback) {
+        Call call = getClient().postHeader(ApiUrl.FORGET_PSW, SPService.getOauth(), Base64Service.encryptBASE64(Tools.JSONPARSE.toJson(req)));
         call.enqueue(callback);
     }
 

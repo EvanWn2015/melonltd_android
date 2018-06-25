@@ -9,17 +9,18 @@
     tools:context=".view.common.page.LoginFragment">
 
     <ScrollView
-        android:scrollbars="none"
         android:id="@+id/scrollView"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
+        android:layout_height="match_parent"
         android:overScrollMode="never"
+        android:scrollbars="none"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
         <android.support.constraint.ConstraintLayout
+            android:id="@+id/largeLabel"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
 

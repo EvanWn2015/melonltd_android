@@ -18,6 +18,7 @@ import com.bigkoo.alertview.AlertView;
 import com.bigkoo.alertview.OnDismissListener;
 import com.google.common.base.Strings;
 import com.google.common.collect.Maps;
+import com.melonltd.naber.R;
 import com.melonltd.naber.model.api.ApiManager;
 import com.melonltd.naber.model.api.ThreadCallback;
 import com.melonltd.naber.util.Tools;
@@ -25,7 +26,6 @@ import com.melonltd.naber.util.VerifyUtil;
 import com.melonltd.naber.view.common.BaseActivity;
 import com.melonltd.naber.view.common.BaseCore;
 import com.melonltd.naber.view.factory.PageType;
-import com.melonltd.naber.R;
 
 import java.util.Map;
 
@@ -83,14 +83,6 @@ public class VerifySMSFragment extends Fragment implements View.OnClickListener 
         }
     }
 
-    private void remoreAllData() {
-//        map = Maps.newHashMap();
-//        phoneNamberEdit.setText("");
-//        verifySMSEdit.setText("");
-//        verifySMSEdit.setEnabled(false);
-//        readCheckBox.setChecked(false);
-    }
-
     @Override
     public void onStop() {
         super.onStop();
@@ -109,13 +101,14 @@ public class VerifySMSFragment extends Fragment implements View.OnClickListener 
         requestVerifyCodeBtn.setOnClickListener(this);
         submitToRegisteredBun.setOnClickListener(this);
         privacyPolicyText.setOnClickListener(this);
+        v.setOnClickListener(this);
     }
 
     @Override
     public void onClick(View v) {
         InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(phoneNamberEdit.getWindowToken(), 0);
-        imm.hideSoftInputFromWindow(verifySMSEdit.getWindowToken(), 0);
+        imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+
         switch (v.getId()) {
             case R.id.requestVerifyCodeBtn:
 
