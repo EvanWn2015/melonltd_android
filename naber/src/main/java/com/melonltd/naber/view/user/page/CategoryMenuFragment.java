@@ -13,6 +13,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
+import com.melonltd.naber.R;
 import com.melonltd.naber.model.api.ApiManager;
 import com.melonltd.naber.model.api.ThreadCallback;
 import com.melonltd.naber.model.bean.Model;
@@ -23,7 +24,6 @@ import com.melonltd.naber.view.user.UserMainActivity;
 import com.melonltd.naber.view.user.adapter.MenuAdapter;
 import com.melonltd.naber.vo.CategoryFoodRelVo;
 import com.melonltd.naber.vo.RestaurantCategoryRelVo;
-import com.melonltd.naber.R;
 
 import java.util.List;
 
@@ -146,7 +146,6 @@ public class CategoryMenuFragment extends Fragment {
             UserMainActivity.navigationIconDisplay(true, new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-//                    backToRestaurantDetail();
                     RestaurantDetailFragment.TO_CATEGORY_MENU_INDEX = -1;
                     UserMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.RESTAURANT_DETAIL, null);
                     UserMainActivity.navigationIconDisplay(false, null);
@@ -157,8 +156,8 @@ public class CategoryMenuFragment extends Fragment {
             Bundle bundle = new Bundle();
             Log.i(TAG,holder.categoryInfo.restaurant_uuid);
 
-            bundle.putString(NaberConstant.RESTAURANT_NAME, getArguments().getString(NaberConstant.RESTAURANT_NAME));
-            bundle.putString(NaberConstant.RESTAURANT_UUID, holder.categoryInfo.restaurant_uuid);
+            bundle.putSerializable(NaberConstant.RESTAURANT_INFO, getArguments().getSerializable(NaberConstant.RESTAURANT_INFO));
+//            bundle.putString(NaberConstant.RESTAURANT_UUID, holder.categoryInfo.restaurant_uuid);
             bundle.putSerializable(NaberConstant.FOOD_INFO, Model.CATEGORY_FOOD_REL_LIST.get(TO_MENU_DETAIL_INDEX));
             UserMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.MENU_DETAIL, bundle);
         }
@@ -183,8 +182,9 @@ public class CategoryMenuFragment extends Fragment {
             TO_MENU_DETAIL_INDEX = (int) v.getTag();
             Bundle bundle = new Bundle();
             Log.i(TAG,holder.categoryInfo.restaurant_uuid);
-            bundle.putString(NaberConstant.RESTAURANT_NAME, getArguments().getString(NaberConstant.RESTAURANT_NAME));
-            bundle.putString(NaberConstant.RESTAURANT_UUID, holder.categoryInfo.restaurant_uuid);
+            bundle.putSerializable(NaberConstant.RESTAURANT_INFO, getArguments().getSerializable(NaberConstant.RESTAURANT_INFO));
+//            bundle.putString(NaberConstant.RESTAURANT_NAME, getArguments().getString(NaberConstant.RESTAURANT_NAME));
+//            bundle.putString(NaberConstant.RESTAURANT_UUID, holder.categoryInfo.restaurant_uuid);
             bundle.putSerializable(NaberConstant.FOOD_INFO, Model.CATEGORY_FOOD_REL_LIST.get(TO_MENU_DETAIL_INDEX));
             UserMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.MENU_DETAIL, bundle);
         }

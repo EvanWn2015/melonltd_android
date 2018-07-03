@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,9 +26,6 @@ import com.melonltd.naber.model.api.ThreadCallback;
 import com.melonltd.naber.model.bean.Model;
 import com.melonltd.naber.model.constant.NaberConstant;
 import com.melonltd.naber.model.service.SPService;
-import com.melonltd.naber.util.Tools;
-import com.melonltd.naber.view.common.BaseCore;
-import com.melonltd.naber.view.factory.PageFragmentFactory;
 import com.melonltd.naber.view.factory.PageType;
 import com.melonltd.naber.view.user.UserMainActivity;
 
@@ -57,14 +53,12 @@ public class SubmitOrdersFragment extends Fragment implements View.OnClickListen
         if (bundle != null) {
             FRAGMENT.setArguments(bundle);
         }
-
         return FRAGMENT;
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
     }
 
     @Override
@@ -80,10 +74,10 @@ public class SubmitOrdersFragment extends Fragment implements View.OnClickListen
     private void getViews(View v) {
         selectDateText = v.findViewById(R.id.selectDateText);
         userNameText = v.findViewById(R.id.userNameText);
-        userPhoneNumberText = v.findViewById(R.id.userPhoneNumberText);
+        userPhoneNumberText = v.findViewById(R.id.userPhoneText);
         ordersPriceText = v.findViewById(R.id.ordersPriceText);
         ordersBonusText = v.findViewById(R.id.ordersBonusText);
-        remarkText = v.findViewById(R.id.remarkText);
+        remarkText = v.findViewById(R.id.userMessageText);
         Button submitOrdersBtn = v.findViewById(R.id.submitOrdersBtn);
 
         selectDateText.setOnClickListener(this);
@@ -98,16 +92,21 @@ public class SubmitOrdersFragment extends Fragment implements View.OnClickListen
             UserMainActivity.navigationIconDisplay(true, new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    backToShoppingCartPage();
+//                    backToShoppingCartPage();
                     UserMainActivity.navigationIconDisplay(false, null);
+//                    BaseCore.FRAGMENT_TAG = PageType.SHOPPING_CART.name();
+                    ShoppingCartFragment.TO_SUBMIT_ORDERS_PAGE_INDEX = -1;
+                    UserMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.SHOPPING_CART, null);
+//                    Fragment f = PageFragmentFactory.of(PageType.SHOPPING_CART, null);
+//                    getFragmentManager().beginTransaction().remove(this).replace(R.id.frameContainer, f).addToBackStack(f.toString()).commit();
                 }
             });
         }
 
         dataIndex = getArguments().getInt(NaberConstant.ORDER_DETAIL_INDEX);
         Model.USER_CACHE_SHOPPING_CART.get(dataIndex).fetch_date = "";
-        userNameText.setText(Model.USER_CACHE_SHOPPING_CART.get(dataIndex).user_name);
-        userPhoneNumberText.setText(Model.USER_CACHE_SHOPPING_CART.get(dataIndex).user_phone);
+        userNameText.setText(SPService.getUserName());
+        userPhoneNumberText.setText(SPService.getUserPhone());
         remarkText.setText(Model.USER_CACHE_SHOPPING_CART.get(dataIndex).user_message);
         int amount = 0;
         for (int i = 0; i < Model.USER_CACHE_SHOPPING_CART.get(dataIndex).orders.size(); i++) {
@@ -117,12 +116,12 @@ public class SubmitOrdersFragment extends Fragment implements View.OnClickListen
         ordersBonusText.setText("應得紅利 " + ((int) Math.floor(amount / 10d)) + "");
     }
 
-    private void backToShoppingCartPage() {
-        BaseCore.FRAGMENT_TAG = PageType.SHOPPING_CART.name();
-        ShoppingCartFragment.TO_SUBMIT_ORDERS_PAGE_INDEX = -1;
-        Fragment f = PageFragmentFactory.of(PageType.SHOPPING_CART, null);
-        getFragmentManager().beginTransaction().remove(this).replace(R.id.frameContainer, f).addToBackStack(f.toString()).commit();
-    }
+//    private void backToShoppingCartPage() {
+//        BaseCore.FRAGMENT_TAG = PageType.SHOPPING_CART.name();
+//        ShoppingCartFragment.TO_SUBMIT_ORDERS_PAGE_INDEX = -1;
+//        Fragment f = PageFragmentFactory.of(PageType.SHOPPING_CART, null);
+//        getFragmentManager().beginTransaction().remove(this).replace(R.id.frameContainer, f).addToBackStack(f.toString()).commit();
+//    }
 
     @Override
     public void onStop() {
@@ -147,7 +146,7 @@ public class SubmitOrdersFragment extends Fragment implements View.OnClickListen
                 new OnTimeSelectListener() {
                     @Override
                     public void onTimeSelect(Date date, View v) {
-                        Model.USER_CACHE_SHOPPING_CART.get(dataIndex).fetch_date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:SS.ssss'Z'").format(date);
+                        Model.USER_CACHE_SHOPPING_CART.get(dataIndex).fetch_date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSS'Z'").format(date);
                         selectDateText.setText(new SimpleDateFormat("yyyy-MM-dd HH:mm").format(date));
                     }
                 })
@@ -191,20 +190,34 @@ public class SubmitOrdersFragment extends Fragment implements View.OnClickListen
 
     private void submitOrder() {
         Model.USER_CACHE_SHOPPING_CART.get(dataIndex).user_message = remarkText.getText().toString();
-        Log.i(TAG, Tools.JSONPARSE.toJson(Model.USER_CACHE_SHOPPING_CART.get(dataIndex)));
         if (Strings.isNullOrEmpty(Model.USER_CACHE_SHOPPING_CART.get(dataIndex).fetch_date)) {
-
+            handler.postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    new AlertView.Builder()
+                            .setTitle("")
+                            .setMessage("請選擇取餐時間，才可以送出訂單。")
+                            .setContext(getContext())
+                            .setStyle(AlertView.Style.Alert)
+                            .setOthers(new String[]{"我知道了"})
+                            .build()
+                            .show();
+                }
+            }, 500);
         } else {
             ApiManager.userOrderSubmit(Model.USER_CACHE_SHOPPING_CART.get(dataIndex), new ThreadCallback(getContext()) {
                 @Override
                 public void onSuccess(String responseBody) {
-                    Log.i(TAG, responseBody);
-                    handler.postDelayed(new OnResponseAlert("商家看到你囉，請準時拿餐\n你可以到訂單頁面中，查看商品狀態", true), 500);
+                    handler.postDelayed(new OnResponseAlert(
+                            "商家已看到您的訂單囉！\n" +
+                                    "你可前往訂單頁面查看商品狀態，\n" +
+                                    "提醒您，商品只保留至取餐時間後20分鐘。",
+                            true), 500);
                 }
 
                 @Override
                 public void onFail(Exception error, String msg) {
-                    handler.postDelayed(new OnResponseAlert(msg,false), 500);
+                    handler.postDelayed(new OnResponseAlert(msg, false), 500);
                 }
             });
         }
@@ -226,7 +239,7 @@ public class SubmitOrdersFragment extends Fragment implements View.OnClickListen
 
         @Override
         public void run() {
-            if (this.isSuccess){
+            if (this.isSuccess) {
                 Model.USER_CACHE_SHOPPING_CART.remove(dataIndex);
                 SPService.setUserCacheShoppingCarData(Model.USER_CACHE_SHOPPING_CART);
             }
@@ -241,7 +254,7 @@ public class SubmitOrdersFragment extends Fragment implements View.OnClickListen
                     .setOnDismissListener(new OnDismissListener() {
                         @Override
                         public void onDismiss(Object o) {
-                            if (isSuccess){
+                            if (isSuccess) {
                                 ShoppingCartFragment.TO_SUBMIT_ORDERS_PAGE_INDEX = -1;
                                 UserMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.HISTORY, null);
                             }

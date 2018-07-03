@@ -197,10 +197,10 @@ public class HomeFragment extends Fragment {
                 List<RestaurantInfoVo> vos = Tools.JSONPARSE.fromJsonList(responseBody, RestaurantInfoVo[].class);
                 Model.RESTAURANT_INFO_LIST.addAll(vos);
                 if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                    if (Model.LOCATION == null){
+                    if (Model.LOCATION == null) {
                         Location location = LOCATION_MG.getLastKnownLocation(LocationManager.GPS_PROVIDER);
                         adapter.setLocation(location);
-                    }else {
+                    } else {
                         adapter.setLocation(Model.LOCATION);
                     }
                 }
@@ -217,7 +217,7 @@ public class HomeFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        if (BaseCore.checkLocationPermission(getContext())){
+        if (BaseCore.checkLocationPermission(getContext())) {
             ActivityCompat.requestPermissions(getActivity(), BaseCore.LOCATION_PERMISSION, LOCATION_CODE);
         }
         if (Model.RESTAURANT_INFO_LIST.size() == 0) {
@@ -229,12 +229,12 @@ public class HomeFragment extends Fragment {
     public void onResume() {
         super.onResume();
         UserMainActivity.changeTabAndToolbarStatus();
+        // 4.4.2 版本出現問題
         boolean isFirst = SPService.getIsFirstLogin();
         if (isFirst) {
             startActivity(new Intent(getActivity().getBaseContext(), IntroActivity.class));
         }
     }
-
 
     @Override
     public void onStop() {

@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:background="@drawable/naber_text_base_line"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@drawable/naber_text_base_line">
 
     <TextView
         android:id="@+id/textView33"
@@ -40,6 +39,7 @@
         android:id="@+id/restaurantNameText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
         app:layout_constraintStart_toEndOf="@+id/textView33"
         app:layout_constraintTop_toTopOf="@+id/textView33" />
@@ -53,7 +53,7 @@
         app:layout_constraintTop_toBottomOf="@+id/restaurantNameText" />
 
     <TextView
-        android:id="@+id/totalAmountText"
+        android:id="@+id/priceEdit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
@@ -66,6 +66,7 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="16dp"
+        android:layout_marginRight="16dp"
         android:layout_marginTop="8dp"
         app:layout_constraintBottom_toBottomOf="@+id/textView35"
         app:layout_constraintEnd_toEndOf="parent"

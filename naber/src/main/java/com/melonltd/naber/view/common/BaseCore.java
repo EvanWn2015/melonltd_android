@@ -33,6 +33,7 @@ import com.melonltd.naber.model.api.ApiCallback;
 import com.melonltd.naber.model.api.ApiManager;
 import com.melonltd.naber.model.bean.IdentityJsonBean;
 import com.melonltd.naber.model.bean.Model;
+import com.melonltd.naber.model.constant.NaberConstant;
 import com.melonltd.naber.model.service.SPService;
 import com.melonltd.naber.util.DistanceTools;
 import com.melonltd.naber.util.Tools;
@@ -124,12 +125,13 @@ public abstract class BaseCore extends AppCompatActivity implements LocationList
 
     public static void getCurrentUser(Activity activity) {
         final FirebaseAuth auth = FirebaseAuth.getInstance();
-        auth.signInAnonymously()
+        auth.signInWithEmailAndPassword(NaberConstant.FIREBASE_ACCOUNT, NaberConstant.FIREBASE_PSW)
                 .addOnCompleteListener(activity, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             currentUser = auth.getCurrentUser();
+                            Log.i(TAG, currentUser.getUid());
                         }
                     }
                 });
@@ -311,8 +313,8 @@ public abstract class BaseCore extends AppCompatActivity implements LocationList
 //        SellerStatFragment.FRAGMENT = null;
 //        SellerOrdersLogsFragment.FRAGMENT = null;
 //        SellerOrderLogsDetailFragment.FRAGMENT = null;
-//        SellerRestaurantFragment.FRAGMENT = null;
 //        SellerCategoryListFragment.FRAGMENT = null;
+//        SellerFoodListFragment.FRAGMENT = null;
 //        SellerMenuEditFragment.FRAGMENT = null;
 //        SellerSetUpFragment.FRAGMENT = null;
 //        SellerDetailFragment.FRAGMENT = null;

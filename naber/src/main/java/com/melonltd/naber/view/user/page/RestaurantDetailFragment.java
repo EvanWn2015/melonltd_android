@@ -100,43 +100,14 @@ public class RestaurantDetailFragment extends Fragment {
         holder.restaurantNameText.setText(vo.name);
         holder.businessTimeText.setText("接單時間: " + vo.store_start + "~" + vo.store_end);
         holder.addressText.setText(vo.address);
-        if (vo.is_store_now_open.toUpperCase().equals("FALSE")){
-            holder.distanceText.setVisibility(View.GONE);
-        }else {
-            String distance = DistanceTools.getGoogleDistance(Model.LOCATION, LocationVo.of(Double.parseDouble(vo.latitude), Double.parseDouble(vo.longitude)));
-            holder.distanceText.setText(distance);
-            holder.distanceText.setVisibility(View.VISIBLE);
-        }
+        String distance = DistanceTools.getGoogleDistance(Model.LOCATION, LocationVo.of(Double.parseDouble(vo.latitude), Double.parseDouble(vo.longitude)));
+        holder.distanceText.setText(distance);
 
-//        new Handler(Looper.getMainLooper()).post(new Runnable() {
-//            @Override
-//            public void run() {
-//                if (!Strings.isNullOrEmpty(vo.photo)) {
-//                    holder.restaurantIcon.setImageURI(Uri.parse(vo.photo));
-//                } else {
-//                    ImageRequest imageRequest = ImageRequestBuilder.newBuilderWithResourceId(R.drawable.naber_icon_logo_reverse).build();
-//                    holder.restaurantIcon.setImageURI(imageRequest.getSourceUri());
-//                }
-//                if (!Strings.isNullOrEmpty(vo.background_photo)) {
-//                    holder.restaurantBackgroundImage.setImageURI(Uri.parse(vo.background_photo));
-//                } else {
-//                    ImageRequest imageRequest = ImageRequestBuilder.newBuilderWithResourceId(R.drawable.naber_default_image).build();
-//                    holder.restaurantBackgroundImage.setImageURI(imageRequest.getSourceUri());
-//                }
-//                holder.restaurantBulletinText.setText(vo.bulletin);
-//                holder.restaurantNameText.setText(vo.name);
-//                holder.businessTimeText.setText("接單時間: " + vo.store_start + "~" + vo.store_end);
-//                holder.addressText.setText(vo.address);
-//                if (vo.is_store_now_open.toUpperCase().equals("FALSE")){
-//                    holder.distanceText.setVisibility(View.GONE);
-//                }else {
-//                    String distance = DistanceTools.getGoogleDistance(Model.LOCATION, LocationVo.of(Double.parseDouble(vo.latitude), Double.parseDouble(vo.longitude)));
-//                    holder.distanceText.setText(distance);
-//                    holder.distanceText.setVisibility(View.VISIBLE);
-//                }
-//            }
-//        });
-
+//        if (vo.is_store_now_open.toUpperCase().equals("FALSE")){
+//            holder.distanceText.setVisibility(View.GONE);
+//        }else {
+//            holder.distanceText.setVisibility(View.VISIBLE);
+//        }
     }
 
     private void getViews(View v) {
@@ -233,7 +204,8 @@ public class RestaurantDetailFragment extends Fragment {
         TO_CATEGORY_MENU_INDEX = index;
         BaseCore.FRAGMENT_TAG = PageType.CATEGORY_MENU.name();
         Bundle bundle = new Bundle();
-        bundle.putString(NaberConstant.RESTAURANT_NAME,holder.restaurantNameText.getText().toString());
+//        RestaurantInfoVo vo = (RestaurantInfoVo) getArguments().getSerializable(NaberConstant.RESTAURANT_INFO);
+        bundle.putSerializable(NaberConstant.RESTAURANT_INFO,  (RestaurantInfoVo) getArguments().get(NaberConstant.RESTAURANT_INFO));
         bundle.putSerializable(NaberConstant.RESTAURANT_CATEGORY_REL, Model.RESTAURANT_CATEGORY_REL_LIST.get(index));
         Fragment f = PageFragmentFactory.of(PageType.CATEGORY_MENU, bundle);
         getFragmentManager().beginTransaction().replace(R.id.frameContainer, f).addToBackStack(f.toString()).commit();

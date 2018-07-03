@@ -5,11 +5,13 @@ import android.location.Location;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import com.melonltd.naber.vo.CategoryFoodRelVo;
+import com.melonltd.naber.vo.DateRangeVo;
 import com.melonltd.naber.vo.OrderDetail;
 import com.melonltd.naber.vo.OrderVo;
 import com.melonltd.naber.vo.RestaurantCategoryRelVo;
 import com.melonltd.naber.vo.RestaurantInfoVo;
 import com.melonltd.naber.vo.RestaurantTemplate;
+import com.melonltd.naber.vo.SellerStatVo;
 
 import java.util.List;
 import java.util.Map;
@@ -31,5 +33,24 @@ public class Model {
 
     // key restaurant_uuid
     public static List<OrderDetail> USER_CACHE_SHOPPING_CART = Lists.<OrderDetail>newArrayList();
+
+
+
+
+    // seller
+    public static List<OrderVo> SELLER_QUICK_SEARCH_ORDERS = Lists.<OrderVo>newArrayList();
+
+    public static List<DateRangeVo> SELLER_BUSINESS_TIME_RANGE = Lists.<DateRangeVo>newArrayList();
+    public static List<OrderVo> SELLER_TMP_ORDERS_LIST = Lists.<OrderVo>newArrayList();
+    public static List<OrderVo> SELLER_UNFINISH_ORDERS_LIST = Lists.<OrderVo>newArrayList();
+    public static List<OrderVo> SELLER_PROCESSING_ORDERS_LIST = Lists.<OrderVo>newArrayList();
+    public static List<OrderVo> SELLER_CAN_FETCH_ORDERS_LIST = Lists.<OrderVo>newArrayList();
+    public static SellerStatVo SELLER_STAT = new SellerStatVo();
+
+    public static List<OrderVo> SELLER_STAT_LOGS = Lists.<OrderVo>newArrayList();
+    public static List<RestaurantCategoryRelVo> SELLER_CATEGORY_LIST = Lists.<RestaurantCategoryRelVo>newArrayList();
+    public static List<CategoryFoodRelVo> SELLER_FOOD_LIST = Lists.<CategoryFoodRelVo>newArrayList();
+
+
 
 }

@@ -3,18 +3,17 @@ package com.melonltd.naber.view.user.adapter;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.melonltd.naber.R;
 import com.melonltd.naber.model.bean.Model;
 import com.melonltd.naber.model.constant.NaberConstant;
 import com.melonltd.naber.model.type.OrderStatus;
 import com.melonltd.naber.util.Tools;
 import com.melonltd.naber.vo.OrderDetail;
-import com.melonltd.naber.R;
 
 
 public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHolder> {
@@ -41,9 +40,9 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
         holder.itemView.setTag(position);
         holder.itemView.setOnClickListener(this.itemClickListener);
         OrderDetail detail = Tools.JSONPARSE.fromJson(Model.USER_ORDER_HISTORY_LIST.get(position).order_data, OrderDetail.class);
-        Log.d(TAG, detail.toString());
         holder.getOrderTimeText.setText(Tools.FORMAT.format(NaberConstant.DATE_FORMAT_PATTERN, "dd日 HH時 mm分", Model.USER_ORDER_HISTORY_LIST.get(position).fetch_date));
-        holder.restaurantNameText.setText(Model.USER_ORDER_HISTORY_LIST.get(position).restaurant_name);
+
+        holder.restaurantNameText.setText(detail.restaurant_name);
         OrderStatus status = OrderStatus.of(Model.USER_ORDER_HISTORY_LIST.get(position).status);
         if (status != null){
             holder.orderStatusText.setText(status.getText());
@@ -64,7 +63,7 @@ public class HistoryAdapter extends RecyclerView.Adapter<HistoryAdapter.ViewHold
         public ViewHolder(View v) {
             super(v);
             restaurantNameText = v.findViewById(R.id.restaurantNameText);
-            totalAmountText = v.findViewById(R.id.totalAmountText);
+            totalAmountText = v.findViewById(R.id.priceEdit);
             orderStatusText = v.findViewById(R.id.orderStatusText);
             getOrderTimeText = v.findViewById(R.id.getOrderTimeText);
         }

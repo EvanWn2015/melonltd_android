@@ -5,17 +5,21 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import com.melonltd.naber.R;
-import com.melonltd.naber.view.common.BaseCore;
-import com.melonltd.naber.view.factory.PageFragmentFactory;
+import com.melonltd.naber.model.bean.Model;
+import com.melonltd.naber.model.constant.NaberConstant;
 import com.melonltd.naber.view.factory.PageType;
 import com.melonltd.naber.view.seller.SellerMainActivity;
+
+import java.util.List;
 
 public class SellerSimpleInformationFragment extends Fragment {
     private static final String TAG = SellerSimpleInformationFragment.class.getSimpleName();
     public static SellerSimpleInformationFragment FRAGMENT = null;
-
+    private LinearLayout bulletinContent;
 
     public SellerSimpleInformationFragment() {
         // Required empty public constructor
@@ -25,20 +29,22 @@ public class SellerSimpleInformationFragment extends Fragment {
         if (FRAGMENT == null) {
             FRAGMENT = new SellerSimpleInformationFragment();
         }
-        FRAGMENT.setArguments(bundle);
+        if (bundle != null) {
+            FRAGMENT.setArguments(bundle);
+        }
         return FRAGMENT;
     }
 
-    public Fragment newInstance(Object... o) {
-        return new SellerSimpleInformationFragment();
-    }
-
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_seller_simple_information, container, false);
+        if (container.getTag(R.id.seller_simple_information_page) == null) {
+            View v = inflater.inflate(R.layout.fragment_seller_simple_information, container, false);
+            bulletinContent = v.findViewById(R.id.bulletinContent);
+            container.setTag(R.id.seller_simple_information_page, v);
+            return v;
+        }
+        return (View) container.getTag(R.id.seller_simple_information_page);
     }
-
 
     @Override
     public void onResume() {
@@ -48,10 +54,24 @@ public class SellerSimpleInformationFragment extends Fragment {
             SellerMainActivity.navigationIconDisplay(true, new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    backToSellerSetUpPage();
                     SellerMainActivity.navigationIconDisplay(false, null);
+                    SellerSetUpFragment.TO_SELLER_SIMPLE_INFO_INDEX = -1;
+                    SellerMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.SELLER_SET_UP, null);
                 }
             });
+        }
+
+        bulletinContent.removeAllViews();
+        List<String> list = getArguments().getStringArrayList(NaberConstant.SIMPLE_INFO);
+        if (!Model.BULLETIN_VOS.isEmpty()){
+            for(int i=0; i<list.size(); i++){
+                View v = LayoutInflater.from(getContext()).inflate(R.layout.common_bulletin_template, null);
+                TextView title = v.findViewById(R.id.titleText);
+                TextView msg = v.findViewById(R.id.messageText);
+                title.setText(Model.BULLETIN_VOS.get(list.get(i)).get("title"));
+                msg.setText(Model.BULLETIN_VOS.get(list.get(i)).get("content_text"));
+                bulletinContent.addView(v);
+            }
         }
     }
 
@@ -59,12 +79,5 @@ public class SellerSimpleInformationFragment extends Fragment {
     public void onStop() {
         super.onStop();
         SellerMainActivity.navigationIconDisplay(false, null);
-    }
-
-    private void backToSellerSetUpPage() {
-        BaseCore.FRAGMENT_TAG = PageType.SELLER_SET_UP.name();
-        SellerSetUpFragment.TO_SELLER_SIMPLE_INFO_INDEX = -1;
-        Fragment f = PageFragmentFactory.of(PageType.SELLER_SET_UP, null);
-        getFragmentManager().beginTransaction().remove(this).replace(R.id.sellerFrameContainer, f).commit();
     }
 }

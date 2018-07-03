@@ -17,12 +17,14 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        fresco:failureImage="@drawable/naber_icon_logo_reverse" />
+        fresco:failureImage="@drawable/naber_icon_logo_reverse"
+        android:layout_marginLeft="8dp" />
 
     <TextView
         android:id="@+id/ordersItemNameText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
         android:layout_marginStart="16dp"
         android:text="珍珠奶茶"
         android:textColor="@android:color/black"
@@ -88,6 +90,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
         android:layout_weight="1"
         android:text="40"
         android:textColor="@android:color/black"
@@ -101,6 +104,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
         android:background="@android:color/transparent"
         android:src="@drawable/naber_trash_can_icon"
         app:layout_constraintBottom_toBottomOf="@+id/linearLayout100"

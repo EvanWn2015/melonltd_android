@@ -95,6 +95,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     public void onResume() {
         super.onResume();
         BaseActivity.changeToolbarStatus();
+        accountEdit.setText(SPService.getAccout());
     }
 
     @Override
@@ -116,13 +117,14 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                             AccountInfoVo resp = Tools.JSONPARSE.fromJson(responseBody, AccountInfoVo.class);
                             SPService.setOauth(resp.account_uuid);
                             SPService.setUserName(resp.name);
+                            SPService.setAccout(resp.account);
                             SPService.setUserPhone(resp.phone);
                             SPService.setOauth(resp.account_uuid);
+                            SPService.setIdentity(resp.identity);
                             Log.d(TAG, Model.BANNER_IMAGES.toString());
                             if (rememberMe.isChecked()){
                                 SPService.setLoginLimit(new Date().getTime());
                                 SPService.setRememberAccount(resp.phone);
-                                SPService.setRememberIdentity(resp.identity);
                             }
 
                             if (Identity.getUserValues().contains(Identity.of(resp.identity))){

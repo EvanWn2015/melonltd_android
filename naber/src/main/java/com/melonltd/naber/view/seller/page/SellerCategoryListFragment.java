@@ -1,7 +1,9 @@
 package com.melonltd.naber.view.seller.page;
 
 
+import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -10,39 +12,40 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.TextView;
+import android.widget.EditText;
 
 import com.bigkoo.alertview.AlertView;
 import com.bigkoo.alertview.OnItemClickListener;
-import com.facebook.drawee.backends.pipeline.Fresco;
-import com.google.common.collect.Lists;
+import com.google.common.base.Strings;
 import com.melonltd.naber.R;
-import com.melonltd.naber.view.common.BaseCore;
+import com.melonltd.naber.model.api.ApiManager;
+import com.melonltd.naber.model.api.ThreadCallback;
+import com.melonltd.naber.model.bean.Model;
+import com.melonltd.naber.model.constant.NaberConstant;
+import com.melonltd.naber.model.type.SwitchStatus;
+import com.melonltd.naber.util.Tools;
 import com.melonltd.naber.view.customize.SwitchButton;
-import com.melonltd.naber.view.factory.PageFragmentFactory;
 import com.melonltd.naber.view.factory.PageType;
 import com.melonltd.naber.view.seller.SellerMainActivity;
-import com.melonltd.naber.view.seller.adapter.MenuAdapter;
-
-import java.util.List;
+import com.melonltd.naber.view.seller.adapter.CategoryAdapter;
+import com.melonltd.naber.vo.ReqData;
+import com.melonltd.naber.vo.RestaurantCategoryRelVo;
 
 import cn.bingoogolapple.refreshlayout.BGANormalRefreshViewHolder;
 import cn.bingoogolapple.refreshlayout.BGARefreshLayout;
 
-public class SellerCategoryListFragment extends Fragment implements View.OnClickListener {
+public class SellerCategoryListFragment extends Fragment {
     private static final String TAG = SellerCategoryListFragment.class.getSimpleName();
     public static SellerCategoryListFragment FRAGMENT = null;
 
-    private TextView categoryNameText;
-    private Button newMenuBtn;
+    private EditText categoryEdit;
+    private Button newCategoryBtn;
+    private CategoryAdapter adapter;
+    private Bundle bundle;
 
-    private BGARefreshLayout bgaRefreshLayout;
-    private RecyclerView recyclerView;
-    private MenuAdapter adapter;
-    private List<String> listData = Lists.newArrayList();
-
-    public static int TO_MENU_EDIT_PAGE_INDEX = -1;
+    public static int TO_CATEGORY_LIST_PAGE_INDEX = -1;
 
     public SellerCategoryListFragment() {
     }
@@ -50,126 +53,153 @@ public class SellerCategoryListFragment extends Fragment implements View.OnClick
     public Fragment getInstance(Bundle bundle) {
         if (FRAGMENT == null) {
             FRAGMENT = new SellerCategoryListFragment();
-            TO_MENU_EDIT_PAGE_INDEX =-1;
+            TO_CATEGORY_LIST_PAGE_INDEX = -1;
         }
-        FRAGMENT.setArguments(bundle);
+        if (bundle != null) {
+            FRAGMENT.setArguments(bundle);
+        }
         return FRAGMENT;
-    }
-
-    public Fragment newInstance(Object... o) {
-        return new SellerCategoryListFragment();
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        adapter = new MenuAdapter(listData);
-        Fresco.initialize(getContext());
+        adapter = new CategoryAdapter(new SwitchListener(), new EditListener(), new DeleteListener());
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        if (container.getTag(R.id.seller_restaurant_category_list_page) == null) {
-            View v = inflater.inflate(R.layout.fragment_seller_category_list, container, false);
-            getViews(v);
-            setListener();
-            container.setTag(R.id.seller_restaurant_category_list_page, v);
-            return v;
-        }
-        return (View) container.getTag(R.id.seller_restaurant_category_list_page);
+//        if (container.getTag(R.id.seller_category_list_main_page) == null) {
+        View v = inflater.inflate(R.layout.fragment_seller_category_list, container, false);
+        getViews(v);
+//            container.setTag(R.id.seller_category_list_main_page, v);
+        return v;
+//        }
+//        return (View) container.getTag(R.id.seller_category_list_main_page);
     }
 
 
     private void getViews(View v) {
-        categoryNameText = v.findViewById(R.id.categoryNameText);
-        newMenuBtn = v.findViewById(R.id.newMenuBtn);
-        bgaRefreshLayout = v.findViewById(R.id.menuBGARefreshLayout);
-        recyclerView = v.findViewById(R.id.menuRecyclerView);
+        categoryEdit = v.findViewById(R.id.categoryEdit);
+        newCategoryBtn = v.findViewById(R.id.newCategoryBtn);
+        BGARefreshLayout refreshLayout = v.findViewById(R.id.categoryBGARefreshLayout);
+        RecyclerView recyclerView = v.findViewById(R.id.categoryRecyclerView);
 
         BGANormalRefreshViewHolder refreshViewHolder = new BGANormalRefreshViewHolder(getContext(), true);
         refreshViewHolder.setPullDownRefreshText("Pull");
         refreshViewHolder.setRefreshingText("Pull to refresh");
         refreshViewHolder.setReleaseRefreshText("Pull to refresh");
         refreshViewHolder.setLoadingMoreText("Loading more !");
-
-        bgaRefreshLayout.setRefreshViewHolder(refreshViewHolder);
+        refreshLayout.setRefreshViewHolder(refreshViewHolder);
 
         final LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
-    }
 
-    private void setListener() {
-        adapter.setListener(new SwitchListener(), new DeleteListener(), new EditListener(), new CopyLongListener());
+        //setListener
         recyclerView.setAdapter(adapter);
-        newMenuBtn.setOnClickListener(this);
+        newCategoryBtn.setOnClickListener(new AddCategoryListener());
+
+        refreshLayout.setDelegate(new BGARefreshLayout.BGARefreshLayoutDelegate() {
+            @Override
+            public void onBGARefreshLayoutBeginRefreshing(BGARefreshLayout refreshLayout) {
+                refreshLayout.endRefreshing();
+                loadData();
+            }
+
+            @Override
+            public boolean onBGARefreshLayoutBeginLoadingMore(BGARefreshLayout refreshLayout) {
+                refreshLayout.endLoadingMore();
+                return false;
+            }
+        });
+
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        categoryEdit.setText("");
         SellerMainActivity.changeTabAndToolbarStatus();
-        for (int i = 0; i < 10; i++) {
-            listData.add("menu :: " + i);
+        SellerMainActivity.lockDrawer(true);
+        if (TO_CATEGORY_LIST_PAGE_INDEX >= 0) {
+            SellerMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.SELLER_FOOD_LIST, bundle);
+        } else {
+            loadData();
         }
-        adapter.notifyDataSetChanged();
-
-        if (TO_MENU_EDIT_PAGE_INDEX >= 0) {
-            toMenuEditPage(TO_MENU_EDIT_PAGE_INDEX);
-        }
-
-        if (SellerMainActivity.toolbar != null) {
-            SellerMainActivity.navigationIconDisplay(true, new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    backToSellerRestaurantPage();
-                    SellerMainActivity.navigationIconDisplay(false, null);
-                }
-            });
-        }
-    }
-
-    private void backToSellerRestaurantPage() {
-        BaseCore.FRAGMENT_TAG = PageType.SELLER_RESTAURANT.name();
-        SellerRestaurantFragment.TO_CATEGORY_LIST_PAGE_INDEX = -1;
-        Fragment f = PageFragmentFactory.of(PageType.SELLER_RESTAURANT, null);
-        getFragmentManager().beginTransaction().remove(this).replace(R.id.sellerFrameContainer, f).commit();
-    }
-
-    private void toMenuEditPage(int index) {
-        BaseCore.FRAGMENT_TAG = PageType.SELLER_MENU_EDIT.name();
-        TO_MENU_EDIT_PAGE_INDEX = index;
-        Fragment f = PageFragmentFactory.of(PageType.SELLER_MENU_EDIT, null);
-        getFragmentManager().beginTransaction().remove(this).replace(R.id.sellerFrameContainer, f).commit();
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        SellerMainActivity.navigationIconDisplay(false, null);
     }
 
-    @Override
-    public void onClick(View view) {
-        toMenuEditPage(0);
+    private void loadData() {
+        Model.SELLER_CATEGORY_LIST.clear();
+        adapter.notifyDataSetChanged();
+        ApiManager.sellerCategoryList(new ThreadCallback(getContext()) {
+            @Override
+            public void onSuccess(String responseBody) {
+                Log.i(TAG, responseBody);
+                Model.SELLER_CATEGORY_LIST = Tools.JSONPARSE.fromJsonList(responseBody, RestaurantCategoryRelVo[].class);
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFail(Exception error, String msg) {
+
+            }
+        });
     }
 
     class SwitchListener implements SwitchButton.OnCheckedChangeListener {
         @Override
-        public void onCheckedChanged(SwitchButton view, boolean isChecked) {
-            Log.d(TAG, isChecked + "");
-            Log.d(TAG, view.getTag() + "");
+        public void onCheckedChanged(final SwitchButton view, final boolean isChecked) {
+            InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            final int index = (int) view.getTag();
+            if (Model.SELLER_CATEGORY_LIST.get(index).status.getStatus() != isChecked) {
+                ReqData req = new ReqData();
+                req.uuid = Model.SELLER_CATEGORY_LIST.get(index).category_uuid;
+                final SwitchStatus status = SwitchStatus.of(isChecked);
+                req.status = status.getName();
+                ApiManager.sellerChangeCategoryStatus(req, new ThreadCallback(getContext()) {
+                    @Override
+                    public void onSuccess(String responseBody) {
+                        Model.SELLER_CATEGORY_LIST.get(index).status = status;
+                    }
+
+                    @Override
+                    public void onFail(Exception error, String msg) {
+                        view.setChecked(Model.SELLER_CATEGORY_LIST.get(index).status.getStatus());
+                    }
+                });
+            }
+        }
+    }
+
+    class EditListener implements View.OnClickListener {
+        @Override
+        public void onClick(View view) {
+            int index = (int) view.getTag();
+            InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            TO_CATEGORY_LIST_PAGE_INDEX = index;
+            bundle = new Bundle();
+            bundle.putString(NaberConstant.SELLER_CATEGORY_NAME, Model.SELLER_CATEGORY_LIST.get(index).category_name);
+            bundle.putString(NaberConstant.SELLER_CATEGORY_UUID, Model.SELLER_CATEGORY_LIST.get(index).category_uuid);
+            SellerMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.SELLER_FOOD_LIST, bundle);
         }
     }
 
     class DeleteListener implements View.OnClickListener {
         @Override
-        public void onClick(View view) {
-            Log.d(TAG, view.getTag() + "");
-            final int index = listData.indexOf(view.getTag());
+        public void onClick(final View view) {
+            InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
             new AlertView.Builder()
                     .setTitle("")
-                    .setMessage("刪除後將無法找回，\n您確定要刪除嗎？")
+                    .setMessage("請注意刪除種類\n，將會影響種類下的產品!")
                     .setContext(getContext())
                     .setStyle(AlertView.Style.Alert)
                     .setOthers(new String[]{"確定刪除", "取消"})
@@ -177,8 +207,8 @@ public class SellerCategoryListFragment extends Fragment implements View.OnClick
                         @Override
                         public void onItemClick(Object o, int position) {
                             if (position == 0) {
-                                listData.remove(index);
-                                adapter.notifyDataSetChanged();
+                                int index = (int) view.getTag();
+                                new Handler().postDelayed(new DeleteRun(index), 300);
                             }
                         }
                     })
@@ -188,38 +218,70 @@ public class SellerCategoryListFragment extends Fragment implements View.OnClick
         }
     }
 
-    class EditListener implements View.OnClickListener {
+
+    class DeleteRun implements Runnable {
+        private int index;
+
+        DeleteRun(int index) {
+            this.index = index;
+        }
+
+        @Override
+        public void run() {
+            ReqData req = new ReqData();
+            req.uuid = Model.SELLER_CATEGORY_LIST.get(index).category_uuid;
+            ApiManager.sellerDeleteCategory(req, new ThreadCallback(getContext()) {
+                @Override
+                public void onSuccess(String responseBody) {
+                    Model.SELLER_CATEGORY_LIST.remove(index);
+                    adapter.notifyDataSetChanged();
+                }
+
+                @Override
+                public void onFail(Exception error, String msg) {
+                }
+            });
+        }
+    }
+
+    class AddCategoryListener implements View.OnClickListener {
         @Override
         public void onClick(View view) {
-            Log.d(TAG, view.getTag() + "");
-            int index = listData.indexOf(view.getTag());
-            toMenuEditPage(index);
-        }
-    }
+            InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            if (Strings.isNullOrEmpty(categoryEdit.getText().toString())) {
+                new AlertView.Builder()
+                        .setTitle("")
+                        .setMessage("請輸入種類名稱")
+                        .setContext(getContext())
+                        .setStyle(AlertView.Style.Alert)
+                        .setOthers(new String[]{"取消"})
+                        .build()
+                        .setCancelable(true)
+                        .show();
+            } else {
+                ReqData req = new ReqData();
+                req.name = categoryEdit.getText().toString();
+                ApiManager.sellerAddCategory(req, new ThreadCallback(getContext()) {
+                    @Override
+                    public void onSuccess(String responseBody) {
+                        RestaurantCategoryRelVo categoryRel = Tools.JSONPARSE.fromJson(responseBody, RestaurantCategoryRelVo.class);
+                        Model.SELLER_CATEGORY_LIST.add(0, categoryRel);
+                        categoryEdit.setText("");
 
+                        TO_CATEGORY_LIST_PAGE_INDEX = 0;
+                        bundle = new Bundle();
+                        bundle.putString(NaberConstant.SELLER_CATEGORY_NAME, categoryRel.category_name);
+                        bundle.putString(NaberConstant.SELLER_CATEGORY_UUID, categoryRel.category_uuid);
+                        SellerMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.SELLER_FOOD_LIST, bundle);
+                    }
 
-    class CopyLongListener implements View.OnLongClickListener {
-        @Override
-        public boolean onLongClick(View view) {
-            Log.d(TAG, view.getTag() + "");
-            final int index = listData.indexOf(view.getTag());
-            new AlertView.Builder()
-                    .setTitle("複製 : " + view.getTag())
-                    .setContext(getContext())
-                    .setStyle(AlertView.Style.Alert)
-                    .setOthers(new String[]{"確定複製", "取消"})
-                    .setOnItemClickListener(new OnItemClickListener() {
-                        @Override
-                        public void onItemClick(Object o, int position) {
-                            if (position == 0) {
-                                toMenuEditPage(index);
-                            }
-                        }
-                    })
-                    .build()
-                    .setCancelable(true)
-                    .show();
-            return false;
+                    @Override
+                    public void onFail(Exception error, String msg) {
+                        Log.i(TAG, msg);
+                    }
+                });
+            }
         }
     }
 

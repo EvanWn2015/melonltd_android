@@ -21,7 +21,10 @@ import com.bigkoo.alertview.AlertView;
 import com.bigkoo.alertview.OnItemClickListener;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.facebook.imagepipeline.request.ImageRequest;
+import com.facebook.imagepipeline.request.ImageRequestBuilder;
 import com.google.common.base.Splitter;
+import com.google.common.base.Strings;
 import com.melonltd.naber.R;
 import com.melonltd.naber.model.bean.Model;
 import com.melonltd.naber.model.constant.NaberConstant;
@@ -163,8 +166,6 @@ public class ShoppingCartFragment extends Fragment {
                 amount += Integer.parseInt(Model.USER_CACHE_SHOPPING_CART.get(index).orders.get(i).item.price);
             }
             if (amount <= 5000) {
-                Model.USER_CACHE_SHOPPING_CART.get(index).user_name = SPService.getUserName();
-                Model.USER_CACHE_SHOPPING_CART.get(index).user_phone = SPService.getUserPhone();
                 TO_SUBMIT_ORDERS_PAGE_INDEX = index;
                 Bundle bundle = new Bundle();
                 bundle.putInt(NaberConstant.ORDER_DETAIL_INDEX, index);
@@ -328,7 +329,13 @@ public class ShoppingCartFragment extends Fragment {
                     foodItem.addBtn.setOnClickListener(this.foodAddAndMinusListener);
                     foodItem.minusBtn.setOnClickListener(this.foodAddAndMinusListener);
                     foodItem.deleteBtn.setOnClickListener(this.foodDeleteListener);
-                    foodItem.foodPhotoImageView.setImageURI(Uri.parse(Model.USER_CACHE_SHOPPING_CART.get(position).orders.get(i).item.food_photo));
+                    if (!Strings.isNullOrEmpty(Model.USER_CACHE_SHOPPING_CART.get(position).orders.get(i).item.food_photo)){
+                        foodItem.foodPhotoImageView.setImageURI(Uri.parse(Model.USER_CACHE_SHOPPING_CART.get(position).orders.get(i).item.food_photo));
+                    }else {
+                        ImageRequest imageRequest = ImageRequestBuilder.newBuilderWithResourceId(R.drawable.naber_icon_logo_reverse).build();
+                        foodItem.foodPhotoImageView.setImageURI(imageRequest.getSourceUri());
+                    }
+
                     this.layout.addView(foodItem.getView());
                 }
             }

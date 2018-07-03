@@ -111,7 +111,6 @@ public class VerifySMSFragment extends Fragment implements View.OnClickListener 
 
         switch (v.getId()) {
             case R.id.requestVerifyCodeBtn:
-
                 if (!readCheckBox.isChecked()) {
                     new AlertView.Builder()
                             .setContext(getContext())
@@ -198,12 +197,15 @@ public class VerifySMSFragment extends Fragment implements View.OnClickListener 
                     public void onSuccess(String responseBody) {
                         Bundle bundle = new Bundle();
                         bundle.putString("phone", phoneNamberEdit.getText().toString());
+                        phoneNamberEdit.setText("");
+                        verifySMSEdit.setText("");
+                        readCheckBox.setChecked(false);
+                        map = Maps.newHashMap();
                         BaseActivity.removeAndReplaceWhere(FRAGMENT, PageType.REGISTERED_USER, bundle);
                     }
 
                     @Override
                     public void onFail(Exception error, String msg) {
-                        Log.d(TAG, msg);
                         new AlertView.Builder()
                                 .setContext(getContext())
                                 .setStyle(AlertView.Style.Alert)

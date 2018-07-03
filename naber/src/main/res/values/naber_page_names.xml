@@ -31,9 +31,9 @@
     <string name="seller_menu_stat_btn">營運概況</string>
     <string name="seller_menu_orders_logs">營運概況</string>
     <string name="seller_menu_orders_logs_detail">營運概況</string>
-    <string name="seller_menu_menu_btn">菜單</string>
-    <string name="seller_menu_category_list">菜單</string>
-    <string name="seller_menu_menu_edit">產品細項</string>
+    <string name="seller_menu_category_list_btn">菜單</string>
+    <string name="seller_menu_food_list">菜單</string>
+    <string name="seller_menu_food_edit">產品細項</string>
     <string name="seller_menu_set_up_btn">設定</string>
     <string name="seller_menu_seller_detail">商家設定</string>
     <string name="seller_menu_simple_information">關於我們</string>

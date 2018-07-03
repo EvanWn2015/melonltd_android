@@ -75,9 +75,9 @@ public class OrderDetailFragment extends Fragment {
                 }
             });
 
-            holder.sellerNameText.setText(vo.restaurant_name);
+            holder.sellerNameText.setText(orderDetail.restaurant_name);
             holder.priceText.setText("$ " + vo.order_price);
-            holder.addressText.setText(vo.restaurant_address);
+            holder.addressText.setText(orderDetail.restaurant_address);
             holder.messageText.setText(vo.user_message);
             holder.bonusText.setText(vo.order_bonus);
 
@@ -119,7 +119,6 @@ public class OrderDetailFragment extends Fragment {
         getFragmentManager().beginTransaction().remove(this).replace(R.id.frameContainer, f).addToBackStack(f.toString()).commit();
     }
 
-
     class ViewHolder {
         TextView sellerNameText, priceText, addressText, messageText, bonusText, orderingTimeText, fetchDateText;
         ListView orderDatas;
@@ -127,7 +126,7 @@ public class OrderDetailFragment extends Fragment {
             this.orderDatas = v.findViewById(R.id.orderDatas);
             this.orderDatas.setAdapter(new OrderAdapter());
             this.sellerNameText = v.findViewById(R.id.sellerNameText);
-            this.priceText = v.findViewById(R.id.priceText);
+            this.priceText = v.findViewById(R.id.priceEdit);
             this.addressText = v.findViewById(R.id.addressText);
             this.messageText = v.findViewById(R.id.messageText);
             this.bonusText = v.findViewById(R.id.bonusText);
@@ -135,7 +134,6 @@ public class OrderDetailFragment extends Fragment {
             this.fetchDateText = v.findViewById(R.id.fetchDateText);
         }
     }
-
 
     class OrderAdapter extends BaseAdapter {
         @Override
@@ -199,7 +197,7 @@ public class OrderDetailFragment extends Fragment {
         class ViewHolder {
             TextView foodNameText, countText, datasText;
             ViewHolder(View v){
-                this.foodNameText = v.findViewById(R.id.foodNameText);
+                this.foodNameText = v.findViewById(R.id.nameEdit);
                 this.countText = v.findViewById(R.id.countText);
                 this.datasText = v.findViewById(R.id.datasText);
             }

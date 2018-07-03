@@ -32,17 +32,17 @@ public class Slide extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null && getArguments().containsKey(ARG_LAYOUT_RES_ID)) {
-            layoutResId = getArguments().getInt(ARG_LAYOUT_RES_ID);
-            introResId = getArguments().getInt(INTRO_RES_ID);
+            this.layoutResId = getArguments().getInt(ARG_LAYOUT_RES_ID);
+            this.introResId = getArguments().getInt(INTRO_RES_ID);
         }
     }
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View v = inflater.inflate(layoutResId, container, false);
+        View v = inflater.inflate(this.layoutResId, container, false);
         ImageView introImage = v.findViewById(R.id.introImage);
-        introImage.setImageResource(introResId);
+        introImage.setImageResource(this.introResId);
         return v;
 //        return inflater.inflate(layoutResId, container, false);
     }

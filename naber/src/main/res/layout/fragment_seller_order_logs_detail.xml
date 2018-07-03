@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/seller_order_logs_detail_page"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:overScrollMode="never"
     android:padding="16dp"
+    android:scrollbars="none"
     tools:context=".view.seller.page.SellerOrderLogsDetailFragment">
-
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:background="@drawable/naber_reverse_gary_button_style"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@drawable/naber_reverse_gary_button_style">
 
         <View
             android:id="@+id/toolerView"
@@ -32,16 +33,17 @@
             android:layout_height="wrap_content"
             android:padding="8dp"
             android:paddingEnd="0dp"
+            android:paddingRight="0dp"
             android:text="商品"
             android:textColor="@android:color/black"
             android:textSize="14sp"
-            app:layout_constraintBottom_toTopOf="@+id/foodItemsText"
-            app:layout_constraintEnd_toStartOf="@+id/foodItemsCountText"
+            app:layout_constraintBottom_toTopOf="@+id/foodContentText"
+            app:layout_constraintEnd_toStartOf="@+id/foodCountText"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/toolerView" />
 
         <TextView
-            android:id="@+id/foodItemsCountText"
+            android:id="@+id/foodCountText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
@@ -54,7 +56,7 @@
             app:layout_constraintTop_toTopOf="@+id/logsItemText" />
 
         <TextView
-            android:id="@+id/foodItemsText"
+            android:id="@+id/foodContentText"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/naber_text_base_line"
@@ -75,13 +77,13 @@
             android:text="備註欄"
             android:textColor="@android:color/black"
             android:textSize="14sp"
-            app:layout_constraintBottom_toTopOf="@+id/remarkText"
+            app:layout_constraintBottom_toTopOf="@+id/userMessageText"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/foodItemsText" />
+            app:layout_constraintTop_toBottomOf="@+id/foodContentText" />
 
         <TextView
-            android:id="@+id/remarkText"
+            android:id="@+id/userMessageText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="@drawable/naber_text_base_line"
@@ -106,12 +108,12 @@
             android:textColor="@android:color/black"
             android:textSize="14sp"
             app:layout_constraintBottom_toTopOf="@+id/textView89"
-            app:layout_constraintEnd_toStartOf="@+id/fetchTimeText"
+            app:layout_constraintEnd_toStartOf="@+id/fetchDateText"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/remarkText" />
+            app:layout_constraintTop_toBottomOf="@+id/userMessageText" />
 
         <TextView
-            android:id="@+id/fetchTimeText"
+            android:id="@+id/fetchDateText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="@drawable/naber_text_base_line"
@@ -132,12 +134,12 @@
             android:textColor="@android:color/black"
             android:textSize="14sp"
             app:layout_constraintBottom_toTopOf="@+id/textView94"
-            app:layout_constraintEnd_toStartOf="@+id/userPhoneNumberText"
+            app:layout_constraintEnd_toStartOf="@+id/userPhoneText"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView87" />
 
         <TextView
-            android:id="@+id/userPhoneNumberText"
+            android:id="@+id/userPhoneText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="@drawable/naber_text_base_line"
@@ -157,9 +159,9 @@
             android:text="姓名"
             android:textColor="@android:color/black"
             android:textSize="14sp"
-            app:layout_constraintBottom_toBottomOf="@+id/userPhoneNumberText"
+            app:layout_constraintBottom_toBottomOf="@+id/userPhoneText"
             app:layout_constraintEnd_toStartOf="@+id/userNameText"
-            app:layout_constraintStart_toEndOf="@+id/userPhoneNumberText" />
+            app:layout_constraintStart_toEndOf="@+id/userPhoneText" />
 
         <TextView
             android:id="@+id/userNameText"
@@ -187,10 +189,11 @@
             app:layout_constraintTop_toBottomOf="@+id/textView89" />
 
         <TextView
-            android:id="@+id/totalAmountText"
+            android:id="@+id/priceEdit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
+            android:layout_marginLeft="60dp"
             android:layout_marginStart="60dp"
             android:layout_marginTop="8dp"
             android:text="400$"
@@ -216,7 +219,7 @@
             app:layout_constraintTop_toBottomOf="@+id/textView94">
 
             <Button
-                android:id="@+id/cancelBtn"
+                android:id="@+id/statusBtn"
                 android:layout_width="wrap_content"
                 android:layout_height="28dp"
                 android:layout_margin="1dp"
@@ -224,56 +227,8 @@
                 android:background="@color/naber_basis_red"
                 android:text="取消"
                 android:textColor="@android:color/white"
-                android:textSize="10sp"
-                android:visibility="gone" />
-
-            <Button
-                android:id="@+id/failureBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="28dp"
-                android:layout_margin="1dp"
-                android:layout_weight="1"
-                android:background="@color/naber_basis_red"
-                android:text="跑單"
-                android:textColor="@android:color/white"
-                android:textSize="10sp"
-                android:visibility="gone" />
-
-            <Button
-                android:id="@+id/processingBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="28dp"
-                android:layout_margin="1dp"
-                android:layout_weight="1"
-                android:background="@color/naber_basis_orange"
-                android:text="製作中"
-                android:textColor="@android:color/white"
-                android:textSize="10sp"
-                android:visibility="gone" />
-
-            <Button
-                android:id="@+id/canFetchBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="28dp"
-                android:layout_margin="1dp"
-                android:layout_weight="1"
-                android:background="@color/naber_basis_bright_yellow"
-                android:text="可領取"
-                android:textColor="@android:color/white"
-                android:textSize="10sp"
-                android:visibility="gone" />
-
-            <Button
-                android:id="@+id/finishBtn"
-                android:layout_width="wrap_content"
-                android:layout_height="28dp"
-                android:layout_margin="1dp"
-                android:layout_weight="1"
-                android:background="@color/naber_basis_bright_green"
-                android:text="交易完成"
-                android:textColor="@android:color/white"
                 android:textSize="10sp" />
 
         </LinearLayout>
     </android.support.constraint.ConstraintLayout>
-</RelativeLayout>
+</ScrollView>

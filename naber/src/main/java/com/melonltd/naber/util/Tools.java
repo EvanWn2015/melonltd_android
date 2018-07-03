@@ -43,8 +43,6 @@ public class Tools {
     public static Longitude LONGITUDE = new Longitude();
 //    public static Bitmaps BITMAPS = new Bitmaps();
 
-    public static MakeUp MAKEUP = new MakeUp();
-
     public static class Format {
         private static DecimalFormat decimal = new DecimalFormat();
         private static SimpleDateFormat simpleDate = new SimpleDateFormat();
@@ -74,10 +72,15 @@ public class Tools {
             }
         }
 
-        public static String toUTCDateTime(Date date) {
-            simpleDate = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:SS.ssss'Z'");
-            simpleDate.setTimeZone(TimeZone.getTimeZone("GMT"));
+        public static String formatDate(Date date) {
+            simpleDate = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSS'Z'");
+//            simpleDate.setTimeZone(TimeZone.getTimeZone("GMT"));
             return simpleDate.format(date);
+        }
+
+        public static String formatStartDate(Date date, String value) {
+            simpleDate = new SimpleDateFormat("yyyy-MM-dd");
+            return simpleDate.format(date) + value;
         }
     }
 
@@ -179,24 +182,4 @@ public class Tools {
     }
 
 
-    public static class MakeUp {
-        public enum Direction {RIGHT, LEFT}
-
-        public static String makeUpCharacter(String src, int min, Direction direction) {
-            String result = "";
-            if (Strings.isNullOrEmpty(src)) {
-                for (int i = 0; i < min; i++) {
-                    result = result + "\u0020";
-                }
-            } else if (src.toCharArray().length - min < 0) {
-                for (int i = 0; i < min - src.toCharArray().length; i++) {
-                    result = result + "\u0020";
-                }
-                result = direction.equals(Direction.RIGHT) ? src + result : result + src;
-            } else {
-                result = src;
-            }
-            return result;
-        }
-    }
 }

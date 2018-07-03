@@ -9,21 +9,16 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.melonltd.naber.R;
+import com.melonltd.naber.model.bean.Model;
+import com.melonltd.naber.view.common.HideKeyboardListener;
 import com.melonltd.naber.view.customize.SwitchButton;
 
-import java.util.List;
-
-
 public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHolder> {
-    private List<String> listData;
     private SwitchButton.OnCheckedChangeListener aSwitchListener;
     private View.OnClickListener deleteListener, editListener;
+    private View.OnClickListener hideKeyboardListener = new HideKeyboardListener();
 
-    public CategoryAdapter(List<String> listData) {
-        this.listData = listData;
-    }
-
-    public void setListener(SwitchButton.OnCheckedChangeListener aSwitchListener, View.OnClickListener editListener, View.OnClickListener deleteListener) {
+    public CategoryAdapter(SwitchButton.OnCheckedChangeListener aSwitchListener, View.OnClickListener editListener, View.OnClickListener deleteListener) {
         this.aSwitchListener = aSwitchListener;
         this.editListener = editListener;
         this.deleteListener = deleteListener;
@@ -39,12 +34,12 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        holder.v.setOnClickListener(this.hideKeyboardListener);
 
-        holder.categoryText.setText(listData.get(position));
-        holder.aSwitch.setTag(listData.get(position));
-        holder.editBtn.setTag(listData.get(position));
-        holder.deleteBtn.setTag(listData.get(position));
+        holder.categoryText.setText(Model.SELLER_CATEGORY_LIST.get(position).category_name);
+        holder.setTag(position);
 
+        holder.aSwitch.setChecked(Model.SELLER_CATEGORY_LIST.get(position).status.getStatus());
         holder.aSwitch.setOnCheckedChangeListener(this.aSwitchListener);
         holder.editBtn.setOnClickListener(this.editListener);
         holder.deleteBtn.setOnClickListener(this.deleteListener);
@@ -52,20 +47,28 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
 
     @Override
     public int getItemCount() {
-        return listData.size();
+        return Model.SELLER_CATEGORY_LIST.size();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
         private TextView categoryText;
         private Button editBtn, deleteBtn;
         private SwitchButton aSwitch;
+        private View v;
 
         ViewHolder(View v) {
             super(v);
-            categoryText = v.findViewById(R.id.categoryText);
-            editBtn = v.findViewById(R.id.editBtn);
-            deleteBtn = v.findViewById(R.id.deleteBtn);
-            aSwitch = v.findViewById(R.id.aSwitch);
+            this.v = v;
+            this.categoryText = v.findViewById(R.id.categoryText);
+            this.editBtn = v.findViewById(R.id.editBtn);
+            this.deleteBtn = v.findViewById(R.id.deleteBtn);
+            this.aSwitch = v.findViewById(R.id.aSwitch);
+        }
+
+        public void setTag(int position){
+            this.aSwitch.setTag(position);
+            this.editBtn.setTag(position);
+            this.deleteBtn.setTag(position);
         }
     }
 

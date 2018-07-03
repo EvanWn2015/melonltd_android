@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/seller_menu_edit_page"
-    android:layout_width="match_parent"
     xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/seller_food_edit_page"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:overScrollMode="never"
     android:scrollbars="none"
-    tools:context=".view.seller.page.SellerMenuEditFragment">
+    tools:context=".view.seller.page.SellerFoodEditFragment">
 
 
     <android.support.constraint.ConstraintLayout
@@ -49,64 +49,31 @@
             android:id="@+id/textView80"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
             android:text="產品名稱"
             android:textColor="@android:color/black"
             android:textSize="14sp"
-            app:layout_constraintBottom_toTopOf="@+id/textView88"
-            app:layout_constraintEnd_toStartOf="@+id/editText"
+            app:layout_constraintBottom_toTopOf="@+id/editLayout"
+            app:layout_constraintEnd_toStartOf="@+id/foodNameText"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/view10" />
 
-        <EditText
-            android:id="@+id/editText"
+        <TextView
+            android:id="@+id/foodNameText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:background="@drawable/naber_reverse_gary_button_style"
-            android:hint="請輸入產品名稱"
             android:padding="8dp"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="@+id/textView80"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/textView80"
             app:layout_constraintTop_toTopOf="@+id/textView80" />
-
-        <TextView
-            android:id="@+id/textView88"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
-            android:text="最低價位"
-            android:textColor="@android:color/black"
-            android:textSize="14sp"
-            app:layout_constraintBottom_toTopOf="@+id/editLayout"
-            app:layout_constraintEnd_toStartOf="@+id/editText2"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView80" />
-
-        <EditText
-            android:id="@+id/editText2"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
-            android:layout_marginStart="8dp"
-            android:background="@drawable/naber_reverse_gary_button_style"
-            android:hint="請輸入產品最低價位"
-            android:inputType="number"
-            android:padding="8dp"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="@+id/textView88"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/textView88"
-            app:layout_constraintTop_toTopOf="@+id/textView88" />
 
         <LinearLayout
             android:id="@+id/editLayout"
@@ -119,11 +86,18 @@
             app:layout_constraintBottom_toTopOf="@+id/linearLayout6"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView88">
+            app:layout_constraintTop_toBottomOf="@+id/textView80">
 
             <include layout="@layout/menu_detail_scope" />
 
-            <include layout="@layout/menu_detail_optional" />
+            <include layout="@layout/seller_food_edit_optional" />
+
+            <LinearLayout
+                android:id="@+id/demandLayout"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            </LinearLayout>
 
         </LinearLayout>
 
@@ -142,7 +116,7 @@
             app:layout_constraintTop_toBottomOf="@+id/editLayout">
 
             <Button
-                android:id="@+id/newDemandBtn"
+                android:id="@+id/demandBtn"
                 android:layout_width="match_parent"
                 android:layout_height="36dp"
                 android:layout_margin="8dp"
@@ -151,7 +125,7 @@
                 android:text="新增需求" />
 
             <Button
-                android:id="@+id/button2"
+                android:id="@+id/cancelBtn"
                 android:layout_width="match_parent"
                 android:layout_height="36dp"
                 android:layout_margin="8dp"

@@ -10,6 +10,7 @@ import android.provider.MediaStore;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -173,12 +174,14 @@ public class AccountDetailFragment extends Fragment implements View.OnClickListe
                     }
                     @Override
                     public void failure(String errMsg) {
+                        dialog.dismiss();
                         ImageRequest request = ImageRequestBuilder.newBuilderWithResourceId(R.drawable.naber_icon_logo).build();
                         holder.avatarImage.setImageURI(request.getSourceUri());
                     }
                 });
             }else {
                 // TODO 圖片上傳失敗
+                Log.i(TAG, "// TODO 圖片上傳失敗");
             }
         }
     }

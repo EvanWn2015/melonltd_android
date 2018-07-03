@@ -1,6 +1,7 @@
 package com.melonltd.naber.vo;
 
 import com.google.common.base.MoreObjects;
+import com.melonltd.naber.model.type.SwitchStatus;
 
 import java.io.Serializable;
 
@@ -14,6 +15,7 @@ public class CategoryFoodRelVo implements Serializable{
     public String photo;
     public String photo_type;
     public FoodItemVo food_data;
+    public SwitchStatus status;
 
     @Override
     public String toString() {

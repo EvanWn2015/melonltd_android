@@ -35,6 +35,7 @@ import com.melonltd.naber.vo.CategoryFoodRelVo;
 import com.melonltd.naber.vo.DemandsItemVo;
 import com.melonltd.naber.vo.ItemVo;
 import com.melonltd.naber.vo.OrderDetail;
+import com.melonltd.naber.vo.RestaurantInfoVo;
 
 import java.util.List;
 
@@ -79,7 +80,7 @@ public class MenuDetailFragment extends Fragment implements View.OnClickListener
     private void getViews(View v) {
         contentLayout = v.findViewById(R.id.menuDetailContentLinearLayout);
         quantityEditText = v.findViewById(R.id.quantityEditText);
-        totalAmountText = v.findViewById(R.id.totalAmountText);
+        totalAmountText = v.findViewById(R.id.priceEdit);
 
         Button addToShopCartBtn = v.findViewById(R.id.addToShopCartBtn);
         ImageButton addBtn = v.findViewById(R.id.addBtn);
@@ -216,7 +217,7 @@ public class MenuDetailFragment extends Fragment implements View.OnClickListener
     }
 
     private void setOptView(final List<ItemVo> opts) {
-        if (opts.size() < 0) {
+        if (opts.size() > 0) {
             View v = LayoutInflater.from(getContext()).inflate(R.layout.menu_detail_optional, null);
             final LinearLayout optLayout = v.findViewById(R.id.optsLayout);
             for (int i = 0; i < opts.size(); i++) {
@@ -257,26 +258,36 @@ public class MenuDetailFragment extends Fragment implements View.OnClickListener
 
     @Override
     public void onClick(View v) {
-        String uuid = getArguments().getString(NaberConstant.RESTAURANT_UUID);
+        RestaurantInfoVo restaurantInfo = (RestaurantInfoVo)getArguments().getSerializable(NaberConstant.RESTAURANT_INFO);
         orderData.item.price = totalAmountText.getText().toString();
 
         OrderDetail.OrderData data = new OrderDetail.OrderData();
         data = orderData;
+//        data.restaurant_address = restaurantInfo.address;
+//        data.restaurant_name = restaurantInfo.name;
+//        data.user_name = SPService.getUserName();
+//        data.user_phone = SPService.getUserPhone();
         data.item.price = totalAmountText.getText().toString();
         data.item.food_name = UserMainActivity.toolbar.getTitle().toString();
         data.item.food_photo = getArguments().getString("FOOd_PHOTO");
         boolean has = false;
         for (OrderDetail o : Model.USER_CACHE_SHOPPING_CART) {
-            if (uuid.equals(o.restaurant_uuid)) {
-                o.restaurant_name = getArguments().getString(NaberConstant.RESTAURANT_NAME);
+            if (restaurantInfo.restaurant_uuid.equals(o.restaurant_uuid)) {
+                o.restaurant_name = restaurantInfo.name;
+                o.restaurant_address = restaurantInfo.address;
+                o.user_name = SPService.getUserName();
+                o.user_phone = SPService.getUserPhone();
                 o.orders.add(0, data);
                 has = true;
             }
         }
         if (!has) {
             OrderDetail orderDetail = OrderDetail.ofOrders(Lists.newArrayList(data));
-            orderDetail.restaurant_name = getArguments().getString(NaberConstant.RESTAURANT_NAME);
-            orderDetail.restaurant_uuid = uuid;
+            orderDetail.restaurant_uuid = restaurantInfo.restaurant_uuid;
+            orderDetail.restaurant_name = restaurantInfo.name;
+            orderDetail.restaurant_address = restaurantInfo.address;
+            orderDetail.user_name = SPService.getUserName();
+            orderDetail.user_phone = SPService.getUserPhone();
             Model.USER_CACHE_SHOPPING_CART.add(0, orderDetail);
         }
         String msg = "規格：";
@@ -295,7 +306,8 @@ public class MenuDetailFragment extends Fragment implements View.OnClickListener
             msg += "\n";
         }
         msg += "數量：" + orderData.count + "\n";
-        msg += "金額：" + totalAmountText.getText().toString();
+        msg += "金額：" + totalAmountText.getText().toString() + "\n";
+        msg += "品項內容以規格為主！";
 
         new AlertView.Builder()
                 .setContext(getContext())
@@ -308,11 +320,9 @@ public class MenuDetailFragment extends Fragment implements View.OnClickListener
                     public void onItemClick(Object o, int position) {
                         SPService.setUserCacheShoppingCarData(Model.USER_CACHE_SHOPPING_CART);
                         if (position == 0) {
-                            //TODO 選填內容存入SQLite，並導向購物車畫面
                             CategoryMenuFragment.TO_MENU_DETAIL_INDEX = -1;
                             UserMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.SHOPPING_CART, null);
                         } else {
-                            //TODO 暫存選去內容，導系列頁面
                             RestaurantDetailFragment.TO_CATEGORY_MENU_INDEX = -1;
                             CategoryMenuFragment.TO_MENU_DETAIL_INDEX = -1;
                             UserMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.RESTAURANT_DETAIL, null);

@@ -17,6 +17,8 @@ public class ReqData {
     public String category = "";
     public String json_data = "";
     public String date = "";
+    public String start_date = "";
+    public String end_date = "";
     public String message = "";
     public String type = "";
     public String name = "";

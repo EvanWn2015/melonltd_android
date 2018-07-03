@@ -2,18 +2,19 @@ package com.melonltd.naber.view.factory;
 
 import android.support.v4.app.Fragment;
 
+import com.melonltd.naber.R;
 import com.melonltd.naber.view.common.page.LoginFragment;
 import com.melonltd.naber.view.common.page.RecoverPasswordFragment;
 import com.melonltd.naber.view.common.page.RegisteredFragment;
 import com.melonltd.naber.view.common.page.RegisteredSellerFragment;
 import com.melonltd.naber.view.common.page.VerifySMSFragment;
 import com.melonltd.naber.view.seller.page.SellerCategoryListFragment;
+import com.melonltd.naber.view.seller.page.SellerFoodListFragment;
 import com.melonltd.naber.view.seller.page.SellerDetailFragment;
-import com.melonltd.naber.view.seller.page.SellerMenuEditFragment;
+import com.melonltd.naber.view.seller.page.SellerFoodEditFragment;
 import com.melonltd.naber.view.seller.page.SellerOrderLogsDetailFragment;
 import com.melonltd.naber.view.seller.page.SellerOrdersFragment;
 import com.melonltd.naber.view.seller.page.SellerOrdersLogsFragment;
-import com.melonltd.naber.view.seller.page.SellerRestaurantFragment;
 import com.melonltd.naber.view.seller.page.SellerSearchFragment;
 import com.melonltd.naber.view.seller.page.SellerSetUpFragment;
 import com.melonltd.naber.view.seller.page.SellerSimpleInformationFragment;
@@ -31,7 +32,6 @@ import com.melonltd.naber.view.user.page.SetUpFragment;
 import com.melonltd.naber.view.user.page.ShoppingCartFragment;
 import com.melonltd.naber.view.user.page.SimpleInformationFragment;
 import com.melonltd.naber.view.user.page.SubmitOrdersFragment;
-import com.melonltd.naber.R;
 
 
 /**
@@ -76,9 +76,9 @@ public enum PageType {
     SELLER_STAT(R.string.seller_menu_stat_btn, 2, SellerStatFragment.class),
     SELLER_ORDERS_LOGS(R.string.seller_menu_orders_logs, 2, SellerOrdersLogsFragment.class),
     SELLER_ORDERS_LOGS_DETAIL(R.string.seller_menu_orders_logs_detail, 2, SellerOrderLogsDetailFragment.class),
-    SELLER_RESTAURANT(R.string.seller_menu_menu_btn, 3, SellerRestaurantFragment.class),
-    SELLER_CATEGORY_LIST(R.string.seller_menu_category_list, 3, SellerCategoryListFragment.class),
-    SELLER_MENU_EDIT(R.string.seller_menu_menu_edit, 3, SellerMenuEditFragment.class),
+    SELLER_CATEGORY_LIST(R.string.seller_menu_category_list_btn, 3, SellerCategoryListFragment.class),
+    SELLER_FOOD_LIST(R.string.seller_menu_food_list, 3, SellerFoodListFragment.class),
+    SELLER_FOOD_EDIT(R.string.seller_menu_food_edit, 3, SellerFoodEditFragment.class),
     SELLER_SET_UP(R.string.seller_menu_set_up_btn, 4, SellerSetUpFragment.class),
     SELLER_DETAIL(R.string.seller_menu_seller_detail, 4, SellerDetailFragment.class),
     SELLER_SIMPLE_INFO(R.string.seller_menu_simple_information, 4, SellerSimpleInformationFragment.class);

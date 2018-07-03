@@ -17,7 +17,6 @@ import com.melonltd.naber.view.common.page.LoginFragment;
 import com.melonltd.naber.view.common.page.RecoverPasswordFragment;
 import com.melonltd.naber.view.common.page.RegisteredFragment;
 import com.melonltd.naber.view.common.page.RegisteredSellerFragment;
-import com.melonltd.naber.view.common.page.VerifySMSFragment;
 import com.melonltd.naber.view.factory.PageFragmentFactory;
 import com.melonltd.naber.view.factory.PageType;
 import com.melonltd.naber.view.seller.SellerMainActivity;
@@ -49,10 +48,14 @@ public class BaseActivity extends BaseCore {
     @Override
     protected void onResume() {
         super.onResume();
+
+        if (FRAGMENT_TAG.equals("VERIFY_SMS")){
+            return;
+        }
         long limit = SPService.getLoginLimit();
         long now = new Date().getTime();
         if (now - NaberConstant.REMEMBER_DAY < limit) {
-            String identity = SPService.getRememberIdentity();
+            String identity = SPService.getIdentity();
             if (Identity.getUserValues().contains(Identity.of(identity))) {
                 Model.USER_CACHE_SHOPPING_CART = SPService.getUserCacheShoppingCarData();
                 loadRestaurantTemplate(context);
@@ -79,7 +82,7 @@ public class BaseActivity extends BaseCore {
         RecoverPasswordFragment.FRAGMENT = null;
         RegisteredFragment.FRAGMENT = null;
         RegisteredSellerFragment.FRAGMENT = null;
-        VerifySMSFragment.FRAGMENT = null;
+//        VerifySMSFragment.FRAGMENT = null;
     }
 
     @Override

@@ -141,7 +141,6 @@ public class PhotoTools {
         return f;
     }
 
-
     public static void upLoadImage(byte[] bytes, String sourcePath, String fileName, final UpLoadCallBack callback){
         final StorageReference ref = PhotoTools.getReference(NaberConstant.STORAGE_PATH, sourcePath, fileName);
         ref.putBytes(bytes).addOnFailureListener(new OnFailureListener() {

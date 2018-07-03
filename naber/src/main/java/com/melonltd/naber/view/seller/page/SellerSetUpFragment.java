@@ -9,9 +9,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.common.collect.Lists;
 import com.melonltd.naber.R;
-import com.melonltd.naber.view.common.BaseCore;
-import com.melonltd.naber.view.factory.PageFragmentFactory;
+import com.melonltd.naber.model.constant.NaberConstant;
+import com.melonltd.naber.model.service.SPService;
 import com.melonltd.naber.view.factory.PageType;
 import com.melonltd.naber.view.seller.SellerMainActivity;
 
@@ -19,9 +20,10 @@ public class SellerSetUpFragment extends Fragment implements View.OnClickListene
     private static final String TAG = SellerSetUpFragment.class.getSimpleName();
     public static SellerSetUpFragment FRAGMENT = null;
 
-    private TextView toSellerEdit, toAboutUsText;
+    private TextView toSellerEdit, toAboutUsText, accountNumberText;
     public static int TO_SELLER_DETAIL_INDEX = -1;
     public static int TO_SELLER_SIMPLE_INFO_INDEX = -1;
+//    private Bundle bundle = new Bundle();
 
     public SellerSetUpFragment() {
         // Required empty public constructor
@@ -33,14 +35,10 @@ public class SellerSetUpFragment extends Fragment implements View.OnClickListene
             TO_SELLER_DETAIL_INDEX = -1;
             TO_SELLER_SIMPLE_INFO_INDEX = -1;
         }
-        if (bundle != null){
+        if (bundle != null) {
             FRAGMENT.setArguments(bundle);
         }
         return FRAGMENT;
-    }
-
-    public Fragment newInstance(Object... o) {
-        return new SellerSetUpFragment();
     }
 
     @Override
@@ -50,53 +48,33 @@ public class SellerSetUpFragment extends Fragment implements View.OnClickListene
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        if (container.getTag(R.id.seller_set_up_page) == null) {
-            View v = inflater.inflate(R.layout.fragment_seller_set_up, container, false);
-            getViews(v);
-            setListener();
-            container.setTag(R.id.seller_set_up_page, v);
-            return v;
-        }
-        return (View) container.getTag(R.id.seller_set_up_page);
+        View v = inflater.inflate(R.layout.fragment_seller_set_up, container, false);
+        getViews(v);
+        return v;
     }
 
     private void getViews(View v) {
         toSellerEdit = v.findViewById(R.id.toAccountEdit);
         toAboutUsText = v.findViewById(R.id.toAboutUsText);
-    }
-
-    private void setListener() {
+        accountNumberText = v.findViewById(R.id.accountNumberText);
         toSellerEdit.setOnClickListener(this);
         toAboutUsText.setOnClickListener(this);
     }
-
 
     @Override
     public void onResume() {
         super.onResume();
         SellerMainActivity.changeTabAndToolbarStatus();
-//        SellerMainActivity.toolbar.setNavigationIcon(null);
         SellerMainActivity.lockDrawer(true);
         if (TO_SELLER_DETAIL_INDEX > 0) {
-            toSellerDetail(TO_SELLER_DETAIL_INDEX);
+            SellerMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.SELLER_DETAIL, null);
+        }else if (TO_SELLER_SIMPLE_INFO_INDEX > 0){
+            Bundle bundle = new Bundle();
+            bundle.putStringArrayList(NaberConstant.SIMPLE_INFO, Lists.newArrayList("ABOUT_US","APPLY_OF_SELLER"));
+            SellerMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.SELLER_SIMPLE_INFO, bundle);
+        }else {
+            accountNumberText.setText(SPService.getAccout());
         }
-    }
-
-    private void toSellerDetail(int i) {
-        TO_SELLER_DETAIL_INDEX = i;
-        BaseCore.FRAGMENT_TAG = PageType.SELLER_DETAIL.name();
-        Fragment f = PageFragmentFactory.of(PageType.SELLER_DETAIL, null);
-        getFragmentManager().beginTransaction().replace(R.id.sellerFrameContainer, f).commit();
-    }
-
-
-    private void toSimpleInfo(int i) {
-        Bundle b = new Bundle();
-        b.putString("user detail", "");
-        TO_SELLER_SIMPLE_INFO_INDEX = i;
-        BaseCore.FRAGMENT_TAG = PageType.SELLER_SIMPLE_INFO.name();
-        Fragment f = PageFragmentFactory.of(PageType.SELLER_SIMPLE_INFO, b);
-        getFragmentManager().beginTransaction().replace(R.id.sellerFrameContainer, f).addToBackStack(f.toString()).commit();
     }
 
     @Override
@@ -104,10 +82,14 @@ public class SellerSetUpFragment extends Fragment implements View.OnClickListene
 
         switch (view.getId()) {
             case R.id.toAccountEdit:
-                toSellerDetail(1);
+                TO_SELLER_DETAIL_INDEX = 1;
+                SellerMainActivity.removeAndReplaceWhere(FRAGMENT,PageType.SELLER_DETAIL,  null);
                 break;
             case R.id.toAboutUsText:
-                toSimpleInfo(1);
+                Bundle bundle = new Bundle();
+                bundle.putStringArrayList(NaberConstant.SIMPLE_INFO, Lists.newArrayList("ABOUT_US","APPLY_OF_SELLER"));
+                TO_SELLER_SIMPLE_INFO_INDEX = 1;
+                SellerMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.SELLER_SIMPLE_INFO, bundle);
                 break;
         }
 

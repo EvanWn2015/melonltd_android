@@ -7,17 +7,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.melonltd.naber.view.customize.SwitchButton;
 import com.melonltd.naber.R;
-
-import java.util.List;
+import com.melonltd.naber.model.bean.Model;
+import com.melonltd.naber.model.type.SwitchStatus;
+import com.melonltd.naber.view.customize.SwitchButton;
 
 public class DateSelectAdapter extends RecyclerView.Adapter<DateSelectAdapter.ViewHolder> {
-    private List<String> list;
+
     private SwitchButton.OnCheckedChangeListener listener;
 
-    public DateSelectAdapter(List<String> list, SwitchButton.OnCheckedChangeListener listener) {
-        this.list = list;
+    public DateSelectAdapter(SwitchButton.OnCheckedChangeListener listener) {
         this.listener = listener;
     }
 
@@ -31,14 +30,16 @@ public class DateSelectAdapter extends RecyclerView.Adapter<DateSelectAdapter.Vi
 
     @Override
     public void onBindViewHolder(@NonNull DateSelectAdapter.ViewHolder holder, int i) {
-        holder.dateText.setText("00:00 ~ 00:0" + i);
-        holder.aSwitch.setTag(list.get(i));
+        holder.aSwitch.setTag(i);
+        holder.dateText.setText(Model.SELLER_BUSINESS_TIME_RANGE.get(i).date);
+        SwitchStatus switchStatus = SwitchStatus.of(Model.SELLER_BUSINESS_TIME_RANGE.get(i).status);
+        holder.aSwitch.setChecked(switchStatus.getStatus());
         holder.aSwitch.setOnCheckedChangeListener(this.listener);
     }
 
     @Override
     public int getItemCount() {
-        return list.size();
+        return Model.SELLER_BUSINESS_TIME_RANGE.size();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {

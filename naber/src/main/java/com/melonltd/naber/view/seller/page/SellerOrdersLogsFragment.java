@@ -2,26 +2,32 @@ package com.melonltd.naber.view.seller.page;
 
 
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
+import com.bigkoo.pickerview.listener.OnTimeSelectChangeListener;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
-import com.google.common.collect.Lists;
-import com.melonltd.naber.view.common.BaseCore;
-import com.melonltd.naber.view.factory.PageFragmentFactory;
+import com.melonltd.naber.R;
+import com.melonltd.naber.model.api.ApiManager;
+import com.melonltd.naber.model.api.ThreadCallback;
+import com.melonltd.naber.model.bean.Model;
+import com.melonltd.naber.model.constant.NaberConstant;
+import com.melonltd.naber.util.Tools;
 import com.melonltd.naber.view.factory.PageType;
 import com.melonltd.naber.view.seller.SellerMainActivity;
 import com.melonltd.naber.view.seller.adapter.OrdersLogsAdapter;
-import com.melonltd.naber.R;
+import com.melonltd.naber.vo.OrderDetail;
+import com.melonltd.naber.vo.OrderVo;
+import com.melonltd.naber.vo.ReqData;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -36,54 +42,47 @@ public class SellerOrdersLogsFragment extends Fragment implements View.OnClickLi
     public static SellerOrdersLogsFragment FRAGMENT = null;
 
     private TextView startTimeText, endTimeText;
-    private BGARefreshLayout bgaRefreshLayout;
-    private List<String> listData = Lists.newArrayList();
+    private TimePickerView timePickerView;
+    private ReqData req;
     private OrdersLogsAdapter adapter;
-    private RecyclerView recyclerView;
-
     public static int TO_ORDERS_LOGS_DETAIL_INDEX = -1;
 
     public SellerOrdersLogsFragment() {
     }
-
 
     public Fragment getInstance(Bundle bundle) {
         if (FRAGMENT == null) {
             FRAGMENT = new SellerOrdersLogsFragment();
             TO_ORDERS_LOGS_DETAIL_INDEX = -1;
         }
-        FRAGMENT.setArguments(bundle);
+        if (bundle != null) {
+            FRAGMENT.setArguments(bundle);
+        }
         return FRAGMENT;
     }
-
-
-    public Fragment newInstance(Object... o) {
-        return new SellerOrdersLogsFragment();
-    }
-
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        adapter = new OrdersLogsAdapter(listData);
+        req = new ReqData();
+        adapter = new OrdersLogsAdapter(new ItemOnClickListener());
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         SellerMainActivity.toolbar.setNavigationIcon(null);
-        if (container.getTag(R.id.seller_orders_logs_page) == null) {
-            View v = inflater.inflate(R.layout.fragment_seller_orders_logs, container, false);
-            getViews(v);
-            setListener();
-            container.setTag(R.id.seller_orders_logs_page, v);
-            return v;
-        }
-        return (View) container.getTag(R.id.seller_orders_logs_page);
+//        if (container.getTag(R.id.seller_orders_logs_page) == null) {
+        View v = inflater.inflate(R.layout.fragment_seller_orders_logs, container, false);
+        getViews(v);
+//            container.setTag(R.id.seller_orders_logs_page, v);
+        return v;
+//        }
+//        return (View) container.getTag(R.id.seller_orders_logs_page);
     }
 
     private void getViews(View v) {
-        bgaRefreshLayout = v.findViewById(R.id.sellerOrdersLogsBGARefreshLayout);
-        recyclerView = v.findViewById(R.id.sellerOrdersLogsRecyclerView);
+        BGARefreshLayout refreshLayout = v.findViewById(R.id.sellerOrdersLogsBGARefreshLayout);
+        final RecyclerView recyclerView = v.findViewById(R.id.sellerOrdersLogsRecyclerView);
         startTimeText = v.findViewById(R.id.startTimeText);
         endTimeText = v.findViewById(R.id.endTimeText);
 
@@ -93,70 +92,67 @@ public class SellerOrdersLogsFragment extends Fragment implements View.OnClickLi
         refreshViewHolder.setReleaseRefreshText("Pull to refresh");
         refreshViewHolder.setLoadingMoreText("Loading more !");
 
-        bgaRefreshLayout.setRefreshViewHolder(refreshViewHolder);
+        refreshLayout.setRefreshViewHolder(refreshViewHolder);
 
         final LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
 
-    }
+        Calendar now = Calendar.getInstance();
+        startTimeText.setText(new SimpleDateFormat("yyyy-MM-dd").format(now.getTime()));
+        startTimeText.setTag(Tools.FORMAT.formatDate(now.getTime()));
+        endTimeText.setText(new SimpleDateFormat("yyyy-MM-dd").format(now.getTime()));
+        endTimeText.setTag(Tools.FORMAT.formatDate(now.getTime()));
 
-    private void setListener() {
         startTimeText.setOnClickListener(this);
         endTimeText.setOnClickListener(this);
-        adapter.setClickListener(new ItemStatusOnClickListener(), new ItemOnClickListener());
+
         recyclerView.setAdapter(adapter);
-        bgaRefreshLayout.setDelegate(new BGARefreshLayout.BGARefreshLayoutDelegate() {
+        refreshLayout.setDelegate(new BGARefreshLayout.BGARefreshLayoutDelegate() {
             @Override
             public void onBGARefreshLayoutBeginRefreshing(BGARefreshLayout refreshLayout) {
-                bgaRefreshLayout.endRefreshing();
+                refreshLayout.endRefreshing();
+                loadData(true);
             }
 
             @Override
             public boolean onBGARefreshLayoutBeginLoadingMore(BGARefreshLayout refreshLayout) {
-                bgaRefreshLayout.endLoadingMore();
+                refreshLayout.endLoadingMore();
+                if (req.loadingMore) {
+                    loadData(false);
+                }
                 return false;
             }
         });
+    }
 
-
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (Model.SELLER_STAT_LOGS.size() == 0) {
+            loadData(true);
+        }
     }
 
     @Override
     public void onResume() {
         super.onResume();
         SellerMainActivity.changeTabAndToolbarStatus();
-        for (int i = 0; i < 10; i++) {
-            listData.add("item" + i);
-        }
-        adapter.notifyDataSetChanged();
+
         if (SellerMainActivity.toolbar != null) {
             SellerMainActivity.navigationIconDisplay(true, new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    backToSellerStatPage();
                     SellerMainActivity.navigationIconDisplay(false, null);
+                    SellerStatFragment.TO_SELLER_ORDERS_LOGS_INDEX = -1;
+                    SellerMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.SELLER_STAT, null);
                 }
             });
         }
 
         if (TO_ORDERS_LOGS_DETAIL_INDEX >= 0) {
-            toOrderLogsDetailPag(TO_ORDERS_LOGS_DETAIL_INDEX);
+            SellerMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.SELLER_ORDERS_LOGS_DETAIL, null);
         }
-    }
-
-    private void toOrderLogsDetailPag(int index) {
-        BaseCore.FRAGMENT_TAG = PageType.SELLER_ORDERS_LOGS_DETAIL.name();
-        TO_ORDERS_LOGS_DETAIL_INDEX = index;
-        Fragment f = PageFragmentFactory.of(PageType.SELLER_ORDERS_LOGS_DETAIL, null);
-        getFragmentManager().beginTransaction().remove(this).replace(R.id.sellerFrameContainer, f).commit();
-    }
-
-    private void backToSellerStatPage() {
-        BaseCore.FRAGMENT_TAG = PageType.SELLER_STAT.name();
-        SellerStatFragment.TO_SELLER_ORDERS_LOGS_INDEX = -1;
-        Fragment f = PageFragmentFactory.of(PageType.SELLER_STAT, null);
-        getFragmentManager().beginTransaction().remove(this).replace(R.id.sellerFrameContainer, f).commit();
     }
 
     @Override
@@ -168,83 +164,106 @@ public class SellerOrdersLogsFragment extends Fragment implements View.OnClickLi
     @Override
     public void onClick(final View view) {
         final int viewId = view.getId();
-        switch (view.getId()) {
-            case R.id.startTimeText:
-            case R.id.endTimeText:
-                long oneYears = 1L * 365 * 1000 * 60 * 60 * 24L;
-                Calendar now = Calendar.getInstance();
-                Calendar startDate = Calendar.getInstance();
-                startDate.setTimeInMillis(now.getTime().getTime() - oneYears);
-                TimePickerView tp = new TimePickerBuilder(getContext(), new OnTimeSelectListener() {
+        // 1年記錄
+        long oneYears = 1L * 365 * 1000 * 60 * 60 * 24L;
+        final Calendar now = Calendar.getInstance();
+        final Calendar startDate = Calendar.getInstance();
+        startDate.setTimeInMillis(now.getTime().getTime() - oneYears);
+
+        timePickerView = new TimePickerBuilder(getContext(),
+                new OnTimeSelectListener() {
                     @Override
                     public void onTimeSelect(Date date, View v) {
-                        Log.d(TAG, date.toString());
-                        Log.d(TAG, "");
                         if (viewId == R.id.startTimeText) {
+                            startTimeText.setTag(Tools.FORMAT.formatDate(date));
                             startTimeText.setText(new SimpleDateFormat("yyyy-MM-dd").format(date));
+                            loadData(true);
                         } else if (viewId == R.id.endTimeText) {
+                            endTimeText.setTag(Tools.FORMAT.formatDate(date));
                             endTimeText.setText(new SimpleDateFormat("yyyy-MM-dd").format(date));
+                            loadData(true);
                         }
                     }
                 })
-                        .setType(new boolean[]{true, true, true, false, false, false})//"year","month","day","hours","minutes","seconds "
-                        .setTitleSize(20)//标题文字大小
-                        .setOutSideCancelable(true)//点击屏幕，点在控件外部范围时，是否取消显示
-                        .isCyclic(false)//是否循环滚动
-                        .setTitleBgColor(getResources().getColor(R.color.naber_dividing_line_gray))
-                        .setCancelColor(getResources().getColor(R.color.naber_dividing_gray))
-                        .setSubmitColor(getResources().getColor(R.color.naber_dividing_gray))
-                        .setRangDate(startDate, now)//起始终止年月日设定
-                        .isCenterLabel(false) //是否只显示中间选中项的label文字，false则每项item全部都带有label。
-                        .isDialog(false)//是否显示为对话框样式
-                        .build();
-                tp.show();
-//                new TimePickerDialog.Builder()
-//                        .setTitleStringId("")
-//                        .setTitleStringId("請選擇")
-//                        .setYearText(getResources().getString(R.string.data_time_picker_years_text))
-//                        .setMonthText(getResources().getString(R.string.data_time_picker_month_text))
-//                        .setDayText(getResources().getString(R.string.data_time_picker_day_text))
-//                        .setCyclic(false)
-//                        .setToolBarTextColor(getResources().getColor(R.color.naber_basis_blue))
-//                        .setMinMillseconds(System.currentTimeMillis() - oneYears)
-//                        .setMaxMillseconds(System.currentTimeMillis())
-//                        .setCurrentMillseconds(System.currentTimeMillis())
-//                        .setThemeColor(getResources().getColor(R.color.naber_dividing_line_gray))
-//                        .setType(Type.YEAR_MONTH_DAY)
-//                        .setWheelItemTextNormalColor(getResources().getColor(R.color.naber_dividing_line_gray))
-//                        .setWheelItemTextSize(16)
-//                        .setCallBack(new OnDateSetListener() {
-//                            @Override
-//                            public void onDateSet(TimePickerDialog timePickerView, long millseconds) {
-//                                Log.d(TAG, "");
-//                                if (viewId == R.id.startTimeText) {
-//                                    startTimeText.setText(new SimpleDateFormat("yyyy-MM-dd").format(new Date(millseconds)));
-//                                } else if (viewId == R.id.endTimeText) {
-//                                    endTimeText.setText(new SimpleDateFormat("yyyy-MM-dd").format(new Date(millseconds)));
-//                                }
-//
-//                            }
-//                        })
-//                        .build().show(getFragmentManager(), "YEAR_MONTH_DAY");
-                break;
+                .setTimeSelectChangeListener(new OnTimeSelectChangeListener() {
+                    @Override
+                    public void onTimeSelectChanged(Date date) {
+                        // 開始時間不可以大於結束時間
+                        if (viewId == R.id.startTimeText) {
+                            if (Tools.FORMAT.formatDate(date).compareTo(endTimeText.getTag().toString()) > 0) {
+                                startTimeText.setTag(Tools.FORMAT.formatDate(date));
+                                setDate(startDate);
+                            }
+                        } else if (viewId == R.id.endTimeText) {
+                            if (Tools.FORMAT.formatDate(date).compareTo(startTimeText.getTag().toString()) < 0) {
+                                endTimeText.setTag(Tools.FORMAT.formatDate(date));
+                                setDate(now);
+                            }
+                        }
+                    }
+                }).setType(new boolean[]{true, true, true, false, false, false})
+                .setTitleSize(20)
+                .setOutSideCancelable(true)
+                .isCyclic(false)
+                .setTitleBgColor(getResources().getColor(R.color.naber_dividing_line_gray))
+                .setCancelColor(getResources().getColor(R.color.naber_dividing_gray))
+                .setSubmitColor(getResources().getColor(R.color.naber_dividing_gray))
+                .setDate(viewId == R.id.startTimeText ? startDate : now)
+                .setRangDate(startDate, now)
+                .isCenterLabel(false)
+                .isDialog(false)
+                .build();
 
-        }
+        timePickerView.show();
+    }
+
+    private void setDate(Calendar date) {
+        timePickerView.setDate(date);
+        timePickerView.returnData();
     }
 
 
-    class ItemStatusOnClickListener implements View.OnClickListener {
-        @Override
-        public void onClick(View view) {
-            Log.d(TAG, view.getTag() + "");
+    private void loadData(boolean isRefresh) {
+        if (isRefresh) {
+            Model.SELLER_STAT_LOGS.clear();
+            req.page = 0;
+            req.loadingMore = true;
         }
+        req.page++;
+        req.start_date = startTimeText.getTag().toString();
+        req.end_date = endTimeText.getTag().toString();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                ApiManager.sellerStatLog(req, new ThreadCallback(getContext()) {
+                    @Override
+                    public void onSuccess(String responseBody) {
+                        List<OrderVo> list = Tools.JSONPARSE.fromJsonList(responseBody, OrderVo[].class);
+                        for (int i = 0; i < list.size(); i++) {
+                            list.get(i).order_detail = Tools.JSONPARSE.fromJson(list.get(i).order_data, OrderDetail.class);
+                        }
+                        req.loadingMore = list.size() % 10 == 0;
+                        Model.SELLER_STAT_LOGS.addAll(list);
+                        adapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onFail(Exception error, String msg) {
+
+                    }
+                });
+            }
+        }, 300);
     }
 
     class ItemOnClickListener implements View.OnClickListener {
         @Override
-        public void onClick(View view) {
-            int index = listData.indexOf(view.getTag());
-            toOrderLogsDetailPag(index);
+        public void onClick(View v) {
+            int index = (int) v.getTag();
+            TO_ORDERS_LOGS_DETAIL_INDEX = index;
+            Bundle bundle = new Bundle();
+            bundle.putSerializable(NaberConstant.SELLER_STAT_LOGS_DETAIL, Model.SELLER_STAT_LOGS.get(index));
+            SellerMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.SELLER_ORDERS_LOGS_DETAIL, bundle);
         }
     }
 

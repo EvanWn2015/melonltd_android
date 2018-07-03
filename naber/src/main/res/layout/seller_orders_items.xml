@@ -2,8 +2,8 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:layout_margin="8dp"
     android:layout_height="wrap_content"
+    android:layout_margin="8dp"
     android:background="@drawable/naber_white_text_box">
 
     <View
@@ -22,6 +22,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:text="STATUS"
@@ -38,16 +39,17 @@
         android:layout_height="wrap_content"
         android:padding="8dp"
         android:paddingEnd="0dp"
+        android:paddingRight="0dp"
         android:text="商品"
         android:textColor="@android:color/black"
         android:textSize="14sp"
-        app:layout_constraintBottom_toTopOf="@+id/foodItemsText"
-        app:layout_constraintEnd_toStartOf="@+id/foodItemsCountText"
+        app:layout_constraintBottom_toTopOf="@+id/foodContentText"
+        app:layout_constraintEnd_toStartOf="@+id/foodCountText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolerView" />
 
     <TextView
-        android:id="@+id/foodItemsCountText"
+        android:id="@+id/foodCountText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
@@ -60,7 +62,7 @@
         app:layout_constraintTop_toTopOf="@+id/logsItemText" />
 
     <TextView
-        android:id="@+id/foodItemsText"
+        android:id="@+id/foodContentText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@drawable/naber_text_base_line"
@@ -82,19 +84,19 @@
         android:text="備註欄"
         android:textColor="@android:color/black"
         android:textSize="14sp"
-        app:layout_constraintBottom_toTopOf="@+id/remarkText"
+        app:layout_constraintBottom_toTopOf="@+id/userMessageText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/foodItemsText" />
+        app:layout_constraintTop_toBottomOf="@+id/foodContentText" />
 
     <TextView
-        android:id="@+id/remarkText"
+        android:id="@+id/userMessageText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@drawable/naber_text_base_line"
-        android:paddingStart="8dp"
-        android:paddingEnd="8dp"
         android:paddingBottom="8dp"
+        android:paddingEnd="8dp"
+        android:paddingStart="8dp"
         android:text="老闆請幫婐四杯分組裝帶"
         android:textSize="12sp"
         app:layout_constraintBottom_toTopOf="@+id/textView87"
@@ -113,12 +115,12 @@
         android:textColor="@android:color/black"
         android:textSize="14sp"
         app:layout_constraintBottom_toTopOf="@+id/textView89"
-        app:layout_constraintEnd_toStartOf="@+id/fetchTimeText"
+        app:layout_constraintEnd_toStartOf="@+id/fetchDateText"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/remarkText" />
+        app:layout_constraintTop_toBottomOf="@+id/userMessageText" />
 
     <TextView
-        android:id="@+id/fetchTimeText"
+        android:id="@+id/fetchDateText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@drawable/naber_text_base_line"
@@ -139,12 +141,12 @@
         android:textColor="@android:color/black"
         android:textSize="14sp"
         app:layout_constraintBottom_toTopOf="@+id/textView94"
-        app:layout_constraintEnd_toStartOf="@+id/userPhoneNumberText"
+        app:layout_constraintEnd_toStartOf="@+id/userPhoneText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView87" />
 
     <TextView
-        android:id="@+id/userPhoneNumberText"
+        android:id="@+id/userPhoneText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@drawable/naber_text_base_line"
@@ -164,9 +166,9 @@
         android:text="姓名"
         android:textColor="@android:color/black"
         android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="@+id/userPhoneNumberText"
+        app:layout_constraintBottom_toBottomOf="@+id/userPhoneText"
         app:layout_constraintEnd_toStartOf="@+id/userNameText"
-        app:layout_constraintStart_toEndOf="@+id/userPhoneNumberText" />
+        app:layout_constraintStart_toEndOf="@+id/userPhoneText" />
 
     <TextView
         android:id="@+id/userNameText"
@@ -194,10 +196,11 @@
         app:layout_constraintTop_toBottomOf="@+id/textView89" />
 
     <TextView
-        android:id="@+id/totalAmountText"
+        android:id="@+id/priceEdit"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
+        android:layout_marginLeft="60dp"
         android:layout_marginStart="60dp"
         android:layout_marginTop="8dp"
         android:text="400$"
@@ -231,7 +234,8 @@
             android:background="@color/naber_basis_red"
             android:text="取消"
             android:textColor="@android:color/white"
-            android:textSize="10sp"/>
+            android:textSize="12sp"
+            android:textStyle="bold" />
 
         <Button
             android:id="@+id/failureBtn"
@@ -242,7 +246,8 @@
             android:background="@color/naber_basis_red"
             android:text="跑單"
             android:textColor="@android:color/white"
-            android:textSize="10sp"
+            android:textSize="12sp"
+            android:textStyle="bold"
             android:visibility="gone" />
 
         <Button
@@ -254,7 +259,8 @@
             android:background="@color/naber_basis_orange"
             android:text="製作中"
             android:textColor="@android:color/white"
-            android:textSize="10sp"
+            android:textSize="12sp"
+            android:textStyle="bold"
             android:visibility="gone" />
 
         <Button
@@ -266,7 +272,8 @@
             android:background="@color/naber_basis_bright_yellow"
             android:text="可領取"
             android:textColor="@android:color/white"
-            android:textSize="10sp"
+            android:textSize="12sp"
+            android:textStyle="bold"
             android:visibility="gone" />
 
         <Button
@@ -278,7 +285,8 @@
             android:background="@color/naber_basis_bright_green"
             android:text="交易完成"
             android:textColor="@android:color/white"
-            android:textSize="10sp"
+            android:textSize="12sp"
+            android:textStyle="bold"
             android:visibility="gone" />
 
     </LinearLayout>

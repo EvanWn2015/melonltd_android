@@ -9,13 +9,13 @@ import com.melonltd.naber.view.common.page.RecoverPasswordFragment;
 import com.melonltd.naber.view.common.page.RegisteredFragment;
 import com.melonltd.naber.view.common.page.RegisteredSellerFragment;
 import com.melonltd.naber.view.common.page.VerifySMSFragment;
-import com.melonltd.naber.view.seller.page.SellerCategoryListFragment;
+import com.melonltd.naber.view.seller.page.SellerFoodListFragment;
 import com.melonltd.naber.view.seller.page.SellerDetailFragment;
-import com.melonltd.naber.view.seller.page.SellerMenuEditFragment;
+import com.melonltd.naber.view.seller.page.SellerFoodEditFragment;
 import com.melonltd.naber.view.seller.page.SellerOrderLogsDetailFragment;
 import com.melonltd.naber.view.seller.page.SellerOrdersFragment;
 import com.melonltd.naber.view.seller.page.SellerOrdersLogsFragment;
-import com.melonltd.naber.view.seller.page.SellerRestaurantFragment;
+import com.melonltd.naber.view.seller.page.SellerCategoryListFragment;
 import com.melonltd.naber.view.seller.page.SellerSearchFragment;
 import com.melonltd.naber.view.seller.page.SellerSetUpFragment;
 import com.melonltd.naber.view.seller.page.SellerSimpleInformationFragment;
@@ -90,12 +90,12 @@ public class PageFragmentFactory {
                 return new SellerOrdersLogsFragment().getInstance(bundle);
             case SELLER_ORDERS_LOGS_DETAIL:
                 return new SellerOrderLogsDetailFragment().getInstance(bundle);
-            case SELLER_RESTAURANT:
-                return new SellerRestaurantFragment().getInstance(bundle);
             case SELLER_CATEGORY_LIST:
                 return new SellerCategoryListFragment().getInstance(bundle);
-            case SELLER_MENU_EDIT:
-                return new SellerMenuEditFragment().getInstance(bundle);
+            case SELLER_FOOD_LIST:
+                return new SellerFoodListFragment().getInstance(bundle);
+            case SELLER_FOOD_EDIT:
+                return new SellerFoodEditFragment().getInstance(bundle);
             case SELLER_SET_UP:
                 return new SellerSetUpFragment().getInstance(bundle);
             case SELLER_SIMPLE_INFO:

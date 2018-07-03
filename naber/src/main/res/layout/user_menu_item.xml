@@ -2,9 +2,10 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:background="@drawable/naber_text_base_line"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@drawable/naber_text_base_line">
 
     <com.facebook.drawee.view.SimpleDraweeView
         android:id="@+id/ordersItemIconImageView"
@@ -27,6 +28,8 @@
         android:layout_height="wrap_content"
         android:layout_marginBottom="24dp"
         android:layout_marginEnd="8dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="8dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
         android:text="珍珠奶茶"
@@ -38,22 +41,28 @@
         app:layout_constraintTop_toTopOf="@+id/ordersItemIconImageView" />
 
     <TextView
-        android:id="@+id/itemPriceText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="0"
-        app:layout_constraintStart_toStartOf="@+id/ordersItemNameText"
-        app:layout_constraintTop_toBottomOf="@+id/ordersItemNameText" />
-
-    <TextView
         android:id="@+id/textView37"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginEnd="2dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="2dp"
+        android:layout_marginStart="8dp"
         android:text="$"
-        app:layout_constraintStart_toEndOf="@+id/itemPriceText"
+        app:layout_constraintEnd_toStartOf="@+id/itemPriceText"
+        app:layout_constraintStart_toStartOf="@+id/ordersItemNameText"
         app:layout_constraintTop_toTopOf="@+id/itemPriceText" />
+
+    <TextView
+        android:id="@+id/itemPriceText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="2dp"
+        android:layout_marginStart="2dp"
+        android:layout_marginTop="8dp"
+        android:text="0"
+        app:layout_constraintStart_toEndOf="@+id/textView37"
+        app:layout_constraintTop_toBottomOf="@+id/ordersItemNameText" />
 
     <Button
         android:id="@+id/deleteBtn"
@@ -61,6 +70,7 @@
         android:layout_height="32dp"
         android:layout_marginBottom="4dp"
         android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
         android:background="@drawable/naber_reverse_gary_button_style"
         android:text="刪除"

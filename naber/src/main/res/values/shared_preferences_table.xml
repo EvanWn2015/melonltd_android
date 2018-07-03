@@ -11,6 +11,7 @@
     <string name="user_uid">USER_UID</string>
 
     <string name="user_account_info">USER_ACCOUNT_INFO</string>
+    <string name="user_account">USER_ACCOUNT</string>
     <string name="user_name">USER_NAME</string>
     <string name="user_phone">USER_PHONE</string>
 

@@ -42,8 +42,8 @@
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
-                    fresco:retryImage="@drawable/naber_default_image"
-                    fresco:failureImage="@drawable/naber_default_image"/>
+                    fresco:failureImage="@drawable/naber_default_image"
+                    fresco:retryImage="@drawable/naber_default_image" />
 
                 <View
                     android:id="@+id/view13"
@@ -72,19 +72,21 @@
                         android:layout_width="100dp"
                         android:layout_height="100dp"
                         android:layout_marginBottom="8dp"
+                        android:layout_marginLeft="8dp"
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="8dp"
                         android:background="@drawable/naber_icon_logo_reverse"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
-                        fresco:retryImage="@drawable/naber_icon_logo_reverse"
-                        fresco:failureImage="@drawable/naber_icon_logo_reverse" />
+                        fresco:failureImage="@drawable/naber_icon_logo_reverse"
+                        fresco:retryImage="@drawable/naber_icon_logo_reverse" />
 
                     <ImageView
                         android:id="@+id/imageView4"
                         android:layout_width="24dp"
                         android:layout_height="24dp"
+                        android:layout_marginLeft="8dp"
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="4dp"
                         android:src="@drawable/naber_icon_clock"
@@ -97,6 +99,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginBottom="4dp"
+                        android:layout_marginLeft="8dp"
                         android:layout_marginStart="8dp"
                         android:text=""
                         android:textSize="18sp"
@@ -110,6 +113,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="8dp"
+                        android:layout_marginRight="8dp"
                         android:layout_marginTop="4dp"
                         android:maxLines="1"
                         android:text=""
@@ -125,6 +129,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="8dp"
+                        android:layout_marginRight="8dp"
                         android:maxLines="1"
                         android:text=""
                         app:layout_constraintBottom_toTopOf="@+id/getTypeText"
@@ -151,6 +156,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_marginEnd="8dp"
+                        android:layout_marginRight="8dp"
                         android:layout_marginTop="8dp"
                         android:text=""
                         android:textSize="12sp"
@@ -161,15 +167,18 @@
                         android:id="@+id/warningText"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:layout_marginStart="16dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginStart="8dp"
+                        android:gravity="end"
                         android:text="今日已結束訂單"
+                        android:textAlignment="textEnd"
                         android:textColor="@color/naber_basis_red"
                         android:textSize="12sp"
                         android:textStyle="bold"
-                        android:visibility="gone"
-                        app:layout_constraintBottom_toBottomOf="@+id/restaurantNameText"
-                        app:layout_constraintStart_toEndOf="@+id/restaurantNameText"
-                        app:layout_constraintTop_toTopOf="@+id/restaurantNameText" />
+                        app:layout_constraintBottom_toBottomOf="@+id/getTypeText"
+                        app:layout_constraintEnd_toEndOf="@+id/addressText"
+                        app:layout_constraintStart_toEndOf="@+id/getTypeText"
+                        app:layout_constraintTop_toTopOf="@+id/getTypeText" />
 
                 </android.support.constraint.ConstraintLayout>
 

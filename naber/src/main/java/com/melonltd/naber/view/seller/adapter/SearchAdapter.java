@@ -8,26 +8,23 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.melonltd.naber.util.Tools;
+import com.google.common.base.Strings;
 import com.melonltd.naber.R;
+import com.melonltd.naber.model.bean.Model;
+import com.melonltd.naber.model.constant.NaberConstant;
+import com.melonltd.naber.model.type.OrderStatus;
+import com.melonltd.naber.util.Tools;
+import com.melonltd.naber.vo.DemandsItemVo;
+import com.melonltd.naber.vo.ItemVo;
+import com.melonltd.naber.vo.OrderDetail;
 
-import java.util.List;
 
 public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder> {
     private static final String TAG = SearchAdapter.class.getSimpleName();
-    private List<String> list;
-    private View.OnClickListener cancelListener, processingListener, failureListener, canFetchListener, finishListener;
-
-    public SearchAdapter(List<String> list) {
-        this.list = list;
-    }
-
-    public void setOnClickListeners(View.OnClickListener cancelListener, View.OnClickListener processingListener, View.OnClickListener failureListener, View.OnClickListener canFetchListener, View.OnClickListener finishListener) {
+    private View.OnClickListener statusChangeClickListener, cancelListener;
+    public SearchAdapter(View.OnClickListener statusChangeClickListener, View.OnClickListener cancelListener) {
+        this.statusChangeClickListener = statusChangeClickListener;
         this.cancelListener = cancelListener;
-        this.processingListener = processingListener;
-        this.failureListener = failureListener;
-        this.canFetchListener = canFetchListener;
-        this.finishListener = finishListener;
     }
 
     @NonNull
@@ -35,19 +32,12 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.seller_orders_items, parent, false);
         SearchAdapter.ViewHolder vh = new SearchAdapter.ViewHolder(v);
-        vh.setOnClickListeners(cancelListener, processingListener, failureListener, canFetchListener, finishListener);
+        vh.setOnClickListeners(this.statusChangeClickListener, this.cancelListener);
         return vh;
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        String foodItems = "";
-        for (int i = 0; i <= position; i++) {
-            foodItems += Tools.MAKEUP.makeUpCharacter("機腿", 40, Tools.MakeUp.Direction.RIGHT)
-                    + Tools.MAKEUP.makeUpCharacter("x1", 5, Tools.MakeUp.Direction.RIGHT)
-                    + Tools.MAKEUP.makeUpCharacter("$10", 10, Tools.MakeUp.Direction.LEFT)
-                    + "\n";
-        }
 
         holder.processingBtn.setVisibility(View.GONE);
         holder.canFetchBtn.setVisibility(View.GONE);
@@ -55,48 +45,73 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
         holder.failureBtn.setVisibility(View.GONE);
         holder.finishBtn.setVisibility(View.GONE);
 
-
         // set Tag
-        holder.cancelBtn.setTag(list.get(position));
-        holder.processingBtn.setTag(list.get(position));
-        holder.failureBtn.setTag(list.get(position));
-        holder.canFetchBtn.setTag(list.get(position));
-        holder.finishBtn.setTag(list.get(position));
+        holder.setTag(position);
 
-        holder.foodItemsCountText.setText(list.get(position));
-        holder.foodItemsText.setText(foodItems);
-        holder.remarkText.setText(list.get(position));
+        OrderStatus status = OrderStatus.of(Model.SELLER_QUICK_SEARCH_ORDERS.get(position).status);
+        holder.ordersStatusText.setText(status.getText());
 
-        holder.fetchTimeText.setText("2018-05-0" + position);
-        holder.userPhoneNumberText.setText("09876543" + position);
-        holder.userNameText.setText("某某" + position);
-        holder.totalAmountText.setText((position * 2) + "$");
-        holder.foodItemsText.setText(foodItems);
+        holder.fetchTimeText.setText(Tools.FORMAT.format(NaberConstant.DATE_FORMAT_PATTERN, "dd日 HH時 mm分", Model.SELLER_QUICK_SEARCH_ORDERS.get(position).fetch_date));
+        holder.remarkText.setText(Model.SELLER_QUICK_SEARCH_ORDERS.get(position).user_message);
 
+        holder.foodItemsCountText.setText("  (" + Model.SELLER_QUICK_SEARCH_ORDERS.get(position).order_detail.orders.size() + ")");
 
-        if (position % 5 == 0) {
-            holder.ordersStatusText.setText("未處理");
-            holder.processingBtn.setVisibility(View.VISIBLE);
-            holder.canFetchBtn.setVisibility(View.VISIBLE);
-        } else if (position % 3 == 0) {
-            holder.ordersStatusText.setText("製作中");
-            holder.canFetchBtn.setVisibility(View.VISIBLE);
-            holder.finishBtn.setVisibility(View.VISIBLE);
-        } else if (position % 2 == 0){
-            holder.ordersStatusText.setText("可領取");
-            holder.failureBtn.setVisibility(View.VISIBLE);
-            holder.finishBtn.setVisibility(View.VISIBLE);
+        holder.userPhoneNumberText.setText(Model.SELLER_QUICK_SEARCH_ORDERS.get(position).order_detail.user_phone);
+        holder.userNameText.setText(Model.SELLER_QUICK_SEARCH_ORDERS.get(position).order_detail.user_name);
+        holder.totalAmountText.setText("$ " + Model.SELLER_QUICK_SEARCH_ORDERS.get(position).order_price);
+
+        String content = "";
+        for (OrderDetail.OrderData data : Model.SELLER_QUICK_SEARCH_ORDERS.get(position).order_detail.orders) {
+            content += "品項: " +
+                    Strings.padEnd(data.item.food_name, 20, '\u0020') +
+                    Strings.padEnd(("x" + data.count), 15, '\u0020') +
+                    "$ " + data.item.price +
+                    "\n";
+
+            content += "規格: " +
+                    Strings.padEnd((data.item.scopes.get(0).name), 40 , '\u0020') +
+                    "$ " + data.item.scopes.get(0).price+
+                    "\n";
+
+            content += "附加:";
+            for (ItemVo item : data.item.opts) {
+                content += "\n" + Strings.padEnd(("    - " + item.name), 40, '\u0020') +
+                        Strings.padEnd("  ", 10 , '\u0020') +
+                        "$ " + item.price ;
+            }
+            content += data.item.opts.size() == 0 ? "無\n" : "\n";
+
+            content += "需求: ";
+            for (DemandsItemVo demands : data.item.demands) {
+                content += "" + demands.name + " : ";
+                for (ItemVo item : demands.datas) {
+                    content += item.name + "";
+                }
+                content += ",  ";
+            }
+            content += "\n------------------------------------------------------\n";
         }
+        holder.foodItemsText.setText(content);
 
-//        holder.processingBtn.setVisibility(View.VISIBLE);
-//        holder.canFetchBtn.setVisibility(View.VISIBLE);
-//        holder.failureBtn.setVisibility(View.VISIBLE);
-//        holder.finishBtn.setVisibility(View.VISIBLE);
+        switch (status) {
+            case UNFINISH:
+                holder.processingBtn.setVisibility(View.VISIBLE);
+                holder.canFetchBtn.setVisibility(View.VISIBLE);
+                break;
+            case CAN_FETCH:
+                holder.failureBtn.setVisibility(View.VISIBLE);
+                holder.finishBtn.setVisibility(View.VISIBLE);
+                break;
+            case PROCESSING:
+                holder.canFetchBtn.setVisibility(View.VISIBLE);
+                holder.finishBtn.setVisibility(View.VISIBLE);
+                break;
+        }
     }
 
     @Override
     public int getItemCount() {
-        return this.list.size();
+        return Model.SELLER_QUICK_SEARCH_ORDERS.size();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
@@ -107,9 +122,9 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
             super(v);
             ordersStatusText = v.findViewById(R.id.ordersStatusText);
             ordersStatusText.setVisibility(View.VISIBLE);
-            foodItemsCountText = v.findViewById(R.id.foodItemsCountText);
-            foodItemsText = v.findViewById(R.id.foodItemsText);
-            remarkText = v.findViewById(R.id.remarkText);
+            foodItemsCountText = v.findViewById(R.id.foodCountText);
+            foodItemsText = v.findViewById(R.id.foodContentText);
+            remarkText = v.findViewById(R.id.userMessageText);
 
             cancelBtn = v.findViewById(R.id.cancelBtn);
             processingBtn = v.findViewById(R.id.processingBtn);
@@ -117,18 +132,26 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
             canFetchBtn = v.findViewById(R.id.canFetchBtn);
             finishBtn = v.findViewById(R.id.finishBtn);
 
-            fetchTimeText = v.findViewById(R.id.fetchTimeText);
-            userPhoneNumberText = v.findViewById(R.id.userPhoneNumberText);
+            fetchTimeText = v.findViewById(R.id.fetchDateText);
+            userPhoneNumberText = v.findViewById(R.id.userPhoneText);
             userNameText = v.findViewById(R.id.userNameText);
-            totalAmountText = v.findViewById(R.id.totalAmountText);
+            totalAmountText = v.findViewById(R.id.priceEdit);
         }
 
-        private void setOnClickListeners(View.OnClickListener cancelListener, View.OnClickListener processingListener, View.OnClickListener failureListener, View.OnClickListener canFetchListener, View.OnClickListener finishListener) {
+        private void setTag(int position) {
+            this.cancelBtn.setTag(position);
+            this.processingBtn.setTag(position);
+            this.failureBtn.setTag(position);
+            this.canFetchBtn.setTag(position);
+            this.finishBtn.setTag(position);
+        }
+
+        private void setOnClickListeners(View.OnClickListener statusChangeClickListener, View.OnClickListener cancelListener) {
             cancelBtn.setOnClickListener(cancelListener);
-            processingBtn.setOnClickListener(processingListener);
-            failureBtn.setOnClickListener(failureListener);
-            canFetchBtn.setOnClickListener(canFetchListener);
-            finishBtn.setOnClickListener(finishListener);
+            processingBtn.setOnClickListener(statusChangeClickListener);
+            failureBtn.setOnClickListener(statusChangeClickListener);
+            canFetchBtn.setOnClickListener(statusChangeClickListener);
+            finishBtn.setOnClickListener(statusChangeClickListener);
         }
     }
 }

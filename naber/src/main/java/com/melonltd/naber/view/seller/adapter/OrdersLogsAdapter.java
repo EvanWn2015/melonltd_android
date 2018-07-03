@@ -9,21 +9,16 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.common.base.Strings;
 import com.melonltd.naber.R;
-
-import java.util.List;
+import com.melonltd.naber.model.bean.Model;
+import com.melonltd.naber.model.type.OrderStatus;
 
 public class OrdersLogsAdapter extends RecyclerView.Adapter<OrdersLogsAdapter.ViewHolder> {
-    private List<String> listData;
     private Context context;
-    private View.OnClickListener btnListener, itemListener;
+    private View.OnClickListener itemListener;
 
-    public OrdersLogsAdapter(List<String> listData) {
-        this.listData = listData;
-    }
-
-    public void setClickListener(View.OnClickListener btnOnClickListener, View.OnClickListener itemOnClickListener) {
-        this.btnListener = btnOnClickListener;
+    public OrdersLogsAdapter(View.OnClickListener itemOnClickListener) {
         this.itemListener = itemOnClickListener;
     }
 
@@ -38,32 +33,35 @@ public class OrdersLogsAdapter extends RecyclerView.Adapter<OrdersLogsAdapter.Vi
 
     @Override
     public void onBindViewHolder(@NonNull OrdersLogsAdapter.ViewHolder holder, int position) {
+        holder.amountText.setText("$ " + Model.SELLER_STAT_LOGS.get(position).order_price);
 
-        if (position % 2 == 0) {
-            holder.statusBtn.setBackgroundColor(this.context.getResources().getColor(R.color.naber_basis_green));
-            holder.statusBtn.setText("交易完成" + position);
-        }else{
-            holder.statusBtn.setBackgroundColor(this.context.getResources().getColor(R.color.naber_basis_red));
-            holder.statusBtn.setText("取消" + position);
-        }
+        String content = "電話  ";
+        content += Strings.padEnd(Model.SELLER_STAT_LOGS.get(position).order_detail.user_phone, 25, '\u0020');
+        content += "姓名  ";
+        content += Strings.padEnd(Model.SELLER_STAT_LOGS.get(position).order_detail.user_name, 10, '\u0020');
+        holder.logsItemText.setText(content);
 
-        holder.statusBtn.setTag(listData.get(position));
-        holder.statusBtn.setOnClickListener(this.btnListener);
-        holder.logsItemText.setTag(listData.get(position));
-        holder.logsItemText.setOnClickListener(this.itemListener);
+        OrderStatus status = OrderStatus.of(Model.SELLER_STAT_LOGS.get(position).status);
+        holder.statusBtn.setText(status.getText());
+        holder.statusBtn.setBackgroundColor(this.context.getResources().getColor(status.getColor()));
+
+        holder.v.setTag(position);
+        holder.v.setOnClickListener(this.itemListener);
     }
 
     @Override
     public int getItemCount() {
-        return listData.size();
+        return Model.SELLER_STAT_LOGS.size();
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
         private Button statusBtn;
         private TextView amountText, logsItemText;
+        private View v;
 
         ViewHolder(View v) {
             super(v);
+            this.v = v;
             statusBtn = v.findViewById(R.id.statusBtn);
             amountText = v.findViewById(R.id.amountText);
             logsItemText = v.findViewById(R.id.logsItemText);

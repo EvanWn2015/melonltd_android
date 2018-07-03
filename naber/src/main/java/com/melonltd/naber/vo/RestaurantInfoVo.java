@@ -1,6 +1,7 @@
 package com.melonltd.naber.vo;
 
 import com.google.common.base.MoreObjects;
+import com.google.common.collect.Lists;
 
 import java.io.Serializable;
 import java.util.List;
@@ -14,7 +15,7 @@ public class RestaurantInfoVo implements Serializable {
     public String store_start;
     public String store_end;
     public String is_store_now_open;
-    public List<String> not_business;
+    public List<String> not_business = Lists.newArrayList();
     public List<DateRangeVo> can_store_range;
     public String restaurant_category;
     public String latitude;
