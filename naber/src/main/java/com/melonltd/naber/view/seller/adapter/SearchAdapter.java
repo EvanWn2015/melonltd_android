@@ -21,9 +21,11 @@ import com.melonltd.naber.vo.OrderDetail;
 
 public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder> {
     private static final String TAG = SearchAdapter.class.getSimpleName();
-    private View.OnClickListener statusChangeClickListener, cancelListener;
-    public SearchAdapter(View.OnClickListener statusChangeClickListener, View.OnClickListener cancelListener) {
+    private View.OnClickListener statusChangeClickListener, failureListener, cancelListener;
+
+    public SearchAdapter(View.OnClickListener statusChangeClickListener,  View.OnClickListener failureListener, View.OnClickListener cancelListener) {
         this.statusChangeClickListener = statusChangeClickListener;
+        this.failureListener = failureListener;
         this.cancelListener = cancelListener;
     }
 
@@ -32,7 +34,7 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.seller_orders_items, parent, false);
         SearchAdapter.ViewHolder vh = new SearchAdapter.ViewHolder(v);
-        vh.setOnClickListeners(this.statusChangeClickListener, this.cancelListener);
+        vh.setOnClickListeners(this.statusChangeClickListener, this.failureListener, this.cancelListener);
         return vh;
     }
 
@@ -146,10 +148,10 @@ public class SearchAdapter extends RecyclerView.Adapter<SearchAdapter.ViewHolder
             this.finishBtn.setTag(position);
         }
 
-        private void setOnClickListeners(View.OnClickListener statusChangeClickListener, View.OnClickListener cancelListener) {
+        private void setOnClickListeners(View.OnClickListener statusChangeClickListener, View.OnClickListener failureListener, View.OnClickListener cancelListener) {
             cancelBtn.setOnClickListener(cancelListener);
             processingBtn.setOnClickListener(statusChangeClickListener);
-            failureBtn.setOnClickListener(statusChangeClickListener);
+            failureBtn.setOnClickListener(failureListener);
             canFetchBtn.setOnClickListener(statusChangeClickListener);
             finishBtn.setOnClickListener(statusChangeClickListener);
         }

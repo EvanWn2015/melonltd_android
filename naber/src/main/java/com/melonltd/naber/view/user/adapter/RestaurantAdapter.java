@@ -1,6 +1,5 @@
 package com.melonltd.naber.view.user.adapter;
 
-import android.location.Location;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
@@ -14,10 +13,8 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.imagepipeline.request.ImageRequestBuilder;
 import com.google.common.base.Strings;
-import com.melonltd.naber.util.DistanceTools;
-import com.melonltd.naber.vo.LocationVo;
-import com.melonltd.naber.vo.RestaurantInfoVo;
 import com.melonltd.naber.R;
+import com.melonltd.naber.vo.RestaurantInfoVo;
 
 import java.util.List;
 
@@ -25,11 +22,11 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
     private static final String TAG = RestaurantAdapter.class.getSimpleName();
     private View.OnClickListener itemOnClickListener;
     private List<RestaurantInfoVo> list;
-    private Location location;
+//    private Location location;
 
-    public void setLocation(Location location){
-        this.location = location;
-    }
+//    public void setLocation(Location location){
+//        this.location = location;
+//    }
 
     public RestaurantAdapter(List<RestaurantInfoVo> list, View.OnClickListener itemOnClickListener) {
         this.list = list;
@@ -62,14 +59,14 @@ public class RestaurantAdapter extends RecyclerView.Adapter<RestaurantAdapter.Vi
                 list.get(position).store_end);
 
         holder.addressText.setText(list.get(position).address);
-        String distance = DistanceTools.getGoogleDistance(
-                this.location,
-                LocationVo.of(
-                        Double.parseDouble(list.get(position).latitude),
-                        Double.parseDouble(list.get(position).longitude)
-                )
-        );
-        holder.distanceText.setText("" + distance);
+//        String distance = DistanceTools.getGoogleDistance(
+//                this.location,
+//                LocationVo.of(
+//                        Double.parseDouble(list.get(position).latitude),
+//                        Double.parseDouble(list.get(position).longitude)
+//                )
+//        );
+        holder.distanceText.setText("" + list.get(position).distance);
     }
 
     @Override

@@ -21,13 +21,13 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.ViewHolder> {
 
     private SwitchButton.OnCheckedChangeListener switchListener;
     private View.OnClickListener deleteListener, editListener;
-    private View.OnLongClickListener copyLongListener;
+//    private View.OnLongClickListener copyLongListener;
 
-    public FoodAdapter(SwitchButton.OnCheckedChangeListener switchListener, View.OnClickListener deleteListener, View.OnClickListener editListener, View.OnLongClickListener copyLongListener) {
+    public FoodAdapter(SwitchButton.OnCheckedChangeListener switchListener, View.OnClickListener deleteListener, View.OnClickListener editListener) {
         this.switchListener = switchListener;
         this.deleteListener = deleteListener;
         this.editListener = editListener;
-        this.copyLongListener = copyLongListener;
+//        this.copyLongListener = copyLongListener;
     }
 
     @NonNull
@@ -53,7 +53,7 @@ public class FoodAdapter extends RecyclerView.Adapter<FoodAdapter.ViewHolder> {
         holder.priceText.setText(Model.SELLER_FOOD_LIST.get(position).default_price);
         holder.menuSwitch.setChecked(Model.SELLER_FOOD_LIST.get(position).status.getStatus());
 
-        holder.itemIconImageView.setOnLongClickListener(this.copyLongListener);
+//        holder.itemIconImageView.setOnLongClickListener(this.copyLongListener);
         holder.menuSwitch.setOnCheckedChangeListener(this.switchListener);
         holder.deleteBtn.setOnClickListener(this.deleteListener);
         holder.editBtn.setOnClickListener(this.editListener);

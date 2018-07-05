@@ -10,6 +10,9 @@
     <string name="is_first_use">IS_FIRST_USE</string>
     <string name="user_uid">USER_UID</string>
 
+
+    <string name="remember_me">REMEMBER_ME</string>
+
     <string name="user_account_info">USER_ACCOUNT_INFO</string>
     <string name="user_account">USER_ACCOUNT</string>
     <string name="user_name">USER_NAME</string>

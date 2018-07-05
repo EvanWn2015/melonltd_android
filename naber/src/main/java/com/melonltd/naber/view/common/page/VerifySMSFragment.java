@@ -36,6 +36,7 @@ public class VerifySMSFragment extends Fragment implements View.OnClickListener 
     private EditText phoneNamberEdit, verifySMSEdit;
     private CheckBox readCheckBox;
 
+    private Button requestVerifyCodeBtn;
     private Map<String, String> map = Maps.newHashMap();
 
     public VerifySMSFragment() {
@@ -51,9 +52,6 @@ public class VerifySMSFragment extends Fragment implements View.OnClickListener 
         return FRAGMENT;
     }
 
-    public VerifySMSFragment newInstance(Object... o) {
-        return new VerifySMSFragment();
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -90,7 +88,7 @@ public class VerifySMSFragment extends Fragment implements View.OnClickListener 
     }
 
     private void getView(View v) {
-        Button requestVerifyCodeBtn = v.findViewById(R.id.requestVerifyCodeBtn);
+        requestVerifyCodeBtn = v.findViewById(R.id.requestVerifyCodeBtn);
         Button submitToRegisteredBun = v.findViewById(R.id.submitToRegisteredBun);
         TextView privacyPolicyText = v.findViewById(R.id.privacyPolicyText);
         phoneNamberEdit = v.findViewById(R.id.phoneNamberEdit);
@@ -141,6 +139,8 @@ public class VerifySMSFragment extends Fragment implements View.OnClickListener 
                             Map<String, String> response = Tools.JSONPARSE.fromJson(responseBody, Map.class);
                             map.put("batch_id", response.get("batch_id"));
                             verifySMSEdit.setEnabled(true);
+                            requestVerifyCodeBtn.setVisibility(View.GONE);
+
                         }
 
                         @Override

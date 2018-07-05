@@ -17,7 +17,7 @@
         android:layout_marginTop="8dp"
         android:background="@drawable/naber_white_text_box"
         android:padding="8dp"
-        android:text="2018-11-11"
+        android:text=""
         android:textSize="16sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/untreatedText"

@@ -44,10 +44,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     public LoginFragment() {
     }
 
-    public Fragment newInstance(Object... o) {
-        return new LoginFragment();
-    }
-
     public Fragment getInstance(Bundle bundle) {
         if (FRAGMENT == null) {
             FRAGMENT = new LoginFragment();
@@ -96,6 +92,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         super.onResume();
         BaseActivity.changeToolbarStatus();
         accountEdit.setText(SPService.getAccout());
+        rememberMe.setChecked(SPService.getRememberMe());
     }
 
     @Override
@@ -122,17 +119,19 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                             SPService.setOauth(resp.account_uuid);
                             SPService.setIdentity(resp.identity);
                             Log.d(TAG, Model.BANNER_IMAGES.toString());
-                            if (rememberMe.isChecked()){
-                                SPService.setLoginLimit(new Date().getTime());
-                                SPService.setRememberAccount(resp.phone);
-                            }
 
-                            if (Identity.getUserValues().contains(Identity.of(resp.identity))){
+                            SPService.setRememberMe(rememberMe.isChecked());
+//                            if (rememberMe.isChecked()){
+                            SPService.setLoginLimit(new Date().getTime());
+                            SPService.setRememberAccount(resp.phone);
+//                            }
+
+                            if (Identity.getUserValues().contains(Identity.of(resp.identity))) {
                                 BaseCore.loadRestaurantTemplate(getContext());
                                 startActivity(new Intent(getActivity().getBaseContext(), UserMainActivity.class));
-                            }else if (Identity.SELLERS.equals(Identity.of(resp.identity))){
+                            } else if (Identity.SELLERS.equals(Identity.of(resp.identity))) {
                                 startActivity(new Intent(getActivity().getBaseContext(), SellerMainActivity.class));
-                            }else{
+                            } else {
                                 new AlertView.Builder()
                                         .setContext(getContext())
                                         .setStyle(AlertView.Style.Alert)
@@ -172,10 +171,10 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    class HideKeyboard implements View.OnFocusChangeListener{
+    class HideKeyboard implements View.OnFocusChangeListener {
         @Override
         public void onFocusChange(View v, boolean hasFocus) {
-            if (!hasFocus){
+            if (!hasFocus) {
                 InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
             }

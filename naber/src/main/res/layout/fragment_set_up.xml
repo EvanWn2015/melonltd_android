@@ -220,7 +220,7 @@
             android:layout_marginBottom="8dp"
             android:layout_marginEnd="32dp"
             android:layout_marginTop="8dp"
-            android:text="0987-654-321"
+            android:text=""
             app:layout_constraintBottom_toBottomOf="@+id/toAccountEdit"
             app:layout_constraintEnd_toEndOf="@+id/toAccountEdit"
             app:layout_constraintTop_toTopOf="@+id/toAccountEdit" />
@@ -242,7 +242,7 @@
             android:layout_marginBottom="8dp"
             android:layout_marginEnd="32dp"
             android:layout_marginTop="8dp"
-            android:text="22"
+            android:text="0"
             app:layout_constraintBottom_toBottomOf="@+id/textView54"
             app:layout_constraintEnd_toEndOf="@+id/textView54"
             app:layout_constraintTop_toTopOf="@+id/textView54"

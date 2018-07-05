@@ -67,7 +67,7 @@ public class SellerFoodListFragment extends Fragment implements View.OnClickList
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        adapter = new FoodAdapter(new SwitchListener(), new DeleteListener(), new EditListener(), new CopyLongListener());
+        adapter = new FoodAdapter(new SwitchListener(), new DeleteListener(), new EditListener());
         Fresco.initialize(getContext());
     }
 
@@ -336,30 +336,30 @@ public class SellerFoodListFragment extends Fragment implements View.OnClickList
         }
     }
 
-    class CopyLongListener implements View.OnLongClickListener {
-        @Override
-        public boolean onLongClick(View view) {
-            final int index = (int) view.getTag();
-            new AlertView.Builder()
-                    .setTitle("複製 : " + view.getTag())
-                    .setContext(getContext())
-                    .setStyle(AlertView.Style.Alert)
-                    .setOthers(new String[]{"確定複製", "取消"})
-                    .setOnItemClickListener(new OnItemClickListener() {
-                        @Override
-                        public void onItemClick(Object o, int position) {
-                            if (position == 0) {
-                                TO_MENU_EDIT_PAGE_INDEX = index;
-                                SellerMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.SELLER_FOOD_EDIT, null);
-                            }
-                        }
-                    })
-                    .build()
-                    .setCancelable(true)
-                    .show();
-            return false;
-        }
-    }
+//    class CopyLongListener implements View.OnLongClickListener {
+//        @Override
+//        public boolean onLongClick(View view) {
+//            final int index = (int) view.getTag();
+//            new AlertView.Builder()
+//                    .setTitle("複製 : " + view.getTag())
+//                    .setContext(getContext())
+//                    .setStyle(AlertView.Style.Alert)
+//                    .setOthers(new String[]{"確定複製", "取消"})
+//                    .setOnItemClickListener(new OnItemClickListener() {
+//                        @Override
+//                        public void onItemClick(Object o, int position) {
+//                            if (position == 0) {
+//                                TO_MENU_EDIT_PAGE_INDEX = index;
+//                                SellerMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.SELLER_FOOD_EDIT, null);
+//                            }
+//                        }
+//                    })
+//                    .build()
+//                    .setCancelable(true)
+//                    .show();
+//            return false;
+//        }
+//    }
 
     class FoodAddEdit implements View.OnFocusChangeListener {
         private View v;

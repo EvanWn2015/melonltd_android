@@ -85,7 +85,7 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 //                .setNumber(++numMessages)
 //                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
 //                .setVibrate(new long[]{100, 200, 300, 400, 500})
-                .setSmallIcon(R.drawable.naber_notify_icon, 1);
+                .setSmallIcon(R.drawable.ic_notif_eca_small, 1);
         notificationBuilder.setStyle(new NotificationCompat.BigTextStyle().setBigContentTitle(data.get("title")).bigText(data.get("message")));
 //        NotificationCompat.BigTextStyle style = new NotificationCompat.BigTextStyle();
 //        style.setBigContentTitle(data.get("title"));

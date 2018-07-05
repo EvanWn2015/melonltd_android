@@ -1,7 +1,6 @@
 package com.melonltd.naber.view.user.page;
 
 import android.Manifest;
-import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
@@ -29,14 +28,15 @@ import com.melonltd.naber.model.api.ThreadCallback;
 import com.melonltd.naber.model.bean.Model;
 import com.melonltd.naber.model.constant.NaberConstant;
 import com.melonltd.naber.model.service.SPService;
+import com.melonltd.naber.util.DistanceTools;
 import com.melonltd.naber.util.Tools;
 import com.melonltd.naber.view.common.BaseCore;
 import com.melonltd.naber.view.factory.PageType;
-import com.melonltd.naber.view.intro.IntroActivity;
 import com.melonltd.naber.view.user.UserMainActivity;
 import com.melonltd.naber.view.user.adapter.RestaurantAdapter;
 import com.melonltd.naber.vo.AdvertisementVo;
 import com.melonltd.naber.vo.BulletinVo;
+import com.melonltd.naber.vo.LocationVo;
 import com.melonltd.naber.vo.ReqData;
 import com.melonltd.naber.vo.RestaurantInfoVo;
 
@@ -57,6 +57,7 @@ public class HomeFragment extends Fragment {
     public static HomeFragment FRAGMENT = null;
     private RestaurantAdapter adapter;
 
+    private Location location;
     public HomeFragment() {
     }
 
@@ -173,6 +174,7 @@ public class HomeFragment extends Fragment {
         bgaRefreshLayout.setDelegate(new BGARefreshLayout.BGARefreshLayoutDelegate() {
             @Override
             public void onBGARefreshLayoutBeginRefreshing(BGARefreshLayout refreshLayout) {
+                getLocation();
                 bgaRefreshLayout.endRefreshing();
                 doLoadData(true);
             }
@@ -194,16 +196,14 @@ public class HomeFragment extends Fragment {
         ApiManager.restaurantList(req, new ThreadCallback(getContext()) {
             @Override
             public void onSuccess(String responseBody) {
-                List<RestaurantInfoVo> vos = Tools.JSONPARSE.fromJsonList(responseBody, RestaurantInfoVo[].class);
-                Model.RESTAURANT_INFO_LIST.addAll(vos);
-                if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                    if (Model.LOCATION == null) {
-                        Location location = LOCATION_MG.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                        adapter.setLocation(location);
-                    } else {
-                        adapter.setLocation(Model.LOCATION);
-                    }
+                List<RestaurantInfoVo> list = Tools.JSONPARSE.fromJsonList(responseBody, RestaurantInfoVo[].class);
+
+                for (int i=0; i< list.size(); i++) {
+                    list.get(i).distance = DistanceTools.getGoogleDistance(location, LocationVo.of(list.get(i).latitude, list.get(i).longitude));
                 }
+
+                Model.RESTAURANT_INFO_LIST.addAll(list);
+
                 adapter.notifyDataSetChanged();
             }
 
@@ -229,10 +229,21 @@ public class HomeFragment extends Fragment {
     public void onResume() {
         super.onResume();
         UserMainActivity.changeTabAndToolbarStatus();
+        getLocation();
         // 4.4.2 版本出現問題
         boolean isFirst = SPService.getIsFirstLogin();
-        if (isFirst) {
-            startActivity(new Intent(getActivity().getBaseContext(), IntroActivity.class));
+//        if (isFirst) {
+//            startActivity(new Intent(getActivity().getBaseContext(), IntroActivity.class));
+//        }
+    }
+
+    private void getLocation (){
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            if (Model.LOCATION == null) {
+                location = LOCATION_MG.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            } else {
+                location = Model.LOCATION;
+            }
         }
     }
 

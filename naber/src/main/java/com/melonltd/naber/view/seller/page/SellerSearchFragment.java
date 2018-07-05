@@ -57,14 +57,10 @@ public class SellerSearchFragment extends Fragment implements View.OnClickListen
         return FRAGMENT;
     }
 
-    public Fragment newInstance(Object... o) {
-        return new SellerSearchFragment();
-    }
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        adapter = new SearchAdapter(new StatusChangeClickListener(), new CancelListener());
+        adapter = new SearchAdapter(new StatusChangeClickListener(), new FailureListener(), new CancelListener());
     }
 
     @Override
@@ -155,7 +151,7 @@ public class SellerSearchFragment extends Fragment implements View.OnClickListen
                     if (list.size() == 0) {
                         new AlertView.Builder()
                                 .setTitle("")
-                                .setMessage("目前查無此訂單，\n請確認取餐時間禍首機號碼，\n是否正確！！")
+                                .setMessage("目前查無此訂單，\n請確認取餐時間，\n或手機號碼是否正確！！")
                                 .setContext(getContext())
                                 .setStyle(AlertView.Style.Alert)
                                 .setCancelText("確定")
@@ -228,24 +224,67 @@ public class SellerSearchFragment extends Fragment implements View.OnClickListen
     class StatusChangeClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
-            int index = (int) v.getTag();
-            ReqData req = new ReqData();
+            final int index = (int) v.getTag();
+            final ReqData req = new ReqData();
+            String alertMsg = "";
             switch (v.getId()) {
                 case R.id.processingBtn:
                     req.type = OrderStatus.PROCESSING.name();
-                    break;
-                case R.id.failureBtn:
-                    req.type = OrderStatus.FAIL.name();
+                    alertMsg = "確認開始製作此訂單";
                     break;
                 case R.id.canFetchBtn:
                     req.type = OrderStatus.CAN_FETCH.name();
+                    alertMsg = "確認此訂單已可領取";
                     break;
                 case R.id.finishBtn:
                     req.type = OrderStatus.FINISH.name();
+                    alertMsg = "確認此訂單已交易完成";
                     break;
             }
 
             req.uuid = Model.SELLER_QUICK_SEARCH_ORDERS.get(index).order_uuid;
+
+            new AlertView.Builder()
+                    .setContext(getContext())
+                    .setStyle(AlertView.Style.Alert)
+                    .setTitle("")
+                    .setMessage(alertMsg)
+                    .setOthers(new String[]{"返回", "確定"})
+                    .setOnItemClickListener(new OnItemClickListener() {
+                        @Override
+                        public void onItemClick(Object o, int position) {
+                            if (position == 1) {
+                                new Handler().postDelayed(new StatusChangeRun(req), 300);
+                            }
+                        }
+                    })
+                    .build()
+                    .setCancelable(true)
+                    .show();
+//            ApiManager.sellerChangeOrder(req, new ThreadCallback(getContext()) {
+//                @Override
+//                public void onSuccess(String responseBody) {
+//                    Log.i(TAG, responseBody);
+//                    phoneSearchBtn.callOnClick();
+//                    adapter.notifyDataSetChanged();
+//                }
+//
+//                @Override
+//                public void onFail(Exception error, String msg) {
+//
+//                }
+//            });
+        }
+    }
+
+
+    class StatusChangeRun implements Runnable{
+        private ReqData req;
+        StatusChangeRun(ReqData req){
+            this.req = req;
+        }
+        @Override
+        public void run() {
             ApiManager.sellerChangeOrder(req, new ThreadCallback(getContext()) {
                 @Override
                 public void onSuccess(String responseBody) {
@@ -259,9 +298,10 @@ public class SellerSearchFragment extends Fragment implements View.OnClickListen
 
                 }
             });
+//            req.uuid = Model.SELLER_TMP_ORDERS_LIST.get(index).order_uuid;
+//            sellerChangeOrder(this.req, this.index);
         }
     }
-
 
     class CancelListenerView implements View.OnClickListener {
         private View view;
@@ -310,6 +350,52 @@ public class SellerSearchFragment extends Fragment implements View.OnClickListen
                 return customEdit.getText().toString();
             }
             return this.msg;
+        }
+    }
+
+    class FailureListener implements View.OnClickListener {
+        @Override
+        public void onClick(final View v) {
+            final int index = (int) v.getTag();
+            final ReqData req = new ReqData();
+            req.uuid = Model.SELLER_QUICK_SEARCH_ORDERS.get(index).order_uuid;
+            req.type = OrderStatus.FAIL.name();
+            final String msg = "確定客戶跑單嗎？\n會影響客戶點餐的權益以及紅利點數";
+            new AlertView.Builder()
+                    .setContext(getContext())
+                    .setStyle(AlertView.Style.Alert)
+                    .setTitle("")
+                    .setMessage(msg)
+                    .setOthers(new String[]{"返回", "送出"})
+                    .setOnItemClickListener(new OnItemClickListener() {
+                        @Override
+                        public void onItemClick(Object o, int position) {
+                            if (position == 1) {
+                                req.message = "你的商品超過時間未領取，記點一次，請注意往後的訂餐權利！";
+                                ApiManager.sellerChangeOrder(req, new ThreadCallback(getContext()) {
+                                    @Override
+                                    public void onSuccess(final String responseBody) {
+                                        new Handler().postDelayed(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                Log.i(TAG, responseBody);
+                                                phoneSearchBtn.callOnClick();
+                                                adapter.notifyDataSetChanged();
+                                            }
+                                        } ,500);
+
+                                    }
+                                    @Override
+                                    public void onFail(Exception error, String msg) {
+
+                                    }
+                                });
+                            }
+                        }
+                    })
+                    .build()
+                    .setCancelable(true)
+                    .show();
         }
     }
 

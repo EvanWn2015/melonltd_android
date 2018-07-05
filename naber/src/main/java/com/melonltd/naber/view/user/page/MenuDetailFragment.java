@@ -330,7 +330,7 @@ public class MenuDetailFragment extends Fragment implements View.OnClickListener
                     }
                 })
                 .build()
-                .setCancelable(true)
+                .setCancelable(false)
                 .show();
     }
 

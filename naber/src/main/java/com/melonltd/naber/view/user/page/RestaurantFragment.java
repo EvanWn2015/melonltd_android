@@ -53,6 +53,7 @@ public class RestaurantFragment extends Fragment implements View.OnClickListener
     private Button filterCategoryBtn, filterAreaBtn, filterDistanceBtn;
     private ReqData reqData = new ReqData();
     private RestaurantAdapter adapter;
+    private Location location;
 
     public static int TO_RESTAURANT_DETAIL_INDEX = -1;
     public static int HOME_TO_RESTAURANT_DETAIL_INDEX = -1;
@@ -116,7 +117,13 @@ public class RestaurantFragment extends Fragment implements View.OnClickListener
             @Override
             public void onBGARefreshLayoutBeginRefreshing(BGARefreshLayout refreshLayout) {
                 bgaRefreshLayout.endRefreshing();
+                getLocation();
                 reqData.loadingMore = true;
+                reqData.page = 1;
+                if (reqData.search_type.equals("DISTANCE")) {
+                    reqData.uuids.clear();
+                    reqData.uuids.addAll(getTemplate(reqData.page));
+                }
                 doLoadData(true);
             }
 
@@ -129,6 +136,7 @@ public class RestaurantFragment extends Fragment implements View.OnClickListener
 
                 reqData.page++;
                 if (reqData.search_type.equals("DISTANCE")) {
+                    reqData.uuids.clear();
                     reqData.uuids.addAll(getTemplate(reqData.page));
                 }
                 doLoadData(false);
@@ -147,29 +155,24 @@ public class RestaurantFragment extends Fragment implements View.OnClickListener
             @Override
             public void onSuccess(String responseBody) {
                 List<RestaurantInfoVo> list = Tools.JSONPARSE.fromJsonList(responseBody, RestaurantInfoVo[].class);
-                if (list.size() % 10 != 0) {
-                    reqData.loadingMore = false;
+                reqData.loadingMore = list.size() % 10 == 0 && list.size() != 0;
+                for (int i = 0; i < list.size(); i++) {
+                    list.get(i).distance = DistanceTools.getGoogleDistance(location, LocationVo.of(list.get(i).latitude, list.get(i).longitude));
                 }
+
                 if (reqData.search_type.equals("DISTANCE")) {
+
+                    reqData.loadingMore = Model.RESTAURANT_TEMPLATE.size() > reqData.page;
                     Ordering<RestaurantInfoVo> ordering = Ordering.natural()
                             .nullsFirst()
-                            .onResultOf(new Function<RestaurantInfoVo, Double>() {
-                                public Double apply(RestaurantInfoVo info) {
-                                    return DistanceTools.getDistance(Model.LOCATION, LocationVo.of(info.latitude, info.longitude));
+                            .onResultOf(new Function<RestaurantInfoVo, String>() {
+                                public String apply(RestaurantInfoVo info) {
+                                    return info.distance;
                                 }
                             });
                     Model.RESTAURANT_INFO_FILTER_LIST.addAll(ordering.sortedCopy(list));
                 } else {
                     Model.RESTAURANT_INFO_FILTER_LIST.addAll(list);
-                }
-
-                if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                    if (Model.LOCATION == null){
-                        Location location = LOCATION_MG.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-                        adapter.setLocation(location);
-                    }else {
-                        adapter.setLocation(Model.LOCATION);
-                    }
                 }
                 adapter.notifyDataSetChanged();
             }
@@ -190,8 +193,19 @@ public class RestaurantFragment extends Fragment implements View.OnClickListener
             Fragment f = PageFragmentFactory.of(PageType.RESTAURANT_DETAIL, null);
             getFragmentManager().beginTransaction().replace(R.id.frameContainer, f).addToBackStack(f.toString()).commit();
         } else {
-            if (Model.RESTAURANT_INFO_FILTER_LIST.size() == 0){
+            getLocation();
+            if (Model.RESTAURANT_INFO_FILTER_LIST.size() == 0) {
                 filterDistanceBtn.callOnClick();
+            }
+        }
+    }
+
+    private void getLocation() {
+        if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+            if (Model.LOCATION == null) {
+                location = LOCATION_MG.getLastKnownLocation(LocationManager.GPS_PROVIDER);
+            } else {
+                location = Model.LOCATION;
             }
         }
     }
@@ -288,6 +302,10 @@ public class RestaurantFragment extends Fragment implements View.OnClickListener
 
     private static List<String> getTemplate(int page) {
         List<String> uuids = Lists.<String>newArrayList();
+
+        if (Model.RESTAURANT_TEMPLATE.size() <= page - 1) {
+            return uuids;
+        }
         if (!Model.RESTAURANT_TEMPLATE.isEmpty()) {
             for (int i = 0; i < Model.RESTAURANT_TEMPLATE.get(page - 1).size(); i++) {
                 uuids.add(Model.RESTAURANT_TEMPLATE.get(page - 1).get(i).restaurant_uuid);

@@ -19,6 +19,7 @@ import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.OnTimeSelectChangeListener;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.TimePickerView;
+import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.melonltd.naber.R;
 import com.melonltd.naber.model.api.ApiManager;
@@ -32,6 +33,7 @@ import com.melonltd.naber.view.user.UserMainActivity;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Iterator;
 
 
 public class SubmitOrdersFragment extends Fragment implements View.OnClickListener {
@@ -217,7 +219,12 @@ public class SubmitOrdersFragment extends Fragment implements View.OnClickListen
 
                 @Override
                 public void onFail(Exception error, String msg) {
-                    handler.postDelayed(new OnResponseAlert(msg, false), 500);
+                    Iterator<String> iterator = Splitter.on("$split").split(msg).iterator();
+                    String content_text = "";
+                    while (iterator.hasNext()) {
+                        content_text += iterator.next() + "\n";
+                    }
+                    handler.postDelayed(new OnResponseAlert(content_text, false), 500);
                 }
             });
         }

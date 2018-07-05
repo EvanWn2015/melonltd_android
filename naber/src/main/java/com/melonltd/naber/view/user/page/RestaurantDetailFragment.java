@@ -103,11 +103,6 @@ public class RestaurantDetailFragment extends Fragment {
         String distance = DistanceTools.getGoogleDistance(Model.LOCATION, LocationVo.of(Double.parseDouble(vo.latitude), Double.parseDouble(vo.longitude)));
         holder.distanceText.setText(distance);
 
-//        if (vo.is_store_now_open.toUpperCase().equals("FALSE")){
-//            holder.distanceText.setVisibility(View.GONE);
-//        }else {
-//            holder.distanceText.setVisibility(View.VISIBLE);
-//        }
     }
 
     private void getViews(View v) {
@@ -151,7 +146,7 @@ public class RestaurantDetailFragment extends Fragment {
     public void onResume() {
         super.onResume();
         // 回到此畫面即時更新種類列表
-        if (TO_CATEGORY_MENU_INDEX == -1){
+        if (TO_CATEGORY_MENU_INDEX == -1) {
             doLoadData(true);
         }
 
@@ -166,19 +161,26 @@ public class RestaurantDetailFragment extends Fragment {
             });
         }
 
-        if (TO_CATEGORY_MENU_INDEX == -1){
+        if (TO_CATEGORY_MENU_INDEX == -1) {
             RestaurantInfoVo vo = (RestaurantInfoVo) getArguments().get(NaberConstant.RESTAURANT_INFO);
-            if (!Strings.isNullOrEmpty(vo.is_store_now_open)){
-                if (vo.is_store_now_open.toUpperCase().equals("FALSE")){
-                    holder.warningText.setVisibility(View.VISIBLE);
-                    if(vo.isShowOne){
-                        String msg = "該店家今天已經結束接單，請明天再嘗試！";
-                        if (vo.can_store_range != null && vo.can_store_range.size() > 0) {
-                            msg = "該店家下列的時間不接單\n" + vo.can_store_range.get(0).date;
-                        }
+            if (vo.isShowOne) {
+                if (!Strings.isNullOrEmpty(vo.is_store_now_open)) {
+                    holder.warningText.setVisibility(View.GONE);
+                    if (vo.not_business.size() > 0) {
+                        holder.warningText.setVisibility(View.VISIBLE);
                         new AlertView.Builder()
                                 .setTitle("")
-                                .setMessage(msg)
+                                .setMessage("今日已結束接單")
+                                .setContext(getContext())
+                                .setStyle(AlertView.Style.Alert)
+                                .setOthers(new String[]{"我知道了"})
+                                .build()
+                                .setCancelable(true)
+                                .show();
+                    } else if (vo.is_store_now_open.toUpperCase().equals("FALSE")) {
+                        new AlertView.Builder()
+                                .setTitle("")
+                                .setMessage("目前時間該商家尚未營業")
                                 .setContext(getContext())
                                 .setStyle(AlertView.Style.Alert)
                                 .setOthers(new String[]{"我知道了"})
@@ -187,14 +189,11 @@ public class RestaurantDetailFragment extends Fragment {
                                 .show();
                     }
                     vo.isShowOne = false;
-
-                }else {
-                    holder.warningText.setVisibility(View.GONE);
                 }
             }
         }
 
-        if (TO_CATEGORY_MENU_INDEX >= 0 ) {
+        if (TO_CATEGORY_MENU_INDEX >= 0) {
             toCategoryMenuPage(TO_CATEGORY_MENU_INDEX);
         }
     }
@@ -205,7 +204,7 @@ public class RestaurantDetailFragment extends Fragment {
         BaseCore.FRAGMENT_TAG = PageType.CATEGORY_MENU.name();
         Bundle bundle = new Bundle();
 //        RestaurantInfoVo vo = (RestaurantInfoVo) getArguments().getSerializable(NaberConstant.RESTAURANT_INFO);
-        bundle.putSerializable(NaberConstant.RESTAURANT_INFO,  (RestaurantInfoVo) getArguments().get(NaberConstant.RESTAURANT_INFO));
+        bundle.putSerializable(NaberConstant.RESTAURANT_INFO, (RestaurantInfoVo) getArguments().get(NaberConstant.RESTAURANT_INFO));
         bundle.putSerializable(NaberConstant.RESTAURANT_CATEGORY_REL, Model.RESTAURANT_CATEGORY_REL_LIST.get(index));
         Fragment f = PageFragmentFactory.of(PageType.CATEGORY_MENU, bundle);
         getFragmentManager().beginTransaction().replace(R.id.frameContainer, f).addToBackStack(f.toString()).commit();
@@ -251,7 +250,7 @@ public class RestaurantDetailFragment extends Fragment {
     class ItemOnClickListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
-            int index = (int)v.getTag();
+            int index = (int) v.getTag();
             toCategoryMenuPage(index);
         }
     }

@@ -21,10 +21,11 @@ import com.melonltd.naber.vo.OrderDetail;
 public class SellerOrdersAdapter extends RecyclerView.Adapter<SellerOrdersAdapter.ViewHolder> {
     private static final String TAG = SellerOrdersAdapter.class.getSimpleName();
 
-    private View.OnClickListener cancelListener, statusChangeClickListener;
+    private View.OnClickListener cancelListener,failureListener, statusChangeClickListener;
 
-    public SellerOrdersAdapter(View.OnClickListener cancelListener, View.OnClickListener statusChangeClickListener) {
+    public SellerOrdersAdapter(View.OnClickListener cancelListener, View.OnClickListener  failureListener, View.OnClickListener statusChangeClickListener) {
         this.cancelListener = cancelListener;
+        this.failureListener = failureListener;
         this.statusChangeClickListener = statusChangeClickListener;
     }
 
@@ -33,7 +34,7 @@ public class SellerOrdersAdapter extends RecyclerView.Adapter<SellerOrdersAdapte
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View v = LayoutInflater.from(parent.getContext()).inflate(R.layout.seller_orders_items, parent, false);
         SellerOrdersAdapter.ViewHolder vh = new SellerOrdersAdapter.ViewHolder(v);
-        vh.setOnClickListeners(cancelListener, statusChangeClickListener);
+        vh.setOnClickListeners(cancelListener, failureListener, statusChangeClickListener);
         return vh;
     }
 
@@ -136,10 +137,10 @@ public class SellerOrdersAdapter extends RecyclerView.Adapter<SellerOrdersAdapte
             totalAmountText = v.findViewById(R.id.priceEdit);
         }
 
-        private void setOnClickListeners(View.OnClickListener cancelListener, View.OnClickListener statusChangeClickListener) {
+        private void setOnClickListeners(View.OnClickListener cancelListener, View.OnClickListener  failureListener, View.OnClickListener statusChangeClickListener) {
             cancelBtn.setOnClickListener(cancelListener);
             processingBtn.setOnClickListener(statusChangeClickListener);
-            failureBtn.setOnClickListener(statusChangeClickListener);
+            failureBtn.setOnClickListener(failureListener);
             canFetchBtn.setOnClickListener(statusChangeClickListener);
             finishBtn.setOnClickListener(statusChangeClickListener);
         }

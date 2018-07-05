@@ -164,8 +164,8 @@ public class SellerOrdersLogsFragment extends Fragment implements View.OnClickLi
     @Override
     public void onClick(final View view) {
         final int viewId = view.getId();
-        // 1年記錄
-        long oneYears = 1L * 365 * 1000 * 60 * 60 * 24L;
+        // 2月記錄
+        long oneYears = 60L * 1000 * 60 * 60 * 24L;
         final Calendar now = Calendar.getInstance();
         final Calendar startDate = Calendar.getInstance();
         startDate.setTimeInMillis(now.getTime().getTime() - oneYears);
@@ -242,7 +242,7 @@ public class SellerOrdersLogsFragment extends Fragment implements View.OnClickLi
                         for (int i = 0; i < list.size(); i++) {
                             list.get(i).order_detail = Tools.JSONPARSE.fromJson(list.get(i).order_data, OrderDetail.class);
                         }
-                        req.loadingMore = list.size() % 10 == 0;
+                        req.loadingMore = list.size() % 10 == 0 && list.size() != 0;
                         Model.SELLER_STAT_LOGS.addAll(list);
                         adapter.notifyDataSetChanged();
                     }

@@ -65,7 +65,6 @@
                     android:maxLines="2"
                     android:minLines="2"
                     android:padding="8dp"
-                    android:text="台股近期雖面臨陸美貿易戰、美國升息等因素干擾，導致外資連續性賣超提款，今年以來對上市櫃市場總計調節1755.3億元。目前外資對集中、櫃買市場持股比例為40.24％、23.07％，仍處相對高水位"
                     android:textSize="14sp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"

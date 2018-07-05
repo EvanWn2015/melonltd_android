@@ -17,7 +17,7 @@
         android:layout_height="wrap_content"
         android:background="@drawable/naber_text_base_line"
         android:padding="16dp"
-        android:text="冷飲"
+        android:text=""
         android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toTopOf="@+id/menuBGARefreshLayout"

@@ -198,7 +198,7 @@
             android:layout_marginEnd="32dp"
             android:layout_marginRight="32dp"
             android:layout_marginTop="8dp"
-            android:text="0987-654-321"
+            android:text=""
             app:layout_constraintBottom_toBottomOf="@+id/toAccountEdit"
             app:layout_constraintEnd_toEndOf="@+id/toAccountEdit"
             app:layout_constraintTop_toTopOf="@+id/toAccountEdit" />

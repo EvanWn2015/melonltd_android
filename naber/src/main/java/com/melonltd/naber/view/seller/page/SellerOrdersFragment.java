@@ -23,7 +23,6 @@ import com.melonltd.naber.R;
 import com.melonltd.naber.model.api.ApiManager;
 import com.melonltd.naber.model.api.ThreadCallback;
 import com.melonltd.naber.model.bean.Model;
-import com.melonltd.naber.model.constant.NaberConstant;
 import com.melonltd.naber.model.type.OrderStatus;
 import com.melonltd.naber.util.Tools;
 import com.melonltd.naber.view.seller.SellerMainActivity;
@@ -41,7 +40,6 @@ import cn.bingoogolapple.refreshlayout.BGANormalRefreshViewHolder;
 import cn.bingoogolapple.refreshlayout.BGARefreshLayout;
 
 import static com.melonltd.naber.model.type.OrderStatus.CAN_FETCH;
-import static com.melonltd.naber.model.type.OrderStatus.FAIL;
 import static com.melonltd.naber.model.type.OrderStatus.FINISH;
 import static com.melonltd.naber.model.type.OrderStatus.PROCESSING;
 import static com.melonltd.naber.model.type.OrderStatus.UNFINISH;
@@ -55,8 +53,8 @@ public class SellerOrdersFragment extends Fragment {
     private ReqData unReq = new ReqData(), prReq = new ReqData(), canReq = new ReqData();
     private OrderStatus STATUS_TAG = OrderStatus.UNFINISH;
     private SellerOrdersAdapter adapter;
-    private Handler handler;
-    private OrderListRun orderListRun;
+//    private Handler handler;
+//    private OrderListRun orderListRun;
 
     public SellerOrdersFragment() {
 
@@ -78,7 +76,7 @@ public class SellerOrdersFragment extends Fragment {
         unReq.search_type = OrderStatus.UNFINISH.name();
         prReq.search_type = OrderStatus.PROCESSING.name();
         canReq.search_type = OrderStatus.CAN_FETCH.name();
-        handler = new Handler();
+//        handler = new Handler();
     }
 
     @Override
@@ -105,9 +103,9 @@ public class SellerOrdersFragment extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
-        if (handler != null) {
-            handler.removeCallbacks(orderListRun);
-        }
+//        if (handler != null) {
+//            handler.removeCallbacks(orderListRun);
+//        }
     }
 
     private void getViews(View v) {
@@ -141,7 +139,7 @@ public class SellerOrdersFragment extends Fragment {
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
 
-        adapter = new SellerOrdersAdapter(new CancelListener(), new StatusChangeClickListener());
+        adapter = new SellerOrdersAdapter(new CancelListener(), new FailureListener(), new StatusChangeClickListener());
         recyclerView.setAdapter(adapter);
         Calendar now = Calendar.getInstance();
         searchDateText.setText(new SimpleDateFormat("yyyy-MM-dd").format(now.getTime()));
@@ -185,9 +183,9 @@ public class SellerOrdersFragment extends Fragment {
     class SelectDateListener implements View.OnClickListener {
         @Override
         public void onClick(View view) {
-            if (orderListRun != null) {
-                handler.removeCallbacks(orderListRun);
-            }
+//            if (orderListRun != null) {
+//                handler.removeCallbacks(orderListRun);
+//            }
 
             long date = 1000 * 60 * 60 * 24 * 2L;
             long dayOne = 1000 * 60 * 60 * 24 * 1L;
@@ -227,23 +225,57 @@ public class SellerOrdersFragment extends Fragment {
         @Override
         public void onClick(View v) {
             final int index = (int) v.getTag();
-            ReqData req = new ReqData();
+            final ReqData req = new ReqData();
+
+            String alertMsg = "";
             switch (v.getId()) {
                 case R.id.processingBtn:
                     req.type = PROCESSING.name();
+                    alertMsg = "確認開始製作此訂單";
                     break;
                 case R.id.canFetchBtn:
                     req.type = CAN_FETCH.name();
-                    break;
-                case R.id.failureBtn:
-                    req.type = FAIL.name();
+                    alertMsg = "確認此訂單已可領取";
                     break;
                 case R.id.finishBtn:
                     req.type = FINISH.name();
+                    alertMsg = "確認此訂單已交易完成";
                     break;
             }
             req.uuid = Model.SELLER_TMP_ORDERS_LIST.get(index).order_uuid;
-            sellerChangeOrder(req, index);
+
+            new AlertView.Builder()
+                    .setContext(getContext())
+                    .setStyle(AlertView.Style.Alert)
+                    .setTitle("")
+                    .setMessage(alertMsg)
+                    .setOthers(new String[]{"返回", "確定"})
+                    .setOnItemClickListener(new OnItemClickListener() {
+                        @Override
+                        public void onItemClick(Object o, int position) {
+                            if (position == 1) {
+                                new Handler().postDelayed(new StatusChangeRun (index ,req), 300);
+                            }
+                        }
+                    })
+                    .build()
+                    .setCancelable(true)
+                    .show();
+        }
+    }
+
+
+    class StatusChangeRun implements Runnable{
+        private ReqData req;
+        private int index;
+        StatusChangeRun(int index, ReqData req){
+            this.index = index;
+            this.req = req;
+        }
+        @Override
+        public void run() {
+//            req.uuid = Model.SELLER_TMP_ORDERS_LIST.get(index).order_uuid;
+            sellerChangeOrder(this.req, this.index);
         }
     }
 
@@ -351,6 +383,36 @@ public class SellerOrdersFragment extends Fragment {
         }
     }
 
+
+    class FailureListener implements View.OnClickListener {
+        @Override
+        public void onClick(final View v) {
+            final int index = (int) v.getTag();
+            final ReqData req = new ReqData();
+            req.uuid = Model.SELLER_TMP_ORDERS_LIST.get(index).order_uuid;
+            req.type = OrderStatus.FAIL.name();
+            final String msg = "確定客戶跑單嗎？\n會影響客戶點餐的權益以及紅利點數";
+            new AlertView.Builder()
+                    .setContext(getContext())
+                    .setStyle(AlertView.Style.Alert)
+                    .setTitle("")
+                    .setMessage(msg)
+                    .setOthers(new String[]{"返回", "送出"})
+                    .setOnItemClickListener(new OnItemClickListener() {
+                        @Override
+                        public void onItemClick(Object o, int position) {
+                            if (position == 1) {
+                                req.message = "你的商品超過時間未領取，記點一次，請注意往後的訂餐權利！";
+                                sellerChangeOrder(req, index);
+                            }
+                        }
+                    })
+                    .build()
+                    .setCancelable(true)
+                    .show();
+        }
+    }
+
     private void loadData(boolean isRefresh) {
         if (isRefresh) {
             switch (STATUS_TAG) {
@@ -385,59 +447,45 @@ public class SellerOrdersFragment extends Fragment {
                 break;
         }
         req.date = (String) searchDateText.getTag();
-
-        handler.removeCallbacks(orderListRun);
-        orderListRun = new OrderListRun(req);
-        handler.post(orderListRun);
+        loadDataNotPost(req);
     }
 
-    class OrderListRun implements Runnable {
-        private ReqData req;
-
-        OrderListRun(ReqData req) {
-            this.req = req;
-        }
-
-        @Override
-        public void run() {
-            ApiManager.sellerOrderList(this.req, new ThreadCallback(getContext()) {
-                @Override
-                public void onSuccess(String responseBody) {
-                    Model.SELLER_TMP_ORDERS_LIST.clear();
-                    List<OrderVo> list = Tools.JSONPARSE.fromJsonList(responseBody, OrderVo[].class);
-                    for (int i = 0; i < list.size(); i++) {
-                        list.get(i).order_detail = Tools.JSONPARSE.fromJson(list.get(i).order_data, OrderDetail.class);
-                    }
-
-                    boolean loadingMore = list.size() % 10 == 0;
-                    switch (STATUS_TAG) {
-                        case UNFINISH:
-                            unReq.loadingMore = loadingMore;
-                            Model.SELLER_UNFINISH_ORDERS_LIST.addAll(list);
-                            Model.SELLER_TMP_ORDERS_LIST.addAll(Model.SELLER_UNFINISH_ORDERS_LIST);
-                            break;
-                        case PROCESSING:
-                            prReq.loadingMore = loadingMore;
-                            Model.SELLER_PROCESSING_ORDERS_LIST.addAll(list);
-                            Model.SELLER_TMP_ORDERS_LIST.addAll(Model.SELLER_PROCESSING_ORDERS_LIST);
-                            break;
-                        case CAN_FETCH:
-                            canReq.loadingMore = loadingMore;
-                            Model.SELLER_CAN_FETCH_ORDERS_LIST.addAll(list);
-                            Model.SELLER_TMP_ORDERS_LIST.addAll(Model.SELLER_CAN_FETCH_ORDERS_LIST);
-                            break;
-                    }
-                    adapter.notifyDataSetChanged();
-                    // 10分鐘更新一次
-                    handler.postDelayed(orderListRun, NaberConstant.SELLER_ORDER_REFRESH_TIMER);
+    private void loadDataNotPost(final ReqData req) {
+        ApiManager.sellerOrderList(req, new ThreadCallback(getContext()) {
+            @Override
+            public void onSuccess(String responseBody) {
+                Model.SELLER_TMP_ORDERS_LIST.clear();
+                List<OrderVo> list = Tools.JSONPARSE.fromJsonList(responseBody, OrderVo[].class);
+                for (int i = 0; i < list.size(); i++) {
+                    list.get(i).order_detail = Tools.JSONPARSE.fromJson(list.get(i).order_data, OrderDetail.class);
                 }
 
-                @Override
-                public void onFail(Exception error, String msg) {
-
+                boolean loadingMore = list.size() % 10 == 0 && list.size() != 0;
+                switch (STATUS_TAG) {
+                    case UNFINISH:
+                        unReq.loadingMore = loadingMore;
+                        Model.SELLER_UNFINISH_ORDERS_LIST.addAll(list);
+                        Model.SELLER_TMP_ORDERS_LIST.addAll(Model.SELLER_UNFINISH_ORDERS_LIST);
+                        break;
+                    case PROCESSING:
+                        prReq.loadingMore = loadingMore;
+                        Model.SELLER_PROCESSING_ORDERS_LIST.addAll(list);
+                        Model.SELLER_TMP_ORDERS_LIST.addAll(Model.SELLER_PROCESSING_ORDERS_LIST);
+                        break;
+                    case CAN_FETCH:
+                        canReq.loadingMore = loadingMore;
+                        Model.SELLER_CAN_FETCH_ORDERS_LIST.addAll(list);
+                        Model.SELLER_TMP_ORDERS_LIST.addAll(Model.SELLER_CAN_FETCH_ORDERS_LIST);
+                        break;
                 }
-            });
-        }
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFail(Exception error, String msg) {
+
+            }
+        });
     }
 
     class TabClickListener implements View.OnClickListener {

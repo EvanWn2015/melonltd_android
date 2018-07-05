@@ -97,7 +97,8 @@ public class HistoryFragment extends Fragment {
             }
 
             @Override
-            public boolean onBGARefreshLayoutBeginLoadingMore(BGARefreshLayout refreshLayout) {
+            public boolean
+            onBGARefreshLayoutBeginLoadingMore(BGARefreshLayout refreshLayout) {
                 bgaRefreshLayout.endLoadingMore();
                 if (!reqData.loadingMore) {
                     return false;
@@ -125,15 +126,14 @@ public class HistoryFragment extends Fragment {
     private void doLoadData(boolean isRefresh) {
         if (isRefresh) {
             Model.USER_ORDER_HISTORY_LIST.clear();
+            reqData.page = 1;
         }
-        reqData.page = 1;
+//        reqData.page = 1;
         ApiManager.userOrderHistory(reqData,new ThreadCallback(getContext()) {
             @Override
             public void onSuccess(String responseBody) {
                 List<OrderVo> list = Tools.JSONPARSE.fromJsonList(responseBody, OrderVo[].class);
-                if (list.size() % 10 != 0) {
-                    reqData.loadingMore = false;
-                }
+                reqData.loadingMore = list.size() % 10 == 0 && list.size() != 0;
                 Model.USER_ORDER_HISTORY_LIST.addAll(list);
                 adapter.notifyDataSetChanged();
             }
