@@ -24,7 +24,7 @@ import com.melonltd.naber.model.constant.NaberConstant;
 import com.melonltd.naber.util.Tools;
 import com.melonltd.naber.view.factory.PageType;
 import com.melonltd.naber.view.seller.SellerMainActivity;
-import com.melonltd.naber.view.seller.adapter.OrdersLogsAdapter;
+import com.melonltd.naber.view.seller.adapter.SellerOrdersLogsAdapter;
 import com.melonltd.naber.vo.OrderDetail;
 import com.melonltd.naber.vo.OrderVo;
 import com.melonltd.naber.vo.ReqData;
@@ -38,13 +38,13 @@ import cn.bingoogolapple.refreshlayout.BGANormalRefreshViewHolder;
 import cn.bingoogolapple.refreshlayout.BGARefreshLayout;
 
 public class SellerOrdersLogsFragment extends Fragment implements View.OnClickListener {
-    private static final String TAG = SellerOrdersLogsFragment.class.getSimpleName();
+//    private static final String TAG = SellerOrdersLogsFragment.class.getSimpleName();
     public static SellerOrdersLogsFragment FRAGMENT = null;
 
     private TextView startTimeText, endTimeText;
     private TimePickerView timePickerView;
     private ReqData req;
-    private OrdersLogsAdapter adapter;
+    private SellerOrdersLogsAdapter adapter;
     public static int TO_ORDERS_LOGS_DETAIL_INDEX = -1;
 
     public SellerOrdersLogsFragment() {
@@ -65,7 +65,7 @@ public class SellerOrdersLogsFragment extends Fragment implements View.OnClickLi
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         req = new ReqData();
-        adapter = new OrdersLogsAdapter(new ItemOnClickListener());
+        adapter = new SellerOrdersLogsAdapter(new ItemOnClickListener());
     }
 
     @Override
@@ -143,9 +143,9 @@ public class SellerOrdersLogsFragment extends Fragment implements View.OnClickLi
             SellerMainActivity.navigationIconDisplay(true, new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    SellerMainActivity.navigationIconDisplay(false, null);
                     SellerStatFragment.TO_SELLER_ORDERS_LOGS_INDEX = -1;
                     SellerMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.SELLER_STAT, null);
+                    SellerMainActivity.navigationIconDisplay(false, null);
                 }
             });
         }
@@ -242,7 +242,7 @@ public class SellerOrdersLogsFragment extends Fragment implements View.OnClickLi
                         for (int i = 0; i < list.size(); i++) {
                             list.get(i).order_detail = Tools.JSONPARSE.fromJson(list.get(i).order_data, OrderDetail.class);
                         }
-                        req.loadingMore = list.size() % 10 == 0 && list.size() != 0;
+                        req.loadingMore = list.size() % NaberConstant.PAGE == 0 && list.size() != 0;
                         Model.SELLER_STAT_LOGS.addAll(list);
                         adapter.notifyDataSetChanged();
                     }

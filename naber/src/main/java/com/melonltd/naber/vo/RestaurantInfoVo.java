@@ -24,7 +24,7 @@ public class RestaurantInfoVo implements Serializable {
     public String photo;
     public String background_photo;
     public String top;
-    public String distance;
+    public double distance;
 
     public boolean isShowOne = true;
 

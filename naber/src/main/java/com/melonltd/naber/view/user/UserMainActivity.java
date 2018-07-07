@@ -19,30 +19,30 @@ import com.melonltd.naber.view.common.BaseCore;
 import com.melonltd.naber.view.customize.NaberTab;
 import com.melonltd.naber.view.factory.PageFragmentFactory;
 import com.melonltd.naber.view.factory.PageType;
-import com.melonltd.naber.view.user.page.AccountDetailFragment;
-import com.melonltd.naber.view.user.page.CategoryMenuFragment;
-import com.melonltd.naber.view.user.page.HistoryFragment;
-import com.melonltd.naber.view.user.page.HomeFragment;
-import com.melonltd.naber.view.user.page.MenuDetailFragment;
-import com.melonltd.naber.view.user.page.OrderDetailFragment;
-import com.melonltd.naber.view.user.page.ResetPasswordFragment;
-import com.melonltd.naber.view.user.page.RestaurantDetailFragment;
-import com.melonltd.naber.view.user.page.RestaurantFragment;
-import com.melonltd.naber.view.user.page.SetUpFragment;
-import com.melonltd.naber.view.user.page.ShoppingCartFragment;
-import com.melonltd.naber.view.user.page.SimpleInformationFragment;
-import com.melonltd.naber.view.user.page.SubmitOrdersFragment;
+import com.melonltd.naber.view.user.page.UserAccountDetailFragment;
+import com.melonltd.naber.view.user.page.UserFoodDetailFragment;
+import com.melonltd.naber.view.user.page.UserFoodListFragment;
+import com.melonltd.naber.view.user.page.UserHomeFragment;
+import com.melonltd.naber.view.user.page.UserOrderDetailFragment;
+import com.melonltd.naber.view.user.page.UserOrderHistoryFragment;
+import com.melonltd.naber.view.user.page.UserResetPasswordFragment;
+import com.melonltd.naber.view.user.page.UserRestaurantDetailFragment;
+import com.melonltd.naber.view.user.page.UserRestaurantListFragment;
+import com.melonltd.naber.view.user.page.UserSetUpFragment;
+import com.melonltd.naber.view.user.page.UserShoppingCartFragment;
+import com.melonltd.naber.view.user.page.UserSimpleInformationFragment;
+import com.melonltd.naber.view.user.page.UserSubmitOrdersFragment;
 
 import java.util.List;
 
 
 public class UserMainActivity extends BaseCore implements View.OnClickListener, TabLayout.OnTabSelectedListener {
-    private static final String TAG = UserMainActivity.class.getSimpleName();
+//    private static final String TAG = UserMainActivity.class.getSimpleName();
     private static Context context;
     public static Toolbar toolbar;
     public static List<View> tabViews = Lists.<View>newArrayList();
     private static FragmentManager FM;
-    private static final List<PageType> MAIN_PAGE = Lists.newArrayList(PageType.HOME, PageType.RESTAURANT, PageType.SHOPPING_CART, PageType.HISTORY, PageType.SET_UP);
+    private static final List<PageType> MAIN_PAGE = Lists.newArrayList(PageType.USER_HOME, PageType.USER_RESTAURANT_LIST, PageType.USER_SHOPPING_CART, PageType.USER_ORDER_HISTORY, PageType.USER_SET_UP);
 
     @Override
     protected void attachBaseContext(Context base) {
@@ -57,7 +57,7 @@ public class UserMainActivity extends BaseCore implements View.OnClickListener, 
         context = this;
         getView();
         FM = getSupportFragmentManager();
-        removeAndReplaceWhere(null, PageType.HOME, null);
+        removeAndReplaceWhere(null, PageType.USER_HOME, null);
     }
 
     private void getView() {
@@ -91,22 +91,22 @@ public class UserMainActivity extends BaseCore implements View.OnClickListener, 
         switch (requestCode) {
             case LOCATION_CODE:
                 if (BaseCore.checkGrantResults(grantResults)){
-                    if (BaseCore.FRAGMENT_TAG.equals(PageType.HOME.name())){
-                        HomeFragment.FRAGMENT.doLoadData(true);
+                    if (BaseCore.FRAGMENT_TAG.equals(PageType.USER_HOME.name())){
+                        UserHomeFragment.FRAGMENT.doLoadData(true);
                     }
                 }
                 break;
             case CAMERA_CODE:
                 if (BaseCore.checkGrantResults(grantResults)){
-                    if (BaseCore.FRAGMENT_TAG.equals(PageType.ACCOUNT_DETAIL.name())){
-                        AccountDetailFragment.FRAGMENT.intentToCamera();
+                    if (BaseCore.FRAGMENT_TAG.equals(PageType.USER_ACCOUNT_DETAIL.name())){
+                        UserAccountDetailFragment.FRAGMENT.intentToCamera();
                     }
                 }
                 break;
             case IO_STREAM_CODE:
                 if (BaseCore.checkGrantResults(grantResults)){
-                    if (BaseCore.FRAGMENT_TAG.equals(PageType.ACCOUNT_DETAIL.name())){
-                        AccountDetailFragment.FRAGMENT.intentToPick();
+                    if (BaseCore.FRAGMENT_TAG.equals(PageType.USER_ACCOUNT_DETAIL.name())){
+                        UserAccountDetailFragment.FRAGMENT.intentToPick();
                     }
                 }
                 break;
@@ -129,7 +129,7 @@ public class UserMainActivity extends BaseCore implements View.OnClickListener, 
 
     public static void changeTabAndToolbarStatus() {
         int position = PageType.equalsPositionByName(FRAGMENT_TAG);
-        if (PageType.HOME.name().equals(FRAGMENT_TAG)) {
+        if (PageType.USER_HOME.name().equals(FRAGMENT_TAG)) {
             toolbar.setTitle("NABER");
         } else {
             toolbar.setTitle(context.getResources().getString(PageType.equalsIdByName(FRAGMENT_TAG)));
@@ -214,19 +214,19 @@ public class UserMainActivity extends BaseCore implements View.OnClickListener, 
     }
 
     public static void clearAllFragment() {
-        AccountDetailFragment.FRAGMENT = null;
-        CategoryMenuFragment.FRAGMENT = null;
-        HistoryFragment.FRAGMENT = null;
-        HomeFragment.FRAGMENT = null;
-        MenuDetailFragment.FRAGMENT = null;
-        OrderDetailFragment.FRAGMENT = null;
-        ResetPasswordFragment.FRAGMENT = null;
-        RestaurantDetailFragment.FRAGMENT = null;
-        RestaurantFragment.FRAGMENT = null;
-        SetUpFragment.FRAGMENT = null;
-        ShoppingCartFragment.FRAGMENT = null;
-        SimpleInformationFragment.FRAGMENT = null;
-        SubmitOrdersFragment.FRAGMENT = null;
+        UserAccountDetailFragment.FRAGMENT = null;
+        UserFoodListFragment.FRAGMENT = null;
+        UserOrderHistoryFragment.FRAGMENT = null;
+        UserHomeFragment.FRAGMENT = null;
+        UserFoodDetailFragment.FRAGMENT = null;
+        UserOrderDetailFragment.FRAGMENT = null;
+        UserResetPasswordFragment.FRAGMENT = null;
+        UserRestaurantDetailFragment.FRAGMENT = null;
+        UserRestaurantListFragment.FRAGMENT = null;
+        UserSetUpFragment.FRAGMENT = null;
+        UserShoppingCartFragment.FRAGMENT = null;
+        UserSimpleInformationFragment.FRAGMENT = null;
+        UserSubmitOrdersFragment.FRAGMENT = null;
     }
 
 }

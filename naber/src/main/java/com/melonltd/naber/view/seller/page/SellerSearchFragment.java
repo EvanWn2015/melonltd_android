@@ -7,7 +7,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +26,7 @@ import com.melonltd.naber.model.bean.Model;
 import com.melonltd.naber.model.type.OrderStatus;
 import com.melonltd.naber.util.Tools;
 import com.melonltd.naber.view.seller.SellerMainActivity;
-import com.melonltd.naber.view.seller.adapter.SearchAdapter;
+import com.melonltd.naber.view.seller.adapter.SellerQuickSearchAdapter;
 import com.melonltd.naber.vo.OrderDetail;
 import com.melonltd.naber.vo.OrderVo;
 import com.melonltd.naber.vo.ReqData;
@@ -39,11 +38,11 @@ import cn.bingoogolapple.refreshlayout.BGANormalRefreshViewHolder;
 import cn.bingoogolapple.refreshlayout.BGARefreshLayout;
 
 public class SellerSearchFragment extends Fragment implements View.OnClickListener {
-    private static final String TAG = SellerSearchFragment.class.getSimpleName();
+//    private static final String TAG = SellerSearchFragment.class.getSimpleName();
     public static SellerSearchFragment FRAGMENT = null;
 
     private EditText phoneEditText;
-    private SearchAdapter adapter;
+    private SellerQuickSearchAdapter adapter;
     private Button phoneSearchBtn;
 
     public SellerSearchFragment() {
@@ -60,7 +59,7 @@ public class SellerSearchFragment extends Fragment implements View.OnClickListen
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        adapter = new SearchAdapter(new StatusChangeClickListener(), new FailureListener(), new CancelListener());
+        adapter = new SellerQuickSearchAdapter(new StatusChangeClickListener(), new FailureListener(), new CancelListener());
     }
 
     @Override
@@ -198,7 +197,7 @@ public class SellerSearchFragment extends Fragment implements View.OnClickListen
                                         new Handler().postDelayed(new Runnable() {
                                             @Override
                                             public void run() {
-                                                Log.i(TAG, responseBody);
+//                                                Log.i(TAG, responseBody);
                                                 phoneSearchBtn.callOnClick();
                                                 adapter.notifyDataSetChanged();
                                             }
@@ -261,22 +260,8 @@ public class SellerSearchFragment extends Fragment implements View.OnClickListen
                     .build()
                     .setCancelable(true)
                     .show();
-//            ApiManager.sellerChangeOrder(req, new ThreadCallback(getContext()) {
-//                @Override
-//                public void onSuccess(String responseBody) {
-//                    Log.i(TAG, responseBody);
-//                    phoneSearchBtn.callOnClick();
-//                    adapter.notifyDataSetChanged();
-//                }
-//
-//                @Override
-//                public void onFail(Exception error, String msg) {
-//
-//                }
-//            });
         }
     }
-
 
     class StatusChangeRun implements Runnable{
         private ReqData req;
@@ -288,7 +273,7 @@ public class SellerSearchFragment extends Fragment implements View.OnClickListen
             ApiManager.sellerChangeOrder(req, new ThreadCallback(getContext()) {
                 @Override
                 public void onSuccess(String responseBody) {
-                    Log.i(TAG, responseBody);
+//                    Log.i(TAG, responseBody);
                     phoneSearchBtn.callOnClick();
                     adapter.notifyDataSetChanged();
                 }
@@ -298,8 +283,6 @@ public class SellerSearchFragment extends Fragment implements View.OnClickListen
 
                 }
             });
-//            req.uuid = Model.SELLER_TMP_ORDERS_LIST.get(index).order_uuid;
-//            sellerChangeOrder(this.req, this.index);
         }
     }
 
@@ -378,7 +361,7 @@ public class SellerSearchFragment extends Fragment implements View.OnClickListen
                                         new Handler().postDelayed(new Runnable() {
                                             @Override
                                             public void run() {
-                                                Log.i(TAG, responseBody);
+//                                                Log.i(TAG, responseBody);
                                                 phoneSearchBtn.callOnClick();
                                                 adapter.notifyDataSetChanged();
                                             }

@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +21,6 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.melonltd.naber.R;
 import com.melonltd.naber.model.api.ApiManager;
 import com.melonltd.naber.model.api.ThreadCallback;
-import com.melonltd.naber.model.bean.Model;
 import com.melonltd.naber.model.service.SPService;
 import com.melonltd.naber.model.type.Identity;
 import com.melonltd.naber.util.Tools;
@@ -36,7 +34,7 @@ import com.melonltd.naber.vo.AccountInfoVo;
 import java.util.Date;
 
 public class LoginFragment extends Fragment implements View.OnClickListener {
-    private static final String TAG = LoginFragment.class.getSimpleName();
+//    private static final String TAG = LoginFragment.class.getSimpleName();
     public static LoginFragment FRAGMENT = null;
     private EditText accountEdit, passwordEdit;
     private CheckBox rememberMe;
@@ -118,13 +116,10 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                             SPService.setUserPhone(resp.phone);
                             SPService.setOauth(resp.account_uuid);
                             SPService.setIdentity(resp.identity);
-                            Log.d(TAG, Model.BANNER_IMAGES.toString());
 
                             SPService.setRememberMe(rememberMe.isChecked());
-//                            if (rememberMe.isChecked()){
                             SPService.setLoginLimit(new Date().getTime());
                             SPService.setRememberAccount(resp.phone);
-//                            }
 
                             if (Identity.getUserValues().contains(Identity.of(resp.identity))) {
                                 BaseCore.loadRestaurantTemplate(getContext());

@@ -13,7 +13,6 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -32,7 +31,7 @@ import com.melonltd.naber.view.customize.NaberTab;
 import com.melonltd.naber.view.customize.SwitchButton;
 import com.melonltd.naber.view.factory.PageFragmentFactory;
 import com.melonltd.naber.view.factory.PageType;
-import com.melonltd.naber.view.seller.adapter.DateSelectAdapter;
+import com.melonltd.naber.view.seller.adapter.SellerTimeRangeAdapter;
 import com.melonltd.naber.view.seller.page.SellerCategoryListFragment;
 import com.melonltd.naber.view.seller.page.SellerDetailFragment;
 import com.melonltd.naber.view.seller.page.SellerFoodEditFragment;
@@ -56,13 +55,13 @@ import cn.bingoogolapple.refreshlayout.BGANormalRefreshViewHolder;
 import cn.bingoogolapple.refreshlayout.BGARefreshLayout;
 
 public class SellerMainActivity extends BaseCore implements TabLayout.OnTabSelectedListener, SwitchButton.OnCheckedChangeListener {
-    private static final String TAG = SellerMainActivity.class.getSimpleName();
+//    private static final String TAG = SellerMainActivity.class.getSimpleName();
     private static Context context;
     public static Toolbar toolbar;
 
     private static Drawable defaultIcon;
     private static DrawerLayout drawer;
-    private static DateSelectAdapter adapter;
+    private static SellerTimeRangeAdapter adapter;
     private static FragmentManager FM;
 
     public static List<View> tabViews = Lists.<View>newArrayList();
@@ -131,7 +130,7 @@ public class SellerMainActivity extends BaseCore implements TabLayout.OnTabSelec
         toggle.syncState();
         defaultIcon = toolbar.getNavigationIcon();
 
-        adapter = new DateSelectAdapter(this);
+        adapter = new SellerTimeRangeAdapter(this);
         recyclerView.setAdapter(adapter);
         refreshLayout.setDelegate(new BGARefreshLayout.BGARefreshLayoutDelegate() {
             @Override
@@ -165,7 +164,6 @@ public class SellerMainActivity extends BaseCore implements TabLayout.OnTabSelec
         ApiManager.sellerBusinessTime(new ThreadCallback(context) {
             @Override
             public void onSuccess(String responseBody) {
-                Log.i(TAG, responseBody);
                 Model.SELLER_BUSINESS_TIME_RANGE = Tools.JSONPARSE.fromJsonList(responseBody, DateRangeVo[].class);
                 adapter.notifyDataSetChanged();
             }

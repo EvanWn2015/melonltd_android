@@ -1,7 +1,6 @@
 package com.melonltd.naber.model.api;
 
 import android.annotation.SuppressLint;
-import android.util.Log;
 
 import java.security.SecureRandom;
 import java.security.cert.CertificateException;
@@ -28,7 +27,7 @@ import okhttp3.logging.HttpLoggingInterceptor;
  */
 
 public class ClientManager {
-    private static final String TAG = ClientManager.class.getSimpleName();
+//    private static final String TAG = ClientManager.class.getSimpleName();
     private static final ConnectionPool CONNECTION_POOL = new ConnectionPool();
     private static final HttpLoggingInterceptor LOGGING = new HttpLoggingInterceptor().setLevel(HttpLoggingInterceptor.Level.BODY);
     private static final OkHttpClient CLIENT = new OkHttpClient.Builder()
@@ -91,8 +90,7 @@ public class ClientManager {
             sc.init(null, new TrustManager[]{new TrustAllManager()}, new SecureRandom());
             sSLSocketFactory = sc.getSocketFactory();
         } catch (Exception e) {
-            Log.e(TAG, "error", e);
-            e.printStackTrace();
+
         }
         return sSLSocketFactory;
     }

@@ -17,7 +17,6 @@ import java.io.Serializable;
  * 半形空白字元（\u0020）
  */
 public class NaberCheckButton implements Serializable {
-    private static final String TAG = NaberCheckButton.class.getSimpleName();
     private static final long serialVersionUID = 7025169341980168427L;
     private CheckBox box;
     private String title = "\u0020", price = "\u0020", symbol = "\u0020";
@@ -41,7 +40,6 @@ public class NaberCheckButton implements Serializable {
         this.title = Strings.padEnd(title, 20, '\u0020');
         this.price = Strings.padEnd(price, 10, '\u0020');
         this.symbol = Strings.padEnd(symbol, 3, '\u0020');
-//        this.text = this.title + Strings.padEnd("", 10, '\u0020') + this.symbol + this.price;
         this.text = this.title + this.symbol + this.price;
         this.box.setText(this.text);
     }

@@ -13,7 +13,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -49,7 +48,7 @@ import com.melonltd.naber.vo.ReqData;
 import java.io.ByteArrayOutputStream;
 
 public class SellerFoodEditFragment extends Fragment implements View.OnFocusChangeListener {
-    private static final String TAG = SellerFoodEditFragment.class.getSimpleName();
+    //    private static final String TAG = SellerFoodEditFragment.class.getSimpleName();
     public static SellerFoodEditFragment FRAGMENT = null;
     private TextView foodNameText;
     private SimpleDraweeView menuIconImage;
@@ -196,9 +195,9 @@ public class SellerFoodEditFragment extends Fragment implements View.OnFocusChan
                                 @Override
                                 public void onItemClick(Object o, int position) {
                                     if (position == 0) {
-                                        SellerMainActivity.navigationIconDisplay(false, null);
                                         SellerFoodListFragment.TO_MENU_EDIT_PAGE_INDEX = -1;
                                         SellerMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.SELLER_FOOD_LIST, null);
+                                        SellerMainActivity.navigationIconDisplay(false, null);
                                     }
                                 }
                             })
@@ -299,9 +298,8 @@ public class SellerFoodEditFragment extends Fragment implements View.OnFocusChan
 
             switch (view.getId()) {
                 case R.id.saveBtn:
-                    Log.i(TAG, foodVo.toString());
                     String msg = verifyData();
-                    if (!Strings.isNullOrEmpty(msg)){
+                    if (!Strings.isNullOrEmpty(msg)) {
                         new AlertView.Builder()
                                 .setTitle("")
                                 .setMessage(msg)
@@ -311,15 +309,13 @@ public class SellerFoodEditFragment extends Fragment implements View.OnFocusChan
                                 .build()
                                 .setCancelable(true)
                                 .show();
-                    }else {
+                    } else {
                         ApiManager.sellerFoodUpdate(foodVo, new ThreadCallback(getContext()) {
                             @Override
                             public void onSuccess(String responseBody) {
-                                Log.i(TAG, responseBody);
-                                Log.i(TAG, responseBody);
-                                SellerMainActivity.navigationIconDisplay(false, null);
                                 SellerFoodListFragment.TO_MENU_EDIT_PAGE_INDEX = -1;
                                 SellerMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.SELLER_FOOD_LIST, null);
+                                SellerMainActivity.navigationIconDisplay(false, null);
                             }
 
                             @Override
@@ -343,9 +339,9 @@ public class SellerFoodEditFragment extends Fragment implements View.OnFocusChan
                                 @Override
                                 public void onItemClick(Object o, int position) {
                                     if (position == 0) {
-                                        SellerMainActivity.navigationIconDisplay(false, null);
                                         SellerFoodListFragment.TO_MENU_EDIT_PAGE_INDEX = -1;
                                         SellerMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.SELLER_FOOD_LIST, null);
+                                        SellerMainActivity.navigationIconDisplay(false, null);
                                     }
                                 }
                             })
@@ -444,7 +440,6 @@ public class SellerFoodEditFragment extends Fragment implements View.OnFocusChan
                 } else {
                     Toast.makeText(getContext(), getContext().getString(R.string.app_name) + "品項規格至少需要一筆資了以上", Toast.LENGTH_LONG).show();
                 }
-                Log.i(TAG, foodVo.food_data.scopes.toString());
             }
         });
         return v;

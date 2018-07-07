@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,7 +26,7 @@ import java.util.Iterator;
 import java.util.Map;
 
 public class RecoverPasswordFragment extends Fragment implements View.OnClickListener {
-    private static final String TAG = RecoverPasswordFragment.class.getSimpleName();
+//    private static final String TAG = RecoverPasswordFragment.class.getSimpleName();
     public static RecoverPasswordFragment FRAGMENT = null;
     private EditText mailEdit, phoneEdit;
 
@@ -120,7 +119,7 @@ public class RecoverPasswordFragment extends Fragment implements View.OnClickLis
                 ApiManager.forgetPassword(req, new ThreadCallback(getContext()) {
                     @Override
                     public void onSuccess(String responseBody) {
-                        Log.d(TAG, responseBody);
+//                        Log.d(TAG, responseBody);
                         new AlertView.Builder()
                                 .setContext(getContext())
                                 .setStyle(AlertView.Style.Alert)

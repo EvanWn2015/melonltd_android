@@ -77,7 +77,7 @@
             android:text="備註欄"
             android:textColor="@android:color/black"
             android:textSize="14sp"
-            app:layout_constraintBottom_toTopOf="@+id/userMessageText"
+            app:layout_constraintBottom_toTopOf="@+id/userMessageEdit"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/foodContentText" />
@@ -110,7 +110,7 @@
             app:layout_constraintBottom_toTopOf="@+id/textView89"
             app:layout_constraintEnd_toStartOf="@+id/fetchDateText"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/userMessageText" />
+            app:layout_constraintTop_toBottomOf="@+id/userMessageEdit" />
 
         <TextView
             android:id="@+id/fetchDateText"

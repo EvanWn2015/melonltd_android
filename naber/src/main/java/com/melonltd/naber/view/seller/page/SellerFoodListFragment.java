@@ -8,7 +8,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,7 +31,7 @@ import com.melonltd.naber.util.Tools;
 import com.melonltd.naber.view.customize.SwitchButton;
 import com.melonltd.naber.view.factory.PageType;
 import com.melonltd.naber.view.seller.SellerMainActivity;
-import com.melonltd.naber.view.seller.adapter.FoodAdapter;
+import com.melonltd.naber.view.seller.adapter.SellerFoodAdapter;
 import com.melonltd.naber.vo.CategoryFoodRelVo;
 import com.melonltd.naber.vo.FoodItemVo;
 import com.melonltd.naber.vo.ItemVo;
@@ -42,11 +41,11 @@ import cn.bingoogolapple.refreshlayout.BGANormalRefreshViewHolder;
 import cn.bingoogolapple.refreshlayout.BGARefreshLayout;
 
 public class SellerFoodListFragment extends Fragment implements View.OnClickListener {
-    private static final String TAG = SellerFoodListFragment.class.getSimpleName();
+//    private static final String TAG = SellerFoodListFragment.class.getSimpleName();
     public static SellerFoodListFragment FRAGMENT = null;
 
     private TextView categoryNameText;
-    private FoodAdapter adapter;
+    private SellerFoodAdapter adapter;
     private ReqData req;
     public static int TO_MENU_EDIT_PAGE_INDEX = -1;
 
@@ -67,7 +66,7 @@ public class SellerFoodListFragment extends Fragment implements View.OnClickList
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        adapter = new FoodAdapter(new SwitchListener(), new DeleteListener(), new EditListener());
+        adapter = new SellerFoodAdapter(new SwitchListener(), new DeleteListener(), new EditListener());
         Fresco.initialize(getContext());
     }
 
@@ -147,8 +146,8 @@ public class SellerFoodListFragment extends Fragment implements View.OnClickList
                 @Override
                 public void onClick(View view) {
                     SellerCategoryListFragment.TO_CATEGORY_LIST_PAGE_INDEX = -1;
-                    SellerMainActivity.navigationIconDisplay(false, null);
                     SellerMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.SELLER_CATEGORY_LIST, null);
+                    SellerMainActivity.navigationIconDisplay(false, null);
                 }
             });
         }
@@ -159,7 +158,6 @@ public class SellerFoodListFragment extends Fragment implements View.OnClickList
         ApiManager.sellerFoodList(req, new ThreadCallback(getContext()) {
             @Override
             public void onSuccess(String responseBody) {
-                Log.i(TAG, responseBody);
                 Model.SELLER_FOOD_LIST = Tools.JSONPARSE.fromJsonList(responseBody, CategoryFoodRelVo[].class);
                 adapter.notifyDataSetChanged();
             }
@@ -277,7 +275,7 @@ public class SellerFoodListFragment extends Fragment implements View.OnClickList
             req.default_price = this.price;
             req.food_data = new FoodItemVo();
             ItemVo item = new ItemVo();
-            item.name = "default";
+            item.name = "統一規格";
             item.price = this.price;
             req.food_data.scopes.add(item);
 
@@ -336,31 +334,6 @@ public class SellerFoodListFragment extends Fragment implements View.OnClickList
         }
     }
 
-//    class CopyLongListener implements View.OnLongClickListener {
-//        @Override
-//        public boolean onLongClick(View view) {
-//            final int index = (int) view.getTag();
-//            new AlertView.Builder()
-//                    .setTitle("複製 : " + view.getTag())
-//                    .setContext(getContext())
-//                    .setStyle(AlertView.Style.Alert)
-//                    .setOthers(new String[]{"確定複製", "取消"})
-//                    .setOnItemClickListener(new OnItemClickListener() {
-//                        @Override
-//                        public void onItemClick(Object o, int position) {
-//                            if (position == 0) {
-//                                TO_MENU_EDIT_PAGE_INDEX = index;
-//                                SellerMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.SELLER_FOOD_EDIT, null);
-//                            }
-//                        }
-//                    })
-//                    .build()
-//                    .setCancelable(true)
-//                    .show();
-//            return false;
-//        }
-//    }
-
     class FoodAddEdit implements View.OnFocusChangeListener {
         private View v;
         private EditText nameEdit, priceEdit;
@@ -387,7 +360,6 @@ public class SellerFoodListFragment extends Fragment implements View.OnClickList
 
         @Override
         public void onFocusChange(View view, boolean b) {
-            Log.i(TAG, b + "");
             if (!b) {
                 InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(view.getWindowToken(), 0);

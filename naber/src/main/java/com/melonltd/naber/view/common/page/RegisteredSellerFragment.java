@@ -27,7 +27,7 @@ import com.melonltd.naber.R;
 import java.util.Map;
 
 public class RegisteredSellerFragment extends Fragment implements View.OnClickListener {
-    private static final String TAG = RegisteredSellerFragment.class.getSimpleName();
+//    private static final String TAG = RegisteredSellerFragment.class.getSimpleName();
     public static RegisteredSellerFragment FRAGMENT = null;
     private EditText nameEdit, addressEdit, contactPersonEdit, contactPhoneEdit;
 

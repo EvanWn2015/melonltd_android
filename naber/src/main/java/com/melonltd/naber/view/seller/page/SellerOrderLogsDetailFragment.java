@@ -24,7 +24,7 @@ import com.melonltd.naber.vo.OrderVo;
 
 
 public class SellerOrderLogsDetailFragment extends Fragment {
-    private static final String TAG = SellerOrderLogsDetailFragment.class.getSimpleName();
+//    private static final String TAG = SellerOrderLogsDetailFragment.class.getSimpleName();
     public static SellerOrderLogsDetailFragment FRAGMENT = null;
 
 
@@ -58,7 +58,7 @@ public class SellerOrderLogsDetailFragment extends Fragment {
         TextView foodCountText = v.findViewById(R.id.foodCountText);
         TextView foodContentText = v.findViewById(R.id.foodContentText);
 
-        TextView userMessageText = v.findViewById(R.id.userMessageText);
+        TextView userMessageText = v.findViewById(R.id.userMessageEdit);
         TextView fetchDateText = v.findViewById(R.id.fetchDateText);
         TextView userPhoneText = v.findViewById(R.id.userPhoneText);
         TextView userNameText = v.findViewById(R.id.userNameText);
@@ -71,7 +71,7 @@ public class SellerOrderLogsDetailFragment extends Fragment {
             foodCountText.setText(" (" +orderVo.order_detail.orders.size() +")");
             String content = "";
             for (OrderDetail.OrderData data :orderVo.order_detail.orders) {
-                content += "品項: " +
+                content += data.item.category_name + ": " +
                         Strings.padEnd(data.item.food_name, 20, '\u0020') +
                         Strings.padEnd(("x" + data.count), 15, '\u0020') +
                         "$ " + data.item.price +
@@ -124,9 +124,9 @@ public class SellerOrderLogsDetailFragment extends Fragment {
             SellerMainActivity.navigationIconDisplay(true, new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    SellerMainActivity.navigationIconDisplay(false, null);
                     SellerOrdersLogsFragment.TO_ORDERS_LOGS_DETAIL_INDEX = -1;
                     SellerMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.SELLER_ORDERS_LOGS, null);
+                    SellerMainActivity.navigationIconDisplay(false, null);
                 }
             });
         }

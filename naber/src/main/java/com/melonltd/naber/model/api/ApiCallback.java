@@ -2,7 +2,6 @@ package com.melonltd.naber.model.api;
 
 import android.content.Context;
 import android.net.ConnectivityManager;
-import android.util.Log;
 
 import com.bigkoo.alertview.AlertView;
 import com.melonltd.naber.model.service.Base64Service;
@@ -17,7 +16,7 @@ import okhttp3.Response;
 
 public abstract class ApiCallback implements Callback {
 
-    private static final String TAG = ThreadCallback.class.getSimpleName();
+//    private static final String TAG = ThreadCallback.class.getSimpleName();
 
     abstract public void onSuccess(String responseBody);
 
@@ -36,7 +35,7 @@ public abstract class ApiCallback implements Callback {
             return;
         }
         if (e.getMessage().contains("Canceled") || e.getMessage().contains("Socket closed")) {
-            Log.e(TAG, "fail", e);
+//            Log.e(TAG, "fail", e);
         } else {
             onFail(e, e.getMessage());
         }
@@ -58,7 +57,7 @@ public abstract class ApiCallback implements Callback {
             }
 
         } catch (Exception e) {
-            Log.e(TAG, "fail", e);
+//            Log.e(TAG, "fail", e);
             onFailure(call, new IOException("Failed"));
         }
     }

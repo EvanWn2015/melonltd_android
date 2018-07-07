@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,8 +15,6 @@ import com.melonltd.naber.model.api.ThreadCallback;
 import com.melonltd.naber.model.bean.Model;
 import com.melonltd.naber.model.constant.NaberConstant;
 import com.melonltd.naber.util.Tools;
-import com.melonltd.naber.view.common.BaseCore;
-import com.melonltd.naber.view.factory.PageFragmentFactory;
 import com.melonltd.naber.view.factory.PageType;
 import com.melonltd.naber.view.seller.SellerMainActivity;
 import com.melonltd.naber.vo.SellerStatVo;
@@ -26,7 +23,7 @@ import cn.bingoogolapple.refreshlayout.BGANormalRefreshViewHolder;
 import cn.bingoogolapple.refreshlayout.BGARefreshLayout;
 
 public class SellerStatFragment extends Fragment implements View.OnClickListener {
-    private static final String TAG = SellerStatFragment.class.getSimpleName();
+//    private static final String TAG = SellerStatFragment.class.getSimpleName();
     public static SellerStatFragment FRAGMENT = null;
     public static int TO_SELLER_ORDERS_LOGS_INDEX = -1;
 
@@ -104,7 +101,6 @@ public class SellerStatFragment extends Fragment implements View.OnClickListener
             ApiManager.sellerStat(new ThreadCallback(getContext()) {
                 @Override
                 public void onSuccess(String responseBody) {
-                    Log.i(TAG, responseBody);
                     Model.SELLER_STAT = Tools.JSONPARSE.fromJson(responseBody, SellerStatVo.class);
 
                     yearIncomeText.setText("$ " + Model.SELLER_STAT.year_income);
@@ -143,7 +139,8 @@ public class SellerStatFragment extends Fragment implements View.OnClickListener
         SellerMainActivity.changeTabAndToolbarStatus();
         SellerMainActivity.lockDrawer(true);
         if (TO_SELLER_ORDERS_LOGS_INDEX >= 0) {
-            toOrdersLogsPage();
+            TO_SELLER_ORDERS_LOGS_INDEX = 1;
+            SellerMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.SELLER_ORDERS_LOGS, null);
         }
         loadDataRun = new LoadDataRun();
         handler.post(loadDataRun);
@@ -158,15 +155,9 @@ public class SellerStatFragment extends Fragment implements View.OnClickListener
         }
     }
 
-    private void toOrdersLogsPage() {
-        TO_SELLER_ORDERS_LOGS_INDEX = 1;
-        Fragment fragment = PageFragmentFactory.of(PageType.SELLER_ORDERS_LOGS, null);
-        BaseCore.FRAGMENT_TAG = PageType.SELLER_ORDERS_LOGS.toString();
-        getFragmentManager().beginTransaction().remove(this).replace(R.id.sellerFrameContainer, fragment).commit();
-    }
-
     @Override
     public void onClick(View view) {
-        toOrdersLogsPage();
+        TO_SELLER_ORDERS_LOGS_INDEX = 1;
+        SellerMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.SELLER_ORDERS_LOGS, null);
     }
 }

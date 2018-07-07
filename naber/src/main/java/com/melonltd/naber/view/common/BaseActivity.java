@@ -25,7 +25,7 @@ import com.melonltd.naber.view.user.UserMainActivity;
 import java.util.Date;
 
 public class BaseActivity extends BaseCore {
-    private static final String TAG = BaseActivity.class.getSimpleName();
+//    private static final String TAG = BaseActivity.class.getSimpleName();
     public static Context context;
     public static Toolbar toolbar;
     public static FragmentManager FM;

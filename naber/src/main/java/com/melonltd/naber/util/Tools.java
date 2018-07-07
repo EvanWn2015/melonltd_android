@@ -10,7 +10,6 @@ import android.location.Location;
 import android.location.LocationManager;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
-import android.util.Log;
 import android.view.KeyEvent;
 
 import com.google.android.gms.common.GoogleApiAvailability;
@@ -36,7 +35,7 @@ import java.util.TimeZone;
  */
 
 public class Tools {
-    public static final String TAG = Tools.class.getSimpleName();
+//    public static final String TAG = Tools.class.getSimpleName();
     public static JsonParse JSONPARSE = new JsonParse();
     public static Format FORMAT = new Format();
     public static Network NETWORK = new Network();
@@ -152,11 +151,11 @@ public class Tools {
             LocationManager locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
             Location loc = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             if (loc == null) {
-                Log.d(TAG, "GPS fail");
+//                Log.d(TAG, "GPS fail");
                 loc = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
             }
             if (loc == null) {
-                Log.d(TAG, "NETWORK fail");
+//                Log.d(TAG, "NETWORK fail");
             }
             return loc;
         }
@@ -180,6 +179,8 @@ public class Tools {
             return false;
         }
     }
+
+
 
 
 }

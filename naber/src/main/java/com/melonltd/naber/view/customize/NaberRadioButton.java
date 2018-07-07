@@ -11,7 +11,6 @@ import com.google.common.base.Strings;
 import java.io.Serializable;
 
 public class NaberRadioButton implements Serializable {
-    private static final String TAG = NaberRadioButton.class.getSimpleName();
     private static final long serialVersionUID = -395093075821576420L;
     private RadioButton radio;
     private String title = "\u0020", price = "\u0020", symbol = "\u0020";
@@ -35,7 +34,6 @@ public class NaberRadioButton implements Serializable {
         this.title = Strings.padEnd(title, 20, '\u0020');
         this.price = Strings.padEnd(price, 10, '\u0020');
         this.symbol = Strings.padEnd(symbol, 3, '\u0020');
-//        this.text = this.title + Strings.padEnd("", 10, '\u0020') + this.symbol + this.price;
         this.text = this.title + this.symbol + this.price;
         this.radio.setText(this.text);
     }

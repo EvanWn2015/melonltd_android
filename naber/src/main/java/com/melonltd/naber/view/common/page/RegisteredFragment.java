@@ -37,7 +37,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class RegisteredFragment extends Fragment implements View.OnClickListener {
-    private static final String TAG = RegisteredFragment.class.getSimpleName();
+//    private static final String TAG = RegisteredFragment.class.getSimpleName();
     public static RegisteredFragment FRAGMENT = null;
 
     private AccountInfoVo account = new AccountInfoVo();

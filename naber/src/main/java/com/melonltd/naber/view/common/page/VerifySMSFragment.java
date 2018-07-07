@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,7 +30,7 @@ import java.util.Map;
 
 
 public class VerifySMSFragment extends Fragment implements View.OnClickListener {
-    private static final String TAG = VerifySMSFragment.class.getSimpleName();
+//    private static final String TAG = VerifySMSFragment.class.getSimpleName();
     public static VerifySMSFragment FRAGMENT = null;
     private EditText phoneNamberEdit, verifySMSEdit;
     private CheckBox readCheckBox;
@@ -145,7 +144,6 @@ public class VerifySMSFragment extends Fragment implements View.OnClickListener 
 
                         @Override
                         public void onFail(Exception error, String msg) {
-                            Log.d(TAG, msg);
                             new AlertView.Builder()
                                     .setContext(getContext())
                                     .setStyle(AlertView.Style.Alert)

@@ -17,12 +17,11 @@ import com.melonltd.naber.view.seller.SellerMainActivity;
 import java.util.List;
 
 public class SellerSimpleInformationFragment extends Fragment {
-    private static final String TAG = SellerSimpleInformationFragment.class.getSimpleName();
+//    private static final String TAG = SellerSimpleInformationFragment.class.getSimpleName();
     public static SellerSimpleInformationFragment FRAGMENT = null;
     private LinearLayout bulletinContent;
 
     public SellerSimpleInformationFragment() {
-        // Required empty public constructor
     }
 
     public Fragment getInstance(Bundle bundle) {
@@ -54,9 +53,9 @@ public class SellerSimpleInformationFragment extends Fragment {
             SellerMainActivity.navigationIconDisplay(true, new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    SellerMainActivity.navigationIconDisplay(false, null);
                     SellerSetUpFragment.TO_SELLER_SIMPLE_INFO_INDEX = -1;
                     SellerMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.SELLER_SET_UP, null);
+                    SellerMainActivity.navigationIconDisplay(false, null);
                 }
             });
         }

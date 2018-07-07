@@ -23,6 +23,7 @@ import com.melonltd.naber.R;
 import com.melonltd.naber.model.api.ApiManager;
 import com.melonltd.naber.model.api.ThreadCallback;
 import com.melonltd.naber.model.bean.Model;
+import com.melonltd.naber.model.constant.NaberConstant;
 import com.melonltd.naber.model.type.OrderStatus;
 import com.melonltd.naber.util.Tools;
 import com.melonltd.naber.view.seller.SellerMainActivity;
@@ -46,7 +47,7 @@ import static com.melonltd.naber.model.type.OrderStatus.UNFINISH;
 
 
 public class SellerOrdersFragment extends Fragment {
-    private static final String TAG = SellerOrdersFragment.class.getSimpleName();
+//    private static final String TAG = SellerOrdersFragment.class.getSimpleName();
     public static SellerOrdersFragment FRAGMENT = null;
     private TextView searchDateText;
     private TextView untreatedText, processingText, canFetchText;
@@ -98,14 +99,13 @@ public class SellerOrdersFragment extends Fragment {
         SellerMainActivity.lockDrawer(false);
 
         SellerMainActivity.notifyDateRange();
+
+        loadData(true);
     }
 
     @Override
     public void onStop() {
         super.onStop();
-//        if (handler != null) {
-//            handler.removeCallbacks(orderListRun);
-//        }
     }
 
     private void getViews(View v) {
@@ -177,7 +177,7 @@ public class SellerOrdersFragment extends Fragment {
             }
         });
 
-        loadData(true);
+//        loadData(true);
     }
 
     class SelectDateListener implements View.OnClickListener {
@@ -287,15 +287,18 @@ public class SellerOrdersFragment extends Fragment {
                 switch (STATUS_TAG) {
                     case UNFINISH:
                         Model.SELLER_UNFINISH_ORDERS_LIST.remove(index);
+                        adapter.notifyDataSetChanged();
                         break;
                     case PROCESSING:
                         Model.SELLER_PROCESSING_ORDERS_LIST.remove(index);
+                        adapter.notifyDataSetChanged();
                         break;
                     case CAN_FETCH:
                         Model.SELLER_CAN_FETCH_ORDERS_LIST.remove(index);
+                        adapter.notifyDataSetChanged();
                         break;
                 }
-                adapter.notifyDataSetChanged();
+//                adapter.notifyDataSetChanged();
             }
 
             @Override
@@ -415,6 +418,7 @@ public class SellerOrdersFragment extends Fragment {
 
     private void loadData(boolean isRefresh) {
         if (isRefresh) {
+            Model.SELLER_TMP_ORDERS_LIST.clear();
             switch (STATUS_TAG) {
                 case UNFINISH:
                     unReq.page = 0;
@@ -460,7 +464,7 @@ public class SellerOrdersFragment extends Fragment {
                     list.get(i).order_detail = Tools.JSONPARSE.fromJson(list.get(i).order_data, OrderDetail.class);
                 }
 
-                boolean loadingMore = list.size() % 10 == 0 && list.size() != 0;
+                boolean loadingMore = list.size() % NaberConstant.PAGE == 0 && list.size() != 0;
                 switch (STATUS_TAG) {
                     case UNFINISH:
                         unReq.loadingMore = loadingMore;

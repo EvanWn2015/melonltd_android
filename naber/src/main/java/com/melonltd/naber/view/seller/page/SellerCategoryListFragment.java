@@ -8,7 +8,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +28,7 @@ import com.melonltd.naber.util.Tools;
 import com.melonltd.naber.view.customize.SwitchButton;
 import com.melonltd.naber.view.factory.PageType;
 import com.melonltd.naber.view.seller.SellerMainActivity;
-import com.melonltd.naber.view.seller.adapter.CategoryAdapter;
+import com.melonltd.naber.view.seller.adapter.SellerCategoryAdapter;
 import com.melonltd.naber.vo.ReqData;
 import com.melonltd.naber.vo.RestaurantCategoryRelVo;
 
@@ -37,12 +36,12 @@ import cn.bingoogolapple.refreshlayout.BGANormalRefreshViewHolder;
 import cn.bingoogolapple.refreshlayout.BGARefreshLayout;
 
 public class SellerCategoryListFragment extends Fragment {
-    private static final String TAG = SellerCategoryListFragment.class.getSimpleName();
+//    private static final String TAG = SellerCategoryListFragment.class.getSimpleName();
     public static SellerCategoryListFragment FRAGMENT = null;
 
     private EditText categoryEdit;
     private Button newCategoryBtn;
-    private CategoryAdapter adapter;
+    private SellerCategoryAdapter adapter;
     private Bundle bundle;
 
     public static int TO_CATEGORY_LIST_PAGE_INDEX = -1;
@@ -64,7 +63,7 @@ public class SellerCategoryListFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        adapter = new CategoryAdapter(new SwitchListener(), new EditListener(), new DeleteListener());
+        adapter = new SellerCategoryAdapter(new SwitchListener(), new EditListener(), new DeleteListener());
     }
 
     @Override
@@ -140,7 +139,6 @@ public class SellerCategoryListFragment extends Fragment {
         ApiManager.sellerCategoryList(new ThreadCallback(getContext()) {
             @Override
             public void onSuccess(String responseBody) {
-                Log.i(TAG, responseBody);
                 Model.SELLER_CATEGORY_LIST = Tools.JSONPARSE.fromJsonList(responseBody, RestaurantCategoryRelVo[].class);
                 adapter.notifyDataSetChanged();
             }
@@ -278,7 +276,6 @@ public class SellerCategoryListFragment extends Fragment {
 
                     @Override
                     public void onFail(Exception error, String msg) {
-                        Log.i(TAG, msg);
                     }
                 });
             }

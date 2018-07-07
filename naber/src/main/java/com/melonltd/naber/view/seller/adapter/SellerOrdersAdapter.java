@@ -19,8 +19,7 @@ import com.melonltd.naber.vo.ItemVo;
 import com.melonltd.naber.vo.OrderDetail;
 
 public class SellerOrdersAdapter extends RecyclerView.Adapter<SellerOrdersAdapter.ViewHolder> {
-    private static final String TAG = SellerOrdersAdapter.class.getSimpleName();
-
+//    private static final String TAG = SellerOrdersAdapter.class.getSimpleName();
     private View.OnClickListener cancelListener,failureListener, statusChangeClickListener;
 
     public SellerOrdersAdapter(View.OnClickListener cancelListener, View.OnClickListener  failureListener, View.OnClickListener statusChangeClickListener) {
@@ -60,10 +59,9 @@ public class SellerOrdersAdapter extends RecyclerView.Adapter<SellerOrdersAdapte
         holder.userPhoneNumberText.setText(Model.SELLER_TMP_ORDERS_LIST.get(position).order_detail.user_phone);
         holder.userNameText.setText(Model.SELLER_TMP_ORDERS_LIST.get(position).order_detail.user_name);
         holder.totalAmountText.setText("$ " + Model.SELLER_TMP_ORDERS_LIST.get(position).order_price);
-
         String content = "";
         for (OrderDetail.OrderData data : Model.SELLER_TMP_ORDERS_LIST.get(position).order_detail.orders) {
-            content += "品項: " +
+            content += data.item.category_name +": " +
                     Strings.padEnd(data.item.food_name, 20, '\u0020') +
                     Strings.padEnd(("x" + data.count), 15, '\u0020') +
                     "$ " + data.item.price +

@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,6 +26,7 @@ import com.melonltd.naber.R;
 import com.melonltd.naber.model.api.ApiManager;
 import com.melonltd.naber.model.api.ThreadCallback;
 import com.melonltd.naber.model.bean.Model;
+import com.melonltd.naber.model.constant.NaberConstant;
 import com.melonltd.naber.model.service.SPService;
 import com.melonltd.naber.model.type.SwitchStatus;
 import com.melonltd.naber.util.Tools;
@@ -41,14 +41,11 @@ import java.util.List;
 import java.util.Map;
 
 public class SellerDetailFragment extends Fragment implements View.OnClickListener {
-    private static final String TAG = SellerDetailFragment.class.getSimpleName();
+//    private static final String TAG = SellerDetailFragment.class.getSimpleName();
     public static SellerDetailFragment FRAGMENT = null;
-
     private EditText bulletinEdit;
     private TextView storeStartText, storeEndText;
     private LinearLayout businessLayout;
-    private List<String> options1Items = Lists.newArrayList("00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23");
-    private List<String> options2Items = Lists.newArrayList("00", "30");
     private Map<String, Boolean> notBusinessData = Maps.<String, Boolean>newHashMap();
 
     public SellerDetailFragment() {
@@ -99,8 +96,10 @@ public class SellerDetailFragment extends Fragment implements View.OnClickListen
             SellerMainActivity.navigationIconDisplay(true, new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    backToSellerSetUpPage();
+                    SellerSetUpFragment.TO_SELLER_DETAIL_INDEX = -1;
+                    SellerMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.SELLER_SET_UP, null);
                     SellerMainActivity.navigationIconDisplay(false, null);
+
                 }
             });
         }
@@ -129,11 +128,6 @@ public class SellerDetailFragment extends Fragment implements View.OnClickListen
         SellerMainActivity.navigationIconDisplay(false, null);
     }
 
-    private void backToSellerSetUpPage() {
-        SellerSetUpFragment.TO_SELLER_DETAIL_INDEX = -1;
-        SellerMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.SELLER_SET_UP, null);
-    }
-
     private void showDatePicker(final int id) {
         InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(bulletinEdit.getWindowToken(), 0);
@@ -141,7 +135,7 @@ public class SellerDetailFragment extends Fragment implements View.OnClickListen
                 new OnOptionsSelectListener() {
                     @Override
                     public void onOptionsSelect(int options1, int option2, int options3, View v) {
-                        String tx = options1Items.get(options1) + ":" + options2Items.get(option2);
+                        String tx = NaberConstant.HOUR_OPT.get(options1) + ":" + NaberConstant.MINUTE_OPT.get(option2);
                         if (id == R.id.storeStartText) {
                             storeStartText.setText(tx);
                             storeStartText.setTag(tx);
@@ -156,7 +150,7 @@ public class SellerDetailFragment extends Fragment implements View.OnClickListen
                 .setCancelColor(getResources().getColor(R.color.naber_dividing_gray))
                 .setSubmitColor(getResources().getColor(R.color.naber_dividing_gray))
                 .build();
-        pvOptions.setNPicker(options1Items, options2Items, null);
+        pvOptions.setNPicker(NaberConstant.HOUR_OPT, NaberConstant.MINUTE_OPT, null);
         pvOptions.show();
     }
 
@@ -234,12 +228,10 @@ public class SellerDetailFragment extends Fragment implements View.OnClickListen
             ApiManager.sellerRestaurantSettingBusiness(req, new ThreadCallback(getContext()) {
                 @Override
                 public void onSuccess(String responseBody) {
-                    Log.i(TAG, responseBody);
                     notBusinessData.put(date, status.getStatus());
                 }
                 @Override
                 public void onFail(Exception error, String msg) {
-                    Log.i(TAG, msg);
                 }
             });
 

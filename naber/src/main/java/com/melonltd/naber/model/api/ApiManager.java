@@ -1,7 +1,5 @@
 package com.melonltd.naber.model.api;
 
-import android.util.Log;
-
 import com.melonltd.naber.model.service.Base64Service;
 import com.melonltd.naber.model.service.SPService;
 import com.melonltd.naber.util.Tools;
@@ -20,7 +18,7 @@ import okhttp3.Call;
  */
 
 public class ApiManager {
-    private static final String TAG = ApiManager.class.getSimpleName();
+//    private static final String TAG = ApiManager.class.getSimpleName();
     private static ClientManager CLIENT_MANAGER = ClientManager.getInstance();
 
     public static ClientManager getClient() {
@@ -59,11 +57,6 @@ public class ApiManager {
 
     // 登入
     public static void login(AccountInfoVo req, ThreadCallback callback) {
-
-        String json = Tools.JSONPARSE.toJson(req);
-        Log.i(TAG, json);
-        String ss = Base64Service.encryptBASE64(Tools.JSONPARSE.toJson(req));
-        Log.i(TAG, ss);
         Call call = getClient().post(ApiUrl.LOGIN, Base64Service.encryptBASE64(Tools.JSONPARSE.toJson(req)));
         call.enqueue(callback);
     }

@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.google.common.collect.Lists;
+import com.melonltd.naber.BuildConfig;
 import com.melonltd.naber.R;
 import com.melonltd.naber.model.constant.NaberConstant;
 import com.melonltd.naber.model.service.SPService;
@@ -17,16 +18,15 @@ import com.melonltd.naber.view.factory.PageType;
 import com.melonltd.naber.view.seller.SellerMainActivity;
 
 public class SellerSetUpFragment extends Fragment implements View.OnClickListener {
-    private static final String TAG = SellerSetUpFragment.class.getSimpleName();
+    //    private static final String TAG = SellerSetUpFragment.class.getSimpleName();
     public static SellerSetUpFragment FRAGMENT = null;
 
-    private TextView toSellerEdit, toAboutUsText, accountNumberText;
+    private TextView toSellerEdit, toAboutUsText, accountNumberText, versionName;
     public static int TO_SELLER_DETAIL_INDEX = -1;
     public static int TO_SELLER_SIMPLE_INFO_INDEX = -1;
 //    private Bundle bundle = new Bundle();
 
     public SellerSetUpFragment() {
-        // Required empty public constructor
     }
 
     public Fragment getInstance(Bundle bundle) {
@@ -57,22 +57,25 @@ public class SellerSetUpFragment extends Fragment implements View.OnClickListene
         toSellerEdit = v.findViewById(R.id.toAccountEdit);
         toAboutUsText = v.findViewById(R.id.toAboutUsText);
         accountNumberText = v.findViewById(R.id.accountNumberText);
+        versionName = v.findViewById(R.id.versionName);
         toSellerEdit.setOnClickListener(this);
         toAboutUsText.setOnClickListener(this);
+
     }
 
     @Override
     public void onResume() {
         super.onResume();
+        versionName.setText("V"+ BuildConfig.VERSION_NAME);
         SellerMainActivity.changeTabAndToolbarStatus();
         SellerMainActivity.lockDrawer(true);
         if (TO_SELLER_DETAIL_INDEX > 0) {
             SellerMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.SELLER_DETAIL, null);
-        }else if (TO_SELLER_SIMPLE_INFO_INDEX > 0){
+        } else if (TO_SELLER_SIMPLE_INFO_INDEX > 0) {
             Bundle bundle = new Bundle();
-            bundle.putStringArrayList(NaberConstant.SIMPLE_INFO, Lists.newArrayList("ABOUT_US","APPLY_OF_SELLER"));
+            bundle.putStringArrayList(NaberConstant.SIMPLE_INFO, Lists.newArrayList("ABOUT_US", "APPLY_OF_SELLER"));
             SellerMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.SELLER_SIMPLE_INFO, bundle);
-        }else {
+        } else {
             accountNumberText.setText(SPService.getAccout());
         }
     }
@@ -83,11 +86,11 @@ public class SellerSetUpFragment extends Fragment implements View.OnClickListene
         switch (view.getId()) {
             case R.id.toAccountEdit:
                 TO_SELLER_DETAIL_INDEX = 1;
-                SellerMainActivity.removeAndReplaceWhere(FRAGMENT,PageType.SELLER_DETAIL,  null);
+                SellerMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.SELLER_DETAIL, null);
                 break;
             case R.id.toAboutUsText:
                 Bundle bundle = new Bundle();
-                bundle.putStringArrayList(NaberConstant.SIMPLE_INFO, Lists.newArrayList("ABOUT_US","APPLY_OF_SELLER"));
+                bundle.putStringArrayList(NaberConstant.SIMPLE_INFO, Lists.newArrayList("ABOUT_US", "APPLY_OF_SELLER"));
                 TO_SELLER_SIMPLE_INFO_INDEX = 1;
                 SellerMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.SELLER_SIMPLE_INFO, bundle);
                 break;
