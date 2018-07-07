@@ -16,7 +16,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.KeyEvent;
 import android.widget.Toast;
 
@@ -33,6 +32,7 @@ import com.melonltd.naber.model.api.ApiCallback;
 import com.melonltd.naber.model.api.ApiManager;
 import com.melonltd.naber.model.bean.IdentityJsonBean;
 import com.melonltd.naber.model.bean.Model;
+import com.melonltd.naber.model.constant.NaberConstant;
 import com.melonltd.naber.model.service.SPService;
 import com.melonltd.naber.util.DistanceTools;
 import com.melonltd.naber.util.Tools;
@@ -44,7 +44,7 @@ import java.util.List;
 
 
 public abstract class BaseCore extends AppCompatActivity implements LocationListener {
-    private static final String TAG = BaseCore.class.getSimpleName();
+//    private static final String TAG = BaseCore.class.getSimpleName();
     public static Context context;
     private static ConnectivityManager cm;
     public static  LocationManager LOCATION_MG;
@@ -124,7 +124,7 @@ public abstract class BaseCore extends AppCompatActivity implements LocationList
 
     public static void getCurrentUser(Activity activity) {
         final FirebaseAuth auth = FirebaseAuth.getInstance();
-        auth.signInAnonymously()
+        auth.signInWithEmailAndPassword(NaberConstant.FIREBASE_ACCOUNT, NaberConstant.FIREBASE_PSW)
                 .addOnCompleteListener(activity, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
@@ -163,10 +163,8 @@ public abstract class BaseCore extends AppCompatActivity implements LocationList
                 }
                 break;
             case CAMERA_CODE:
-                Log.i(TAG, grantResults + "");
                 break;
             case IO_STREAM_CODE:
-                Log.i(TAG, grantResults + "");
                 break;
         }
     }
@@ -219,17 +217,14 @@ public abstract class BaseCore extends AppCompatActivity implements LocationList
 
     @Override
     public void onStatusChanged(String s, int i, Bundle bundle) {
-        Log.d(TAG, "onStatusChanged: ");
     }
 
     @Override
     public void onProviderEnabled(String s) {
-        Log.d(TAG, "onProviderEnabled: ");
     }
 
     @Override
     public void onProviderDisabled(String s) {
-        Log.d(TAG, "onProviderDisabled: ");
     }
 
     @Override
@@ -242,20 +237,20 @@ public abstract class BaseCore extends AppCompatActivity implements LocationList
 
 
     public static void loadRestaurantTemplate(Context context) {
-        Model.RESTAURANT_TEMPLATE.clear();
+        Model.RESTAURANT_TEMPLATE_PAGS.clear();
         ApiManager.restaurantTemplate(new ApiCallback(context) {
             @Override
             public void onSuccess(String responseBody) {
-                List<RestaurantTemplate> list = Tools.JSONPARSE.fromJsonList(responseBody, RestaurantTemplate[].class);
-                for (int i = 0; i < list.size(); i++) {
-                    list.get(i).distance = DistanceTools.getDistance(Model.LOCATION, LocationVo.of(list.get(i).latitude, list.get(i).longitude));
+                Model.RESTAURANT_TEMPLATE = Tools.JSONPARSE.fromJsonList(responseBody, RestaurantTemplate[].class);
+                for (int i = 0; i < Model.RESTAURANT_TEMPLATE.size(); i++) {
+                    Model.RESTAURANT_TEMPLATE.get(i).distance = DistanceTools.getDistance(Model.LOCATION, LocationVo.of(Model.RESTAURANT_TEMPLATE.get(i).latitude, Model.RESTAURANT_TEMPLATE.get(i).longitude));
                 }
                 Ordering<RestaurantTemplate> ordering = Ordering.natural().nullsFirst().onResultOf(new Function<RestaurantTemplate, Double>() {
                     public Double apply(RestaurantTemplate template) {
                         return template.distance;
                     }
                 });
-                Model.RESTAURANT_TEMPLATE.addAll(Lists.partition(ordering.sortedCopy(list), 10));
+                Model.RESTAURANT_TEMPLATE_PAGS.addAll(Lists.partition(ordering.sortedCopy(Model.RESTAURANT_TEMPLATE), 10));
             }
 
             @Override
@@ -285,45 +280,5 @@ public abstract class BaseCore extends AppCompatActivity implements LocationList
         Model.OPT_ITEM_2.clear();
         Model.OPT_ITEM_2.addAll(opt2);
     }
-
-
-//    public void removeFragment(){
-//        LoginFragment.FRAGMENT = null;
-//        RecoverPasswordFragment.FRAGMENT = null;
-//        RegisteredFragment.FRAGMENT = null;
-//        VerifySMSFragment.FRAGMENT = null;
-//        RegisteredSellerFragment.FRAGMENT = null;
-//        HomeFragment.FRAGMENT = null;
-//        RestaurantFragment.FRAGMENT = null;
-//        RestaurantDetailFragment.FRAGMENT = null;
-//        CategoryMenuFragment.FRAGMENT = null;
-//        MenuDetailFragment.FRAGMENT = null;
-//        ShoppingCartFragment.FRAGMENT = null;
-//        SubmitOrdersFragment.FRAGMENT = null;
-//        HistoryFragment.FRAGMENT = null;
-//        OrderDetailFragment.FRAGMENT = null;
-//        SetUpFragment.FRAGMENT = null;
-//        AccountDetailFragment.FRAGMENT = null;
-//        SimpleInformationFragment.FRAGMENT = null;
-//        ResetPasswordFragment.FRAGMENT = null;
-//        SellerSearchFragment.FRAGMENT = null;
-//        SellerOrdersFragment.FRAGMENT = null;
-//        SellerStatFragment.FRAGMENT = null;
-//        SellerOrdersLogsFragment.FRAGMENT = null;
-//        SellerOrderLogsDetailFragment.FRAGMENT = null;
-//        SellerRestaurantFragment.FRAGMENT = null;
-//        SellerCategoryListFragment.FRAGMENT = null;
-//        SellerMenuEditFragment.FRAGMENT = null;
-//        SellerSetUpFragment.FRAGMENT = null;
-//        SellerDetailFragment.FRAGMENT = null;
-//        SellerSimpleInformationFragment.FRAGMENT = null;
-
-//        for (Fragment fragment : fragmentManager.getFragments()) {
-//            Log.d(TAG, fragment + "");
-//            if (fragment instanceof AbsPageFragment) {
-//                fragmentManager.beginTransaction().remove(fragment).commit();
-//            }
-//        }
-//    }
 
 }

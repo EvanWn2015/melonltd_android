@@ -6,7 +6,6 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.os.Handler;
 import android.os.Looper;
-import android.util.Log;
 
 import com.bigkoo.alertview.AlertView;
 import com.melonltd.naber.model.service.Base64Service;
@@ -21,7 +20,7 @@ import okhttp3.Callback;
 import okhttp3.Response;
 
 public abstract class ThreadCallback implements Callback {
-    private static final String TAG = ThreadCallback.class.getSimpleName();
+//    private static final String TAG = ThreadCallback.class.getSimpleName();
     private AlertDialog DIALOG = null;
 
     abstract public void onSuccess(String responseBody);
@@ -33,7 +32,7 @@ public abstract class ThreadCallback implements Callback {
     public ThreadCallback(Context context) {
         this.context = context;
         if (! (context instanceof Activity)) {
-            Log.d(TAG, "! context instanceof Activity");
+//            Log.d(TAG, "! context instanceof Activity");
         }
         this.DIALOG = LoadingBarTools.newLoading(context);
     }
@@ -51,7 +50,7 @@ public abstract class ThreadCallback implements Callback {
                     return;
                 }
                 if (e.getMessage().contains("Canceled") || e.getMessage().contains("Socket closed")) {
-                    Log.e(TAG, "fail", e);
+//                    Log.e(TAG, "fail", e);
                 } else {
                     DIALOG.cancel();
                     onFail(e, e.getMessage());
@@ -82,7 +81,7 @@ public abstract class ThreadCallback implements Callback {
                     }
 
                 } catch (Exception e) {
-                    Log.e(TAG, "fail", e);
+//                    Log.e(TAG, "fail", e);
 //                    DIALOG.hide();
                     onFailure(call, new IOException("Failed"));
                 }

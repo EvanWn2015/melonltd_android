@@ -44,10 +44,10 @@ public class SPService {
         return SERVICE.preferences.getString(String.valueOf(R.string.remember_account),"");
     }
 
-    public static void setRememberIdentity(String identity) {
+    public static void setIdentity(String identity) {
         SERVICE.preferences.edit().putString(String.valueOf(R.string.remember_identity),identity).commit();
     }
-    public static String getRememberIdentity() {
+    public static String getIdentity() {
         return SERVICE.preferences.getString(String.valueOf(R.string.remember_identity),"");
     }
 
@@ -71,12 +71,24 @@ public class SPService {
         SERVICE.preferences.edit().putString(String.valueOf(R.string.user_cache_shopping_car_data),Tools.JSONPARSE.toJson(data)).commit();
     }
     public static List<OrderDetail> getUserCacheShoppingCarData() {
-        String data = SERVICE.preferences.getString(String.valueOf(R.string.user_cache_shopping_car_data),null);
+        String data = SERVICE.preferences.getString(String.valueOf(R.string.user_cache_shopping_car_data),"");
         return Tools.JSONPARSE.fromJsonList(data,OrderDetail[].class);
     }
 
 
+    public static void setRememberMe(boolean rememberMe) {
+        SERVICE.preferences.edit().putBoolean(String.valueOf(R.string.remember_me),rememberMe).commit();
+    }
+    public static boolean getRememberMe() {
+        return SERVICE.preferences.getBoolean(String.valueOf(R.string.remember_me),false);
+    }
 
+    public static void setAccout(String account) {
+        SERVICE.preferences.edit().putString(String.valueOf(R.string.user_account),account).commit();
+    }
+    public static String getAccout() {
+        return SERVICE.preferences.getString(String.valueOf(R.string.user_account),"");
+    }
     public static void setUserName(String userName) {
         SERVICE.preferences.edit().putString(String.valueOf(R.string.user_name),userName).commit();
     }
@@ -113,9 +125,16 @@ public class SPService {
     }
 
     public static void removeAll() {
-        SERVICE.preferences.edit().clear().commit();
+        if (getRememberMe()){
+            String account = getAccout();
+            boolean rememberMe = getRememberMe();
+            SERVICE.preferences.edit().clear().commit();
+            setAccout(account);
+            setRememberMe(rememberMe);
+        }else {
+            SERVICE.preferences.edit().clear().commit();
+        }
     }
-
 
     public void setPreferences(SharedPreferences preferences) {
         this.preferences = preferences;

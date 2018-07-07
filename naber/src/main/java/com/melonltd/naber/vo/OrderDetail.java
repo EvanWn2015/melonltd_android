@@ -10,9 +10,10 @@ public class OrderDetail implements Serializable {
     private static final long serialVersionUID = -5397846887657210105L;
     public String restaurant_uuid;
     public String restaurant_name = "";
-    public String fetch_date;
+    public String restaurant_address;
     public String user_name;
     public String user_phone;
+    public String fetch_date;
     public String user_message;
     public List<OrderData> orders;
 

@@ -11,7 +11,7 @@ import java.net.URLEncoder;
 
 
 public class Base64Service {
-    private static final String TAG = Base64Service.class.getSimpleName();
+//    private static final String TAG = Base64Service.class.getSimpleName();
 
     public static String encryptBASE64(String key) {
         try {

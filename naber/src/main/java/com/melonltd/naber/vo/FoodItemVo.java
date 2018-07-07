@@ -9,9 +9,10 @@ import java.util.List;
 public class FoodItemVo implements Serializable{
     private static final long serialVersionUID = -2613643417174779593L;
     public String food_uuid;
+    public String category_name;
     public String food_name;
     public String price;
-    public String food_photo = "";
+    public String food_photo;
 
     public List<ItemVo> scopes = Lists.<ItemVo>newArrayList();
     public List<ItemVo> opts = Lists.<ItemVo>newArrayList();
@@ -23,7 +24,7 @@ public class FoodItemVo implements Serializable{
         return MoreObjects.toStringHelper(this.getClass())
                 .add("food_uuid", food_uuid)
                 .add("food_name", food_name)
-//				.add("photo", photo)
+				.add("category_name", category_name)
                 .add("price", price)
                 .add("scopes", scopes)
                 .add("opts", opts)

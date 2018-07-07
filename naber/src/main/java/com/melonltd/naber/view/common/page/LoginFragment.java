@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,7 +21,6 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.melonltd.naber.R;
 import com.melonltd.naber.model.api.ApiManager;
 import com.melonltd.naber.model.api.ThreadCallback;
-import com.melonltd.naber.model.bean.Model;
 import com.melonltd.naber.model.service.SPService;
 import com.melonltd.naber.model.type.Identity;
 import com.melonltd.naber.util.Tools;
@@ -36,16 +34,12 @@ import com.melonltd.naber.vo.AccountInfoVo;
 import java.util.Date;
 
 public class LoginFragment extends Fragment implements View.OnClickListener {
-    private static final String TAG = LoginFragment.class.getSimpleName();
+//    private static final String TAG = LoginFragment.class.getSimpleName();
     public static LoginFragment FRAGMENT = null;
     private EditText accountEdit, passwordEdit;
     private CheckBox rememberMe;
 
     public LoginFragment() {
-    }
-
-    public Fragment newInstance(Object... o) {
-        return new LoginFragment();
     }
 
     public Fragment getInstance(Bundle bundle) {
@@ -95,6 +89,8 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
     public void onResume() {
         super.onResume();
         BaseActivity.changeToolbarStatus();
+        accountEdit.setText(SPService.getAccout());
+        rememberMe.setChecked(SPService.getRememberMe());
     }
 
     @Override
@@ -116,21 +112,21 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                             AccountInfoVo resp = Tools.JSONPARSE.fromJson(responseBody, AccountInfoVo.class);
                             SPService.setOauth(resp.account_uuid);
                             SPService.setUserName(resp.name);
+                            SPService.setAccout(resp.account);
                             SPService.setUserPhone(resp.phone);
                             SPService.setOauth(resp.account_uuid);
-                            Log.d(TAG, Model.BANNER_IMAGES.toString());
-                            if (rememberMe.isChecked()){
-                                SPService.setLoginLimit(new Date().getTime());
-                                SPService.setRememberAccount(resp.phone);
-                                SPService.setRememberIdentity(resp.identity);
-                            }
+                            SPService.setIdentity(resp.identity);
 
-                            if (Identity.getUserValues().contains(Identity.of(resp.identity))){
+                            SPService.setRememberMe(rememberMe.isChecked());
+                            SPService.setLoginLimit(new Date().getTime());
+                            SPService.setRememberAccount(resp.phone);
+
+                            if (Identity.getUserValues().contains(Identity.of(resp.identity))) {
                                 BaseCore.loadRestaurantTemplate(getContext());
                                 startActivity(new Intent(getActivity().getBaseContext(), UserMainActivity.class));
-                            }else if (Identity.SELLERS.equals(Identity.of(resp.identity))){
+                            } else if (Identity.SELLERS.equals(Identity.of(resp.identity))) {
                                 startActivity(new Intent(getActivity().getBaseContext(), SellerMainActivity.class));
-                            }else{
+                            } else {
                                 new AlertView.Builder()
                                         .setContext(getContext())
                                         .setStyle(AlertView.Style.Alert)
@@ -170,10 +166,10 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-    class HideKeyboard implements View.OnFocusChangeListener{
+    class HideKeyboard implements View.OnFocusChangeListener {
         @Override
         public void onFocusChange(View v, boolean hasFocus) {
-            if (!hasFocus){
+            if (!hasFocus) {
                 InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
                 imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
             }

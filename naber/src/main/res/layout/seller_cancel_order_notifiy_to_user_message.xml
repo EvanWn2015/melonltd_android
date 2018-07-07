@@ -36,18 +36,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
+                android:layout_marginLeft="16dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 android:layout_weight="1"
                 android:text="告訴客人原因"
                 android:textColor="@android:color/black"
                 android:textSize="16sp"
-                app:layout_constraintBottom_toTopOf="@+id/defaultText1"
+                app:layout_constraintBottom_toTopOf="@+id/nameEdit"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView86" />
 
             <TextView
-                android:id="@+id/defaultText1"
+                android:id="@+id/nameEdit"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
@@ -59,13 +60,13 @@
                 android:text="我現在忙不過來，抱歉!"
                 android:textColor="@android:color/black"
                 android:textSize="14sp"
-                app:layout_constraintBottom_toTopOf="@+id/defaultText2"
+                app:layout_constraintBottom_toTopOf="@+id/priceEdit"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView90" />
 
             <TextView
-                android:id="@+id/defaultText2"
+                android:id="@+id/priceEdit"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
@@ -80,7 +81,7 @@
                 app:layout_constraintBottom_toTopOf="@+id/customEdit"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/defaultText1" />
+                app:layout_constraintTop_toBottomOf="@+id/nameEdit" />
 
             <EditText
                 android:id="@+id/customEdit"
@@ -99,7 +100,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/defaultText2" />
+                app:layout_constraintTop_toBottomOf="@+id/priceEdit" />
 
         </android.support.constraint.ConstraintLayout>
     </ScrollView>

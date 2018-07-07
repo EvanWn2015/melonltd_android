@@ -1,108 +1,141 @@
 package com.melonltd.naber.model.service;
 
 import android.app.Notification;
-import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.media.RingtoneManager;
 import android.os.Build;
-import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
 
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.melonltd.naber.R;
-import com.melonltd.naber.util.Tools;
 import com.melonltd.naber.view.common.BaseActivity;
 
-import java.io.IOException;
-import java.net.URL;
 import java.util.Map;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
-    public static final String FCM_PARAM = "picture";
-    private static final String CHANNEL_NAME = "FCM";
-    private static final String CHANNEL_DESC = "Firebase Cloud Messaging";
+//    private static final String TAG = MyFirebaseMessagingService.class.getSimpleName();
+//    public static final String FCM_PARAM = "picture";
+//    private static final String CHANNEL_NAME = "FCM";
+//    private static final String CHANNEL_DESC = "Firebase Cloud Messaging";
     private int numMessages = 0;
+
+//    private static List<Identity> USER_IDENTITY = Identity.getUserValues();
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-        Log.d("FCM", "onMessageReceived:  " + remoteMessage);
-        Map<String, String> map  = remoteMessage.getData();
-        Log.d("FCM", "onMessageReceived:  " + Tools.JSONPARSE.toJson(map));
+//        Log.i(TAG, Tools.JSONPARSE.toJson(remoteMessage.getData()));
+
+        Map<String, String> map = remoteMessage.getData();
+//        Identity identity = Identity.of(map.get("identity"));
+//        Identity currentIdentity = Identity.of(SPService.getIdentity());
+//        if (USER_IDENTITY.containsAll(Lists.newArrayList(identity, currentIdentity))) {
+//            sendNotification(map);
+//        } else if (Lists.newArrayList(identity, currentIdentity).contains(Identity.SELLERS)) {
+//            sendNotification(map);
+//        }
         sendNotification(map);
     }
 
-    private void sendNotification( Map<String, String> data) {
-        Bundle bundle = new Bundle();
-        bundle.putString(FCM_PARAM, data.get(FCM_PARAM));
+    private void sendNotification(Map<String, String> data) {
+//        Bundle bundle = new Bundle();
+//        bundle.putString(FCM_PARAM, data.get(FCM_PARAM));
 
         Intent intent = new Intent(this, BaseActivity.class);
-        intent.putExtras(bundle);
+//        intent.putExtras(bundle);
 
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        Bitmap restaurantLogo = null;
-        try {
-            restaurantLogo = BitmapFactory.decodeStream(new URL("https://firebasestorage.googleapis.com/v0/b/naber-20180622.appspot.com/o/restaurant%2Flogo%2FRESTAURANT_20180622_113122_120_d7c29279-1e0d-489a-b854-2e5270da7267.jpg?alt=media&token=a443d757-f8a9-400e-9012-171e669d981c").openConnection().getInputStream());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+//        Bitmap restaurantLogo = null;
+//        try {
+//            restaurantLogo = BitmapFactory.decodeStream(new URL(data.get("icon")).openConnection().getInputStream());
+//        } catch (IOException e) {
+////            e.printStackTrace();
+//        }
 
         NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, "1")
-                .setContentTitle("sss")
-                .setContentText("aaa")
+                .setContentTitle(data.get("title"))
+                .setContentText(data.get("message"))
                 .setAutoCancel(true)
-                .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
                 .setContentIntent(pendingIntent)
-                .setContentInfo("Hello")
-//                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.naber_icon_logo_reverse))
-                .setLargeIcon(restaurantLogo == null ? BitmapFactory.decodeResource(getResources(), R.mipmap.naber_icon_logo_reverse): restaurantLogo)
+//                .setContentInfo("Hello")
+                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.naber_icon_logo_reverse))
                 .setColor(getResources().getColor(R.color.colorAccent))
                 .setLights(Color.RED, 1000, 300)
-                .setDefaults(Notification.DEFAULT_VIBRATE)
-                .setNumber(++numMessages)
-                .setSmallIcon(R.drawable.naber_icon_logo);
+//                .setDefaults(Notification.DEFAULT_VIBRATE)
+//                .setNumber(1)
+                .setSmallIcon(R.drawable.ic_notif_eca_small);
 
-        try {
-//            String picture = data.get(FCM_PARAM);
-            String picture ="https://firebasestorage.googleapis.com/v0/b/naber-20180622.appspot.com/o/userUSER_20180620_b39c9635-a05e-4def-8180-087bdbaa1157.jpg?alt=media&token=a7b069e9-03d7-4b52-92a8-92f32740ebde";
-            if (picture != null && !"".equals(picture)) {
-                URL url = new URL(picture);
-                Bitmap bigPicture = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-                notificationBuilder.setStyle(
-                        new NotificationCompat.BigPictureStyle().bigPicture(bigPicture).setSummaryText("AAA")
-                );
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+            notificationBuilder.setStyle(new NotificationCompat.BigTextStyle().setBigContentTitle(data.get("title")).bigText(data.get("message")));
         }
+
+
+        // 額外通知設定
+        Notification note = notificationBuilder.build();
+        // 通知 震動
+//        if (SPService.getNotifyShake()) {
+//            note.defaults |= Notification.DEFAULT_VIBRATE;
+//        }
+//        // 通知 聲音
+//        if (SPService.getNotifySound()) {
+//            note.defaults |= Notification.DEFAULT_SOUND;
+//        }
+        // 通知 燈光
+        note.defaults |= Notification.DEFAULT_LIGHTS;
+
+//        NotificationCompat.BigTextStyle style = new NotificationCompat.BigTextStyle();
+//        style.setBigContentTitle(data.get("title"));
+//        style.bigText(data.get("message"));
+//        style.setSummaryText(context.getString(R.string.app_name));
+
+
+        // 通知 震動
+        if (SPService.getNotifyShake()) {
+            note.vibrate = new long[]{100, 200, 300, 400, 500};
+//            note.setVibrate(new long[]{100, 200, 300, 400, 500});
+        }
+        // 通知 聲音
+        if (SPService.getNotifySound()) {
+            note.sound = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+//            notificationBuilder.setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION));
+        }
+
+//        try {
+//            String picture = data.get("picture");
+//            if (picture != null && !"".equals(picture)) {
+//                URL url = new URL(picture);
+//                Bitmap bigPicture = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+//                notificationBuilder.setStyle(new NotificationCompat.BigPictureStyle().bigPicture(bigPicture));
+//            }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        }
 
         NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            NotificationChannel channel = new NotificationChannel("1", CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT
-            );
-            channel.setDescription(CHANNEL_DESC);
-            channel.setShowBadge(true);
-            channel.canShowBadge();
-            channel.enableLights(true);
-            channel.setLightColor(Color.RED);
-            channel.enableVibration(true);
-            channel.setVibrationPattern(new long[]{100, 200, 300, 400, 500});
-
-            assert notificationManager != null;
-            notificationManager.createNotificationChannel(channel);
-        }
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+//            NotificationChannel channel = new NotificationChannel("1", CHANNEL_NAME, NotificationManager.IMPORTANCE_DEFAULT
+//            );
+//            channel.setDescription(CHANNEL_DESC);
+//            channel.setShowBadge(true);
+//            channel.canShowBadge();
+//            channel.enableLights(true);
+//            channel.setLightColor(Color.RED);
+//            channel.enableVibration(true);
+//            channel.setVibrationPattern(new long[]{100, 200, 300, 400, 500});
+//
+//            assert notificationManager != null;
+//            notificationManager.createNotificationChannel(channel);
+//        }
 
         assert notificationManager != null;
-        notificationManager.notify(0, notificationBuilder.build());
+        notificationManager.notify(numMessages, note);
     }
 
 }

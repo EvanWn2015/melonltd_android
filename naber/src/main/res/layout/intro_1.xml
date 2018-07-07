@@ -8,6 +8,7 @@
     android:gravity="center">
 
     <ImageView
+        android:src="@drawable/intro_01"
         android:id="@+id/introImage"
         android:layout_width="wrap_content"
         android:layout_height="0dp"

@@ -17,14 +17,16 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        fresco:failureImage="@drawable/naber_icon_logo_reverse" />
+        fresco:failureImage="@drawable/naber_icon_logo_reverse"
+        android:layout_marginLeft="8dp" />
 
     <TextView
         android:id="@+id/ordersItemNameText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginLeft="16dp"
         android:layout_marginStart="16dp"
-        android:text="珍珠奶茶"
+        android:text=""
         android:textColor="@android:color/black"
         android:textSize="14sp"
         app:layout_constraintStart_toEndOf="@+id/ordersItemIconImageView"
@@ -34,7 +36,7 @@
         android:id="@+id/ordersItemScopeText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="中杯，正常甜，正常冰"
+        android:text=""
         android:textSize="10sp"
         app:layout_constraintStart_toStartOf="@+id/ordersItemNameText"
         app:layout_constraintTop_toBottomOf="@+id/ordersItemNameText" />
@@ -67,7 +69,7 @@
             android:background="@android:color/transparent"
             android:paddingEnd="0dp"
             android:paddingStart="0dp"
-            android:text="100"
+            android:text="1"
             android:textAlignment="center"
             android:textSize="14sp"
             android:visibility="visible" />
@@ -88,8 +90,9 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
         android:layout_weight="1"
-        android:text="40"
+        android:text="0"
         android:textColor="@android:color/black"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/linearLayout100"
@@ -101,6 +104,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
         android:background="@android:color/transparent"
         android:src="@drawable/naber_trash_can_icon"
         app:layout_constraintBottom_toBottomOf="@+id/linearLayout100"

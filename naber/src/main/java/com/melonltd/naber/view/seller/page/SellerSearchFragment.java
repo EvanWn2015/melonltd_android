@@ -1,14 +1,16 @@
 package com.melonltd.naber.view.seller.page;
 
+import android.content.Context;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -16,29 +18,32 @@ import android.widget.TextView;
 import com.bigkoo.alertview.AlertView;
 import com.bigkoo.alertview.OnItemClickListener;
 import com.google.common.base.Strings;
-import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import com.melonltd.naber.R;
 import com.melonltd.naber.model.api.ApiManager;
 import com.melonltd.naber.model.api.ThreadCallback;
+import com.melonltd.naber.model.bean.Model;
+import com.melonltd.naber.model.type.OrderStatus;
+import com.melonltd.naber.util.Tools;
 import com.melonltd.naber.view.seller.SellerMainActivity;
-import com.melonltd.naber.view.seller.adapter.SearchAdapter;
+import com.melonltd.naber.view.seller.adapter.SellerQuickSearchAdapter;
+import com.melonltd.naber.vo.OrderDetail;
+import com.melonltd.naber.vo.OrderVo;
+import com.melonltd.naber.vo.ReqData;
 
 import java.util.List;
+import java.util.Map;
 
 import cn.bingoogolapple.refreshlayout.BGANormalRefreshViewHolder;
 import cn.bingoogolapple.refreshlayout.BGARefreshLayout;
 
-public class SellerSearchFragment extends Fragment {
-    private static final String TAG = SellerSearchFragment.class.getSimpleName();
+public class SellerSearchFragment extends Fragment implements View.OnClickListener {
+//    private static final String TAG = SellerSearchFragment.class.getSimpleName();
     public static SellerSearchFragment FRAGMENT = null;
 
     private EditText phoneEditText;
+    private SellerQuickSearchAdapter adapter;
     private Button phoneSearchBtn;
-
-    private BGARefreshLayout searchRefreshLayout;
-    private SearchAdapter adapter;
-    private RecyclerView recyclerView;
-    private List<String> listData = Lists.newArrayList();
 
     public SellerSearchFragment() {
     }
@@ -51,17 +56,10 @@ public class SellerSearchFragment extends Fragment {
         return FRAGMENT;
     }
 
-    public Fragment newInstance(Object... o) {
-        return new SellerSearchFragment();
-    }
-
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        for (int i = 0; i < 10; i++) {
-            listData.add("listData : " + i);
-        }
-        adapter = new SearchAdapter(listData);
+        adapter = new SellerQuickSearchAdapter(new StatusChangeClickListener(), new FailureListener(), new CancelListener());
     }
 
     @Override
@@ -69,7 +67,6 @@ public class SellerSearchFragment extends Fragment {
         if (container.getTag(R.id.seller_search_main_page) == null) {
             View v = inflater.inflate(R.layout.fragment_seller_search, container, false);
             getViews(v);
-            setListener();
             container.setTag(R.id.seller_search_main_page, v);
             return v;
         }
@@ -81,13 +78,12 @@ public class SellerSearchFragment extends Fragment {
         super.onResume();
         SellerMainActivity.lockDrawer(true);
         SellerMainActivity.changeTabAndToolbarStatus();
-//        SellerMainActivity.toolbar.setNavigationIcon(null);
     }
 
     private void getViews(View v) {
         phoneEditText = v.findViewById(R.id.phoneEditText);
         phoneSearchBtn = v.findViewById(R.id.phoneSearchBtn);
-        searchRefreshLayout = v.findViewById(R.id.sellerSearchRefreshLayout);
+        final BGARefreshLayout searchRefreshLayout = v.findViewById(R.id.sellerSearchRefreshLayout);
         BGANormalRefreshViewHolder refreshViewHolder = new BGANormalRefreshViewHolder(getContext(), true);
         refreshViewHolder.setPullDownRefreshText("Pull");
         refreshViewHolder.setRefreshingText("Pull to refresh");
@@ -95,70 +91,96 @@ public class SellerSearchFragment extends Fragment {
         refreshViewHolder.setLoadingMoreText("加載");
 
         searchRefreshLayout.setRefreshViewHolder(refreshViewHolder);
-        recyclerView = v.findViewById(R.id.searchRecyclerView);
+        RecyclerView recyclerView = v.findViewById(R.id.searchRecyclerView);
 
         final LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
-    }
 
-    private void setListener() {
+        // setListener
+        phoneSearchBtn.setOnClickListener(this);
+        v.setOnClickListener(this);
+        recyclerView.setOnClickListener(this);
         recyclerView.setAdapter(adapter);
-        adapter.setOnClickListeners(new CancelListener(), new ProcessingListener(), new FailureListener(), new CanFetchListener(), new FinishListener());
         searchRefreshLayout.setDelegate(new BGARefreshLayout.BGARefreshLayoutDelegate() {
             @Override
             public void onBGARefreshLayoutBeginRefreshing(BGARefreshLayout refreshLayout) {
-                ApiManager.test(new ThreadCallback(getContext()) {
-                    @Override
-                    public void onSuccess(String responseBody) {
-                        listData.clear();
-                        adapter.notifyDataSetChanged();
-                        for (int i = 0; i < 10; i++) {
-                            listData.add("listData : " + i);
-                        }
-                        adapter.notifyDataSetChanged();
-                        searchRefreshLayout.endRefreshing();
-                    }
-
-                    @Override
-                    public void onFail(Exception error, String msg) {
-                        searchRefreshLayout.endRefreshing();
-                    }
-                });
-
+                searchRefreshLayout.endRefreshing();
+                phoneSearchBtn.callOnClick();
             }
 
             @Override
             public boolean onBGARefreshLayoutBeginLoadingMore(BGARefreshLayout refreshLayout) {
-//                searchRefreshLayout.endLoadingMore();
-//                for (int i = 0; i < 10; i++) {
-//                    listData.add("listData : " + i);
-//                }
-//                adapter.notifyDataSetChanged();
-//                searchRefreshLayout.endRefreshing();
-                ApiManager.test(new ThreadCallback(getContext()) {
-                    @Override
-                    public void onSuccess(String responseBody) {
-                        for (int i = 0; i < 10; i++) {
-                            listData.add("listData : " + i);
-                        }
-                        adapter.notifyDataSetChanged();
-                        searchRefreshLayout.endRefreshing();
-                    }
-
-                    @Override
-                    public void onFail(Exception error, String msg) {
-                        searchRefreshLayout.endRefreshing();
-                    }
-                });
+                searchRefreshLayout.endLoadingMore();
                 return false;
             }
         });
     }
 
+    @Override
+    public void onClick(View view) {
+        InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+        if (view.getId() == R.id.phoneSearchBtn) {
+            loadData();
+        }
+    }
+
+    private void loadData() {
+        Model.SELLER_QUICK_SEARCH_ORDERS.clear();
+        adapter.notifyDataSetChanged();
+        if (phoneEditText.getText().toString().length() < 4) {
+            new AlertView.Builder()
+                    .setTitle("")
+                    .setMessage("輸入號碼未滿4位數，請正確輸入。")
+                    .setContext(getContext())
+                    .setStyle(AlertView.Style.Alert)
+                    .setCancelText("確定")
+                    .build()
+                    .setCancelable(true)
+                    .show();
+
+        } else {
+            Map<String, String> req = Maps.newHashMap();
+            req.put("phone", phoneEditText.getText().toString());
+            ApiManager.sellerQuickSearch(req, new ThreadCallback(getContext()) {
+                @Override
+                public void onSuccess(String responseBody) {
+                    List<OrderVo> list = Tools.JSONPARSE.fromJsonList(responseBody, OrderVo[].class);
+                    if (list.size() == 0) {
+                        new AlertView.Builder()
+                                .setTitle("")
+                                .setMessage("目前查無此訂單，\n請確認取餐時間，\n或手機號碼是否正確！！")
+                                .setContext(getContext())
+                                .setStyle(AlertView.Style.Alert)
+                                .setCancelText("確定")
+                                .build()
+                                .setCancelable(true)
+                                .show();
+                    } else {
+                        for (int i = 0; i < list.size(); i++) {
+                            list.get(i).order_detail = Tools.JSONPARSE.fromJson(list.get(i).order_data, OrderDetail.class);
+                        }
+                        Model.SELLER_QUICK_SEARCH_ORDERS.addAll(list);
+                        adapter.notifyDataSetChanged();
+                    }
+                }
+
+                @Override
+                public void onFail(Exception error, String msg) {
+
+                }
+            });
+        }
+    }
+
     class CancelListener implements View.OnClickListener {
         @Override
-        public void onClick(final View view) {
+        public void onClick(final View v) {
+            final int index = (int) v.getTag();
+            final ReqData req = new ReqData();
+            req.uuid = Model.SELLER_QUICK_SEARCH_ORDERS.get(index).order_uuid;
+            req.type = OrderStatus.CANCEL.name();
             final CancelListenerView extView = new CancelListenerView();
             new AlertView.Builder()
                     .setContext(getContext())
@@ -168,9 +190,25 @@ public class SellerSearchFragment extends Fragment {
                         @Override
                         public void onItemClick(Object o, int position) {
                             if (position == 1) {
-                                int index = listData.indexOf((String) view.getTag());
-                                listData.remove((String) view.getTag());
-                                adapter.notifyItemRemoved(index);
+                                req.message = extView.getMessage();
+                                ApiManager.sellerChangeOrder(req, new ThreadCallback(getContext()) {
+                                    @Override
+                                    public void onSuccess(final String responseBody) {
+                                        new Handler().postDelayed(new Runnable() {
+                                            @Override
+                                            public void run() {
+//                                                Log.i(TAG, responseBody);
+                                                phoneSearchBtn.callOnClick();
+                                                adapter.notifyDataSetChanged();
+                                            }
+                                        } ,500);
+
+                                    }
+                                    @Override
+                                    public void onFail(Exception error, String msg) {
+
+                                    }
+                                });
                             }
                         }
                     })
@@ -181,41 +219,70 @@ public class SellerSearchFragment extends Fragment {
         }
     }
 
-    class ProcessingListener implements View.OnClickListener {
+
+    class StatusChangeClickListener implements View.OnClickListener {
         @Override
-        public void onClick(View view) {
-            Object o = view.getTag();
-            Log.d(TAG, o + "");
-            int index = listData.indexOf((String) view.getTag());
-            listData.remove((String) view.getTag());
-            adapter.notifyItemRemoved(index);
+        public void onClick(View v) {
+            final int index = (int) v.getTag();
+            final ReqData req = new ReqData();
+            String alertMsg = "";
+            switch (v.getId()) {
+                case R.id.processingBtn:
+                    req.type = OrderStatus.PROCESSING.name();
+                    alertMsg = "確認開始製作此訂單";
+                    break;
+                case R.id.canFetchBtn:
+                    req.type = OrderStatus.CAN_FETCH.name();
+                    alertMsg = "確認此訂單已可領取";
+                    break;
+                case R.id.finishBtn:
+                    req.type = OrderStatus.FINISH.name();
+                    alertMsg = "確認此訂單已交易完成";
+                    break;
+            }
+
+            req.uuid = Model.SELLER_QUICK_SEARCH_ORDERS.get(index).order_uuid;
+
+            new AlertView.Builder()
+                    .setContext(getContext())
+                    .setStyle(AlertView.Style.Alert)
+                    .setTitle("")
+                    .setMessage(alertMsg)
+                    .setOthers(new String[]{"返回", "確定"})
+                    .setOnItemClickListener(new OnItemClickListener() {
+                        @Override
+                        public void onItemClick(Object o, int position) {
+                            if (position == 1) {
+                                new Handler().postDelayed(new StatusChangeRun(req), 300);
+                            }
+                        }
+                    })
+                    .build()
+                    .setCancelable(true)
+                    .show();
         }
     }
 
-    class FailureListener implements View.OnClickListener {
-        @Override
-        public void onClick(View view) {
-            int index = listData.indexOf((String) view.getTag());
-            listData.remove((String) view.getTag());
-            adapter.notifyItemRemoved(index);
+    class StatusChangeRun implements Runnable{
+        private ReqData req;
+        StatusChangeRun(ReqData req){
+            this.req = req;
         }
-    }
-
-    class CanFetchListener implements View.OnClickListener {
         @Override
-        public void onClick(View view) {
-            int index = listData.indexOf((String) view.getTag());
-            listData.remove((String) view.getTag());
-            adapter.notifyItemRemoved(index);
-        }
-    }
+        public void run() {
+            ApiManager.sellerChangeOrder(req, new ThreadCallback(getContext()) {
+                @Override
+                public void onSuccess(String responseBody) {
+//                    Log.i(TAG, responseBody);
+                    phoneSearchBtn.callOnClick();
+                    adapter.notifyDataSetChanged();
+                }
 
-    class FinishListener implements View.OnClickListener {
-        @Override
-        public void onClick(View view) {
-            int index = listData.indexOf((String) view.getTag());
-            listData.remove((String) view.getTag());
-            adapter.notifyItemRemoved(index);
+                @Override
+                public void onFail(Exception error, String msg) {
+
+                }
+            });
         }
     }
 
@@ -228,8 +295,8 @@ public class SellerSearchFragment extends Fragment {
 
         CancelListenerView() {
             this.view = getLayoutInflater().inflate(R.layout.seller_cancel_order_notifiy_to_user_message, null);
-            this.defText1 = view.findViewById(R.id.defaultText1);
-            this.defText2 = view.findViewById(R.id.defaultText2);
+            this.defText1 = view.findViewById(R.id.nameEdit);
+            this.defText2 = view.findViewById(R.id.priceEdit);
             this.customEdit = view.findViewById(R.id.customEdit);
             // 先帶入預設一
             this.msg = defText1.getText().toString();
@@ -244,12 +311,12 @@ public class SellerSearchFragment extends Fragment {
         @Override
         public void onClick(View v) {
             switch (v.getId()) {
-                case R.id.defaultText1:
+                case R.id.nameEdit:
                     v.setBackgroundResource(R.drawable.naber_reverse_orange_button_style);
                     this.defText2.setBackgroundResource(R.drawable.naber_reverse_gary_button_style);
                     this.msg = defText1.getText().toString();
                     break;
-                case R.id.defaultText2:
+                case R.id.priceEdit:
                     v.setBackgroundResource(R.drawable.naber_reverse_orange_button_style);
                     this.defText1.setBackgroundResource(R.drawable.naber_reverse_gary_button_style);
                     this.msg = defText2.getText().toString();
@@ -266,6 +333,52 @@ public class SellerSearchFragment extends Fragment {
                 return customEdit.getText().toString();
             }
             return this.msg;
+        }
+    }
+
+    class FailureListener implements View.OnClickListener {
+        @Override
+        public void onClick(final View v) {
+            final int index = (int) v.getTag();
+            final ReqData req = new ReqData();
+            req.uuid = Model.SELLER_QUICK_SEARCH_ORDERS.get(index).order_uuid;
+            req.type = OrderStatus.FAIL.name();
+            final String msg = "確定客戶跑單嗎？\n會影響客戶點餐的權益以及紅利點數";
+            new AlertView.Builder()
+                    .setContext(getContext())
+                    .setStyle(AlertView.Style.Alert)
+                    .setTitle("")
+                    .setMessage(msg)
+                    .setOthers(new String[]{"返回", "送出"})
+                    .setOnItemClickListener(new OnItemClickListener() {
+                        @Override
+                        public void onItemClick(Object o, int position) {
+                            if (position == 1) {
+                                req.message = "你的商品超過時間未領取，記點一次，請注意往後的訂餐權利！";
+                                ApiManager.sellerChangeOrder(req, new ThreadCallback(getContext()) {
+                                    @Override
+                                    public void onSuccess(final String responseBody) {
+                                        new Handler().postDelayed(new Runnable() {
+                                            @Override
+                                            public void run() {
+//                                                Log.i(TAG, responseBody);
+                                                phoneSearchBtn.callOnClick();
+                                                adapter.notifyDataSetChanged();
+                                            }
+                                        } ,500);
+
+                                    }
+                                    @Override
+                                    public void onFail(Exception error, String msg) {
+
+                                    }
+                                });
+                            }
+                        }
+                    })
+                    .build()
+                    .setCancelable(true)
+                    .show();
         }
     }
 

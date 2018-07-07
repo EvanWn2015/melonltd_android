@@ -4,7 +4,6 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v4.app.Fragment;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -31,11 +30,12 @@ import java.util.Map;
 
 
 public class VerifySMSFragment extends Fragment implements View.OnClickListener {
-    private static final String TAG = VerifySMSFragment.class.getSimpleName();
+//    private static final String TAG = VerifySMSFragment.class.getSimpleName();
     public static VerifySMSFragment FRAGMENT = null;
     private EditText phoneNamberEdit, verifySMSEdit;
     private CheckBox readCheckBox;
 
+    private Button requestVerifyCodeBtn;
     private Map<String, String> map = Maps.newHashMap();
 
     public VerifySMSFragment() {
@@ -51,9 +51,6 @@ public class VerifySMSFragment extends Fragment implements View.OnClickListener 
         return FRAGMENT;
     }
 
-    public VerifySMSFragment newInstance(Object... o) {
-        return new VerifySMSFragment();
-    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -90,7 +87,7 @@ public class VerifySMSFragment extends Fragment implements View.OnClickListener 
     }
 
     private void getView(View v) {
-        Button requestVerifyCodeBtn = v.findViewById(R.id.requestVerifyCodeBtn);
+        requestVerifyCodeBtn = v.findViewById(R.id.requestVerifyCodeBtn);
         Button submitToRegisteredBun = v.findViewById(R.id.submitToRegisteredBun);
         TextView privacyPolicyText = v.findViewById(R.id.privacyPolicyText);
         phoneNamberEdit = v.findViewById(R.id.phoneNamberEdit);
@@ -111,7 +108,6 @@ public class VerifySMSFragment extends Fragment implements View.OnClickListener 
 
         switch (v.getId()) {
             case R.id.requestVerifyCodeBtn:
-
                 if (!readCheckBox.isChecked()) {
                     new AlertView.Builder()
                             .setContext(getContext())
@@ -142,11 +138,12 @@ public class VerifySMSFragment extends Fragment implements View.OnClickListener 
                             Map<String, String> response = Tools.JSONPARSE.fromJson(responseBody, Map.class);
                             map.put("batch_id", response.get("batch_id"));
                             verifySMSEdit.setEnabled(true);
+                            requestVerifyCodeBtn.setVisibility(View.GONE);
+
                         }
 
                         @Override
                         public void onFail(Exception error, String msg) {
-                            Log.d(TAG, msg);
                             new AlertView.Builder()
                                     .setContext(getContext())
                                     .setStyle(AlertView.Style.Alert)
@@ -198,12 +195,15 @@ public class VerifySMSFragment extends Fragment implements View.OnClickListener 
                     public void onSuccess(String responseBody) {
                         Bundle bundle = new Bundle();
                         bundle.putString("phone", phoneNamberEdit.getText().toString());
+                        phoneNamberEdit.setText("");
+                        verifySMSEdit.setText("");
+                        readCheckBox.setChecked(false);
+                        map = Maps.newHashMap();
                         BaseActivity.removeAndReplaceWhere(FRAGMENT, PageType.REGISTERED_USER, bundle);
                     }
 
                     @Override
                     public void onFail(Exception error, String msg) {
-                        Log.d(TAG, msg);
                         new AlertView.Builder()
                                 .setContext(getContext())
                                 .setStyle(AlertView.Style.Alert)

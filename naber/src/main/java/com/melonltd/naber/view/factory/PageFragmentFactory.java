@@ -9,30 +9,30 @@ import com.melonltd.naber.view.common.page.RecoverPasswordFragment;
 import com.melonltd.naber.view.common.page.RegisteredFragment;
 import com.melonltd.naber.view.common.page.RegisteredSellerFragment;
 import com.melonltd.naber.view.common.page.VerifySMSFragment;
-import com.melonltd.naber.view.seller.page.SellerCategoryListFragment;
+import com.melonltd.naber.view.seller.page.SellerFoodListFragment;
 import com.melonltd.naber.view.seller.page.SellerDetailFragment;
-import com.melonltd.naber.view.seller.page.SellerMenuEditFragment;
+import com.melonltd.naber.view.seller.page.SellerFoodEditFragment;
 import com.melonltd.naber.view.seller.page.SellerOrderLogsDetailFragment;
 import com.melonltd.naber.view.seller.page.SellerOrdersFragment;
 import com.melonltd.naber.view.seller.page.SellerOrdersLogsFragment;
-import com.melonltd.naber.view.seller.page.SellerRestaurantFragment;
+import com.melonltd.naber.view.seller.page.SellerCategoryListFragment;
 import com.melonltd.naber.view.seller.page.SellerSearchFragment;
 import com.melonltd.naber.view.seller.page.SellerSetUpFragment;
 import com.melonltd.naber.view.seller.page.SellerSimpleInformationFragment;
 import com.melonltd.naber.view.seller.page.SellerStatFragment;
-import com.melonltd.naber.view.user.page.AccountDetailFragment;
-import com.melonltd.naber.view.user.page.CategoryMenuFragment;
-import com.melonltd.naber.view.user.page.HistoryFragment;
-import com.melonltd.naber.view.user.page.HomeFragment;
-import com.melonltd.naber.view.user.page.MenuDetailFragment;
-import com.melonltd.naber.view.user.page.OrderDetailFragment;
-import com.melonltd.naber.view.user.page.ResetPasswordFragment;
-import com.melonltd.naber.view.user.page.RestaurantDetailFragment;
-import com.melonltd.naber.view.user.page.RestaurantFragment;
-import com.melonltd.naber.view.user.page.SetUpFragment;
-import com.melonltd.naber.view.user.page.ShoppingCartFragment;
-import com.melonltd.naber.view.user.page.SimpleInformationFragment;
-import com.melonltd.naber.view.user.page.SubmitOrdersFragment;
+import com.melonltd.naber.view.user.page.UserAccountDetailFragment;
+import com.melonltd.naber.view.user.page.UserFoodListFragment;
+import com.melonltd.naber.view.user.page.UserOrderDetailFragment;
+import com.melonltd.naber.view.user.page.UserOrderHistoryFragment;
+import com.melonltd.naber.view.user.page.UserHomeFragment;
+import com.melonltd.naber.view.user.page.UserFoodDetailFragment;
+import com.melonltd.naber.view.user.page.UserResetPasswordFragment;
+import com.melonltd.naber.view.user.page.UserRestaurantDetailFragment;
+import com.melonltd.naber.view.user.page.UserRestaurantListFragment;
+import com.melonltd.naber.view.user.page.UserSetUpFragment;
+import com.melonltd.naber.view.user.page.UserShoppingCartFragment;
+import com.melonltd.naber.view.user.page.UserSimpleInformationFragment;
+import com.melonltd.naber.view.user.page.UserSubmitOrdersFragment;
 
 public class PageFragmentFactory {
     private final static String TAG = PageFragmentFactory.class.getSimpleName();
@@ -51,32 +51,32 @@ public class PageFragmentFactory {
             case VERIFY_SMS:
                 return new VerifySMSFragment().getInstance(bundle);
 
-            case HOME:
-                return new HomeFragment().getInstance(bundle);
-            case SET_UP:
-                return new SetUpFragment().getInstance(bundle);
-            case ACCOUNT_DETAIL:
-                return new AccountDetailFragment().getInstance(bundle);
-            case HISTORY:
-                return new HistoryFragment().getInstance(bundle);
-            case ORDER_DETAIL:
-                return new OrderDetailFragment().getInstance(bundle);
-            case RESTAURANT:
-                return new RestaurantFragment().getInstance(bundle);
-            case RESTAURANT_DETAIL:
-                return new RestaurantDetailFragment().getInstance(bundle);
-            case CATEGORY_MENU:
-                return new CategoryMenuFragment().getInstance(bundle);
-            case SHOPPING_CART:
-                return new ShoppingCartFragment().getInstance(bundle);
-            case SUBMIT_ORDER:
-                return new SubmitOrdersFragment().getInstance(bundle);
-            case SIMPLE_INFO:
-                return new SimpleInformationFragment().getInstance(bundle);
-            case RESET_PASSWORD:
-                return new ResetPasswordFragment().getInstance(bundle);
-            case MENU_DETAIL:
-                return new MenuDetailFragment().getInstance(bundle);
+            case USER_HOME:
+                return new UserHomeFragment().getInstance(bundle);
+            case USER_SET_UP:
+                return new UserSetUpFragment().getInstance(bundle);
+            case USER_ACCOUNT_DETAIL:
+                return new UserAccountDetailFragment().getInstance(bundle);
+            case USER_ORDER_HISTORY:
+                return new UserOrderHistoryFragment().getInstance(bundle);
+            case USER_ORDER_DETAIL:
+                return new UserOrderDetailFragment().getInstance(bundle);
+            case USER_RESTAURANT_LIST:
+                return new UserRestaurantListFragment().getInstance(bundle);
+            case USER_RESTAURANT_DETAIL:
+                return new UserRestaurantDetailFragment().getInstance(bundle);
+            case USER_FOOD_LIST:
+                return new UserFoodListFragment().getInstance(bundle);
+            case USER_SHOPPING_CART:
+                return new UserShoppingCartFragment().getInstance(bundle);
+            case USER_SUBMIT_ORDER:
+                return new UserSubmitOrdersFragment().getInstance(bundle);
+            case USER_SIMPLE_INFO:
+                return new UserSimpleInformationFragment().getInstance(bundle);
+            case USER_RESET_PASSWORD:
+                return new UserResetPasswordFragment().getInstance(bundle);
+            case USER_FOOD_DETAIL:
+                return new UserFoodDetailFragment().getInstance(bundle);
 
 
             // seller
@@ -90,12 +90,12 @@ public class PageFragmentFactory {
                 return new SellerOrdersLogsFragment().getInstance(bundle);
             case SELLER_ORDERS_LOGS_DETAIL:
                 return new SellerOrderLogsDetailFragment().getInstance(bundle);
-            case SELLER_RESTAURANT:
-                return new SellerRestaurantFragment().getInstance(bundle);
             case SELLER_CATEGORY_LIST:
                 return new SellerCategoryListFragment().getInstance(bundle);
-            case SELLER_MENU_EDIT:
-                return new SellerMenuEditFragment().getInstance(bundle);
+            case SELLER_FOOD_LIST:
+                return new SellerFoodListFragment().getInstance(bundle);
+            case SELLER_FOOD_EDIT:
+                return new SellerFoodEditFragment().getInstance(bundle);
             case SELLER_SET_UP:
                 return new SellerSetUpFragment().getInstance(bundle);
             case SELLER_SIMPLE_INFO:
@@ -103,7 +103,7 @@ public class PageFragmentFactory {
             case SELLER_DETAIL:
                 return new SellerDetailFragment().getInstance(bundle);
             default:
-                return new HomeFragment().getInstance(bundle);
+                return new UserHomeFragment().getInstance(bundle);
         }
 
     }

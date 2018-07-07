@@ -8,11 +8,6 @@ public class OrderVo implements Serializable{
     private static final long serialVersionUID = 3927830460393882600L;
     public String order_uuid;
     public String account_uuid;
-    public String account_name;
-    public String account_phone;
-    public String restaurant_uuid;
-    public String restaurant_name;
-    public String restaurant_address;
     public String user_message;
     public String create_date;
     public String update_date;
@@ -22,14 +17,13 @@ public class OrderVo implements Serializable{
     public String order_data;
     public String status;
 
+    public OrderDetail order_detail;
+
     @Override
     public String toString() {
         return MoreObjects.toStringHelper(this.getClass())
                 .add("order_uuid", order_uuid)
                 .add("account_uuid", account_uuid)
-                .add("restaurant_uuid", restaurant_uuid)
-                .add("restaurant_name", restaurant_name)
-                .add("restaurant_address", restaurant_address)
                 .add("user_message", user_message)
                 .add("create_date", create_date)
                 .add("update_date", update_date)

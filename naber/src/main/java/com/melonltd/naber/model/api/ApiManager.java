@@ -1,13 +1,13 @@
 package com.melonltd.naber.model.api;
 
-import android.util.Log;
-
 import com.melonltd.naber.model.service.Base64Service;
 import com.melonltd.naber.model.service.SPService;
 import com.melonltd.naber.util.Tools;
 import com.melonltd.naber.vo.AccountInfoVo;
+import com.melonltd.naber.vo.CategoryFoodRelVo;
 import com.melonltd.naber.vo.OrderDetail;
 import com.melonltd.naber.vo.ReqData;
+import com.melonltd.naber.vo.RestaurantInfoVo;
 
 import java.util.Map;
 
@@ -18,7 +18,7 @@ import okhttp3.Call;
  */
 
 public class ApiManager {
-    private static final String TAG = ApiManager.class.getSimpleName();
+//    private static final String TAG = ApiManager.class.getSimpleName();
     private static ClientManager CLIENT_MANAGER = ClientManager.getInstance();
 
     public static ClientManager getClient() {
@@ -57,11 +57,6 @@ public class ApiManager {
 
     // 登入
     public static void login(AccountInfoVo req, ThreadCallback callback) {
-
-        String json = Tools.JSONPARSE.toJson(req);
-        Log.i(TAG, json);
-        String ss = Base64Service.encryptBASE64(Tools.JSONPARSE.toJson(req));
-        Log.i(TAG, ss);
         Call call = getClient().post(ApiUrl.LOGIN, Base64Service.encryptBASE64(Tools.JSONPARSE.toJson(req)));
         call.enqueue(callback);
     }
@@ -154,27 +149,116 @@ public class ApiManager {
         call.enqueue(callback);
     }
 
-    public static void test(ThreadCallback callback) {
-        TData tt = new TData();
-        String gg = Tools.JSONPARSE.toJson(tt);
-        Call call = getClient().post(ApiUrl.test, tt.data);
+
+    /////// SELLSE API /////
+
+    // 取得每日營業時段
+    public static void sellerBusinessTime(ThreadCallback callback) {
+        Call call = getClient().postHeader(ApiUrl.BUSINESS_TIME, SPService.getOauth());
         call.enqueue(callback);
     }
 
-
-    public static class TData {
-        public String data = Tools.JSONPARSE.toJson(new TT("0987654321", "GVGhhGhb"));
+    // 更新每日營業時段
+    public static void sellerChangeBusinessTime(RestaurantInfoVo req, ThreadCallback callback) {
+        Call call = getClient().postHeader(ApiUrl.CHANGE_BUSINESS_TIME, SPService.getOauth(), Base64Service.encryptBASE64(Tools.JSONPARSE.toJson(req)));
+        call.enqueue(callback);
     }
 
-    public static class TT {
+    // 快速查詢訂單
+    public static void sellerQuickSearch(Map<String, String> req, ThreadCallback callback) {
+        Call call = getClient().postHeader(ApiUrl.QUICK_SEARCH, SPService.getOauth(), Base64Service.encryptBASE64(Tools.JSONPARSE.toJson(req)));
+        call.enqueue(callback);
+    }
 
-        private String password;
-        private String phone;
+    // 更改訂單狀況
+    public static void sellerChangeOrder(ReqData req, ThreadCallback callback) {
+        Call call = getClient().postHeader(ApiUrl.CHANGE_ORDER, SPService.getOauth(), Base64Service.encryptBASE64(Tools.JSONPARSE.toJson(req)));
+        call.enqueue(callback);
+    }
 
-        public TT(String phone, String password) {
-            this.phone = phone;
-            this.password = password;
-        }
+    // 取得訂單列表
+    public static void sellerOrderList(ReqData req, ThreadCallback callback) {
+        Call call = getClient().postHeader(ApiUrl.ORDER_LIST, SPService.getOauth(), Base64Service.encryptBASE64(Tools.JSONPARSE.toJson(req)));
+        call.enqueue(callback);
+    }
+
+    // 取得營運概況
+    public static void sellerStat(ThreadCallback callback) {
+        Call call = getClient().postHeader(ApiUrl.SELLER_STAT, SPService.getOauth());
+        call.enqueue(callback);
+    }
+
+    // 取得營運概況已完成訂單列表
+    public static void sellerStatLog(ReqData req, ThreadCallback callback) {
+        Call call = getClient().postHeader(ApiUrl.SELLER_STAT_LOG, SPService.getOauth(), Base64Service.encryptBASE64(Tools.JSONPARSE.toJson(req)));
+        call.enqueue(callback);
+    }
+
+    // 取得種類列表
+    public static void sellerCategoryList(ThreadCallback callback) {
+        Call call = getClient().postHeader(ApiUrl.SELLER_CATEGORY_LIST, SPService.getOauth());
+        call.enqueue(callback);
+    }
+
+    //    {"uuid":"RESTAURANT_CATEGORY_db001826-9169-4230-a747-c6d9f8d0a582","status":"open"}
+    // 新增種類
+    public static void sellerAddCategory(ReqData req, ThreadCallback callback) {
+        Call call = getClient().postHeader(ApiUrl.SELLER_ADD_CATEGORY, SPService.getOauth(), Base64Service.encryptBASE64(Tools.JSONPARSE.toJson(req)));
+        call.enqueue(callback);
+    }
+
+    // 更新種類狀態
+    public static void sellerChangeCategoryStatus(ReqData req, ThreadCallback callback) {
+        Call call = getClient().postHeader(ApiUrl.SELLER_CHANGE_CATEGORY, SPService.getOauth(), Base64Service.encryptBASE64(Tools.JSONPARSE.toJson(req)));
+        call.enqueue(callback);
+    }
+
+    // 刪除種類
+    public static void sellerDeleteCategory(ReqData req, ThreadCallback callback) {
+        Call call = getClient().postHeader(ApiUrl.SELLER_DELETE_CATEGORY, SPService.getOauth(), Base64Service.encryptBASE64(Tools.JSONPARSE.toJson(req)));
+        call.enqueue(callback);
+    }
+
+    // 品項列表
+    public static void sellerFoodList(ReqData req, ThreadCallback callback) {
+        Call call = getClient().postHeader(ApiUrl.SELLER_FOOD_LIST, SPService.getOauth(), Base64Service.encryptBASE64(Tools.JSONPARSE.toJson(req)));
+        call.enqueue(callback);
+    }
+
+    // 品項更新
+    public static void sellerFoodUpdate(CategoryFoodRelVo req, ThreadCallback callback) {
+        Call call = getClient().postHeader(ApiUrl.SELLER_CHANGE_FOOD, SPService.getOauth(), Base64Service.encryptBASE64(Tools.JSONPARSE.toJson(req)));
+        call.enqueue(callback);
+    }
+
+    // 品項刪除
+    public static void sellerFoodDelete(ReqData req, ThreadCallback callback) {
+        Call call = getClient().postHeader(ApiUrl.SELLER_DELETE_FOOD, SPService.getOauth(), Base64Service.encryptBASE64(Tools.JSONPARSE.toJson(req)));
+        call.enqueue(callback);
+    }
+
+    // 品項刪除
+    public static void sellerFoodAdd(CategoryFoodRelVo req, ThreadCallback callback) {
+        Call call = getClient().postHeader(ApiUrl.SELLER_ADD_FOOD, SPService.getOauth(), Base64Service.encryptBASE64(Tools.JSONPARSE.toJson(req)));
+        call.enqueue(callback);
+    }
+
+    // 取得餐館資訊
+    public static void sellerRestaurantInfo(ThreadCallback callback) {
+        Call call = getClient().postHeader(ApiUrl.SELLER_RESTAURANT_INFO, SPService.getOauth());
+        call.enqueue(callback);
+    }
+
+    // 設定餐館資訊
+    public static void sellerRestaurantSetting(RestaurantInfoVo req, ThreadCallback callback) {
+        Call call = getClient().postHeader(ApiUrl.SELLER_RESTAURANT_SETTING, SPService.getOauth(), Base64Service.encryptBASE64(Tools.JSONPARSE.toJson(req)));
+        call.enqueue(callback);
+    }
+
+    // 設定餐館隔日接單開關
+    public static void sellerRestaurantSettingBusiness(Map<String, String> req, ThreadCallback callback) {
+        Call call = getClient().postHeader(ApiUrl.SELLER_RESTAURANT_SETTING_BUSINESS, SPService.getOauth(), Base64Service.encryptBASE64(Tools.JSONPARSE.toJson(req)));
+        call.enqueue(callback);
     }
 
 }

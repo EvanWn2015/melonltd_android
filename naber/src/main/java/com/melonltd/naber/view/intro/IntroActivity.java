@@ -13,16 +13,22 @@ public class IntroActivity extends AppIntro2 {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+//        setFadeAnimation();
+//        showSkipButton(false);
+//        showStatusBar(false);
+//        showSkipButton(false);
+//        showDoneButton(true);
+
+        addSlide(Slide.newInstance(R.layout.intro_1));
+        addSlide(Slide.newInstance(R.layout.intro_2));
+        addSlide(Slide.newInstance(R.layout.intro_3));
+        addSlide(Slide.newInstance(R.layout.intro_4));
+
         setFadeAnimation();
         showSkipButton(false);
         showStatusBar(false);
         showSkipButton(false);
         showDoneButton(true);
-
-        addSlide(Slide.newInstance(R.layout.intro_1, R.drawable.intro_01));
-        addSlide(Slide.newInstance(R.layout.intro_1, R.drawable.intro_02));
-        addSlide(Slide.newInstance(R.layout.intro_1, R.drawable.intro_03));
-        addSlide(Slide.newInstance(R.layout.intro_1, R.drawable.intro_04));
 
     }
 
@@ -37,6 +43,12 @@ public class IntroActivity extends AppIntro2 {
         super.onDonePressed(currentFragment);
         SPService.setIsFirstLogin(false);
         finish();
+    }
+
+    @Override
+    public void onSlideChanged(@Nullable Fragment oldFragment, @Nullable Fragment newFragment) {
+        super.onSlideChanged(oldFragment, newFragment);
+        // Do something when the slide changes.
     }
 
 }

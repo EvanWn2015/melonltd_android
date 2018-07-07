@@ -2,18 +2,19 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
-    android:background="@drawable/naber_text_base_line"
+    android:layout_height="wrap_content"
     android:layout_marginBottom="2dp"
-    android:layout_height="wrap_content">
+    android:background="@drawable/naber_text_base_line">
 
     <TextView
         android:id="@+id/categoryText"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
+        android:layout_marginLeft="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="Category Name"
+        android:text=""
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/aSwitch"
         app:layout_constraintStart_toStartOf="parent"
@@ -21,37 +22,27 @@
 
     <com.melonltd.naber.view.customize.SwitchButton
         android:id="@+id/aSwitch"
-        android:checked="true"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="4dp"
         android:layout_marginTop="8dp"
+        android:checked="true"
         app:layout_constraintBottom_toBottomOf="@+id/deleteBtn"
         app:layout_constraintEnd_toStartOf="@+id/deleteBtn"
         app:layout_constraintStart_toEndOf="@+id/categoryText"
         app:layout_constraintTop_toTopOf="@+id/deleteBtn"
         app:sb_checked="true"
-        app:sb_show_indicator="false" />
-
-    <!--<Switch-->
-        <!--android:id="@+id/aSwitch"-->
-        <!--android:checked="true"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_marginBottom="8dp"-->
-        <!--android:layout_marginEnd="4dp"-->
-        <!--android:layout_marginTop="8dp"-->
-        <!--app:layout_constraintBottom_toBottomOf="@+id/deleteBtn"-->
-        <!--app:layout_constraintEnd_toStartOf="@+id/deleteBtn"-->
-        <!--app:layout_constraintStart_toEndOf="@+id/categoryText"-->
-        <!--app:layout_constraintTop_toTopOf="@+id/deleteBtn" />-->
+        app:sb_show_indicator="false"
+        android:layout_marginRight="4dp" />
 
     <Button
         android:id="@+id/deleteBtn"
         android:layout_width="50dp"
         android:layout_height="32dp"
         android:layout_marginEnd="4dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="4dp"
         android:layout_marginStart="8dp"
         android:background="@color/naber_basis_red"
         android:text="刪除"
@@ -68,6 +59,8 @@
         android:layout_height="32dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
+        android:layout_marginLeft="4dp"
+        android:layout_marginRight="8dp"
         android:layout_marginStart="4dp"
         android:layout_marginTop="8dp"
         android:background="@color/naber_basis_blue"

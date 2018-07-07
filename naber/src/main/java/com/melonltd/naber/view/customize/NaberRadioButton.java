@@ -1,18 +1,16 @@
 package com.melonltd.naber.view.customize;
 
 import android.content.Context;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.RadioButton;
 
-import com.melonltd.naber.util.Tools;
+import com.google.common.base.Strings;
 
 import java.io.Serializable;
 
 public class NaberRadioButton implements Serializable {
-    private static final String TAG = NaberRadioButton.class.getSimpleName();
     private static final long serialVersionUID = -395093075821576420L;
     private RadioButton radio;
     private String title = "\u0020", price = "\u0020", symbol = "\u0020";
@@ -33,17 +31,11 @@ public class NaberRadioButton implements Serializable {
     }
 
     private void setTitleAndPriceAndSymbol(String title, String price, String symbol) {
-        this.title = Tools.MAKEUP.makeUpCharacter(title, 20, Tools.MakeUp.Direction.RIGHT);
-        Log.d(" this.title ",  this.title.length() + "");
-        this.price = Tools.MAKEUP.makeUpCharacter(price, 10, Tools.MakeUp.Direction.LEFT);
-        Log.d("this.price", this.price.length() + "");
-        this.symbol = Tools.MAKEUP.makeUpCharacter(symbol, 3, Tools.MakeUp.Direction.LEFT);
-        Log.d("this.symbol", this.symbol.length() + "");
-        this.text = this.title + Tools.MAKEUP.makeUpCharacter("", 10, Tools.MakeUp.Direction.RIGHT) + this.price + this.symbol;
-        Log.d("this.symbol", this.text.length() + "");
+        this.title = Strings.padEnd(title, 20, '\u0020');
+        this.price = Strings.padEnd(price, 10, '\u0020');
+        this.symbol = Strings.padEnd(symbol, 3, '\u0020');
+        this.text = this.title + this.symbol + this.price;
         this.radio.setText(this.text);
-        Log.d("", this.radio.getText().toString().length() + "");
-        Log.d("", this.radio.getText().toString() + "");
     }
 
     private RadioButton getView() {

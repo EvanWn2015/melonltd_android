@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.bigkoo.alertview.AlertView;
+import com.bigkoo.alertview.OnItemClickListener;
 import com.bigkoo.pickerview.builder.OptionsPickerBuilder;
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
 import com.bigkoo.pickerview.listener.OnOptionsSelectListener;
@@ -36,7 +37,7 @@ import java.util.Calendar;
 import java.util.Date;
 
 public class RegisteredFragment extends Fragment implements View.OnClickListener {
-    private static final String TAG = RegisteredFragment.class.getSimpleName();
+//    private static final String TAG = RegisteredFragment.class.getSimpleName();
     public static RegisteredFragment FRAGMENT = null;
 
     private AccountInfoVo account = new AccountInfoVo();
@@ -44,10 +45,6 @@ public class RegisteredFragment extends Fragment implements View.OnClickListener
     private EditText nameEditText, addressEditText, emailEditText, passwordEditText, confirmPasswordEditText;
 
     public RegisteredFragment() {
-    }
-
-    public Fragment newInstance(Object... o) {
-        return new RegisteredFragment();
     }
 
     public Fragment getInstance(Bundle bundle) {
@@ -131,7 +128,24 @@ public class RegisteredFragment extends Fragment implements View.OnClickListener
                     ApiManager.userRegistered(account, new ThreadCallback(getContext()) {
                         @Override
                         public void onSuccess(String responseBody) {
-                            BaseActivity.removeAndReplaceWhere(FRAGMENT, PageType.LOGIN, null);
+                            new AlertView.Builder()
+                                    .setContext(getContext())
+                                    .setStyle(AlertView.Style.Alert)
+                                    .setTitle("")
+                                    .setMessage("完成註冊，\n歡迎加入NABER！")
+                                    .setOthers(new String[]{"返回登入畫面"})
+                                    .setOnItemClickListener(new OnItemClickListener() {
+                                        @Override
+                                        public void onItemClick(Object o, int position) {
+                                            if (position == 0) {
+                                                BaseActivity.removeAndReplaceWhere(FRAGMENT, PageType.LOGIN, null);
+                                            }
+                                        }
+                                    })
+                                    .build()
+                                    .setCancelable(false)
+                                    .show();
+
                         }
 
                         @Override
@@ -182,7 +196,7 @@ public class RegisteredFragment extends Fragment implements View.OnClickListener
                 @Override
                 public void onTimeSelect(Date date, View v) {
                     account.birth_day = new SimpleDateFormat("yyyy-MM-dd").format(date);
-                    identityText.setText(account.birth_day);
+                    birthdayText.setText(account.birth_day);
                 }
             }).setType(new boolean[]{true, true, true, false, false, false})//"year","month","day","hours","minutes","seconds "
                     .setTitleSize(20)
@@ -221,37 +235,37 @@ public class RegisteredFragment extends Fragment implements View.OnClickListener
         }
         // 驗證姓名不為空
         if (Strings.isNullOrEmpty(nameEditText.getText().toString())) {
-            message = "驗證姓名不為空";
+            message = "姓名不為空";
             result = false;
         }
         // 驗證姓名長度大於二
-        if (nameEditText.getText().toString().length() <= 4) {
-            message = "驗證姓名長度大於二";
+        if (nameEditText.getText().toString().length() <= 1 || nameEditText.getText().toString().length() >= 5) {
+            message = "姓名格式不正確";
             result = false;
         }
         // 驗證Email不為空
         if (Strings.isNullOrEmpty(emailEditText.getText().toString())) {
-            message = "驗證Email不為空";
+            message = "Email不為空";
             result = false;
         }
         // 驗證Email錯誤格式
         if (!VerifyUtil.email(emailEditText.getText().toString())) {
-            message = "驗證Email錯誤格式";
+            message = "Email錯誤格式";
             result = false;
         }
         // 驗證密碼不為空 並需要英文大小寫數字 6 ~ 20
         if (!VerifyUtil.password(passwordEditText.getText().toString())) {
-            message = "驗證密碼不為空 並需要英文大小寫數字 6 ~ 20";
+            message = "密碼不為空 並需要英文大小寫數字 6 ~ 20";
             result = false;
         }
         // 驗證密碼與確認密碼一致
         if (!passwordEditText.getText().toString().equals(confirmPasswordEditText.getText().toString())) {
-            message = "驗證密碼與確認密碼一致";
+            message = "密碼與確認密碼一致";
             result = false;
         }
         // 驗證生日不為空
         if (Strings.isNullOrEmpty(birthdayText.getText().toString())) {
-            message = "驗證生日不為空";
+            message = "生日不為空";
             result = false;
         }
         if (!result) {
