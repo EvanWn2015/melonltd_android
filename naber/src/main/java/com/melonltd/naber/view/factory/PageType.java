@@ -15,6 +15,7 @@ import com.melonltd.naber.view.seller.page.SellerFoodListFragment;
 import com.melonltd.naber.view.seller.page.SellerOrderLogsDetailFragment;
 import com.melonltd.naber.view.seller.page.SellerOrdersFragment;
 import com.melonltd.naber.view.seller.page.SellerOrdersLogsFragment;
+import com.melonltd.naber.view.seller.page.SellerResetPasswordFragment;
 import com.melonltd.naber.view.seller.page.SellerSearchFragment;
 import com.melonltd.naber.view.seller.page.SellerSetUpFragment;
 import com.melonltd.naber.view.seller.page.SellerSimpleInformationFragment;
@@ -64,7 +65,8 @@ public enum PageType {
     SELLER_FOOD_EDIT(R.string.seller_menu_food_edit, 3, SellerFoodEditFragment.class),
     SELLER_SET_UP(R.string.seller_menu_set_up_btn, 4, SellerSetUpFragment.class),
     SELLER_DETAIL(R.string.seller_menu_seller_detail, 4, SellerDetailFragment.class),
-    SELLER_SIMPLE_INFO(R.string.seller_menu_simple_information, 4, SellerSimpleInformationFragment.class);
+    SELLER_SIMPLE_INFO(R.string.seller_menu_simple_information, 4, SellerSimpleInformationFragment.class),
+    SELLER_RESET_PASSWORD(R.string.common_page_reset_password_title,4,SellerResetPasswordFragment.class);
 
 
     private final int id;

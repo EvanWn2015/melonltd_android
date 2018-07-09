@@ -355,5 +355,17 @@ public class SellerMainActivity extends BaseCore implements TabLayout.OnTabSelec
         drawer.setDrawerLockMode(lock ? DrawerLayout.LOCK_MODE_LOCKED_CLOSED : DrawerLayout.LOCK_MODE_UNDEFINED);
     }
 
-
+    public static void clearAllFragment() {
+        SellerFoodListFragment.FRAGMENT = null;
+        SellerDetailFragment.FRAGMENT = null;
+        SellerFoodEditFragment.FRAGMENT = null;
+        SellerOrderLogsDetailFragment.FRAGMENT = null;
+        SellerOrdersFragment.FRAGMENT = null;
+        SellerOrdersLogsFragment.FRAGMENT = null;
+        SellerCategoryListFragment.FRAGMENT = null;
+        SellerSearchFragment.FRAGMENT = null;
+        SellerSetUpFragment.FRAGMENT = null;
+        SellerSimpleInformationFragment.FRAGMENT = null;
+        SellerStatFragment.FRAGMENT = null;
+    }
 }

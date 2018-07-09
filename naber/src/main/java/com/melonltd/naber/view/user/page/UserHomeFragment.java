@@ -192,6 +192,7 @@ public class UserHomeFragment extends Fragment {
 //            Model.RESTAURANT_INFO_LIST.clear();
         }
         Model.RESTAURANT_INFO_LIST.clear();
+        adapter.notifyDataSetChanged();
         ReqData req = new ReqData();
         req.search_type = "TOP";
         ApiManager.restaurantList(req, new ThreadCallback(getContext()) {
@@ -221,9 +222,7 @@ public class UserHomeFragment extends Fragment {
         if (BaseCore.checkLocationPermission(getContext())) {
             ActivityCompat.requestPermissions(getActivity(), BaseCore.LOCATION_PERMISSION, LOCATION_CODE);
         }
-        if (Model.RESTAURANT_INFO_LIST.size() == 0) {
-            doLoadData(true);
-        }
+//        doLoadData(true);
     }
 
     @Override
@@ -232,6 +231,7 @@ public class UserHomeFragment extends Fragment {
         UserMainActivity.changeTabAndToolbarStatus();
         getLocation();
         // 4.4.2 版本出現問題
+        doLoadData(true);
         boolean isFirst = SPService.getIsFirstLogin();
 //        if (isFirst) {
 //            startActivity(new Intent(getActivity().getBaseContext(), IntroActivity.class));
