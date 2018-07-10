@@ -2,6 +2,7 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/restaurantItem"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
@@ -108,5 +109,19 @@
         app:layout_constraintBottom_toBottomOf="@+id/restaurantNameText"
         app:layout_constraintStart_toEndOf="@+id/restaurantNameText"
         app:layout_constraintTop_toTopOf="@+id/restaurantNameText" />
+
+    <TextView
+        android:id="@+id/storeStatusText"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:paddingEnd="4dp"
+        android:paddingStart="4dp"
+        android:text="今日不營業"
+        android:textColor="@color/naber_basis_red"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/addressText"
+        app:layout_constraintTop_toBottomOf="@+id/addressText" />
 
 </android.support.constraint.ConstraintLayout>

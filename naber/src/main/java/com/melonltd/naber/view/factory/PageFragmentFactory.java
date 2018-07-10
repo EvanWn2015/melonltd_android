@@ -9,23 +9,24 @@ import com.melonltd.naber.view.common.page.RecoverPasswordFragment;
 import com.melonltd.naber.view.common.page.RegisteredFragment;
 import com.melonltd.naber.view.common.page.RegisteredSellerFragment;
 import com.melonltd.naber.view.common.page.VerifySMSFragment;
-import com.melonltd.naber.view.seller.page.SellerFoodListFragment;
+import com.melonltd.naber.view.seller.page.SellerCategoryListFragment;
 import com.melonltd.naber.view.seller.page.SellerDetailFragment;
 import com.melonltd.naber.view.seller.page.SellerFoodEditFragment;
+import com.melonltd.naber.view.seller.page.SellerFoodListFragment;
 import com.melonltd.naber.view.seller.page.SellerOrderLogsDetailFragment;
 import com.melonltd.naber.view.seller.page.SellerOrdersFragment;
 import com.melonltd.naber.view.seller.page.SellerOrdersLogsFragment;
-import com.melonltd.naber.view.seller.page.SellerCategoryListFragment;
+import com.melonltd.naber.view.seller.page.SellerResetPasswordFragment;
 import com.melonltd.naber.view.seller.page.SellerSearchFragment;
 import com.melonltd.naber.view.seller.page.SellerSetUpFragment;
 import com.melonltd.naber.view.seller.page.SellerSimpleInformationFragment;
 import com.melonltd.naber.view.seller.page.SellerStatFragment;
 import com.melonltd.naber.view.user.page.UserAccountDetailFragment;
+import com.melonltd.naber.view.user.page.UserFoodDetailFragment;
 import com.melonltd.naber.view.user.page.UserFoodListFragment;
+import com.melonltd.naber.view.user.page.UserHomeFragment;
 import com.melonltd.naber.view.user.page.UserOrderDetailFragment;
 import com.melonltd.naber.view.user.page.UserOrderHistoryFragment;
-import com.melonltd.naber.view.user.page.UserHomeFragment;
-import com.melonltd.naber.view.user.page.UserFoodDetailFragment;
 import com.melonltd.naber.view.user.page.UserResetPasswordFragment;
 import com.melonltd.naber.view.user.page.UserRestaurantDetailFragment;
 import com.melonltd.naber.view.user.page.UserRestaurantListFragment;
@@ -102,6 +103,8 @@ public class PageFragmentFactory {
                 return new SellerSimpleInformationFragment().getInstance(bundle);
             case SELLER_DETAIL:
                 return new SellerDetailFragment().getInstance(bundle);
+            case SELLER_RESET_PASSWORD:
+                return new SellerResetPasswordFragment().getInstance(bundle);
             default:
                 return new UserHomeFragment().getInstance(bundle);
         }

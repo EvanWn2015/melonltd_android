@@ -54,7 +54,7 @@ public class SellerQuickSearchAdapter extends RecyclerView.Adapter<SellerQuickSe
         holder.ordersStatusText.setText(status.getText());
 
         holder.fetchTimeText.setText(Tools.FORMAT.format(NaberConstant.DATE_FORMAT_PATTERN, "dd日 HH時 mm分", Model.SELLER_QUICK_SEARCH_ORDERS.get(position).fetch_date));
-        holder.remarkText.setText(Model.SELLER_QUICK_SEARCH_ORDERS.get(position).user_message);
+        holder.userMessageText.setText(Model.SELLER_QUICK_SEARCH_ORDERS.get(position).user_message);
 
         holder.foodItemsCountText.setText("  (" + Model.SELLER_QUICK_SEARCH_ORDERS.get(position).order_detail.orders.size() + ")");
 
@@ -117,7 +117,7 @@ public class SellerQuickSearchAdapter extends RecyclerView.Adapter<SellerQuickSe
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView ordersStatusText, foodItemsCountText, foodItemsText, remarkText, fetchTimeText, userPhoneNumberText, userNameText, totalAmountText;
+        private TextView ordersStatusText, foodItemsCountText, foodItemsText, userMessageText, fetchTimeText, userPhoneNumberText, userNameText, totalAmountText;
         private Button cancelBtn, failureBtn, processingBtn, canFetchBtn, finishBtn;
 
         public ViewHolder(View v) {
@@ -126,7 +126,7 @@ public class SellerQuickSearchAdapter extends RecyclerView.Adapter<SellerQuickSe
             ordersStatusText.setVisibility(View.VISIBLE);
             foodItemsCountText = v.findViewById(R.id.foodCountText);
             foodItemsText = v.findViewById(R.id.foodContentText);
-            remarkText = v.findViewById(R.id.userMessageEdit);
+            userMessageText = v.findViewById(R.id.userMessageText);
 
             cancelBtn = v.findViewById(R.id.cancelBtn);
             processingBtn = v.findViewById(R.id.processingBtn);

@@ -249,6 +249,25 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/Layout" />
 
+        <Button
+            android:id="@+id/toResetPasswordBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="162dp"
+            android:layout_marginLeft="161dp"
+            android:layout_marginRight="162dp"
+            android:layout_marginStart="161dp"
+            android:layout_marginTop="8dp"
+            android:background="@android:color/transparent"
+            android:text="修改密碼"
+            android:textColor="@color/naber_basis_orange"
+            android:textSize="12sp"
+            app:layout_constraintBottom_toTopOf="@+id/view"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/logoutBtn" />
+
         <View
             android:id="@+id/view12"
             android:layout_width="match_parent"
@@ -256,7 +275,7 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/logoutBtn" />
+            app:layout_constraintTop_toBottomOf="@+id/toResetPasswordBtn" />
 
     </android.support.constraint.ConstraintLayout>
 </ScrollView>

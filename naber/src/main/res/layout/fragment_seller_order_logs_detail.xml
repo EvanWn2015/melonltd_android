@@ -83,7 +83,7 @@
             app:layout_constraintTop_toBottomOf="@+id/foodContentText" />
 
         <TextView
-            android:id="@+id/userMessageText"
+            android:id="@+id/userMessageEdit"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:background="@drawable/naber_text_base_line"

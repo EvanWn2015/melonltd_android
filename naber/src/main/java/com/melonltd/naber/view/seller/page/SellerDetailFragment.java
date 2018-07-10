@@ -41,8 +41,9 @@ import java.util.List;
 import java.util.Map;
 
 public class SellerDetailFragment extends Fragment implements View.OnClickListener {
-//    private static final String TAG = SellerDetailFragment.class.getSimpleName();
+    //    private static final String TAG = SellerDetailFragment.class.getSimpleName();
     public static SellerDetailFragment FRAGMENT = null;
+    public static int TO_RESET_PASSWORD_INDEX = -1;
     private EditText bulletinEdit;
     private TextView storeStartText, storeEndText;
     private LinearLayout businessLayout;
@@ -77,12 +78,15 @@ public class SellerDetailFragment extends Fragment implements View.OnClickListen
         bulletinEdit = v.findViewById(R.id.bulletinEdit);
         Button submitBtn = v.findViewById(R.id.submitBtn);
         Button logoutBtn = v.findViewById(R.id.logoutBtn);
+        Button toResetPasswordBtn = v.findViewById(R.id.toResetPasswordBtn);
+
         storeStartText = v.findViewById(R.id.storeStartText);
         storeEndText = v.findViewById(R.id.storeEndText);
         businessLayout = v.findViewById(R.id.businessLayout);
 
         submitBtn.setOnClickListener(this);
         logoutBtn.setOnClickListener(this);
+        toResetPasswordBtn.setOnClickListener(this);
         storeStartText.setOnClickListener(this);
         storeEndText.setOnClickListener(this);
     }
@@ -103,23 +107,29 @@ public class SellerDetailFragment extends Fragment implements View.OnClickListen
                 }
             });
         }
-        ApiManager.sellerRestaurantInfo(new ThreadCallback(getContext()) {
-            @Override
-            public void onSuccess(String responseBody) {
-                RestaurantInfoVo restaurant = Tools.JSONPARSE.fromJson(responseBody, RestaurantInfoVo.class);
-                storeStartText.setText(restaurant.store_start);
-                storeStartText.setTag(restaurant.store_start);
-                storeEndText.setText(restaurant.store_end);
-                storeEndText.setTag(restaurant.store_end);
-                bulletinEdit.setText(restaurant.bulletin);
-                builderThreeBusiness(restaurant.not_business);
-            }
 
-            @Override
-            public void onFail(Exception error, String msg) {
-                builderThreeBusiness(Lists.<String>newArrayList());
-            }
-        });
+        if (TO_RESET_PASSWORD_INDEX >= 0) {
+            TO_RESET_PASSWORD_INDEX = 1;
+            SellerMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.SELLER_RESET_PASSWORD, null);
+        } else {
+            ApiManager.sellerRestaurantInfo(new ThreadCallback(getContext()) {
+                @Override
+                public void onSuccess(String responseBody) {
+                    RestaurantInfoVo restaurant = Tools.JSONPARSE.fromJson(responseBody, RestaurantInfoVo.class);
+                    storeStartText.setText(restaurant.store_start);
+                    storeStartText.setTag(restaurant.store_start);
+                    storeEndText.setText(restaurant.store_end);
+                    storeEndText.setTag(restaurant.store_end);
+                    bulletinEdit.setText(restaurant.bulletin);
+                    builderThreeBusiness(restaurant.not_business);
+                }
+
+                @Override
+                public void onFail(Exception error, String msg) {
+                    builderThreeBusiness(Lists.<String>newArrayList());
+                }
+            });
+        }
     }
 
     @Override
@@ -194,7 +204,7 @@ public class SellerDetailFragment extends Fragment implements View.OnClickListen
                             @Override
                             public void onItemClick(Object o, int position) {
                                 if (position == 0) {
-                                    if (notBusinessData.get(date) != isChecked){
+                                    if (notBusinessData.get(date) != isChecked) {
                                         new Handler().postDelayed(new SettingBusinessRun(date, isChecked), 300);
                                     }
                                 } else if (position == 1) {
@@ -205,7 +215,7 @@ public class SellerDetailFragment extends Fragment implements View.OnClickListen
                         .build()
                         .setCancelable(false)
                         .show();
-            }else {
+            } else {
                 new Handler().postDelayed(new SettingBusinessRun(date, isChecked), 300);
             }
         }
@@ -230,6 +240,7 @@ public class SellerDetailFragment extends Fragment implements View.OnClickListen
                 public void onSuccess(String responseBody) {
                     notBusinessData.put(date, status.getStatus());
                 }
+
                 @Override
                 public void onFail(Exception error, String msg) {
                 }
@@ -284,6 +295,10 @@ public class SellerDetailFragment extends Fragment implements View.OnClickListen
                 break;
             case R.id.storeEndText:
                 showDatePicker(R.id.storeEndText);
+                break;
+            case R.id.toResetPasswordBtn:
+                TO_RESET_PASSWORD_INDEX = 1;
+                SellerMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.SELLER_RESET_PASSWORD, null);
                 break;
         }
     }
