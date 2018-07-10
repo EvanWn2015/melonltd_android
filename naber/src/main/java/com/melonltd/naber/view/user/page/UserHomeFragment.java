@@ -15,7 +15,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextView;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.view.SimpleDraweeView;
@@ -39,6 +38,7 @@ import com.melonltd.naber.vo.BulletinVo;
 import com.melonltd.naber.vo.LocationVo;
 import com.melonltd.naber.vo.ReqData;
 import com.melonltd.naber.vo.RestaurantInfoVo;
+import com.sunfusheng.marqueeview.MarqueeView;
 
 import java.util.Iterator;
 import java.util.List;
@@ -53,11 +53,12 @@ import static com.melonltd.naber.view.common.BaseCore.LOCATION_MG;
 
 
 public class UserHomeFragment extends Fragment {
-//    private static final String TAG = UserHomeFragment.class.getSimpleName();
+    //    private static final String TAG = UserHomeFragment.class.getSimpleName();
     public static UserHomeFragment FRAGMENT = null;
     private UserRestaurantAdapter adapter;
 
     private Location location;
+
     public UserHomeFragment() {
     }
 
@@ -90,7 +91,7 @@ public class UserHomeFragment extends Fragment {
 
     private void getViews(View v) {
         final BGABanner banner = v.findViewById(R.id.homeBanner);
-        final TextView bulletinText = v.findViewById(R.id.bulletinText);
+        final MarqueeView bulletinText = v.findViewById(R.id.bulletinText);
 
         final BGARefreshLayout bgaRefreshLayout = v.findViewById(R.id.top30BGARefreshLayout);
         RecyclerView recyclerView = v.findViewById(R.id.top30RecyclerView);
@@ -148,8 +149,12 @@ public class UserHomeFragment extends Fragment {
             @Override
             public void onSuccess(String responseBody) {
                 List<BulletinVo> list = Tools.JSONPARSE.fromJsonList(responseBody, BulletinVo[].class);
+                List<String> homeBulletins = Lists.newArrayList();
                 for (int i = 0; i < list.size(); i++) {
                     Iterator<String> iterator = Splitter.on("$split").split(list.get(i).content_text).iterator();
+                    if ("HOME".equals(list.get(i).bulletin_category)){
+                        homeBulletins = Lists.newArrayList(iterator);
+                    }
                     String content_text = "";
                     while (iterator.hasNext()) {
                         content_text += iterator.next() + "\n";
@@ -159,12 +164,12 @@ public class UserHomeFragment extends Fragment {
                     m.put("content_text", content_text);
                     Model.BULLETIN_VOS.put(list.get(i).bulletin_category, m);
                 }
-                bulletinText.setText(Model.BULLETIN_VOS.get("HOME").get("content_text"));
+                bulletinText.startWithList(homeBulletins, R.anim.anim_bottom_in, R.anim.anim_top_out);
             }
 
             @Override
             public void onFail(Exception error, String msg) {
-                bulletinText.setText("");
+                bulletinText.startWithList(Lists.<CharSequence>newArrayList(), R.anim.anim_bottom_in, R.anim.anim_top_out);
             }
         });
 
@@ -200,7 +205,7 @@ public class UserHomeFragment extends Fragment {
             public void onSuccess(String responseBody) {
                 List<RestaurantInfoVo> list = Tools.JSONPARSE.fromJsonList(responseBody, RestaurantInfoVo[].class);
 
-                for (int i=0; i< list.size(); i++) {
+                for (int i = 0; i < list.size(); i++) {
                     list.get(i).distance = DistanceTools.getDistance(location, LocationVo.of(list.get(i).latitude, list.get(i).longitude));
                 }
 
@@ -238,7 +243,7 @@ public class UserHomeFragment extends Fragment {
 //        }
     }
 
-    private void getLocation (){
+    private void getLocation() {
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             if (Model.LOCATION == null) {
                 location = LOCATION_MG.getLastKnownLocation(LocationManager.GPS_PROVIDER);
