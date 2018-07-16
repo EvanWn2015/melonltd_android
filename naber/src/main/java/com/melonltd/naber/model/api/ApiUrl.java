@@ -15,6 +15,7 @@ public class ApiUrl {
 
     public final static String DOMAIN = "https://ap.melonltd.com.tw";
     public final static String LOGIN = DOMAIN + "/login";
+    public final static String LOGOUT = DOMAIN + "/logout";
     public final static String GET_SMS_CODE = DOMAIN + "/sms/get/code";
     public final static String SMS_VERIFY_CODE = DOMAIN + "/sms/verify/code";
     public final static String USER_REGISTERED = DOMAIN + "/registered/user";
@@ -44,6 +45,7 @@ public class ApiUrl {
     public final static String BUSINESS_TIME = DOMAIN + "/seller/business/time";
     public final static String CHANGE_BUSINESS_TIME = DOMAIN + "/seller/change/daily/business/time";
     public final static String ORDER_LIST = DOMAIN + "/seller/ordar/list";
+    public final static String ORDER_LIVE = DOMAIN + "/seller/ordar/live";
     public final static String SELLER_STAT = DOMAIN + "/seller/stat";
     public final static String SELLER_STAT_LOG = DOMAIN + "/seller/stat/log";
 

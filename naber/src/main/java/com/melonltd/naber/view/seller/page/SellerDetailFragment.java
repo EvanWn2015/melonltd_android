@@ -22,6 +22,7 @@ import com.bigkoo.pickerview.listener.OnOptionsSelectListener;
 import com.bigkoo.pickerview.view.OptionsPickerView;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.melonltd.naber.R;
 import com.melonltd.naber.model.api.ApiManager;
 import com.melonltd.naber.model.api.ThreadCallback;
@@ -287,8 +288,24 @@ public class SellerDetailFragment extends Fragment implements View.OnClickListen
 
                 break;
             case R.id.logoutBtn:
-                SPService.removeAll();
-                getActivity().finish();
+                Map<String, String> req = Maps.newHashMap();
+                req.put("account_uuid" , SPService.getOauth());
+                req.put("device_token" , FirebaseInstanceId.getInstance().getToken());
+                req.put("device_category", "ANDROID");
+                ApiManager.logout(req, new ThreadCallback(getContext()) {
+                    @Override
+                    public void onSuccess(String responseBody) {
+                        SPService.removeAll();
+                        getActivity().finish();
+                    }
+
+                    @Override
+                    public void onFail(Exception error, String msg) {
+                        SPService.removeAll();
+                        getActivity().finish();
+                    }
+                });
+
                 break;
             case R.id.storeStartText:
                 showDatePicker(R.id.storeStartText);
