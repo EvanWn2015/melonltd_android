@@ -11,11 +11,15 @@ import android.media.RingtoneManager;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 
+import com.google.common.collect.Lists;
 import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 import com.melonltd.naber.R;
+import com.melonltd.naber.model.type.Identity;
 import com.melonltd.naber.view.common.BaseActivity;
+import com.melonltd.naber.view.seller.page.SellerOrdersFragment;
 
+import java.util.List;
 import java.util.Map;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
@@ -25,21 +29,24 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
 //    private static final String CHANNEL_DESC = "Firebase Cloud Messaging";
     private int numMessages = 0;
 
-//    private static List<Identity> USER_IDENTITY = Identity.getUserValues();
+    private static List<Identity> USER_IDENTITY = Identity.getUserValues();
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
 //        Log.i(TAG, Tools.JSONPARSE.toJson(remoteMessage.getData()));
 
         Map<String, String> map = remoteMessage.getData();
-//        Identity identity = Identity.of(map.get("identity"));
-//        Identity currentIdentity = Identity.of(SPService.getIdentity());
-//        if (USER_IDENTITY.containsAll(Lists.newArrayList(identity, currentIdentity))) {
-//            sendNotification(map);
-//        } else if (Lists.newArrayList(identity, currentIdentity).contains(Identity.SELLERS)) {
-//            sendNotification(map);
-//        }
-        sendNotification(map);
+        Identity identity = Identity.of(map.get("identity"));
+        Identity currentIdentity = Identity.of(SPService.getIdentity());
+        if (USER_IDENTITY.containsAll(Lists.newArrayList(identity, currentIdentity))) {
+            sendNotification(map);
+        } else if (Lists.newArrayList(identity, currentIdentity).contains(Identity.SELLERS)) {
+            sendNotification(map);
+            if (SellerOrdersFragment.FRAGMENT != null){
+                SellerOrdersFragment.loadLiveData();
+            }
+        }
+//        sendNotification(map);
     }
 
     private void sendNotification(Map<String, String> data) {

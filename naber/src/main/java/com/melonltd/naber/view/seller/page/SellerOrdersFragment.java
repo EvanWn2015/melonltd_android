@@ -1,6 +1,7 @@
 package com.melonltd.naber.view.seller.page;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -42,20 +43,22 @@ import cn.bingoogolapple.refreshlayout.BGARefreshLayout;
 
 import static com.melonltd.naber.model.type.OrderStatus.CAN_FETCH;
 import static com.melonltd.naber.model.type.OrderStatus.FINISH;
+import static com.melonltd.naber.model.type.OrderStatus.LIVE;
 import static com.melonltd.naber.model.type.OrderStatus.PROCESSING;
 import static com.melonltd.naber.model.type.OrderStatus.UNFINISH;
 
 
 public class SellerOrdersFragment extends Fragment {
-//    private static final String TAG = SellerOrdersFragment.class.getSimpleName();
+    //    private static final String TAG = SellerOrdersFragment.class.getSimpleName();
     public static SellerOrdersFragment FRAGMENT = null;
     private TextView searchDateText;
-    private TextView untreatedText, processingText, canFetchText;
+    private TextView liveText, untreatedText, processingText, canFetchText;
     private ReqData unReq = new ReqData(), prReq = new ReqData(), canReq = new ReqData();
-    private OrderStatus STATUS_TAG = OrderStatus.UNFINISH;
-    private SellerOrdersAdapter adapter;
-//    private Handler handler;
-//    private OrderListRun orderListRun;
+    private static OrderStatus STATUS_TAG = OrderStatus.LIVE;
+    private static SellerOrdersAdapter adapter;
+    private static Handler handler;
+    private static LiveOrderRun liveOrderRun;
+    private static Context context;
 
     public SellerOrdersFragment() {
 
@@ -78,6 +81,7 @@ public class SellerOrdersFragment extends Fragment {
         prReq.search_type = OrderStatus.PROCESSING.name();
         canReq.search_type = OrderStatus.CAN_FETCH.name();
 //        handler = new Handler();
+        this.context = getContext();
     }
 
     @Override
@@ -100,12 +104,20 @@ public class SellerOrdersFragment extends Fragment {
 
         SellerMainActivity.notifyDateRange();
 
-        loadData(true);
+        if (OrderStatus.LIVE.equals(STATUS_TAG)){
+            loadLiveData();
+        }else {
+            loadData(true);
+        }
     }
 
     @Override
     public void onStop() {
         super.onStop();
+
+        if (handler != null){
+            handler.removeCallbacks(liveOrderRun);
+        }
     }
 
     private void getViews(View v) {
@@ -119,6 +131,7 @@ public class SellerOrdersFragment extends Fragment {
         refreshLayout.setRefreshViewHolder(refreshViewHolder);
         searchDateText = v.findViewById(R.id.searchDateText);
 
+        liveText = v.findViewById(R.id.liveText);
         untreatedText = v.findViewById(R.id.untreatedText);
         processingText = v.findViewById(R.id.processingText);
         canFetchText = v.findViewById(R.id.canFetchText);
@@ -128,9 +141,12 @@ public class SellerOrdersFragment extends Fragment {
         searchDateText.setOnClickListener(new SelectDateListener());
         TabClickListener tabClickListener = new TabClickListener();
 
+
+        liveText.setTag(LIVE);
         untreatedText.setTag(UNFINISH);
         processingText.setTag(PROCESSING);
         canFetchText.setTag(CAN_FETCH);
+        liveText.setOnClickListener(tabClickListener);
         untreatedText.setOnClickListener(tabClickListener);
         processingText.setOnClickListener(tabClickListener);
         canFetchText.setOnClickListener(tabClickListener);
@@ -142,6 +158,7 @@ public class SellerOrdersFragment extends Fragment {
         adapter = new SellerOrdersAdapter(new CancelListener(), new FailureListener(), new StatusChangeClickListener());
         recyclerView.setAdapter(adapter);
         Calendar now = Calendar.getInstance();
+        searchDateText.setVisibility(View.GONE);
         searchDateText.setText(new SimpleDateFormat("yyyy-MM-dd").format(now.getTime()));
         searchDateText.setTag(Tools.FORMAT.formatDate(now.getTime()));
 
@@ -149,7 +166,12 @@ public class SellerOrdersFragment extends Fragment {
             @Override
             public void onBGARefreshLayoutBeginRefreshing(BGARefreshLayout refreshLayout) {
                 refreshLayout.endRefreshing();
-                loadData(true);
+
+                if (OrderStatus.LIVE.equals(STATUS_TAG)){
+                    loadLiveData();
+                }else {
+                    loadData(true);
+                }
             }
 
             @Override
@@ -168,7 +190,6 @@ public class SellerOrdersFragment extends Fragment {
                         loadingMore = canReq.loadingMore;
                         break;
                 }
-
                 if (loadingMore) {
                     loadData(false);
                 }
@@ -176,8 +197,6 @@ public class SellerOrdersFragment extends Fragment {
                 return false;
             }
         });
-
-//        loadData(true);
     }
 
     class SelectDateListener implements View.OnClickListener {
@@ -186,38 +205,42 @@ public class SellerOrdersFragment extends Fragment {
 //            if (orderListRun != null) {
 //                handler.removeCallbacks(orderListRun);
 //            }
+            if (OrderStatus.LIVE.equals(STATUS_TAG)){
 
-            long date = 1000 * 60 * 60 * 24 * 2L;
-            long dayOne = 1000 * 60 * 60 * 24 * 1L;
+            }else {
+                long date = 1000 * 60 * 60 * 24 * 2L;
+                long dayOne = 1000 * 60 * 60 * 24 * 1L;
 
-            Calendar now = Calendar.getInstance();
-            Calendar startDate = Calendar.getInstance();
-            startDate.setTimeInMillis(now.getTime().getTime() - dayOne);
-            Calendar endDate = Calendar.getInstance();
-            endDate.setTimeInMillis(now.getTime().getTime() + date);
+                Calendar now = Calendar.getInstance();
+                Calendar startDate = Calendar.getInstance();
+                startDate.setTimeInMillis(now.getTime().getTime() - dayOne);
+                Calendar endDate = Calendar.getInstance();
+                endDate.setTimeInMillis(now.getTime().getTime() + date);
 
-            new TimePickerBuilder(getContext(),
-                    new OnTimeSelectListener() {
-                        @Override
-                        public void onTimeSelect(Date date, View v) {
-                            searchDateText.setTag(Tools.FORMAT.formatDate(date));
-                            searchDateText.setText(new SimpleDateFormat("yyyy-MM-dd").format(date));
-                            loadData(true);
-                        }
-                    })
-                    .setType(new boolean[]{true, true, true, false, false, false})
-                    .setTitleSize(20)
-                    .setOutSideCancelable(true)
-                    .isCyclic(false)
-                    .setTitleBgColor(getResources().getColor(R.color.naber_dividing_line_gray))
-                    .setCancelColor(getResources().getColor(R.color.naber_dividing_gray))
-                    .setSubmitColor(getResources().getColor(R.color.naber_dividing_gray))
-                    .setDate(now)
-                    .setRangDate(startDate, endDate)
-                    .isCenterLabel(false)
-                    .isDialog(false)
-                    .build()
-                    .show();
+                new TimePickerBuilder(getContext(),
+                        new OnTimeSelectListener() {
+                            @Override
+                            public void onTimeSelect(Date date, View v) {
+                                searchDateText.setTag(Tools.FORMAT.formatDate(date));
+                                searchDateText.setText(new SimpleDateFormat("yyyy-MM-dd").format(date));
+                                loadData(true);
+                            }
+                        })
+                        .setType(new boolean[]{true, true, true, false, false, false})
+                        .setTitleSize(20)
+                        .setOutSideCancelable(true)
+                        .isCyclic(false)
+                        .setTitleBgColor(getResources().getColor(R.color.naber_dividing_line_gray))
+                        .setCancelColor(getResources().getColor(R.color.naber_dividing_gray))
+                        .setSubmitColor(getResources().getColor(R.color.naber_dividing_gray))
+                        .setDate(now)
+                        .setRangDate(startDate, endDate)
+                        .isCenterLabel(false)
+                        .isDialog(false)
+                        .build()
+                        .show();
+            }
+
         }
     }
 
@@ -254,7 +277,7 @@ public class SellerOrdersFragment extends Fragment {
                         @Override
                         public void onItemClick(Object o, int position) {
                             if (position == 1) {
-                                new Handler().postDelayed(new StatusChangeRun (index ,req), 300);
+                                new Handler().postDelayed(new StatusChangeRun(index, req), 300);
                             }
                         }
                     })
@@ -265,13 +288,15 @@ public class SellerOrdersFragment extends Fragment {
     }
 
 
-    class StatusChangeRun implements Runnable{
+    class StatusChangeRun implements Runnable {
         private ReqData req;
         private int index;
-        StatusChangeRun(int index, ReqData req){
+
+        StatusChangeRun(int index, ReqData req) {
             this.index = index;
             this.req = req;
         }
+
         @Override
         public void run() {
 //            req.uuid = Model.SELLER_TMP_ORDERS_LIST.get(index).order_uuid;
@@ -280,6 +305,9 @@ public class SellerOrdersFragment extends Fragment {
     }
 
     private void sellerChangeOrder(ReqData req, final int index) {
+        if (handler != null){
+            handler.removeCallbacks(liveOrderRun);
+        }
         ApiManager.sellerChangeOrder(req, new ThreadCallback(getContext()) {
             @Override
             public void onSuccess(String responseBody) {
@@ -297,13 +325,21 @@ public class SellerOrdersFragment extends Fragment {
                         Model.SELLER_CAN_FETCH_ORDERS_LIST.remove(index);
                         adapter.notifyDataSetChanged();
                         break;
+                    case LIVE:
+                        adapter.notifyDataSetChanged();
+                        handler.post(liveOrderRun);
+                        break;
                 }
-//                adapter.notifyDataSetChanged();
             }
 
             @Override
             public void onFail(Exception error, String msg) {
-
+                if (OrderStatus.LIVE.equals(STATUS_TAG)){
+                    if (handler != null){
+                        handler.removeCallbacks(liveOrderRun);
+                    }
+                    handler.post(liveOrderRun);
+                }
             }
         });
     }
@@ -416,6 +452,56 @@ public class SellerOrdersFragment extends Fragment {
         }
     }
 
+
+    public static void loadLiveData() {
+        if (OrderStatus.LIVE.equals(STATUS_TAG)){
+            if (handler == null) {
+                handler = new Handler();
+            }
+
+            if (liveOrderRun == null) {
+                liveOrderRun = new LiveOrderRun(context);
+            }
+
+            if (handler != null && liveOrderRun!= null){
+                handler.removeCallbacks(liveOrderRun);
+            }
+
+            Model.SELLER_TMP_ORDERS_LIST.clear();
+            handler.post(liveOrderRun);
+        }
+    }
+
+
+    static class LiveOrderRun implements Runnable {
+        private Context context;
+        LiveOrderRun (Context context){
+            this.context = context;
+        }
+        @Override
+        public void run() {
+            Model.SELLER_TMP_ORDERS_LIST.clear();
+            adapter.notifyDataSetChanged();
+            ApiManager.sellerOrderLive(new ThreadCallback(this.context) {
+                @Override
+                public void onSuccess(String responseBody) {
+                    List<OrderVo> list = Tools.JSONPARSE.fromJsonList(responseBody, OrderVo[].class);
+                    for (int i = 0; i < list.size(); i++) {
+                        list.get(i).order_detail = Tools.JSONPARSE.fromJson(list.get(i).order_data, OrderDetail.class);
+                    }
+                    Model.SELLER_TMP_ORDERS_LIST.addAll(list);
+                    adapter.notifyDataSetChanged();
+                    handler.postDelayed(liveOrderRun, NaberConstant.SELLER_LIVE_ORDER_REFRESH_TIMER);
+                }
+
+                @Override
+                public void onFail(Exception error, String msg) {
+                    handler.postDelayed(liveOrderRun, NaberConstant.SELLER_LIVE_ORDER_REFRESH_TIMER);
+                }
+            });
+        }
+    }
+
     private void loadData(boolean isRefresh) {
         if (isRefresh) {
             Model.SELLER_TMP_ORDERS_LIST.clear();
@@ -495,6 +581,10 @@ public class SellerOrdersFragment extends Fragment {
     class TabClickListener implements View.OnClickListener {
         @Override
         public void onClick(View view) {
+            if (handler != null){
+                handler.removeCallbacks(liveOrderRun);
+            }
+
             OrderStatus status = (OrderStatus) view.getTag();
             if (STATUS_TAG.equals(status)) {
                 return;
@@ -504,7 +594,7 @@ public class SellerOrdersFragment extends Fragment {
         }
 
         private void changeTab(TextView textView, OrderStatus status) {
-            List<TextView> views = Lists.newArrayList(untreatedText, processingText, canFetchText);
+            List<TextView> views = Lists.newArrayList(liveText, untreatedText, processingText, canFetchText);
             for (TextView tv : views) {
                 tv.setTextColor(getResources().getColor(android.R.color.black));
                 tv.setBackgroundColor(getResources().getColor(R.color.colorAccent));
@@ -513,7 +603,13 @@ public class SellerOrdersFragment extends Fragment {
                     tv.setTextColor(getResources().getColor(android.R.color.white));
                 }
             }
-            loadData(true);
+            if (OrderStatus.LIVE.equals(STATUS_TAG)) {
+                loadLiveData();
+                searchDateText.setVisibility(View.GONE);
+            } else {
+                searchDateText.setVisibility(View.VISIBLE);
+                loadData(true);
+            }
         }
     }
 

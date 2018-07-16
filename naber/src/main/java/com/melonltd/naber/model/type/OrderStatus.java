@@ -4,7 +4,7 @@ import com.google.common.base.Strings;
 import com.melonltd.naber.R;
 
 public enum OrderStatus {
-
+    LIVE("LIVE", "即時", R.color.naber_basis_bright_yellow),
     UNFINISH("UNFINISH", "未處理", R.color.naber_basis_blue),
     PROCESSING("PROCESSING", "製作中", R.color.naber_basis_orange),
     CAN_FETCH("CAN_FETCH", "可領取", R.color.naber_basis_bright_yellow),

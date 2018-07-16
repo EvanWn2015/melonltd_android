@@ -61,6 +61,12 @@ public class ApiManager {
         call.enqueue(callback);
     }
 
+    // 登出
+    public static void logout(Map<String, String> req, ThreadCallback callback) {
+        Call call = getClient().postHeader(ApiUrl.LOGOUT, SPService.getOauth(), Base64Service.encryptBASE64(Tools.JSONPARSE.toJson(req)));
+        call.enqueue(callback);
+    }
+
 
     /**
      * 以下為使用者是使用 API
@@ -179,6 +185,12 @@ public class ApiManager {
     // 取得訂單列表
     public static void sellerOrderList(ReqData req, ThreadCallback callback) {
         Call call = getClient().postHeader(ApiUrl.ORDER_LIST, SPService.getOauth(), Base64Service.encryptBASE64(Tools.JSONPARSE.toJson(req)));
+        call.enqueue(callback);
+    }
+
+    // 取得即時訂單列表
+    public static void sellerOrderLive(ThreadCallback callback) {
+        Call call = getClient().postHeader(ApiUrl.ORDER_LIVE, SPService.getOauth());
         call.enqueue(callback);
     }
 

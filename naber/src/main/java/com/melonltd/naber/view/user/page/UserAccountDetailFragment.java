@@ -23,6 +23,8 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.imagepipeline.request.ImageRequestBuilder;
 import com.google.common.base.Strings;
+import com.google.common.collect.Maps;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.melonltd.naber.R;
 import com.melonltd.naber.model.api.ApiManager;
 import com.melonltd.naber.model.api.ThreadCallback;
@@ -39,6 +41,7 @@ import com.melonltd.naber.vo.AccountInfoVo;
 import com.melonltd.naber.vo.ReqData;
 
 import java.io.ByteArrayOutputStream;
+import java.util.Map;
 
 public class UserAccountDetailFragment extends Fragment implements View.OnClickListener {
 //    private static final String TAG = UserAccountDetailFragment.class.getSimpleName();
@@ -196,9 +199,28 @@ public class UserAccountDetailFragment extends Fragment implements View.OnClickL
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.logoutBtn:
-                SPService.removeAll();
-                getActivity().finish();
-                UserMainActivity.clearAllFragment();
+
+                Map<String, String> req = Maps.newHashMap();
+                req.put("account_uuid" , SPService.getOauth());
+                req.put("device_token" , FirebaseInstanceId.getInstance().getToken());
+                req.put("device_category", "ANDROID");
+                ApiManager.logout(req, new ThreadCallback(getContext()) {
+                    @Override
+                    public void onSuccess(String responseBody) {
+                        SPService.removeAll();
+                        getActivity().finish();
+                        UserMainActivity.clearAllFragment();
+                    }
+
+                    @Override
+                    public void onFail(Exception error, String msg) {
+                        SPService.removeAll();
+                        getActivity().finish();
+                        UserMainActivity.clearAllFragment();
+                    }
+                });
+
+
                 break;
             case R.id.toResetPasswordBtn:
                 TO_RESET_PASSWORD_INDEX = 1;
