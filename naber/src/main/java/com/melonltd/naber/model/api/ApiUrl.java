@@ -8,11 +8,7 @@ public class ApiUrl {
 
 //    public final static String DOMAIN = "http://192.168.31.252:8080/melonltd-ap";
 //    public final static String DOMAIN = "http://192.168.31.14:8080/melonltd-ap";
-
-//    public final static String DOMAIN = "http://192.168.2.101:8080/melonltd-ap";
-//    public final static String DOMAIN = "https://192.168.
-// 2.100/melonltd-ap";
-
+//    public final static String DOMAIN = "https://192.168.2.100";
 
     public final static String DOMAIN = "https://ap.melonltd.com.tw";
     public final static String LOGIN = DOMAIN + "/login";

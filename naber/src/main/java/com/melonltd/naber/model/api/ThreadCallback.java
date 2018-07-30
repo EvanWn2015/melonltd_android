@@ -20,7 +20,7 @@ import okhttp3.Callback;
 import okhttp3.Response;
 
 public abstract class ThreadCallback implements Callback {
-//    private static final String TAG = ThreadCallback.class.getSimpleName();
+    private static final String TAG = ThreadCallback.class.getSimpleName();
     private AlertDialog DIALOG = null;
 
     abstract public void onSuccess(String responseBody);
@@ -31,10 +31,9 @@ public abstract class ThreadCallback implements Callback {
 
     public ThreadCallback(Context context) {
         this.context = context;
-        if (! (context instanceof Activity)) {
-//            Log.d(TAG, "! context instanceof Activity");
+        if (context instanceof Activity) {
+            this.DIALOG = LoadingBarTools.newLoading(context);
         }
-        this.DIALOG = LoadingBarTools.newLoading(context);
     }
 
 
@@ -45,14 +44,18 @@ public abstract class ThreadCallback implements Callback {
             public void run() {
                 // 如果是 network 錯誤
                 if (checkNetWork()) {
-                    DIALOG.cancel();
+                    if (DIALOG != null){
+                        DIALOG.cancel();
+                    }
                     getAlertView();
                     return;
                 }
                 if (e.getMessage().contains("Canceled") || e.getMessage().contains("Socket closed")) {
 //                    Log.e(TAG, "fail", e);
                 } else {
-                    DIALOG.cancel();
+                    if (DIALOG != null){
+                        DIALOG.cancel();
+                    }
                     onFail(e, e.getMessage());
                 }
 
@@ -73,16 +76,18 @@ public abstract class ThreadCallback implements Callback {
                     final String resp = Base64Service.decryptBASE64(response.body().string());
                     RespData data = Tools.JSONPARSE.fromJson(resp, RespData.class);
                     if (data.status.toUpperCase().equals("TRUE")){
-                        DIALOG.cancel();
+                        if (DIALOG != null){
+                            DIALOG.cancel();
+                        }
                         onSuccess(Tools.JSONPARSE.toJson(data.data));
                     }else {
-                        DIALOG.cancel();
+                        if (DIALOG != null) {
+                            DIALOG.cancel();
+                        }
                         onFail(new IOException("Failed"), data.err_msg);
                     }
-
                 } catch (Exception e) {
-//                    Log.e(TAG, "fail", e);
-//                    DIALOG.hide();
+
                     onFailure(call, new IOException("Failed"));
                 }
 
@@ -102,14 +107,16 @@ public abstract class ThreadCallback implements Callback {
     }
 
     private void getAlertView() {
-        new AlertView.Builder()
-                .setContext(this.context)
-                .setStyle(AlertView.Style.Alert)
-                .setTitle("網路連線錯誤")
-                .setMessage("請檢查 Wi-Fi 或 4G是否已連接。")
-                .setDestructive("確定")
-                .build()
-                .setCancelable(true)
-                .show();
+        if (context instanceof Activity) {
+            new AlertView.Builder()
+                    .setContext(this.context)
+                    .setStyle(AlertView.Style.Alert)
+                    .setTitle("網路連線錯誤")
+                    .setMessage("請檢查 Wi-Fi 或 4G是否已連接。")
+                    .setDestructive("確定")
+                    .build()
+                    .setCancelable(true)
+                    .show();
+        }
     }
 }
