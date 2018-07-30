@@ -184,7 +184,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
             result = false;
         }
         if (Strings.isNullOrEmpty(passwordEdit.getText().toString())) {
-            message = "請輸入帳號";
+            message = "請輸入密碼";
             result = false;
         }
         if (!result) {

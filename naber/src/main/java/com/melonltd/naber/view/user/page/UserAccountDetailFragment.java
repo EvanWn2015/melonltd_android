@@ -204,6 +204,7 @@ public class UserAccountDetailFragment extends Fragment implements View.OnClickL
                 req.put("account_uuid" , SPService.getOauth());
                 req.put("device_token" , FirebaseInstanceId.getInstance().getToken());
                 req.put("device_category", "ANDROID");
+
                 ApiManager.logout(req, new ThreadCallback(getContext()) {
                     @Override
                     public void onSuccess(String responseBody) {
@@ -219,7 +220,6 @@ public class UserAccountDetailFragment extends Fragment implements View.OnClickL
                         UserMainActivity.clearAllFragment();
                     }
                 });
-
 
                 break;
             case R.id.toResetPasswordBtn:
