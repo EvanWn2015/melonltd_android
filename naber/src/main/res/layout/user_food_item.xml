@@ -2,7 +2,6 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:fresco="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/naber_text_base_line">
@@ -20,7 +19,8 @@
         app:layout_constraintHorizontal_chainStyle="spread_inside"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        fresco:failureImage="@drawable/naber_icon_logo_reverse" />
+        fresco:failureImage="@drawable/naber_icon_logo_reverse"
+        fresco:roundedCornerRadius="12dp" />
 
     <TextView
         android:id="@+id/ordersItemNameText"
@@ -69,8 +69,9 @@
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
-        android:background="@drawable/naber_reverse_gary_button_style"
+        android:background="@drawable/naber_red_button_style"
         android:text="刪除"
+        android:textColor="@android:color/white"
         android:textSize="14sp"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@+id/editBtn"
@@ -84,8 +85,9 @@
         android:layout_height="32dp"
         android:layout_marginBottom="4dp"
         android:layout_marginTop="4dp"
-        android:background="@drawable/naber_reverse_gary_button_style"
+        android:background="@drawable/naber_blue_button_style"
         android:text="編輯"
+        android:textColor="@android:color/white"
         android:textSize="14sp"
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="parent"

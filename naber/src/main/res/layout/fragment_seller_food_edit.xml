@@ -43,7 +43,8 @@
             app:layout_constraintStart_toStartOf="@+id/view10"
             app:layout_constraintTop_toTopOf="@+id/view10"
             fresco:backgroundImage="@drawable/naber_icon_logo"
-            fresco:failureImage="@drawable/naber_icon_logo" />
+            fresco:failureImage="@drawable/naber_icon_logo"
+            fresco:roundedCornerRadius="15dp" />
 
         <TextView
             android:id="@+id/textView80"
@@ -94,14 +95,13 @@
 
             <LinearLayout
                 android:id="@+id/demandLayout"
-                android:orientation="vertical"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-            </LinearLayout>
+                android:layout_height="wrap_content"
+                android:orientation="vertical"></LinearLayout>
 
         </LinearLayout>
 
-        <LinearLayout
+        <android.support.constraint.ConstraintLayout
             android:id="@+id/linearLayout6"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -117,32 +117,51 @@
 
             <Button
                 android:id="@+id/demandBtn"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="36dp"
-                android:layout_margin="8dp"
+                android:layout_marginBottom="4dp"
+                android:layout_marginEnd="4dp"
+                android:layout_marginTop="4dp"
                 android:layout_weight="1"
-                android:background="@color/naber_basis"
-                android:text="新增需求" />
+                android:background="@drawable/naber_button_style"
+                android:text="新增需求"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/cancelBtn"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <Button
                 android:id="@+id/cancelBtn"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="36dp"
-                android:layout_margin="8dp"
+                android:layout_marginBottom="4dp"
+                android:layout_marginEnd="4dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="4dp"
                 android:layout_weight="1"
-                android:background="@color/naber_basis"
-                android:text="取消" />
+                android:background="@drawable/naber_button_style"
+                android:text="取消"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/saveBtn"
+                app:layout_constraintStart_toEndOf="@+id/demandBtn"
+                app:layout_constraintTop_toTopOf="parent" />
 
             <Button
                 android:id="@+id/saveBtn"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="36dp"
-                android:layout_margin="8dp"
+                android:layout_marginBottom="4dp"
+                android:layout_marginStart="4dp"
+                android:layout_marginTop="4dp"
                 android:layout_weight="1"
-                android:background="@color/naber_basis"
-                android:text="儲存" />
+                android:background="@drawable/naber_button_style"
+                android:text="儲存"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/cancelBtn"
+                app:layout_constraintTop_toTopOf="parent" />
 
-        </LinearLayout>
+        </android.support.constraint.ConstraintLayout>
 
     </android.support.constraint.ConstraintLayout>
 </ScrollView>

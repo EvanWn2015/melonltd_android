@@ -36,7 +36,7 @@ public class RegisteredFragment extends Fragment implements View.OnClickListener
     private AccountInfoVo account = new AccountInfoVo();
     private TextView identityText;
 //    birthdayText;
-    private EditText nameEditText,  passwordEditText, confirmPasswordEditText;
+    private EditText nameEditText, passwordEditText, confirmPasswordEditText;
 //    addressEditText, emailEditText,
 
     public RegisteredFragment() {
@@ -263,7 +263,7 @@ public class RegisteredFragment extends Fragment implements View.OnClickListener
         }
         // 驗證密碼與確認密碼一致
         if (!passwordEditText.getText().toString().equals(confirmPasswordEditText.getText().toString())) {
-            message = "密碼與確認密碼一致";
+            message = "密碼與確認密碼不一致";
             result = false;
         }
         // 驗證生日不為空

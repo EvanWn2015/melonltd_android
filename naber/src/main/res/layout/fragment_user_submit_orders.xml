@@ -14,8 +14,9 @@
         android:layout_height="0dp"
         android:overScrollMode="never"
         android:scrollbars="none"
-        app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
+        app:layout_constraintBottom_toTopOf="@+id/readRuleCheckBtn"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -46,14 +47,14 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
+                android:background="@drawable/naber_white_text_box"
+                android:ellipsize="marquee"
+                android:hint="請點此選擇(由於要製作，時間需為現在的20分鐘後)"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:padding="18dp"
+                android:scrollHorizontally="true"
                 android:scrollbars="vertical"
                 android:singleLine="true"
-                android:marqueeRepeatLimit="marquee_forever"
-                android:ellipsize="marquee"
-                android:scrollHorizontally="true"
-                android:background="@drawable/naber_white_text_box"
-                android:hint="請點此選擇(由於要製作，時間需為現在的20分鐘後)"
-                android:padding="18dp"
                 android:textSize="14sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -161,6 +162,18 @@
         </android.support.constraint.ConstraintLayout>
     </ScrollView>
 
+    <CheckBox
+        android:id="@+id/readRuleCheckBtn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:text="使用者規範"
+        android:checked="false"
+        app:layout_constraintBottom_toTopOf="@+id/constraintLayout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/scrollView2" />
+
     <android.support.constraint.ConstraintLayout
         android:id="@+id/constraintLayout"
         android:layout_width="match_parent"
@@ -168,7 +181,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/scrollView2">
+        app:layout_constraintTop_toBottomOf="@+id/readRuleCheckBtn">
 
         <View
             android:id="@+id/view8"
@@ -221,7 +234,7 @@
             android:layout_height="30dp"
             android:layout_marginEnd="16dp"
             android:layout_marginRight="16dp"
-            android:background="@color/naber_basis_red"
+            android:background="@drawable/naber_red_button_style"
             android:text="送出訂單"
             android:textColor="@android:color/white"
             android:textSize="14sp"

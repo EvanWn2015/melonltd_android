@@ -270,7 +270,17 @@ public class UserShoppingCartFragment extends Fragment {
 
             holder.setSubViews(position);
             holder.totalAmountText.setText(amount + "");
-            holder.bonusText.setText(((int) Math.floor(amount / 10d)) + "");
+            // TODO 未更新APP會生錯誤
+            if (Strings.isNullOrEmpty(Model.USER_CACHE_SHOPPING_CART.get(position).can_discount)){
+                Model.USER_CACHE_SHOPPING_CART.get(position).can_discount = "Y";
+            }
+
+            if (Model.USER_CACHE_SHOPPING_CART.get(position).can_discount.equals("N")){
+                holder.bonusText.setText("該店家不提供紅利");
+            }else {
+                holder.bonusText.setText(((int) Math.floor(amount / 10d)) + "");
+            }
+//            holder.bonusText.setText(((int) Math.floor(amount / 10d)) + "");
             holder.nameText.setText(Model.USER_CACHE_SHOPPING_CART.get(position).restaurant_name);
             holder.cancelBtn.setTag(position);
             holder.submitBtn.setTag(position);

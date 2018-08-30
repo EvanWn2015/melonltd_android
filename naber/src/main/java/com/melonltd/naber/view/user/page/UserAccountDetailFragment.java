@@ -103,7 +103,7 @@ public class UserAccountDetailFragment extends Fragment implements View.OnClickL
                 @Override
                 public void onClick(View view) {
                     UserSetUpFragment.TO_ACCOUNT_DETAIL_INDEX = -1;
-                    UserMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.USER_SET_UP, null);
+                    UserMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.USER_ACCOUNT, null);
                     UserMainActivity.navigationIconDisplay(false, null);
                 }
             });

@@ -10,7 +10,6 @@ import com.melonltd.naber.vo.OrderDetail;
 import com.melonltd.naber.vo.OrderVo;
 import com.melonltd.naber.vo.RestaurantCategoryRelVo;
 import com.melonltd.naber.vo.RestaurantInfoVo;
-import com.melonltd.naber.vo.RestaurantTemplate;
 import com.melonltd.naber.vo.SellerStatVo;
 
 import java.util.List;
@@ -24,10 +23,10 @@ public class Model {
     public static Map<String, Map<String, String>> BULLETIN_VOS = Maps.<String, Map<String, String>>newHashMap();
     public static List<String> BANNER_IMAGES = Lists.<String>newArrayList();
     public static Location LOCATION;
-    public static List<List<RestaurantTemplate>> RESTAURANT_TEMPLATE_PAGS = Lists.<List<RestaurantTemplate>>newArrayList();
-    public static List<RestaurantTemplate> RESTAURANT_TEMPLATE = Lists.<RestaurantTemplate>newArrayList();
-    public static List<RestaurantInfoVo> RESTAURANT_INFO_LIST = Lists.<RestaurantInfoVo>newArrayList();
-    public static List<RestaurantCategoryRelVo> RESTAURANT_CATEGORY_REL_LIST = Lists.<RestaurantCategoryRelVo>newArrayList();
+//    public static List<List<RestaurantTemplate>> RESTAURANT_TEMPLATE_PAGS = Lists.<List<RestaurantTemplate>>newArrayList();
+//    public static List<RestaurantTemplate> RESTAURANT_TEMPLATE = Lists.<RestaurantTemplate>newArrayList();
+//    public static List<RestaurantInfoVo> RESTAURANT_INFO_LIST = Lists.<RestaurantInfoVo>newArrayList();
+//    public static List<RestaurantCategoryRelVo> RESTAURANT_CATEGORY_REL_LIST = Lists.<RestaurantCategoryRelVo>newArrayList();
     public static List<RestaurantInfoVo> RESTAURANT_INFO_FILTER_LIST = Lists.<RestaurantInfoVo>newArrayList();
     public static List<CategoryFoodRelVo> CATEGORY_FOOD_REL_LIST = Lists.<CategoryFoodRelVo>newArrayList();
     public static List<OrderVo> USER_ORDER_HISTORY_LIST = Lists.newArrayList();

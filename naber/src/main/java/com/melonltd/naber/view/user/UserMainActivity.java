@@ -9,12 +9,17 @@ import android.support.multidex.MultiDex;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.common.collect.Lists;
 import com.melonltd.naber.R;
+import com.melonltd.naber.model.api.ApiCallback;
+import com.melonltd.naber.model.api.ApiManager;
+import com.melonltd.naber.model.constant.NaberConstant;
+import com.melonltd.naber.util.Tools;
 import com.melonltd.naber.view.common.BaseCore;
 import com.melonltd.naber.view.customize.NaberTab;
 import com.melonltd.naber.view.factory.PageFragmentFactory;
@@ -39,10 +44,11 @@ import java.util.List;
 public class UserMainActivity extends BaseCore implements View.OnClickListener, TabLayout.OnTabSelectedListener {
 //    private static final String TAG = UserMainActivity.class.getSimpleName();
     private static Context context;
+    public static int LAYOUT_WIDTH = 0;
     public static Toolbar toolbar;
     public static List<View> tabViews = Lists.<View>newArrayList();
     private static FragmentManager FM;
-    private static final List<PageType> MAIN_PAGE = Lists.newArrayList(PageType.USER_HOME, PageType.USER_RESTAURANT_LIST, PageType.USER_SHOPPING_CART, PageType.USER_ORDER_HISTORY, PageType.USER_SET_UP);
+    private static final List<PageType> MAIN_PAGE = Lists.newArrayList(PageType.USER_HOME, PageType.USER_RESTAURANT_LIST, PageType.USER_SHOPPING_CART, PageType.USER_ORDER_HISTORY, PageType.USER_ACCOUNT);
 
     @Override
     protected void attachBaseContext(Context base) {
@@ -58,6 +64,11 @@ public class UserMainActivity extends BaseCore implements View.OnClickListener, 
         getView();
         FM = getSupportFragmentManager();
         removeAndReplaceWhere(null, PageType.USER_HOME, null);
+
+        DisplayMetrics dm = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(dm);
+
+        LAYOUT_WIDTH = dm.widthPixels;
     }
 
     private void getView() {
@@ -71,18 +82,31 @@ public class UserMainActivity extends BaseCore implements View.OnClickListener, 
         View v1 = new NaberTab(context).Builder().setIcon(R.drawable.naber_tab_restaurant_icon).setTitle(R.string.menu_restaurant_btn).build();
         View v2 = new NaberTab(context).Builder().setIcon(R.drawable.naber_tab_shopping_cart_icon).setTitle(R.string.menu_shopping_cart_btn).build();
         View v3 = new NaberTab(context).Builder().setIcon(R.drawable.naber_tab_history_icon).setTitle(R.string.menu_history_btn).build();
-        View v4 = new NaberTab(context).Builder().setIcon(R.drawable.naber_tab_set_up_icon).setTitle(R.string.menu_set_up_btn).build();
+        View v4 = new NaberTab(context).Builder().setIcon(R.drawable.naber_tab_account_icon).setTitle(R.string.menu_account_btn).build();
         tabViews = Lists.<View>newArrayList(v0, v1, v2, v3, v4);
         tabLayout.addTab(tabLayout.newTab().setCustomView(v0).setTag(R.string.menu_home_btn), false);
         tabLayout.addTab(tabLayout.newTab().setCustomView(v1).setTag(R.string.menu_restaurant_btn), false);
         tabLayout.addTab(tabLayout.newTab().setCustomView(v2).setTag(R.string.menu_shopping_cart_btn), false);
         tabLayout.addTab(tabLayout.newTab().setCustomView(v3).setTag(R.string.menu_history_btn), false);
-        tabLayout.addTab(tabLayout.newTab().setCustomView(v4).setTag(R.string.menu_set_up_btn), false);
+        tabLayout.addTab(tabLayout.newTab().setCustomView(v4).setTag(R.string.menu_account_btn), false);
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
+        ApiManager.storeCategoryList(new ApiCallback(context) {
+            @Override
+            public void onSuccess(String responseBody) {
+                List<String> categoryNames = Tools.JSONPARSE.fromJsonList(responseBody, String[].class);
+                NaberConstant.FILTER_CATEGORYS = new String[categoryNames.size()];
+                NaberConstant.FILTER_CATEGORYS = categoryNames.toArray(NaberConstant.FILTER_CATEGORYS);
+            }
+            @Override
+            public void onFail(Exception error, String msg) {
+//                Log.i(TAG, msg);
+            }
+        });
     }
 
     @Override

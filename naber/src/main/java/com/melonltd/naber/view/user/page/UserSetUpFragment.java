@@ -107,25 +107,29 @@ public class UserSetUpFragment extends Fragment{
         public void onClick(View view) {
             switch (view.getId()) {
                 case R.id.toAccountEdit:
-                    TO_ACCOUNT_DETAIL_INDEX = 1;
+                    // 因個人紅利問題，每次訪問該頁面從新抓取使用者資訊，不可停留在細節畫面
+//                    TO_ACCOUNT_DETAIL_INDEX = 1;
                     Bundle bundle = new Bundle();
                     bundle.putSerializable(NaberConstant.ACCOUNT_INFO, holder.accountInfoVo);
                     UserMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.USER_ACCOUNT_DETAIL, bundle);
                     break;
+                case R.id.toBonusExchange:
+                    UserMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.USER_BONUS_EXCHANGE, null);
+                    break;
                 case R.id.toAboutUsText:
-                    TO_SIMPLE_INFO_INDEX = 1;
+//                    TO_SIMPLE_INFO_INDEX = 1;
                     holder.bundle.putString(NaberConstant.TOOLBAR_TITLE, ((TextView)view).getText().toString());
                     holder.bundle.putStringArrayList(NaberConstant.SIMPLE_INFO, Lists.newArrayList("ABOUT_US","APPLY_OF_SELLER"));
                     UserMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.USER_SIMPLE_INFO, holder.bundle);
                     break;
                 case R.id.toHelpText:
-                    TO_SIMPLE_INFO_INDEX = 1;
+//                    TO_SIMPLE_INFO_INDEX = 1;
                     holder.bundle.putString(NaberConstant.TOOLBAR_TITLE, ((TextView)view).getText().toString());
                     holder.bundle.putStringArrayList(NaberConstant.SIMPLE_INFO, Lists.newArrayList("FAQ","CONTACT_US"));
                     UserMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.USER_SIMPLE_INFO, holder.bundle);
                     break;
                 case R.id.toTeachingText:
-                    TO_SIMPLE_INFO_INDEX = 1;
+//                    TO_SIMPLE_INFO_INDEX = 1;
                     holder.bundle.putString(NaberConstant.TOOLBAR_TITLE, ((TextView)view).getText().toString());
                     holder.bundle.putStringArrayList(NaberConstant.SIMPLE_INFO, Lists.newArrayList("TEACHING"));
                     UserMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.USER_SIMPLE_INFO, holder.bundle);
@@ -163,6 +167,7 @@ public class UserSetUpFragment extends Fragment{
             SwitchButton soundSwitch = v.findViewById(R.id.soundSwitch);
             SwitchButton shakeSwitch = v.findViewById(R.id.shakeSwitch);
             TextView toAccountEdit = v.findViewById(R.id.toAccountEdit);
+            TextView toBonusExchange = v.findViewById(R.id.toBonusExchange);
             TextView toAboutUsText = v.findViewById(R.id.toAboutUsText);
             TextView toHelpText = v.findViewById(R.id.toHelpText);
             TextView toTeachingText = v.findViewById(R.id.toTeachingText);
@@ -176,6 +181,7 @@ public class UserSetUpFragment extends Fragment{
 
             SetUpClick click = new SetUpClick();
             toAccountEdit.setOnClickListener(click);
+            toBonusExchange.setOnClickListener(click);
             toAboutUsText.setOnClickListener(click);
             toHelpText.setOnClickListener(click);
             toTeachingText.setOnClickListener(click);

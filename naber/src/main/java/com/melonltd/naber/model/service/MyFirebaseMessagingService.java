@@ -8,7 +8,6 @@ import android.content.Intent;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.media.RingtoneManager;
-import android.net.Uri;
 import android.os.Build;
 import android.support.v4.app.NotificationCompat;
 
@@ -25,6 +24,7 @@ import java.util.Map;
 
 public class MyFirebaseMessagingService extends FirebaseMessagingService {
 
+    private static String TAG = MyFirebaseMessagingService.class.getSimpleName();
     private int numMessages = 0;
 
     private static List<Identity> USER_IDENTITY = Identity.getUserValues();
@@ -36,42 +36,44 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         Identity identity = Identity.of(map.get("identity"));
         Identity currentIdentity = Identity.of(SPService.getIdentity());
         if (USER_IDENTITY.containsAll(Lists.newArrayList(identity, currentIdentity))) {
-            sendNotification(map);
+            sendNotification(remoteMessage.getNotification());
         } else if (Lists.newArrayList(identity, currentIdentity).contains(Identity.SELLERS)) {
-            sendNotification(map);
+            sendNotification(remoteMessage.getNotification());
             if (SellerOrdersFragment.FRAGMENT != null){
                 SellerOrdersFragment.loadLiveData();
             }
         }
     }
 
-    private void sendNotification(Map<String, String> data) {
+
+    private void sendNotification(RemoteMessage.Notification notify) {
 
         Intent intent = new Intent(this, BaseActivity.class);
 
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-        NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, "1")
-                .setContentTitle(data.get("title"))
-                .setContentText(data.get("message"))
-                .setAutoCancel(true)
-                .setContentIntent(pendingIntent)
-//                .setContentInfo("Hello")
-                .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.naber_icon_logo_reverse))
-                .setColor(getResources().getColor(R.color.colorAccent))
-                .setLights(Color.RED, 1000, 300)
-                .setDefaults(SPService.getNotifyShake()? Notification.DEFAULT_VIBRATE : 0)
-                .setSound(SPService.getNotifySound() ? RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION) : Uri.parse(""))
-                .setNumber(++numMessages)
-                .setSmallIcon(R.drawable.ic_notif_eca_small);
+        if (notify != null ){
+            NotificationCompat.Builder notificationBuilder = new NotificationCompat.Builder(this, "1")
+                    .setContentTitle(notify.getTitle())
+                    .setContentText(notify.getBody())
+                    .setAutoCancel(true)
+                    .setContentIntent(pendingIntent)
+                    .setLargeIcon(BitmapFactory.decodeResource(getResources(), R.mipmap.naber_icon_logo_reverse))
+                    .setColor(getResources().getColor(R.color.colorAccent))
+                    .setLights(Color.RED, 1000, 300)
+                    .setDefaults( Notification.DEFAULT_VIBRATE )
+                    .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
+                    .setNumber(++numMessages)
+                    .setSmallIcon(R.drawable.ic_notif_eca_small);
 
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            notificationBuilder.setStyle(new NotificationCompat.BigTextStyle().setBigContentTitle(data.get("title")).bigText(data.get("message")));
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
+                notificationBuilder.setStyle(new NotificationCompat.BigTextStyle().setBigContentTitle(notify.getTitle()).bigText(notify.getBody()));
+            }
+
+            NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+            assert notificationManager != null;
+            notificationManager.notify(numMessages, notificationBuilder.build());
         }
 
-        NotificationManager notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-        assert notificationManager != null;
-        notificationManager.notify(numMessages, notificationBuilder.build());
     }
-
 }

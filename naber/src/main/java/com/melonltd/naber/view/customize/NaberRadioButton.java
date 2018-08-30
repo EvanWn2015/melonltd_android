@@ -7,6 +7,7 @@ import android.view.View;
 import android.widget.RadioButton;
 
 import com.google.common.base.Strings;
+import com.melonltd.naber.R;
 
 import java.io.Serializable;
 
@@ -49,7 +50,7 @@ public class NaberRadioButton implements Serializable {
 
         Builder(Context context) {
             this.naberRadio = new NaberRadioButton();
-            this.radio = new RadioButton(context);
+            this.radio = new RadioButton(context, null, R.attr.radioButtonStyle);
             this.radio.setGravity(Gravity.START);
             this.radio.setTextSize(TypedValue.COMPLEX_UNIT_SP, 12);
             this.radio.setText("");
