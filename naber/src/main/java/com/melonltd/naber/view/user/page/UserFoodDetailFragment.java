@@ -294,7 +294,7 @@ public class UserFoodDetailFragment extends Fragment implements View.OnClickList
             if (restaurantInfo.restaurant_uuid.equals(o.restaurant_uuid)) {
                 o.restaurant_name = restaurantInfo.name;
                 // TODO 位置配送類型 ＆ 結算類型，預設 原價 自取
-                o.order_type = OrderDetail.OrderType.setDefult();
+                o.order_type = OrderDetail.OrderType.setDefault();
                 o.restaurant_address = restaurantInfo.address;
                 o.can_discount = restaurantInfo.can_discount;
                 o.user_name = SPService.getUserName();
@@ -308,7 +308,7 @@ public class UserFoodDetailFragment extends Fragment implements View.OnClickList
             orderDetail.restaurant_uuid = restaurantInfo.restaurant_uuid;
             orderDetail.restaurant_name = restaurantInfo.name;
             // TODO 位置配送類型 ＆ 結算類型，預設 原價 自取
-            orderDetail.order_type = OrderDetail.OrderType.setDefult();
+            orderDetail.order_type = OrderDetail.OrderType.setDefault();
             orderDetail.restaurant_address = restaurantInfo.address;
             orderDetail.can_discount = restaurantInfo.can_discount;
             orderDetail.user_name = SPService.getUserName();

@@ -52,7 +52,7 @@ public class OrderDetail implements Serializable {
         OrderType(){
         }
 
-        public static OrderType setDefult(){
+        public static OrderType setDefault(){
             OrderType orderType = new OrderType();
             orderType.billing = BillingType.ORIGINAL;
             orderType.delivery = Delivery.OUT;
