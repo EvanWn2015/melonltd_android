@@ -12,7 +12,6 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,7 +46,7 @@ import cn.bingoogolapple.refreshlayout.BGARefreshLayout;
 import static com.melonltd.naber.view.common.BaseCore.LOCATION_MG;
 
 public class UserRestaurantListFragment extends Fragment implements View.OnClickListener {
-    private static final String TAG = UserRestaurantListFragment.class.getSimpleName();
+//    private static final String TAG = UserRestaurantListFragment.class.getSimpleName();
     public static UserRestaurantListFragment FRAGMENT = null;
     private List<RestaurantTemplate> restaurantTemplates = Lists.<RestaurantTemplate>newArrayList();
     private List<List<RestaurantTemplate>> restaurantTemplatePages = Lists.<List<RestaurantTemplate>>newArrayList();
@@ -189,7 +188,7 @@ public class UserRestaurantListFragment extends Fragment implements View.OnClick
 
             @Override
             public void onFail(Exception error, String msg) {
-                Log.i(TAG, msg);
+//                Log.i(TAG, msg);
             }
         });
     }

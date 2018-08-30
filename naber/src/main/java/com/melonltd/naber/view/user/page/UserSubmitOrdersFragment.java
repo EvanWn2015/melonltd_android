@@ -49,7 +49,9 @@ public class UserSubmitOrdersFragment extends Fragment implements View.OnClickLi
     private int dataIndex = -1;
     private Handler handler = new Handler();
 
-    public UserSubmitOrdersFragment() {
+
+    public UserSubmitOrdersFragment(){
+
     }
 
     public Fragment getInstance(Bundle bundle) {
@@ -146,6 +148,7 @@ public class UserSubmitOrdersFragment extends Fragment implements View.OnClickLi
         for (int i = 0; i < Model.USER_CACHE_SHOPPING_CART.get(dataIndex).orders.size(); i++) {
             amount += Integer.parseInt(Model.USER_CACHE_SHOPPING_CART.get(dataIndex).orders.get(i).item.price);
         }
+        readRuleCheckBtn.setChecked(false);
         ordersPriceText.setText("$ " + amount);
 
         if (Model.USER_CACHE_SHOPPING_CART.get(dataIndex).can_discount.equals("N")){

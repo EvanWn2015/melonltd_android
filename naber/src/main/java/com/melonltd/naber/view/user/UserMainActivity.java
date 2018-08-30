@@ -10,7 +10,6 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -43,7 +42,7 @@ import java.util.List;
 
 
 public class UserMainActivity extends BaseCore implements View.OnClickListener, TabLayout.OnTabSelectedListener {
-    private static final String TAG = UserMainActivity.class.getSimpleName();
+//    private static final String TAG = UserMainActivity.class.getSimpleName();
     private static Context context;
     public static int LAYOUT_WIDTH = 0;
     public static Toolbar toolbar;
@@ -105,7 +104,7 @@ public class UserMainActivity extends BaseCore implements View.OnClickListener, 
             }
             @Override
             public void onFail(Exception error, String msg) {
-                Log.i(TAG, msg);
+//                Log.i(TAG, msg);
             }
         });
     }

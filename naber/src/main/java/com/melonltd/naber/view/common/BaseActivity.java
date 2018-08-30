@@ -8,7 +8,6 @@ import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -36,7 +35,7 @@ import com.melonltd.naber.vo.AppVersionLogVo;
 import java.util.Date;
 
 public class BaseActivity extends BaseCore {
-    private static final String TAG = BaseActivity.class.getSimpleName();
+//    private static final String TAG = BaseActivity.class.getSimpleName();
     public static Context context;
     public static Toolbar toolbar;
     public static FragmentManager FM;
@@ -108,7 +107,7 @@ public class BaseActivity extends BaseCore {
                 }
                 @Override
                 public void onFail(Exception error, String msg) {
-                    Log.i(TAG, msg);
+//                    Log.i(TAG, msg);
                     new Handler().postDelayed(new StartUse(), 500);
                 }
             });
