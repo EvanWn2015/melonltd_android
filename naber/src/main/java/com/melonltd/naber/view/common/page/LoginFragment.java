@@ -25,7 +25,6 @@ import com.melonltd.naber.model.service.SPService;
 import com.melonltd.naber.model.type.Identity;
 import com.melonltd.naber.util.Tools;
 import com.melonltd.naber.view.common.BaseActivity;
-import com.melonltd.naber.view.common.BaseCore;
 import com.melonltd.naber.view.factory.PageType;
 import com.melonltd.naber.view.seller.SellerMainActivity;
 import com.melonltd.naber.view.user.UserMainActivity;
@@ -122,7 +121,7 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                             SPService.setRememberAccount(resp.phone);
 
                             if (Identity.getUserValues().contains(Identity.of(resp.identity))) {
-                                BaseCore.loadRestaurantTemplate(getContext());
+//                                BaseCore.loadRestaurantTemplate(getContext());
                                 startActivity(new Intent(getActivity().getBaseContext(), UserMainActivity.class));
                             } else if (Identity.SELLERS.equals(Identity.of(resp.identity))) {
                                 startActivity(new Intent(getActivity().getBaseContext(), SellerMainActivity.class));

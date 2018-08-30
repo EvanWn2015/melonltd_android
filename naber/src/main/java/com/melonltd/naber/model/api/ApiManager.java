@@ -1,5 +1,6 @@
 package com.melonltd.naber.model.api;
 
+import com.google.common.collect.Maps;
 import com.melonltd.naber.model.service.Base64Service;
 import com.melonltd.naber.model.service.SPService;
 import com.melonltd.naber.util.Tools;
@@ -69,6 +70,24 @@ public class ApiManager {
 
 
     /**
+     * common
+     */
+    // 1.檢查app版本，並確認是否需要更新
+    public static void checkAppVersion(ThreadCallback callback) {
+        Map<String, String> req = Maps.newHashMap();
+
+        Call call = getClient().post(ApiUrl.CHECK_APP_VERSION, Base64Service.encryptBASE64("ANDROID"));
+        call.enqueue(callback);
+    }
+
+    // 2.取得店家類型列表
+    public static void storeCategoryList (ApiCallback callback) {
+        Call call = getClient().post(ApiUrl.STORE_CATEGORY_LIST);
+        call.enqueue(callback);
+    }
+
+
+    /**
      * 以下為使用者是使用 API
      */
     // 輪播圖
@@ -84,7 +103,7 @@ public class ApiManager {
     }
 
     // 取得餐館地理位置模板
-    public static void restaurantTemplate(ApiCallback callback) {
+    public static void restaurantTemplate(ThreadCallback callback) {
         Call call = getClient().postHeader(ApiUrl.RESTAURANT_TEMPLATE, SPService.getOauth());
         call.enqueue(callback);
     }

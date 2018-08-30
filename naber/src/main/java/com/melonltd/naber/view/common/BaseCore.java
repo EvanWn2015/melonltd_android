@@ -21,24 +21,17 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.common.base.Function;
 import com.google.common.collect.Lists;
-import com.google.common.collect.Ordering;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.melonltd.naber.R;
-import com.melonltd.naber.model.api.ApiCallback;
-import com.melonltd.naber.model.api.ApiManager;
 import com.melonltd.naber.model.bean.IdentityJsonBean;
 import com.melonltd.naber.model.bean.Model;
 import com.melonltd.naber.model.constant.NaberConstant;
 import com.melonltd.naber.model.service.SPService;
-import com.melonltd.naber.util.DistanceTools;
 import com.melonltd.naber.util.Tools;
 import com.melonltd.naber.view.factory.PageType;
-import com.melonltd.naber.vo.LocationVo;
-import com.melonltd.naber.vo.RestaurantTemplate;
 
 import java.util.List;
 
@@ -234,32 +227,6 @@ public abstract class BaseCore extends AppCompatActivity implements LocationList
         }
         return super.onKeyDown(keyCode, event);
     }
-
-
-    public static void loadRestaurantTemplate(Context context) {
-        Model.RESTAURANT_TEMPLATE_PAGS.clear();
-        ApiManager.restaurantTemplate(new ApiCallback(context) {
-            @Override
-            public void onSuccess(String responseBody) {
-                Model.RESTAURANT_TEMPLATE = Tools.JSONPARSE.fromJsonList(responseBody, RestaurantTemplate[].class);
-                for (int i = 0; i < Model.RESTAURANT_TEMPLATE.size(); i++) {
-                    Model.RESTAURANT_TEMPLATE.get(i).distance = DistanceTools.getDistance(Model.LOCATION, LocationVo.of(Model.RESTAURANT_TEMPLATE.get(i).latitude, Model.RESTAURANT_TEMPLATE.get(i).longitude));
-                }
-                Ordering<RestaurantTemplate> ordering = Ordering.natural().nullsFirst().onResultOf(new Function<RestaurantTemplate, Double>() {
-                    public Double apply(RestaurantTemplate template) {
-                        return template.distance;
-                    }
-                });
-                Model.RESTAURANT_TEMPLATE_PAGS.addAll(Lists.partition(ordering.sortedCopy(Model.RESTAURANT_TEMPLATE), 10));
-            }
-
-            @Override
-            public void onFail(Exception error, String msg) {
-
-            }
-        });
-    }
-
 
     public static void loadJsonData(Context context) {
         String jsonData = Tools.JSONPARSE.getJson(context, "identity.json");

@@ -2,6 +2,7 @@ package com.melonltd.naber.view.user.page;
 
 
 import android.Manifest;
+import android.content.Context;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationManager;
@@ -11,13 +12,16 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
-import android.widget.TextView;
+import android.widget.EditText;
 
 import com.bigkoo.alertview.AlertView;
+import com.bigkoo.alertview.OnDismissListener;
 import com.bigkoo.alertview.OnItemClickListener;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
@@ -27,12 +31,10 @@ import com.melonltd.naber.model.api.ApiManager;
 import com.melonltd.naber.model.api.ThreadCallback;
 import com.melonltd.naber.model.bean.Model;
 import com.melonltd.naber.model.constant.NaberConstant;
-import com.melonltd.naber.util.DistanceTools;
 import com.melonltd.naber.util.Tools;
 import com.melonltd.naber.view.factory.PageType;
 import com.melonltd.naber.view.user.UserMainActivity;
 import com.melonltd.naber.view.user.adapter.UserRestaurantAdapter;
-import com.melonltd.naber.vo.LocationVo;
 import com.melonltd.naber.vo.ReqData;
 import com.melonltd.naber.vo.RestaurantInfoVo;
 import com.melonltd.naber.vo.RestaurantTemplate;
@@ -45,11 +47,13 @@ import cn.bingoogolapple.refreshlayout.BGARefreshLayout;
 import static com.melonltd.naber.view.common.BaseCore.LOCATION_MG;
 
 public class UserRestaurantListFragment extends Fragment implements View.OnClickListener {
-//    private static final String TAG = UserRestaurantListFragment.class.getSimpleName();
+    private static final String TAG = UserRestaurantListFragment.class.getSimpleName();
     public static UserRestaurantListFragment FRAGMENT = null;
-
-    private TextView filterTypeText;
-    private Button filterCategoryBtn, filterAreaBtn, filterDistanceBtn;
+    private List<RestaurantTemplate> restaurantTemplates = Lists.<RestaurantTemplate>newArrayList();
+    private List<List<RestaurantTemplate>> restaurantTemplatePages = Lists.<List<RestaurantTemplate>>newArrayList();
+//    private TextView filterTypeText;
+    private Button filterNameBtn, filterCategoryBtn, filterAreaBtn, filterDistanceBtn;
+    private List<Button> filterBtns = Lists.newArrayList();
     private ReqData reqData = new ReqData();
     private UserRestaurantAdapter adapter;
     private Location location;
@@ -86,11 +90,12 @@ public class UserRestaurantListFragment extends Fragment implements View.OnClick
     }
 
     private void getViews(View v) {
-        filterTypeText = v.findViewById(R.id.filterTypeText);
+//        filterTypeText = v.findViewById(R.id.filterTypeText);
+        filterNameBtn = v.findViewById(R.id.filterNameBtn);
         filterCategoryBtn = v.findViewById(R.id.filterCategoryBtn);
         filterAreaBtn = v.findViewById(R.id.filterAreaBtn);
         filterDistanceBtn = v.findViewById(R.id.filterDistanceBtn);
-
+        filterBtns = Lists.newArrayList(filterNameBtn, filterCategoryBtn, filterAreaBtn, filterDistanceBtn);
         final BGARefreshLayout bgaRefreshLayout = v.findViewById(R.id.restaurantBGARefreshLayout);
         RecyclerView recyclerView = v.findViewById(R.id.restaurantRecyclerView);
 
@@ -108,6 +113,8 @@ public class UserRestaurantListFragment extends Fragment implements View.OnClick
 
         // setListener
         recyclerView.setAdapter(adapter);
+
+        filterNameBtn.setOnClickListener(this);
         filterCategoryBtn.setOnClickListener(this);
         filterAreaBtn.setOnClickListener(this);
         filterDistanceBtn.setOnClickListener(this);
@@ -120,10 +127,10 @@ public class UserRestaurantListFragment extends Fragment implements View.OnClick
                 reqData.loadingMore = true;
                 reqData.page = 1;
                 if (reqData.search_type.equals("DISTANCE")) {
-                    reqData.uuids.clear();
-                    reqData.uuids.addAll(getTemplate(reqData.page,true));
+                    filterDistanceBtn.callOnClick();
+                }else {
+                    doLoadData(true);
                 }
-                doLoadData(true);
             }
 
             @Override
@@ -156,11 +163,15 @@ public class UserRestaurantListFragment extends Fragment implements View.OnClick
                 List<RestaurantInfoVo> list = Tools.JSONPARSE.fromJsonList(responseBody, RestaurantInfoVo[].class);
                 reqData.loadingMore = list.size() % NaberConstant.PAGE == 0 && list.size() != 0;
                 for (int i = 0; i < list.size(); i++) {
-                    list.get(i).distance = DistanceTools.getDistance(location, LocationVo.of(list.get(i).latitude, list.get(i).longitude));
+                    Location rl = new Location("newlocation");
+                    rl.setLatitude(Double.parseDouble(list.get(i).latitude));
+                    rl.setLongitude(Double.parseDouble(list.get(i).longitude));
+                    list.get(i).distance = location.distanceTo(rl) / 1000;
+//                    list.get(i).distance = DistanceTools.getDistance(location, LocationVo.of(list.get(i).latitude, list.get(i).longitude));
                 }
 
                 if (reqData.search_type.equals("DISTANCE")) {
-                    reqData.loadingMore = Model.RESTAURANT_TEMPLATE_PAGS.size() > reqData.page;
+                    reqData.loadingMore = restaurantTemplatePages.size() > reqData.page;
                     Ordering<RestaurantInfoVo> ordering = Ordering.natural()
                             .nullsFirst()
                             .onResultOf(new Function<RestaurantInfoVo, Double>() {
@@ -178,7 +189,7 @@ public class UserRestaurantListFragment extends Fragment implements View.OnClick
 
             @Override
             public void onFail(Exception error, String msg) {
-
+                Log.i(TAG, msg);
             }
         });
     }
@@ -221,23 +232,58 @@ public class UserRestaurantListFragment extends Fragment implements View.OnClick
     public void onClick(final View v) {
 
         switch (v.getId()) {
+            case R.id.filterNameBtn:
+                View extView = getLayoutInflater().inflate(R.layout.alert_edit_view, null);
+                final EditText nameEdit = extView.findViewById(R.id.edit);
+                nameEdit.setLines(1);
+                nameEdit.setMaxLines(1);
+                nameEdit.setHint("店家名稱");
+
+                new AlertView.Builder()
+                        .setContext(getContext())
+                        .setStyle(AlertView.Style.Alert)
+                        .setTitle("請輸入查詢店家名稱")
+                        .setCancelText("取消")
+                        .setOthers(new String[] {"確定"})
+                        .setOnItemClickListener(new OnItemClickListener() {
+                            @Override
+                            public void onItemClick(Object o, int position) {
+                                if (position != -1) {
+                                    setFilterBtnsColor(v);
+                                    if (!reqData.category.equals(NaberConstant.FILTER_CATEGORYS[position])) {
+                                        reqData = new ReqData();
+                                        reqData.search_type = "STORE_NAME";
+                                        reqData.name = nameEdit.getText().toString();
+                                        reqData.page = 1;
+                                        doLoadData(true);
+                                    }
+                                }
+                            }
+                        })
+                        .build()
+                        .addExtView(extView)
+                        .setCancelable(false)
+                        .setOnDismissListener(new OnDismissListener() {
+                            @Override
+                            public void onDismiss(Object o) {
+                                InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                            }
+                        })
+                        .show();
+                break;
             case R.id.filterCategoryBtn:
                 new AlertView.Builder()
-
                         .setContext(getContext())
                         .setStyle(AlertView.Style.ActionSheet)
-                        .setTitle("請選擇種類")
                         .setCancelText("取消")
                         .setOthers(NaberConstant.FILTER_CATEGORYS)
                         .setOnItemClickListener(new OnItemClickListener() {
                             @Override
                             public void onItemClick(Object o, int position) {
                                 if (position != -1) {
-                                    filterAreaBtn.setBackground(getResources().getDrawable(R.drawable.naber_reverse_gary_button_style));
-                                    filterDistanceBtn.setBackground(getResources().getDrawable(R.drawable.naber_reverse_gary_button_style));
-                                    v.setBackgroundColor(getResources().getColor(R.color.naber_basis));
+                                    setFilterBtnsColor(v);
                                     if (!reqData.category.equals(NaberConstant.FILTER_CATEGORYS[position])) {
-                                        filterTypeText.setText(NaberConstant.FILTER_CATEGORYS[position]);
                                         reqData = new ReqData();
                                         reqData.search_type = "CATEGORY";
                                         reqData.category = NaberConstant.FILTER_CATEGORYS[position];
@@ -255,18 +301,15 @@ public class UserRestaurantListFragment extends Fragment implements View.OnClick
                 new AlertView.Builder()
                         .setContext(getContext())
                         .setStyle(AlertView.Style.ActionSheet)
-                        .setTitle("請選擇區域")
+//                        .setTitle("請選擇區域")
                         .setOthers(NaberConstant.FILTER_AREAS)
                         .setCancelText("取消")
                         .setOnItemClickListener(new OnItemClickListener() {
                             @Override
                             public void onItemClick(Object o, int position) {
                                 if (position != -1) {
-                                    filterCategoryBtn.setBackground(getResources().getDrawable(R.drawable.naber_reverse_gary_button_style));
-                                    filterDistanceBtn.setBackground(getResources().getDrawable(R.drawable.naber_reverse_gary_button_style));
-                                    v.setBackgroundColor(getResources().getColor(R.color.naber_basis));
+                                    setFilterBtnsColor(v);
                                     if (!reqData.area.equals(NaberConstant.FILTER_AREAS[position])) {
-                                        filterTypeText.setText(NaberConstant.FILTER_AREAS[position]);
                                         reqData = new ReqData();
                                         reqData.search_type = "AREA";
                                         reqData.area = NaberConstant.FILTER_AREAS[position];
@@ -281,42 +324,76 @@ public class UserRestaurantListFragment extends Fragment implements View.OnClick
                         .show();
                 break;
             case R.id.filterDistanceBtn:
-                filterCategoryBtn.setBackground(getResources().getDrawable(R.drawable.naber_reverse_gary_button_style));
-                filterAreaBtn.setBackground(getResources().getDrawable(R.drawable.naber_reverse_gary_button_style));
-                v.setBackgroundColor(getResources().getColor(R.color.naber_basis));
-                if (reqData.search_type == null || !reqData.search_type.equals("DISTANCE")) {
-                    filterTypeText.setText("離我最近");
-                    reqData = new ReqData();
-                    reqData.search_type = "DISTANCE";
-                    reqData.uuids = Lists.newArrayList();
-                    reqData.page = 1;
-                    reqData.uuids.addAll(getTemplate(reqData.page, true));
-                    doLoadData(true);
-                }
+                setFilterBtnsColor(v);
+                restaurantTemplatePages.clear();
+                ApiManager.restaurantTemplate(new ThreadCallback(getContext()) {
+                    @Override
+                    public void onSuccess(String responseBody) {
+                        restaurantTemplates.clear();
+                        restaurantTemplates.addAll(Tools.JSONPARSE.fromJsonList(responseBody, RestaurantTemplate[].class));
+                        for (int i = 0; i < restaurantTemplates.size(); i++) {
+                            Location rl = new Location("newlocation");
+                            rl.setLatitude(restaurantTemplates.get(i).latitude);
+                            rl.setLongitude(restaurantTemplates.get(i).longitude);
+                            restaurantTemplates.get(i).distance = location.distanceTo(rl) / 1000;
+//                            restaurantTemplates.get(i).distance = DistanceTools.getDistance(Model.LOCATION, LocationVo.of(restaurantTemplates.get(i).latitude, restaurantTemplates.get(i).longitude));
+                        }
+                        Ordering<RestaurantTemplate> ordering = Ordering.natural().nullsFirst().onResultOf(new Function<RestaurantTemplate, Double>() {
+                            public Double apply(RestaurantTemplate template) {
+                                return template.distance;
+                            }
+                        });
+                        restaurantTemplatePages.addAll(Lists.partition(ordering.sortedCopy(restaurantTemplates), 10));
+
+                        reqData = new ReqData();
+                        reqData.search_type = "DISTANCE";
+                        reqData.uuids = Lists.newArrayList();
+                        reqData.page = 1;
+                        reqData.uuids.addAll(getTemplate(reqData.page, true));
+                        doLoadData(true);
+                    }
+
+                    @Override
+                    public void onFail(Exception error, String msg) {
+
+                    }
+                });
                 break;
         }
     }
 
-    private static List<String> getTemplate(int page, boolean isRefresh) {
+    private  void setFilterBtnsColor(View v){
+        for(Button b : filterBtns) {
+            b.setBackground(getResources().getDrawable(R.drawable.naber_reverse_gary_button_style));
+        }
+        v.setBackground(getResources().getDrawable(R.drawable.naber_button_style));
+    }
+
+    private  List<String> getTemplate(int page, boolean isRefresh) {
         if(isRefresh){
-            Model.RESTAURANT_TEMPLATE_PAGS.clear();
-            for (int i = 0; i < Model.RESTAURANT_TEMPLATE.size(); i++) {
-                Model.RESTAURANT_TEMPLATE.get(i).distance = DistanceTools.getDistance(Model.LOCATION, LocationVo.of(Model.RESTAURANT_TEMPLATE.get(i).latitude, Model.RESTAURANT_TEMPLATE.get(i).longitude));
+            restaurantTemplatePages.clear();
+            for (int i = 0; i < restaurantTemplates.size(); i++) {
+                Location rl = new Location("newlocation");
+                rl.setLatitude(restaurantTemplates.get(i).latitude);
+                rl.setLongitude(restaurantTemplates.get(i).longitude);
+                restaurantTemplates.get(i).distance = location.distanceTo(rl) / 1000;
+
+//                restaurantTemplates.get(i).distance = DistanceTools.getDistance(Model.LOCATION, LocationVo.of(restaurantTemplates.get(i).latitude, restaurantTemplates.get(i).longitude));
             }
             Ordering<RestaurantTemplate> ordering = Ordering.natural().nullsFirst().onResultOf(new Function<RestaurantTemplate, Double>() {
                 public Double apply(RestaurantTemplate template) {
                     return template.distance;
                 }
             });
-            Model.RESTAURANT_TEMPLATE_PAGS.addAll(Lists.partition(ordering.sortedCopy(Model.RESTAURANT_TEMPLATE), 10));
+            restaurantTemplatePages.addAll(Lists.partition(ordering.sortedCopy(restaurantTemplates), 10));
         }
         List<String> uuids = Lists.<String>newArrayList();
-        if (Model.RESTAURANT_TEMPLATE_PAGS.size() <= page - 1) {
+        if (restaurantTemplatePages.size() <= page - 1) {
             return uuids;
         }
-        if (!Model.RESTAURANT_TEMPLATE_PAGS.isEmpty()) {
-            for (int i = 0; i < Model.RESTAURANT_TEMPLATE_PAGS.get(page - 1).size(); i++) {
-                uuids.add(Model.RESTAURANT_TEMPLATE_PAGS.get(page - 1).get(i).restaurant_uuid);
+        if (!restaurantTemplatePages.isEmpty()) {
+            for (int i = 0; i < restaurantTemplatePages.get(page - 1).size(); i++) {
+                uuids.add(restaurantTemplatePages.get(page - 1).get(i).restaurant_uuid);
             }
         }
         return uuids;

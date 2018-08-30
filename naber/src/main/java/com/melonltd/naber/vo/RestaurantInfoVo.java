@@ -17,6 +17,7 @@ public class RestaurantInfoVo implements Serializable {
     public String is_store_now_open;
     public List<String> not_business = Lists.newArrayList();
     public List<DateRangeVo> can_store_range;
+    public String can_discount;
     public String restaurant_category;
     public String latitude;
     public String longitude;
@@ -159,6 +160,7 @@ public class RestaurantInfoVo implements Serializable {
                 .add("store_end", store_end)
                 .add("not_business", not_business)
                 .add("can_store_range", can_store_range)
+                .add("can_discount", can_discount)
                 .add("restaurant_category", restaurant_category)
                 .add("latitude", latitude)
                 .add("longitude", longitude)

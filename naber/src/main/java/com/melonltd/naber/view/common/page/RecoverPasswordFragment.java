@@ -28,7 +28,8 @@ import java.util.Map;
 public class RecoverPasswordFragment extends Fragment implements View.OnClickListener {
 //    private static final String TAG = RecoverPasswordFragment.class.getSimpleName();
     public static RecoverPasswordFragment FRAGMENT = null;
-    private EditText mailEdit, phoneEdit;
+//    private EditText mailEdit, phoneEdit;
+    private EditText phoneEdit;
 
     public RecoverPasswordFragment() {
     }
@@ -59,11 +60,11 @@ public class RecoverPasswordFragment extends Fragment implements View.OnClickLis
 
     private void getView(View v) {
         Button submitBtn = v.findViewById(R.id.submitRecoverPasswordBtn);
-        mailEdit = v.findViewById(R.id.emailEdit);
+//        mailEdit = v.findViewById(R.id.emailEdit);
         phoneEdit = v.findViewById(R.id.phoneEdit);
 
         HideKeyboard hideKeyboard = new HideKeyboard();
-        mailEdit.setOnFocusChangeListener(hideKeyboard);
+//        mailEdit.setOnFocusChangeListener(hideKeyboard);
         phoneEdit.setOnFocusChangeListener(hideKeyboard);
         submitBtn.setOnClickListener(this);
         v.setOnClickListener(this);
@@ -73,7 +74,7 @@ public class RecoverPasswordFragment extends Fragment implements View.OnClickLis
     public void onResume() {
         super.onResume();
         BaseActivity.changeToolbarStatus();
-        mailEdit.setText("");
+//        mailEdit.setText("");
         phoneEdit.setText("");
         if (BaseActivity.toolbar != null) {
             BaseActivity.navigationIconDisplay(true, new View.OnClickListener() {
@@ -115,7 +116,7 @@ public class RecoverPasswordFragment extends Fragment implements View.OnClickLis
             if (verifyInput()) {
                 Map<String, String> req  = Maps.newHashMap();
                 req.put("phone", phoneEdit.getText().toString());
-                req.put("email", mailEdit.getText().toString());
+//                req.put("email", mailEdit.getText().toString());
                 ApiManager.forgetPassword(req, new ThreadCallback(getContext()) {
                     @Override
                     public void onSuccess(String responseBody) {
@@ -170,11 +171,11 @@ public class RecoverPasswordFragment extends Fragment implements View.OnClickLis
             result = false;
         }
 
-        // 驗證Email錯誤格式
-        if (!VerifyUtil.email(mailEdit.getText().toString())) {
-            message = "Email錯誤格式，請重新輸入";
-            result = false;
-        }
+//        // 驗證Email錯誤格式
+//        if (!VerifyUtil.email(mailEdit.getText().toString())) {
+//            message = "Email錯誤格式，請重新輸入";
+//            result = false;
+//        }
 
         if (!result) {
             new AlertView.Builder()

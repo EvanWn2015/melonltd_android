@@ -17,6 +17,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        fresco:roundedCornerRadius="12dp"
         fresco:failureImage="@drawable/naber_icon_logo_reverse"
         android:layout_marginLeft="8dp" />
 

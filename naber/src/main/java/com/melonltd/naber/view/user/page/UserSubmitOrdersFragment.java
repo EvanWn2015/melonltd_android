@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -44,6 +45,7 @@ public class UserSubmitOrdersFragment extends Fragment implements View.OnClickLi
     private TextView selectDateText, userNameText, userPhoneNumberText, ordersPriceText, ordersBonusText;
     private EditText userMessageEdit;
     private TimePickerView timePickerView;
+    private CheckBox readRuleCheckBtn;
     private int dataIndex = -1;
     private Handler handler = new Handler();
 
@@ -82,10 +84,42 @@ public class UserSubmitOrdersFragment extends Fragment implements View.OnClickLi
         ordersPriceText = v.findViewById(R.id.ordersPriceText);
         ordersBonusText = v.findViewById(R.id.ordersBonusText);
         userMessageEdit = v.findViewById(R.id.userMessageEdit);
+        readRuleCheckBtn = v.findViewById(R.id.readRuleCheckBtn);
         Button submitOrdersBtn = v.findViewById(R.id.submitOrdersBtn);
 
         selectDateText.setOnClickListener(this);
         submitOrdersBtn.setOnClickListener(this);
+        readRuleCheckBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                readRuleCheckBtn.setChecked(false);
+
+                View extView = getLayoutInflater().inflate(R.layout.common_intro, null);
+                TextView title = extView.findViewById(R.id.title);
+                TextView body = extView.findViewById(R.id.body);
+                title.setText("使用者規範");
+                body.setText("1.您同意無論任何理由，您都會在所填選擇之取餐時間到場取餐。\n" +
+                        "2.您非常同意，取餐時間、外送地址是由您本人自行填寫。\n" +
+                        "3.當您使用外送服務時，您全權擔保您所填寫的地址，可以聯繫到您本人。\n" +
+                        "4.當我們接獲店家投訴，您棄單造成店家損失，我們可能會與您聯繫。\n" +
+                        "5.當您棄單造成店家損失，我們可能會依照法律途徑處理。");
+
+                new AlertView.Builder()
+                        .setContext(getContext())
+                        .setStyle(AlertView.Style.Alert)
+                        .setOthers(new String[]{"我知道了"})
+                        .setOnItemClickListener(new OnItemClickListener() {
+                            @Override
+                            public void onItemClick(Object o, int position) {
+                                readRuleCheckBtn.setChecked(true);
+                            }
+                        })
+                        .build()
+                        .addExtView(extView)
+                        .setCancelable(false)
+                        .show();
+            }
+        });
     }
 
     @Override
@@ -113,7 +147,13 @@ public class UserSubmitOrdersFragment extends Fragment implements View.OnClickLi
             amount += Integer.parseInt(Model.USER_CACHE_SHOPPING_CART.get(dataIndex).orders.get(i).item.price);
         }
         ordersPriceText.setText("$ " + amount);
-        ordersBonusText.setText("應得紅利 " + ((int) Math.floor(amount / 10d)) + "");
+
+        if (Model.USER_CACHE_SHOPPING_CART.get(dataIndex).can_discount.equals("N")){
+            ordersBonusText.setText("該店家不提供紅利");
+        }else {
+            ordersBonusText.setText("應得紅利 " + ((int) Math.floor(amount / 10d)) + "");
+        }
+
     }
 
     @Override
@@ -181,45 +221,80 @@ public class UserSubmitOrdersFragment extends Fragment implements View.OnClickLi
         timePickerView.returnData();
     }
 
-    private void submitOrder() {
-        Model.USER_CACHE_SHOPPING_CART.get(dataIndex).user_message = userMessageEdit.getText().toString();
-        if (Strings.isNullOrEmpty(Model.USER_CACHE_SHOPPING_CART.get(dataIndex).fetch_date)) {
-            handler.postDelayed(new Runnable() {
-                @Override
-                public void run() {
-                    new AlertView.Builder()
-                            .setTitle("")
-                            .setMessage("請選擇取餐時間，才可以送出訂單。")
-                            .setContext(getContext())
-                            .setStyle(AlertView.Style.Alert)
-                            .setOthers(new String[]{"我知道了"})
-                            .build()
-                            .show();
-                }
-            }, 500);
-        } else {
-            ApiManager.userOrderSubmit(Model.USER_CACHE_SHOPPING_CART.get(dataIndex), new ThreadCallback(getContext()) {
-                @Override
-                public void onSuccess(String responseBody) {
-                    handler.postDelayed(new OnResponseAlert(
-                            "商家已看到您的訂單囉！\n" +
-                                    "你可前往訂單頁面查看商品狀態，\n" +
-                                    "提醒您，商品只保留至取餐時間後20分鐘。",
-                            true), 500);
-                }
-
-                @Override
-                public void onFail(Exception error, String msg) {
-                    Iterator<String> iterator = Splitter.on("$split").split(msg).iterator();
-                    String content_text = "";
-                    while (iterator.hasNext()) {
-                        content_text += iterator.next() + "\n";
-                    }
-                    handler.postDelayed(new OnResponseAlert(content_text, false), 500);
-                }
-            });
-        }
-    }
+//    private void submitOrder() {
+//        Model.USER_CACHE_SHOPPING_CART.get(dataIndex).user_message = userMessageEdit.getText().toString();
+//        if (Strings.isNullOrEmpty(Model.USER_CACHE_SHOPPING_CART.get(dataIndex).fetch_date)) {
+//            handler.postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    new AlertView.Builder()
+//                            .setContext(getContext())
+//                            .setTitle("")
+//                            .setMessage("請選擇取餐時間，才可以送出訂單。")
+//                            .setStyle(AlertView.Style.Alert)
+//                            .setOthers(new String[]{"我知道了"})
+//                            .build()
+//                            .show();
+//                }
+//            }, 500);
+//        }else if (!readRuleCheckBtn.isChecked()){
+//            handler.postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    new AlertView.Builder()
+//                            .setContext(getContext())
+//                            .setTitle("")
+//                            .setMessage("請先閱讀\"使用者規範\"，再提交訂單。")
+//                            .setStyle(AlertView.Style.Alert)
+//                            .setOthers(new String[]{"我知道了"})
+//                            .build()
+//                            .show();
+//                }
+//            }, 500);
+//        } else {
+//            handler.postDelayed(new Runnable() {
+//                @Override
+//                public void run() {
+//                    new AlertView.Builder()
+//                            .setContext(getContext())
+//                            .setTitle("確認訂單")
+//                            .setMessage("取餐時間: " + Model.USER_CACHE_SHOPPING_CART.get(dataIndex).fetch_date )
+//                            .setStyle(AlertView.Style.Alert)
+//                            .setOthers(new String[]{"取消", "確認"})
+//                            .setOnItemClickListener(new OnItemClickListener() {
+//                                @Override
+//                                public void onItemClick(Object o, int position) {
+//                                    if (position == 1) {
+//                                        ApiManager.userOrderSubmit(Model.USER_CACHE_SHOPPING_CART.get(dataIndex), new ThreadCallback(getContext()) {
+//                                            @Override
+//                                            public void onSuccess(String responseBody) {
+//                                                handler.postDelayed(new OnResponseAlert(
+//                                                        "商家已看到您的訂單囉！\n" +
+//                                                                "你可前往訂單頁面查看商品狀態，\n" +
+//                                                                "提醒您，商品只保留至取餐時間後20分鐘。",
+//                                                        true), 500);
+//                                            }
+//
+//                                            @Override
+//                                            public void onFail(Exception error, String msg) {
+//                                                Iterator<String> iterator = Splitter.on("$split").split(msg).iterator();
+//                                                String content_text = "";
+//                                                while (iterator.hasNext()) {
+//                                                    content_text += iterator.next() + "\n";
+//                                                }
+//                                                handler.postDelayed(new OnResponseAlert(content_text, false), 500);
+//                                            }
+//                                        });
+//                                    }
+//                                }
+//                            })
+//                            .build()
+//                            .setCancelable(false)
+//                            .show();
+//                }
+//            }, 500);
+//        }
+//    }
 
     @Override
     public void onDestroy() {
@@ -271,21 +346,79 @@ public class UserSubmitOrdersFragment extends Fragment implements View.OnClickLi
                 showTimePicker();
                 break;
             case R.id.submitOrdersBtn:
-                new AlertView.Builder()
-                        .setContext(getContext())
-                        .setTitle("")
-                        .setMessage("確定要送出訂單嗎？")
-                        .setStyle(AlertView.Style.Alert)
-                        .setOthers(new String[]{"確定", "返回"})
-                        .setOnItemClickListener(new OnItemClickListener() {
-                            @Override
-                            public void onItemClick(Object o, int position) {
-                                if (position == 0) {
-                                    submitOrder();
-                                }
-                            }
-                        })
-                        .build().show();
+                Model.USER_CACHE_SHOPPING_CART.get(dataIndex).user_message = userMessageEdit.getText().toString();
+                if (Strings.isNullOrEmpty(Model.USER_CACHE_SHOPPING_CART.get(dataIndex).fetch_date)) {
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertView.Builder()
+                                    .setContext(getContext())
+                                    .setTitle("")
+                                    .setMessage("請選擇取餐時間，才可以送出訂單。")
+                                    .setStyle(AlertView.Style.Alert)
+                                    .setOthers(new String[]{"我知道了"})
+                                    .build()
+                                    .show();
+                        }
+                    }, 500);
+                }else if (!readRuleCheckBtn.isChecked()){
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertView.Builder()
+                                    .setContext(getContext())
+                                    .setTitle("")
+                                    .setMessage("請先閱讀\"使用者規範\"，再提交訂單。")
+                                    .setStyle(AlertView.Style.Alert)
+                                    .setOthers(new String[]{"我知道了"})
+                                    .build()
+                                    .show();
+                        }
+                    }, 500);
+                } else {
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            new AlertView.Builder()
+                                    .setContext(getContext())
+                                    .setTitle("確認訂單")
+                                    .setMessage("取餐時間: " + selectDateText.getText().toString())
+                                    .setStyle(AlertView.Style.Alert)
+                                    .setOthers(new String[]{"取消", "確認"})
+                                    .setOnItemClickListener(new OnItemClickListener() {
+                                        @Override
+                                        public void onItemClick(Object o, int position) {
+                                            if (position == 1) {
+                                                ApiManager.userOrderSubmit(Model.USER_CACHE_SHOPPING_CART.get(dataIndex), new ThreadCallback(getContext()) {
+                                                    @Override
+                                                    public void onSuccess(String responseBody) {
+                                                        handler.postDelayed(new OnResponseAlert(
+                                                                "商家已看到您的訂單囉！\n" +
+                                                                        "你可前往訂單頁面查看商品狀態，\n" +
+                                                                        "提醒您，商品只保留至取餐時間後20分鐘。",
+                                                                true), 500);
+                                                    }
+
+                                                    @Override
+                                                    public void onFail(Exception error, String msg) {
+                                                        Iterator<String> iterator = Splitter.on("$split").split(msg).iterator();
+                                                        String content_text = "";
+                                                        while (iterator.hasNext()) {
+                                                            content_text += iterator.next() + "\n";
+                                                        }
+                                                        handler.postDelayed(new OnResponseAlert(content_text, false), 500);
+                                                    }
+                                                });
+                                            }
+                                        }
+                                    })
+                                    .build()
+                                    .setCancelable(false)
+                                    .show();
+                        }
+                    }, 500);
+                }
+//                submitOrder();
                 break;
         }
     }

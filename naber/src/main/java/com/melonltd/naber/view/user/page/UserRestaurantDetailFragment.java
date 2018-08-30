@@ -1,5 +1,6 @@
 package com.melonltd.naber.view.user.page;
 
+import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -17,18 +18,17 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.imagepipeline.request.ImageRequestBuilder;
 import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
 import com.melonltd.naber.R;
 import com.melonltd.naber.model.api.ApiManager;
 import com.melonltd.naber.model.api.ThreadCallback;
 import com.melonltd.naber.model.bean.Model;
 import com.melonltd.naber.model.constant.NaberConstant;
-import com.melonltd.naber.util.DistanceTools;
 import com.melonltd.naber.util.Tools;
 import com.melonltd.naber.view.common.BaseCore;
 import com.melonltd.naber.view.factory.PageType;
 import com.melonltd.naber.view.user.UserMainActivity;
 import com.melonltd.naber.view.user.adapter.UserCategoryAdapter;
-import com.melonltd.naber.vo.LocationVo;
 import com.melonltd.naber.vo.RestaurantCategoryRelVo;
 import com.melonltd.naber.vo.RestaurantInfoVo;
 
@@ -40,7 +40,7 @@ import cn.bingoogolapple.refreshlayout.BGARefreshLayout;
 public class UserRestaurantDetailFragment extends Fragment {
 //    private static final String TAG = UserRestaurantDetailFragment.class.getSimpleName();
     public static UserRestaurantDetailFragment FRAGMENT = null;
-
+    public static List<RestaurantCategoryRelVo> restaurantCategoryRelVos = Lists.newArrayList();
     private UserCategoryAdapter adapter;
     private ViewHolder holder;
     public static int TO_CATEGORY_MENU_INDEX = -1;
@@ -62,7 +62,7 @@ public class UserRestaurantDetailFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        adapter = new UserCategoryAdapter(Model.RESTAURANT_CATEGORY_REL_LIST);
+        adapter = new UserCategoryAdapter(restaurantCategoryRelVos);
         Fresco.initialize(getContext());
     }
 
@@ -103,7 +103,11 @@ public class UserRestaurantDetailFragment extends Fragment {
 
 
 //        holder.distanceText.setText(result.equals("0.0") ? "0.1" : result + "公里");
-        double distance = DistanceTools.getDistance(Model.LOCATION, LocationVo.of(Double.parseDouble(vo.latitude), Double.parseDouble(vo.longitude)));
+        Location rl = new Location("newlocation");
+        rl.setLatitude(Double.parseDouble(vo.latitude));
+        rl.setLongitude(Double.parseDouble(vo.longitude));
+        double distance = Model.LOCATION.distanceTo(rl) / 1000;
+//        double distance = DistanceTools.getDistance(Model.LOCATION, LocationVo.of(Double.parseDouble(vo.latitude), Double.parseDouble(vo.longitude)));
         String result = Tools.FORMAT.decimal("0.0", distance);
         holder.distanceText.setText(result.equals("0.0") ? "0.1" : result + "公里");
 
@@ -210,19 +214,19 @@ public class UserRestaurantDetailFragment extends Fragment {
         Bundle bundle = new Bundle();
 //        RestaurantInfoVo vo = (RestaurantInfoVo) getArguments().getSerializable(NaberConstant.RESTAURANT_INFO);
         bundle.putSerializable(NaberConstant.RESTAURANT_INFO, (RestaurantInfoVo) getArguments().get(NaberConstant.RESTAURANT_INFO));
-        bundle.putSerializable(NaberConstant.RESTAURANT_CATEGORY_REL, Model.RESTAURANT_CATEGORY_REL_LIST.get(index));
+        bundle.putSerializable(NaberConstant.RESTAURANT_CATEGORY_REL, restaurantCategoryRelVos.get(index));
         UserMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.USER_FOOD_LIST, bundle);
     }
 
     private void doLoadData(boolean isRefresh) {
         if (isRefresh) {
-            Model.RESTAURANT_CATEGORY_REL_LIST.clear();
+            restaurantCategoryRelVos.clear();
         }
         ApiManager.restaurantDetail(holder.uuid, new ThreadCallback(getContext()) {
             @Override
             public void onSuccess(String responseBody) {
                 List<RestaurantCategoryRelVo> vos = Tools.JSONPARSE.fromJsonList(responseBody, RestaurantCategoryRelVo[].class);
-                Model.RESTAURANT_CATEGORY_REL_LIST.addAll(vos);
+                restaurantCategoryRelVos.addAll(vos);
                 adapter.notifyDataSetChanged();
             }
 

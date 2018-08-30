@@ -75,10 +75,26 @@
             android:layout_marginTop="8dp"
             android:padding="8dp"
             android:text="紅利點數(即將開放)"
-            app:layout_constraintBottom_toTopOf="@+id/textView55"
+            android:background="@drawable/naber_text_base_line"
+            app:layout_constraintBottom_toTopOf="@+id/toBonusExchange"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/toAccountEdit" />
+
+        <TextView
+            android:id="@+id/toBonusExchange"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:padding="8dp"
+            android:text="紅利兌換項目"
+            app:layout_constraintBottom_toTopOf="@+id/textView55"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView54" />
 
         <TextView
             android:id="@+id/textView55"
@@ -92,7 +108,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView54" />
+            app:layout_constraintTop_toBottomOf="@+id/toBonusExchange" />
 
         <TextView
             android:id="@+id/textView56"
@@ -240,20 +256,28 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
-            android:layout_marginEnd="32dp"
+            android:layout_marginEnd="16dp"
             android:layout_marginTop="8dp"
             android:text="0"
             app:layout_constraintBottom_toBottomOf="@+id/textView54"
             app:layout_constraintEnd_toEndOf="@+id/textView54"
-            app:layout_constraintTop_toTopOf="@+id/textView54"
-            android:layout_marginRight="32dp" />
+            app:layout_constraintTop_toTopOf="@+id/textView54" />
+
+        <ImageView
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginEnd="8dp"
+            android:background="@drawable/naber_arrow_right"
+            app:layout_constraintBottom_toBottomOf="@+id/toBonusExchange"
+            app:layout_constraintEnd_toEndOf="@+id/toBonusExchange"
+            app:layout_constraintTop_toTopOf="@+id/toBonusExchange"
+            android:layout_marginRight="8dp" />
 
         <com.melonltd.naber.view.customize.SwitchButton
             android:id="@+id/soundSwitch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="32dp"
-            android:layout_marginRight="32dp"
+            android:layout_marginEnd="16dp"
             app:layout_constraintBottom_toBottomOf="@+id/textView56"
             app:layout_constraintEnd_toEndOf="@+id/textView56"
             app:layout_constraintTop_toTopOf="@+id/textView56"
@@ -264,8 +288,7 @@
             android:id="@+id/shakeSwitch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="32dp"
-            android:layout_marginRight="32dp"
+            android:layout_marginEnd="16dp"
             app:layout_constraintBottom_toBottomOf="@+id/textView57"
             app:layout_constraintEnd_toEndOf="@+id/textView57"
             app:layout_constraintTop_toTopOf="@+id/textView57"

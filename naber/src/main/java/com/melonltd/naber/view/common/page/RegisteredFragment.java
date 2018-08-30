@@ -36,7 +36,7 @@ public class RegisteredFragment extends Fragment implements View.OnClickListener
     private AccountInfoVo account = new AccountInfoVo();
     private TextView identityText;
 //    birthdayText;
-    private EditText nameEditText,  passwordEditText, confirmPasswordEditText;
+    private EditText nameEditText, passwordEditText, confirmPasswordEditText;
 //    addressEditText, emailEditText,
 
     public RegisteredFragment() {

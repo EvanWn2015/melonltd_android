@@ -25,6 +25,7 @@ import com.melonltd.naber.model.api.ThreadCallback;
 import com.melonltd.naber.model.bean.Model;
 import com.melonltd.naber.model.constant.NaberConstant;
 import com.melonltd.naber.model.service.SPService;
+import com.melonltd.naber.util.DensityUtil;
 import com.melonltd.naber.util.Tools;
 import com.melonltd.naber.view.customize.NaberCheckButton;
 import com.melonltd.naber.view.customize.NaberRadioButton;
@@ -40,11 +41,12 @@ import java.util.List;
 
 
 public class UserFoodDetailFragment extends Fragment implements View.OnClickListener {
-//    private static final String TAG = UserFoodDetailFragment.class.getSimpleName();
+    private static final String TAG = UserFoodDetailFragment.class.getSimpleName();
     public static UserFoodDetailFragment FRAGMENT = null;
     private TextView totalAmountText;
     private TextView quantityEditText;
     private LinearLayout contentLayout;
+    private int RADIO_BUTTON_WIDTH = 0;
     private OrderDetail.OrderData orderData = new OrderDetail.OrderData();
 
     public UserFoodDetailFragment() {
@@ -89,6 +91,8 @@ public class UserFoodDetailFragment extends Fragment implements View.OnClickList
         addBtn.setOnClickListener(new AddMinusClickListener());
         minusBtn.setOnClickListener(new AddMinusClickListener());
         addToShopCartBtn.setOnClickListener(this);
+
+        RADIO_BUTTON_WIDTH = UserMainActivity.LAYOUT_WIDTH - DensityUtil.dip2px(getContext(), 32);
     }
 
     @Override
@@ -149,7 +153,8 @@ public class UserFoodDetailFragment extends Fragment implements View.OnClickList
 
     private void setScopeView(final List<ItemVo> scopes) {
         View v = LayoutInflater.from(getContext()).inflate(R.layout.menu_detail_scope, null);
-        RadioGroup group = v.findViewById(R.id.scopeRadioGroup);
+        final RadioGroup group = v.findViewById(R.id.scopeRadioGroup);
+
         for (int i = 0; i < scopes.size(); i++) {
             if (i == 0) {
                 orderData.item.scopes.add(scopes.get(i));
@@ -162,7 +167,12 @@ public class UserFoodDetailFragment extends Fragment implements View.OnClickList
                     .setId(i + 669696)
                     .setChecked(i == 0 ? true : false)
                     .build();
-            group.addView(radio);
+//            group.addView(radio);
+            if (UserMainActivity.LAYOUT_WIDTH != 0 ){
+                group.addView(radio, RADIO_BUTTON_WIDTH, 80);
+            }else {
+                group.addView(radio);
+            }
         }
 
         group.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
@@ -178,11 +188,14 @@ public class UserFoodDetailFragment extends Fragment implements View.OnClickList
     }
 
     private void setDemandView(final List<DemandsItemVo> demands) {
+
+
         for (int i = 0; i < demands.size(); i++) {
             View v = LayoutInflater.from(getContext()).inflate(R.layout.menu_detail_demand, null);
             TextView demandText = v.findViewById(R.id.demandText);
             demandText.setText(demands.get(i).name);
-            RadioGroup group = v.findViewById(R.id.demandRadioGroup);
+            final RadioGroup group = v.findViewById(R.id.demandRadioGroup);
+
             final DemandsItemVo demand = new DemandsItemVo();
             for (int j = 0; j < demands.get(i).datas.size(); j++) {
                 if (j == 0) {
@@ -190,6 +203,7 @@ public class UserFoodDetailFragment extends Fragment implements View.OnClickList
                     demand.datas.add(demands.get(i).datas.get(j));
                     orderData.item.demands.add(demand);
                 }
+
                 RadioButton radio = new NaberRadioButton().Builder(getContext())
                         .setTitle(demands.get(i).datas.get(j).name)
                         .setTag(demands.get(i).datas.get(j))
@@ -198,7 +212,11 @@ public class UserFoodDetailFragment extends Fragment implements View.OnClickList
                         .setId(j + 369646)
                         .setChecked(j == 0 ? true : false)
                         .build();
-                group.addView(radio);
+                if (UserMainActivity.LAYOUT_WIDTH != 0 ){
+                    group.addView(radio, RADIO_BUTTON_WIDTH, 80);
+                }else {
+                    group.addView(radio);
+                }
             }
             group.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
                 @Override
@@ -219,6 +237,7 @@ public class UserFoodDetailFragment extends Fragment implements View.OnClickList
             View v = LayoutInflater.from(getContext()).inflate(R.layout.menu_detail_optional, null);
             final LinearLayout optLayout = v.findViewById(R.id.optsLayout);
             for (int i = 0; i < opts.size(); i++) {
+
                 CheckBox box = new NaberCheckButton().Builder(getContext())
                         .setTitle(opts.get(i).name)
                         .setTag(opts.get(i))
@@ -262,6 +281,7 @@ public class UserFoodDetailFragment extends Fragment implements View.OnClickList
 
         OrderDetail.OrderData data = new OrderDetail.OrderData();
         data = orderData;
+
 //        data.restaurant_address = restaurantInfo.address;
 //        data.restaurant_name = restaurantInfo.name;
 //        data.user_name = SPService.getUserName();
@@ -273,7 +293,10 @@ public class UserFoodDetailFragment extends Fragment implements View.OnClickList
         for (OrderDetail o : Model.USER_CACHE_SHOPPING_CART) {
             if (restaurantInfo.restaurant_uuid.equals(o.restaurant_uuid)) {
                 o.restaurant_name = restaurantInfo.name;
+                // TODO 位置配送類型 ＆ 結算類型，預設 原價 自取
+                o.order_type = OrderDetail.OrderType.setDefult();
                 o.restaurant_address = restaurantInfo.address;
+                o.can_discount = restaurantInfo.can_discount;
                 o.user_name = SPService.getUserName();
                 o.user_phone = SPService.getUserPhone();
                 o.orders.add(0, data);
@@ -284,7 +307,10 @@ public class UserFoodDetailFragment extends Fragment implements View.OnClickList
             OrderDetail orderDetail = OrderDetail.ofOrders(Lists.newArrayList(data));
             orderDetail.restaurant_uuid = restaurantInfo.restaurant_uuid;
             orderDetail.restaurant_name = restaurantInfo.name;
+            // TODO 位置配送類型 ＆ 結算類型，預設 原價 自取
+            orderDetail.order_type = OrderDetail.OrderType.setDefult();
             orderDetail.restaurant_address = restaurantInfo.address;
+            orderDetail.can_discount = restaurantInfo.can_discount;
             orderDetail.user_name = SPService.getUserName();
             orderDetail.user_phone = SPService.getUserPhone();
             Model.USER_CACHE_SHOPPING_CART.add(0, orderDetail);

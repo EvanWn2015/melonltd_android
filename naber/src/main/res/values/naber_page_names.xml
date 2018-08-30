@@ -12,6 +12,7 @@
     <string name="menu_shopping_cart_btn">購物車</string>
     <string name="menu_history_btn">紀錄</string>
     <string name="menu_set_up_btn">設定</string>
+    <string name="menu_account_btn">個人</string>
 
     <!-- page names -->
     <string name="user_page_simple_info_title">資訊</string>
@@ -24,6 +25,8 @@
     <string name="user_page_registered_title">註冊</string>
     <string name="user_page_verify_sms_title">電話驗證</string>
     <string name="user_page_order_detail_title">訂單詳情</string>
+    <string name="user_page_bonus_exchange_title">紅利兌換項目</string>
+
 
     <!-- seller page -->
     <string name="seller_menu_search_btn">快速查詢</string>
