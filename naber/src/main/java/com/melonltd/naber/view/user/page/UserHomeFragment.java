@@ -29,6 +29,7 @@ import com.melonltd.naber.model.api.ThreadCallback;
 import com.melonltd.naber.model.bean.Model;
 import com.melonltd.naber.model.constant.NaberConstant;
 import com.melonltd.naber.model.service.SPService;
+import com.melonltd.naber.util.DistanceTools;
 import com.melonltd.naber.util.Tools;
 import com.melonltd.naber.view.common.BaseCore;
 import com.melonltd.naber.view.factory.PageType;
@@ -36,6 +37,7 @@ import com.melonltd.naber.view.user.UserMainActivity;
 import com.melonltd.naber.view.user.adapter.UserRestaurantAdapter;
 import com.melonltd.naber.vo.AdvertisementVo;
 import com.melonltd.naber.vo.BulletinVo;
+import com.melonltd.naber.vo.LocationVo;
 import com.melonltd.naber.vo.ReqData;
 import com.melonltd.naber.vo.RestaurantInfoVo;
 import com.sunfusheng.marqueeview.MarqueeView;
@@ -123,7 +125,7 @@ public class UserHomeFragment extends Fragment {
         banner.setDelegate(new BGABanner.Delegate() {
             @Override
             public void onBannerItemClick(BGABanner banner, View itemView, @Nullable Object model, int position) {
-                if (advertisementVos.get(position).link_type != null && !Strings.isNullOrEmpty(advertisementVos.get(position).link_to)){
+                if (advertisementVos.get(position).link_type != null && !Strings.isNullOrEmpty(advertisementVos.get(position).link_to)) {
                     switch (advertisementVos.get(position).link_type) {
                         case APP:
                             Map<String, String> toData = Tools.JSONPARSE.fromJson(advertisementVos.get(position).link_to, HashMap.class);
@@ -144,7 +146,7 @@ public class UserHomeFragment extends Fragment {
                                 @Override
                                 public void onSuccess(String responseBody) {
                                     List<RestaurantInfoVo> list = Tools.JSONPARSE.fromJsonList(responseBody, RestaurantInfoVo[].class);
-                                    if (!list.isEmpty()){
+                                    if (!list.isEmpty()) {
                                         Bundle bundle = new Bundle();
                                         bundle.putSerializable(NaberConstant.RESTAURANT_INFO, list.get(0));
                                         UserRestaurantListFragment.TO_RESTAURANT_DETAIL_INDEX = 0;
@@ -153,6 +155,7 @@ public class UserHomeFragment extends Fragment {
                                         UserMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.USER_RESTAURANT_DETAIL, bundle);
                                     }
                                 }
+
                                 @Override
                                 public void onFail(Exception error, String msg) {
 
@@ -191,7 +194,7 @@ public class UserHomeFragment extends Fragment {
                 List<String> homeBulletins = Lists.newArrayList();
                 for (int i = 0; i < list.size(); i++) {
                     Iterator<String> iterator = Splitter.on("$split").split(list.get(i).content_text).iterator();
-                    if ("HOME".equals(list.get(i).bulletin_category)){
+                    if ("HOME".equals(list.get(i).bulletin_category)) {
                         homeBulletins = Lists.newArrayList(iterator);
                     }
                     String content_text = "";
@@ -249,12 +252,9 @@ public class UserHomeFragment extends Fragment {
                 List<RestaurantInfoVo> list = Tools.JSONPARSE.fromJsonList(responseBody, RestaurantInfoVo[].class);
 
                 for (int i = 0; i < list.size(); i++) {
-                    Location rl = new Location("newlocation");
-                    rl.setLatitude(Double.parseDouble(list.get(i).latitude));
-                    rl.setLongitude(Double.parseDouble(list.get(i).longitude));
-                    list.get(i).distance = location.distanceTo(rl) / 1000;
-//                    list.get(i).distance = DistanceTools.getDistance(location, LocationVo.of(list.get(i).latitude, list.get(i).longitude));
+                    list.get(i).distance = DistanceTools.getDistance(location, LocationVo.of(list.get(i).latitude, list.get(i).longitude));
                 }
+
                 restaurantList.addAll(list);
                 adapter.notifyDataSetChanged();
             }

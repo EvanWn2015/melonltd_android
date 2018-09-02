@@ -4,6 +4,7 @@ package com.melonltd.naber.view.user.page;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -47,6 +48,7 @@ public class UserFoodDetailFragment extends Fragment implements View.OnClickList
     private TextView quantityEditText;
     private LinearLayout contentLayout;
     private int RADIO_BUTTON_WIDTH = 0;
+    private int RADIO_BUTTON_HIGH = 0;
     private OrderDetail.OrderData orderData = new OrderDetail.OrderData();
 
     public UserFoodDetailFragment() {
@@ -93,6 +95,7 @@ public class UserFoodDetailFragment extends Fragment implements View.OnClickList
         addToShopCartBtn.setOnClickListener(this);
 
         RADIO_BUTTON_WIDTH = UserMainActivity.LAYOUT_WIDTH - DensityUtil.dip2px(getContext(), 32);
+        RADIO_BUTTON_HIGH = DensityUtil.dip2px(getContext(), 32);
     }
 
     @Override
@@ -167,9 +170,8 @@ public class UserFoodDetailFragment extends Fragment implements View.OnClickList
                     .setId(i + 669696)
                     .setChecked(i == 0 ? true : false)
                     .build();
-//            group.addView(radio);
-            if (UserMainActivity.LAYOUT_WIDTH != 0 ){
-                group.addView(radio, RADIO_BUTTON_WIDTH, 80);
+            if (UserMainActivity.LAYOUT_WIDTH != 0 && RADIO_BUTTON_HIGH != 0){
+                group.addView(radio, RADIO_BUTTON_WIDTH, RADIO_BUTTON_HIGH);
             }else {
                 group.addView(radio);
             }
@@ -212,7 +214,7 @@ public class UserFoodDetailFragment extends Fragment implements View.OnClickList
                         .setId(j + 369646)
                         .setChecked(j == 0 ? true : false)
                         .build();
-                if (UserMainActivity.LAYOUT_WIDTH != 0 ){
+                if (UserMainActivity.LAYOUT_WIDTH != 0 && RADIO_BUTTON_HIGH != 0){
                     group.addView(radio, RADIO_BUTTON_WIDTH, 80);
                 }else {
                     group.addView(radio);
@@ -238,7 +240,7 @@ public class UserFoodDetailFragment extends Fragment implements View.OnClickList
             final LinearLayout optLayout = v.findViewById(R.id.optsLayout);
             for (int i = 0; i < opts.size(); i++) {
 
-                CheckBox box = new NaberCheckButton().Builder(getContext())
+                final CheckBox box = new NaberCheckButton().Builder(getContext())
                         .setTitle(opts.get(i).name)
                         .setTag(opts.get(i))
                         .setSymbol("$")
@@ -256,7 +258,22 @@ public class UserFoodDetailFragment extends Fragment implements View.OnClickList
                             }
                         }).build();
 
-                optLayout.addView(box);
+                box.post(new Runnable() {
+                    @Override
+                    public void run() {
+                        int width = box.getWidth();
+                        int high = box.getHeight();
+                        Log.i("RADIO_BUTTON_HIGH", RADIO_BUTTON_HIGH + "");
+                        Log.i("View width" ,  width + ":" + high) ;
+                    }
+                });
+
+                if (UserMainActivity.LAYOUT_WIDTH != 0 && RADIO_BUTTON_HIGH != 0){
+                    optLayout.addView(box, RADIO_BUTTON_WIDTH, RADIO_BUTTON_HIGH);
+                }else {
+                    optLayout.addView(box);
+                }
+
             }
             contentLayout.addView(v);
         }

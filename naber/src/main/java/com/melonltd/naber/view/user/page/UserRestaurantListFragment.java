@@ -4,7 +4,6 @@ package com.melonltd.naber.view.user.page;
 import android.Manifest;
 import android.content.Context;
 import android.content.pm.PackageManager;
-import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -30,10 +29,12 @@ import com.melonltd.naber.model.api.ApiManager;
 import com.melonltd.naber.model.api.ThreadCallback;
 import com.melonltd.naber.model.bean.Model;
 import com.melonltd.naber.model.constant.NaberConstant;
+import com.melonltd.naber.util.DistanceTools;
 import com.melonltd.naber.util.Tools;
 import com.melonltd.naber.view.factory.PageType;
 import com.melonltd.naber.view.user.UserMainActivity;
 import com.melonltd.naber.view.user.adapter.UserRestaurantAdapter;
+import com.melonltd.naber.vo.LocationVo;
 import com.melonltd.naber.vo.ReqData;
 import com.melonltd.naber.vo.RestaurantInfoVo;
 import com.melonltd.naber.vo.RestaurantTemplate;
@@ -55,7 +56,7 @@ public class UserRestaurantListFragment extends Fragment implements View.OnClick
     private List<Button> filterBtns = Lists.newArrayList();
     private ReqData reqData = new ReqData();
     private UserRestaurantAdapter adapter;
-    private Location location;
+//    private Location location;
 
     public static int TO_RESTAURANT_DETAIL_INDEX = -1;
     public static int HOME_TO_RESTAURANT_DETAIL_INDEX = -1;
@@ -161,12 +162,9 @@ public class UserRestaurantListFragment extends Fragment implements View.OnClick
             public void onSuccess(String responseBody) {
                 List<RestaurantInfoVo> list = Tools.JSONPARSE.fromJsonList(responseBody, RestaurantInfoVo[].class);
                 reqData.loadingMore = list.size() % NaberConstant.PAGE == 0 && list.size() != 0;
+
                 for (int i = 0; i < list.size(); i++) {
-                    Location rl = new Location("newlocation");
-                    rl.setLatitude(Double.parseDouble(list.get(i).latitude));
-                    rl.setLongitude(Double.parseDouble(list.get(i).longitude));
-                    list.get(i).distance = location.distanceTo(rl) / 1000;
-//                    list.get(i).distance = DistanceTools.getDistance(location, LocationVo.of(list.get(i).latitude, list.get(i).longitude));
+                    list.get(i).distance = DistanceTools.getDistance(Model.LOCATION, LocationVo.of(list.get(i).latitude, list.get(i).longitude));
                 }
 
                 if (reqData.search_type.equals("DISTANCE")) {
@@ -210,9 +208,7 @@ public class UserRestaurantListFragment extends Fragment implements View.OnClick
     private void getLocation() {
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             if (Model.LOCATION == null) {
-                location = LOCATION_MG.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-            } else {
-                location = Model.LOCATION;
+                Model.LOCATION = LOCATION_MG.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             }
         }
     }
@@ -323,40 +319,49 @@ public class UserRestaurantListFragment extends Fragment implements View.OnClick
                         .show();
                 break;
             case R.id.filterDistanceBtn:
-                setFilterBtnsColor(v);
-                restaurantTemplatePages.clear();
-                ApiManager.restaurantTemplate(new ThreadCallback(getContext()) {
-                    @Override
-                    public void onSuccess(String responseBody) {
-                        restaurantTemplates.clear();
-                        restaurantTemplates.addAll(Tools.JSONPARSE.fromJsonList(responseBody, RestaurantTemplate[].class));
-                        for (int i = 0; i < restaurantTemplates.size(); i++) {
-                            Location rl = new Location("newlocation");
-                            rl.setLatitude(restaurantTemplates.get(i).latitude);
-                            rl.setLongitude(restaurantTemplates.get(i).longitude);
-                            restaurantTemplates.get(i).distance = location.distanceTo(rl) / 1000;
-//                            restaurantTemplates.get(i).distance = DistanceTools.getDistance(Model.LOCATION, LocationVo.of(restaurantTemplates.get(i).latitude, restaurantTemplates.get(i).longitude));
-                        }
-                        Ordering<RestaurantTemplate> ordering = Ordering.natural().nullsFirst().onResultOf(new Function<RestaurantTemplate, Double>() {
-                            public Double apply(RestaurantTemplate template) {
-                                return template.distance;
+                if (Model.LOCATION == null){
+                    new AlertView.Builder()
+                            .setContext(getContext())
+                            .setStyle(AlertView.Style.Alert)
+                            .setTitle("系統信息")
+                            .setMessage("非常抱歉，您尚未開啟GPS權限\n，將無法使用\"離我最近\"功能。")
+                            .setOthers(new String[] {"我知道了"})
+                            .build()
+                            .setCancelable(false)
+                            .show();
+                }else {
+                    setFilterBtnsColor(v);
+                    restaurantTemplatePages.clear();
+                    ApiManager.restaurantTemplate(new ThreadCallback(getContext()) {
+                        @Override
+                        public void onSuccess(String responseBody) {
+                            restaurantTemplates.clear();
+                            restaurantTemplates.addAll(Tools.JSONPARSE.fromJsonList(responseBody, RestaurantTemplate[].class));
+                            for (int i = 0; i < restaurantTemplates.size(); i++) {
+                                restaurantTemplates.get(i).distance = DistanceTools.getDistance(Model.LOCATION, LocationVo.of(restaurantTemplates.get(i).latitude, restaurantTemplates.get(i).longitude));
                             }
-                        });
-                        restaurantTemplatePages.addAll(Lists.partition(ordering.sortedCopy(restaurantTemplates), 10));
 
-                        reqData = new ReqData();
-                        reqData.search_type = "DISTANCE";
-                        reqData.uuids = Lists.newArrayList();
-                        reqData.page = 1;
-                        reqData.uuids.addAll(getTemplate(reqData.page, true));
-                        doLoadData(true);
-                    }
+                            Ordering<RestaurantTemplate> ordering = Ordering.natural().nullsFirst().onResultOf(new Function<RestaurantTemplate, Double>() {
+                                public Double apply(RestaurantTemplate template) {
+                                    return template.distance;
+                                }
+                            });
+                            restaurantTemplatePages.addAll(Lists.partition(ordering.sortedCopy(restaurantTemplates), 10));
 
-                    @Override
-                    public void onFail(Exception error, String msg) {
+                            reqData = new ReqData();
+                            reqData.search_type = "DISTANCE";
+                            reqData.uuids = Lists.newArrayList();
+                            reqData.page = 1;
+                            reqData.uuids.addAll(getTemplate(reqData.page, true));
+                            doLoadData(true);
+                        }
 
-                    }
-                });
+                        @Override
+                        public void onFail(Exception error, String msg) {
+
+                        }
+                    });
+                }
                 break;
         }
     }
@@ -372,12 +377,7 @@ public class UserRestaurantListFragment extends Fragment implements View.OnClick
         if(isRefresh){
             restaurantTemplatePages.clear();
             for (int i = 0; i < restaurantTemplates.size(); i++) {
-                Location rl = new Location("newlocation");
-                rl.setLatitude(restaurantTemplates.get(i).latitude);
-                rl.setLongitude(restaurantTemplates.get(i).longitude);
-                restaurantTemplates.get(i).distance = location.distanceTo(rl) / 1000;
-
-//                restaurantTemplates.get(i).distance = DistanceTools.getDistance(Model.LOCATION, LocationVo.of(restaurantTemplates.get(i).latitude, restaurantTemplates.get(i).longitude));
+                restaurantTemplates.get(i).distance = DistanceTools.getDistance(Model.LOCATION, LocationVo.of(restaurantTemplates.get(i).latitude, restaurantTemplates.get(i).longitude));
             }
             Ordering<RestaurantTemplate> ordering = Ordering.natural().nullsFirst().onResultOf(new Function<RestaurantTemplate, Double>() {
                 public Double apply(RestaurantTemplate template) {
