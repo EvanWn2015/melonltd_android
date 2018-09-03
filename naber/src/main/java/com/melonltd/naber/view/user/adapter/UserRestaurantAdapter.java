@@ -58,13 +58,17 @@ public class UserRestaurantAdapter extends RecyclerView.Adapter<UserRestaurantAd
                 list.get(position).store_end);
 
         h.addressText.setText(list.get(position).address);
-        String result = Tools.FORMAT.decimal("0.0", list.get(position).distance);
-        h.distanceText.setText(result.equals("0.0") ? "0.1" : result + "公里");
+        String result = "";
+        if (list.get(position).distance > 0) {
+            result = Tools.FORMAT.decimal("0.0", list.get(position).distance);
+            result = result.equals("0.0") ? "0.1" : result + "公里";
+        }
+        h.distanceText.setText(result);
 
 
         h.storeStatusText.setTextColor(this.context.getResources().getColor(R.color.naber_basis_red));
         if (list.get(position).not_business.size() > 0) {
-            h.storeStatusText.setText("今日不營業");
+            h.storeStatusText.setText("今日已結束接單");
         } else if (!Strings.isNullOrEmpty(list.get(position).is_store_now_open) &&
                 list.get(position).is_store_now_open.toUpperCase().equals("FALSE")) {
             h.storeStatusText.setText("該商家尚未營業");

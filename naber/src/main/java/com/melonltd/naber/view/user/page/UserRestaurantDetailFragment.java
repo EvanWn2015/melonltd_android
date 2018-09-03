@@ -100,16 +100,16 @@ public class UserRestaurantDetailFragment extends Fragment {
         holder.businessTimeText.setText("接單時間: " + vo.store_start + "~" + vo.store_end);
         holder.addressText.setText(vo.address);
 
-
-
-//        holder.distanceText.setText(result.equals("0.0") ? "0.1" : result + "公里");
-        Location rl = new Location("newlocation");
-        rl.setLatitude(Double.parseDouble(vo.latitude));
-        rl.setLongitude(Double.parseDouble(vo.longitude));
-        double distance = Model.LOCATION.distanceTo(rl) / 1000;
-//        double distance = DistanceTools.getDistance(Model.LOCATION, LocationVo.of(Double.parseDouble(vo.latitude), Double.parseDouble(vo.longitude)));
-        String result = Tools.FORMAT.decimal("0.0", distance);
-        holder.distanceText.setText(result.equals("0.0") ? "0.1" : result + "公里");
+        if (Model.LOCATION != null){
+            Location rl = new Location("newlocation");
+            rl.setLatitude(Double.parseDouble(vo.latitude));
+            rl.setLongitude(Double.parseDouble(vo.longitude));
+            double distance = Model.LOCATION.distanceTo(rl) / 1000;
+            String result = Tools.FORMAT.decimal("0.0", distance);
+            holder.distanceText.setText(result.equals("0.0") ? "0.1" : result + "公里");
+        }else {
+            holder.distanceText.setText("");
+        }
 
     }
 
@@ -179,7 +179,7 @@ public class UserRestaurantDetailFragment extends Fragment {
                         holder.warningText.setVisibility(View.VISIBLE);
                         new AlertView.Builder()
                                 .setTitle("")
-                                .setMessage("該商家今日不營業")
+                                .setMessage("該商家今日已結束接單")
                                 .setContext(getContext())
                                 .setStyle(AlertView.Style.Alert)
                                 .setOthers(new String[]{"我知道了"})
