@@ -268,11 +268,11 @@ public class UserFoodDetailFragment extends Fragment implements View.OnClickList
                     }
                 });
 
-                if (UserMainActivity.LAYOUT_WIDTH != 0 && RADIO_BUTTON_HIGH != 0){
-                    optLayout.addView(box, RADIO_BUTTON_WIDTH, RADIO_BUTTON_HIGH);
-                }else {
+//                if (UserMainActivity.LAYOUT_WIDTH != 0 && RADIO_BUTTON_HIGH != 0){
+//                    optLayout.addView(box, RADIO_BUTTON_WIDTH, RADIO_BUTTON_HIGH);
+//                }else {
                     optLayout.addView(box);
-                }
+//                }
 
             }
             contentLayout.addView(v);
