@@ -45,8 +45,12 @@ public class UserOrderHistoryAdapter extends RecyclerView.Adapter<UserOrderHisto
         holder.restaurantNameText.setText(detail.restaurant_name);
         OrderStatus status = OrderStatus.of(Model.USER_ORDER_HISTORY_LIST.get(position).status);
         if (status != null){
-            holder.orderStatusText.setText(status.getText());
             holder.orderStatusText.setTextColor(this.context.getResources().getColor(status.getColor()));
+            if(status.equals(OrderStatus.UNFINISH)){
+                holder.orderStatusText.setText("");
+            } else {
+                holder.orderStatusText.setText(status.getText());
+            }
         }
         holder.totalAmountText.setText("$" + Model.USER_ORDER_HISTORY_LIST.get(position).order_price);
     }

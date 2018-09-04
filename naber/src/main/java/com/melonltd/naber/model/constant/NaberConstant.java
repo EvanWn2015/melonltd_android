@@ -18,8 +18,8 @@ public class NaberConstant {
 
 //    public static final String[] FILTER_CATEGORYS = new String[]{"火鍋", "燒烤/居酒屋", "鐵板燒", "素蔬食", "早午餐", "下午茶", "西式/牛排", "中式", "港式", "日式", "韓式", "異國", "美式", "義式", "熱炒", "小吃", "泰式", "咖啡輕食", "甜點", "冰飲"};
     public static String[] FILTER_CATEGORYS = new String[]{"早午餐", "西式/牛排", "中式", "日式", "冰飲"};
-    public static final String[] FILTER_AREAS = new String[]{"桃園區", "中壢區", "平鎮區", "龍潭區", "楊梅區", "新屋區", "觀音區", "龜山區", "八德區", "大溪區", "大園區", "蘆竹區", "復興區"};
-
+//    public static final String[] FILTER_AREAS = new String[]{"桃園區", "中壢區", "平鎮區", "龍潭區", "楊梅區", "新屋區", "觀音區", "龜山區", "八德區", "大溪區", "大園區", "蘆竹區", "復興區"};
+    public static final String[] FILTER_AREAS = new String[]{"桃園區", "中壢區", "平鎮區","楊梅區", "龜山區", "八德區", "蘆竹區"};
     public static List<String> HOUR_OPT = Lists.newArrayList("00", "01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23");
     public static List<String> MINUTE_OPT = Lists.newArrayList("00", "30");
 
