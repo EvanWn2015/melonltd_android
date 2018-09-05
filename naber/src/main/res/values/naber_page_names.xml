@@ -10,7 +10,7 @@
     <string name="menu_home_btn">首頁</string>
     <string name="menu_restaurant_btn">餐館</string>
     <string name="menu_shopping_cart_btn">購物車</string>
-    <string name="menu_history_btn">紀錄</string>
+    <string name="menu_history_btn">訂單</string>
     <string name="menu_set_up_btn">設定</string>
     <string name="menu_account_btn">個人</string>
 
