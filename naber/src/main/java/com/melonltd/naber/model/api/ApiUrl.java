@@ -5,12 +5,12 @@ package com.melonltd.naber.model.api;
  */
 
 public class ApiUrl {
-
+      public final static String DOMAIN = "http://192.168.1.107:8080/melonltd-ap";
 //    public final static String DOMAIN = "http://192.168.1.108";
-//    public final static String DOMAIN = "http://192.168.1.107Ｒ:8080/melonltd-ap";
+//    public final static String DOMAIN = "http://192.168.1.107:8080/melonltd-ap";
 //    public final static String DOMAIN = "https://192.168.2.100";
 
-    public final static String DOMAIN = "https://ap.melonltd.com.tw";
+//    public final static String DOMAIN = "https://ap.melonltd.com.tw";
     public final static String LOGIN = DOMAIN + "/login";
     public final static String LOGOUT = DOMAIN + "/logout";
     public final static String GET_SMS_CODE = DOMAIN + "/sms/get/code";
@@ -40,6 +40,9 @@ public class ApiUrl {
 
 
     // seller
+    public final static String SELLER_SORT_FOOD = DOMAIN + "/seller/food/sort";
+    public final static String SELLER_SORT_CATEGORY = DOMAIN + "/seller/category/sort";
+
     public final static String QUICK_SEARCH = DOMAIN + "/seller/quick/search";
     public final static String CHANGE_ORDER = DOMAIN + "/seller/update/order";
     public final static String BUSINESS_TIME = DOMAIN + "/seller/business/time";

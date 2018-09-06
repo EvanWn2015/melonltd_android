@@ -291,5 +291,4 @@ public class ApiManager {
         Call call = getClient().postHeader(ApiUrl.SELLER_RESTAURANT_SETTING_BUSINESS, SPService.getOauth(), Base64Service.encryptBASE64(Tools.JSONPARSE.toJson(req)));
         call.enqueue(callback);
     }
-
 }

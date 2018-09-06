@@ -32,6 +32,9 @@ import com.melonltd.naber.view.user.adapter.UserCategoryAdapter;
 import com.melonltd.naber.vo.RestaurantCategoryRelVo;
 import com.melonltd.naber.vo.RestaurantInfoVo;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import cn.bingoogolapple.refreshlayout.BGANormalRefreshViewHolder;
@@ -226,6 +229,11 @@ public class UserRestaurantDetailFragment extends Fragment {
             @Override
             public void onSuccess(String responseBody) {
                 List<RestaurantCategoryRelVo> vos = Tools.JSONPARSE.fromJsonList(responseBody, RestaurantCategoryRelVo[].class);
+                Collections.sort(vos, new Comparator<RestaurantCategoryRelVo>() {
+                    public int compare(RestaurantCategoryRelVo o1, RestaurantCategoryRelVo o2) {
+                        return o2.top - o1.top;
+                    }
+                });
                 restaurantCategoryRelVos.addAll(vos);
                 adapter.notifyDataSetChanged();
             }

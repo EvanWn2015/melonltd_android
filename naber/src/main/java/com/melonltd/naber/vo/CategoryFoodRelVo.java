@@ -15,6 +15,7 @@ public class CategoryFoodRelVo implements Serializable{
     public String photo;
     public String photo_type;
     public FoodItemVo food_data;
+    public int top;
     public SwitchStatus status;
 
     @Override
@@ -28,6 +29,7 @@ public class CategoryFoodRelVo implements Serializable{
                 .add("photo",photo)
                 .add("photo_type",photo_type)
                 .add("food_data",food_data)
+                .add("top",top)
                 .toString();
     }
 }
