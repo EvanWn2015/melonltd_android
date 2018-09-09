@@ -6,10 +6,12 @@ import com.melonltd.naber.model.service.SPService;
 import com.melonltd.naber.util.Tools;
 import com.melonltd.naber.vo.AccountInfoVo;
 import com.melonltd.naber.vo.CategoryFoodRelVo;
+import com.melonltd.naber.vo.FoodItemVo;
 import com.melonltd.naber.vo.OrderDetail;
 import com.melonltd.naber.vo.ReqData;
 import com.melonltd.naber.vo.RestaurantInfoVo;
 
+import java.util.List;
 import java.util.Map;
 
 import okhttp3.Call;
@@ -250,6 +252,12 @@ public class ApiManager {
         call.enqueue(callback);
     }
 
+    //排序種類
+    public static void sellerSortCategory(List<CategoryFoodRelVo> req ,ThreadCallback callback){
+        Call call = getClient().postHeader(ApiUrl.SELLER_SORT_CATEGORY, SPService.getOauth(), Base64Service.encryptBASE64(Tools.JsonParse.toJson(req)));
+        call.enqueue(callback);
+    }
+
     // 品項列表
     public static void sellerFoodList(ReqData req, ThreadCallback callback) {
         Call call = getClient().postHeader(ApiUrl.SELLER_FOOD_LIST, SPService.getOauth(), Base64Service.encryptBASE64(Tools.JSONPARSE.toJson(req)));
@@ -274,6 +282,12 @@ public class ApiManager {
         call.enqueue(callback);
     }
 
+    //品項排序
+    public static void sellerFoodSort(List<FoodItemVo> req, ThreadCallback callback){
+        Call call =getClient().postHeader(ApiUrl.SELLER_SORT_FOOD,SPService.getOauth(),Base64Service.encryptBASE64(Tools.JSONPARSE.toJson(req)));
+        call.enqueue(callback);
+    }
+
     // 取得餐館資訊
     public static void sellerRestaurantInfo(ThreadCallback callback) {
         Call call = getClient().postHeader(ApiUrl.SELLER_RESTAURANT_INFO, SPService.getOauth());
@@ -291,4 +305,5 @@ public class ApiManager {
         Call call = getClient().postHeader(ApiUrl.SELLER_RESTAURANT_SETTING_BUSINESS, SPService.getOauth(), Base64Service.encryptBASE64(Tools.JSONPARSE.toJson(req)));
         call.enqueue(callback);
     }
+
 }

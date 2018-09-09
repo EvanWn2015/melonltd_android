@@ -5,8 +5,8 @@ package com.melonltd.naber.model.api;
  */
 
 public class ApiUrl {
-      public final static String DOMAIN = "http://192.168.1.107:8080/melonltd-ap";
-//    public final static String DOMAIN = "http://192.168.1.108";
+//      public final static String DOMAIN = "http://192.168.1.107:8080/melonltd-ap";
+    public final static String DOMAIN = "http://192.168.1.108";
 //    public final static String DOMAIN = "http://192.168.1.107:8080/melonltd-ap";
 //    public final static String DOMAIN = "https://192.168.2.100";
 
