@@ -5,7 +5,7 @@ import com.melonltd.naber.model.type.SwitchStatus;
 
 import java.io.Serializable;
 
-public class RestaurantCategoryRelVo implements Serializable{
+public class CategoryRelVo implements Serializable{
     private static final long serialVersionUID = -9022043460680866466L;
 
     public String category_uuid;
@@ -13,7 +13,8 @@ public class RestaurantCategoryRelVo implements Serializable{
     public String category_name;
     public int top;
     public SwitchStatus status;
-
+    public String enable;
+    public String create_date;
 
     @Override
     public String toString() {

@@ -4,11 +4,11 @@ import android.location.Location;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.melonltd.naber.vo.CategoryFoodRelVo;
+import com.melonltd.naber.vo.FoodVo;
 import com.melonltd.naber.vo.DateRangeVo;
 import com.melonltd.naber.vo.OrderDetail;
 import com.melonltd.naber.vo.OrderVo;
-import com.melonltd.naber.vo.RestaurantCategoryRelVo;
+import com.melonltd.naber.vo.CategoryRelVo;
 import com.melonltd.naber.vo.RestaurantInfoVo;
 import com.melonltd.naber.vo.SellerStatVo;
 
@@ -26,9 +26,9 @@ public class Model {
 //    public static List<List<RestaurantTemplate>> RESTAURANT_TEMPLATE_PAGS = Lists.<List<RestaurantTemplate>>newArrayList();
 //    public static List<RestaurantTemplate> RESTAURANT_TEMPLATE = Lists.<RestaurantTemplate>newArrayList();
 //    public static List<RestaurantInfoVo> RESTAURANT_INFO_LIST = Lists.<RestaurantInfoVo>newArrayList();
-//    public static List<RestaurantCategoryRelVo> RESTAURANT_CATEGORY_REL_LIST = Lists.<RestaurantCategoryRelVo>newArrayList();
+//    public static List<CategoryRelVo> RESTAURANT_CATEGORY_REL_LIST = Lists.<CategoryRelVo>newArrayList();
     public static List<RestaurantInfoVo> RESTAURANT_INFO_FILTER_LIST = Lists.<RestaurantInfoVo>newArrayList();
-    public static List<CategoryFoodRelVo> CATEGORY_FOOD_REL_LIST = Lists.<CategoryFoodRelVo>newArrayList();
+    public static List<FoodVo> CATEGORY_FOOD_REL_LIST = Lists.<FoodVo>newArrayList();
     public static List<OrderVo> USER_ORDER_HISTORY_LIST = Lists.newArrayList();
 
     // key restaurant_uuid
@@ -48,8 +48,8 @@ public class Model {
     public static SellerStatVo SELLER_STAT = new SellerStatVo();
 
     public static List<OrderVo> SELLER_STAT_LOGS = Lists.<OrderVo>newArrayList();
-    public static List<RestaurantCategoryRelVo> SELLER_CATEGORY_LIST = Lists.<RestaurantCategoryRelVo>newArrayList();
-    public static List<CategoryFoodRelVo> SELLER_FOOD_LIST = Lists.<CategoryFoodRelVo>newArrayList();
+    public static List<CategoryRelVo> SELLER_CATEGORY_LIST = Lists.<CategoryRelVo>newArrayList();
+    public static List<FoodVo> SELLER_FOOD_LIST = Lists.<FoodVo>newArrayList();
 
 
 

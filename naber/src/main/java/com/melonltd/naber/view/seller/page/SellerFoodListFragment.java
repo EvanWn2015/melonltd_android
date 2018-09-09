@@ -32,7 +32,7 @@ import com.melonltd.naber.view.customize.SwitchButton;
 import com.melonltd.naber.view.factory.PageType;
 import com.melonltd.naber.view.seller.SellerMainActivity;
 import com.melonltd.naber.view.seller.adapter.SellerFoodAdapter;
-import com.melonltd.naber.vo.CategoryFoodRelVo;
+import com.melonltd.naber.vo.FoodVo;
 import com.melonltd.naber.vo.FoodItemVo;
 import com.melonltd.naber.vo.ItemVo;
 import com.melonltd.naber.vo.ReqData;
@@ -158,7 +158,7 @@ public class SellerFoodListFragment extends Fragment implements View.OnClickList
         ApiManager.sellerFoodList(req, new ThreadCallback(getContext()) {
             @Override
             public void onSuccess(String responseBody) {
-                Model.SELLER_FOOD_LIST = Tools.JSONPARSE.fromJsonList(responseBody, CategoryFoodRelVo[].class);
+                Model.SELLER_FOOD_LIST = Tools.JSONPARSE.fromJsonList(responseBody, FoodVo[].class);
                 adapter.notifyDataSetChanged();
             }
 
@@ -214,7 +214,7 @@ public class SellerFoodListFragment extends Fragment implements View.OnClickList
             final int index = (int) view.getTag();
             final SwitchStatus status = SwitchStatus.of(isChecked);
             if (!status.equals(Model.SELLER_FOOD_LIST.get(index).status)) {
-                CategoryFoodRelVo req = Model.SELLER_FOOD_LIST.get(index);
+                FoodVo req = Model.SELLER_FOOD_LIST.get(index);
                 req.status = status;
                 ApiManager.sellerFoodUpdate(req, new ThreadCallback(getContext()) {
                     @Override
@@ -269,7 +269,7 @@ public class SellerFoodListFragment extends Fragment implements View.OnClickList
 
         @Override
         public void run() {
-            CategoryFoodRelVo req = new CategoryFoodRelVo();
+            FoodVo req = new FoodVo();
             req.category_uuid = this.category_uuid;
             req.food_name = this.name;
             req.default_price = this.price;
@@ -282,7 +282,7 @@ public class SellerFoodListFragment extends Fragment implements View.OnClickList
             ApiManager.sellerFoodAdd(req, new ThreadCallback(getContext()) {
                 @Override
                 public void onSuccess(String responseBody) {
-                    CategoryFoodRelVo vo = Tools.JSONPARSE.fromJson(responseBody, CategoryFoodRelVo.class);
+                    FoodVo vo = Tools.JSONPARSE.fromJson(responseBody, FoodVo.class);
                     Model.SELLER_FOOD_LIST.add(0, vo);
                     TO_MENU_EDIT_PAGE_INDEX = 0;
                     Bundle bundle = new Bundle();

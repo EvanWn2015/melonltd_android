@@ -6,6 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.melonltd.naber.R;
@@ -18,10 +19,20 @@ public class SellerCategoryAdapter extends RecyclerView.Adapter<SellerCategoryAd
     private View.OnClickListener deleteListener, editListener;
     private View.OnClickListener hideKeyboardListener = new HideKeyboardListener();
 
+    private boolean IS_SORT_EDIT = false;
+
     public SellerCategoryAdapter(SwitchButton.OnCheckedChangeListener aSwitchListener, View.OnClickListener editListener, View.OnClickListener deleteListener) {
         this.aSwitchListener = aSwitchListener;
         this.editListener = editListener;
         this.deleteListener = deleteListener;
+    }
+
+    // TODO 新增可否編輯排序，用法
+    // 開啟編輯 adapter.setSortEdit(true).notifyDataSetChanged();
+    // 關閉編輯 adapter.setSortEdit(false).notifyDataSetChanged();
+    public SellerCategoryAdapter setSortEdit(boolean isSortEdit){
+        this.IS_SORT_EDIT = isSortEdit;
+        return this;
     }
 
     @NonNull
@@ -35,6 +46,12 @@ public class SellerCategoryAdapter extends RecyclerView.Adapter<SellerCategoryAd
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.v.setOnClickListener(this.hideKeyboardListener);
+
+
+        // TODO
+        holder.topEdit.setText(Model.SELLER_CATEGORY_LIST.get(position).top + "");
+        holder.topEdit.setEnabled(this.IS_SORT_EDIT);
+
 
         holder.categoryText.setText(Model.SELLER_CATEGORY_LIST.get(position).category_name);
         holder.setTag(position);
@@ -52,6 +69,7 @@ public class SellerCategoryAdapter extends RecyclerView.Adapter<SellerCategoryAd
 
     class ViewHolder extends RecyclerView.ViewHolder {
         private TextView categoryText;
+        private EditText topEdit;
         private Button editBtn, deleteBtn;
         private SwitchButton aSwitch;
         private View v;
@@ -60,6 +78,7 @@ public class SellerCategoryAdapter extends RecyclerView.Adapter<SellerCategoryAd
             super(v);
             this.v = v;
             this.categoryText = v.findViewById(R.id.categoryText);
+            this.topEdit = v.findViewById(R.id.top_edit);
             this.editBtn = v.findViewById(R.id.editBtn);
             this.deleteBtn = v.findViewById(R.id.deleteBtn);
             this.aSwitch = v.findViewById(R.id.aSwitch);

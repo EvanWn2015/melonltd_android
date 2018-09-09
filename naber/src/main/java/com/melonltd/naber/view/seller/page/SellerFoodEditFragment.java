@@ -40,7 +40,7 @@ import com.melonltd.naber.util.UpLoadCallBack;
 import com.melonltd.naber.view.common.BaseCore;
 import com.melonltd.naber.view.factory.PageType;
 import com.melonltd.naber.view.seller.SellerMainActivity;
-import com.melonltd.naber.vo.CategoryFoodRelVo;
+import com.melonltd.naber.vo.FoodVo;
 import com.melonltd.naber.vo.DemandsItemVo;
 import com.melonltd.naber.vo.ItemVo;
 import com.melonltd.naber.vo.ReqData;
@@ -54,7 +54,7 @@ public class SellerFoodEditFragment extends Fragment implements View.OnFocusChan
     private SimpleDraweeView menuIconImage;
     private LinearLayout demandLayout;
     private LinearLayout scopeLayout, optLayout;
-    private CategoryFoodRelVo foodVo;
+    private FoodVo foodVo;
 
     private static final int PICK_FROM_GALLERY = 9908;
     private static final int PICK_FROM_CAMERA = 9901;
@@ -176,7 +176,7 @@ public class SellerFoodEditFragment extends Fragment implements View.OnFocusChan
         super.onResume();
         SellerMainActivity.changeTabAndToolbarStatus();
 
-        foodVo = (CategoryFoodRelVo) getArguments().getSerializable(NaberConstant.SELLER_FOOD_INFO);
+        foodVo = (FoodVo) getArguments().getSerializable(NaberConstant.SELLER_FOOD_INFO);
         setValue();
 
         if (SellerMainActivity.toolbar != null) {

@@ -22,8 +22,8 @@ import com.melonltd.naber.util.Tools;
 import com.melonltd.naber.view.factory.PageType;
 import com.melonltd.naber.view.user.UserMainActivity;
 import com.melonltd.naber.view.user.adapter.UserFoodAdapter;
-import com.melonltd.naber.vo.CategoryFoodRelVo;
-import com.melonltd.naber.vo.RestaurantCategoryRelVo;
+import com.melonltd.naber.vo.CategoryRelVo;
+import com.melonltd.naber.vo.FoodVo;
 
 import java.util.List;
 
@@ -72,7 +72,7 @@ public class UserFoodListFragment extends Fragment {
 
 
     private void serHeaderValue(Bundle bundle) {
-        RestaurantCategoryRelVo vo = (RestaurantCategoryRelVo) bundle.getSerializable(NaberConstant.RESTAURANT_CATEGORY_REL);
+        CategoryRelVo vo = (CategoryRelVo) bundle.getSerializable(NaberConstant.RESTAURANT_CATEGORY_REL);
         holder.categoryInfo = vo;
         holder.categoryNameText.setText(vo.category_name);
     }
@@ -122,7 +122,7 @@ public class UserFoodListFragment extends Fragment {
         ApiManager.restaurantFoodList(holder.categoryInfo.category_uuid, new ThreadCallback(getContext()) {
             @Override
             public void onSuccess(String responseBody) {
-                List<CategoryFoodRelVo> vos = Tools.JSONPARSE.fromJsonList(responseBody, CategoryFoodRelVo[].class);
+                List<FoodVo> vos = Tools.JSONPARSE.fromJsonList(responseBody, FoodVo[].class);
 
                 Log.d("",vos.toString());
 
@@ -189,7 +189,7 @@ public class UserFoodListFragment extends Fragment {
     }
 
     private class ViewHolder {
-        private RestaurantCategoryRelVo categoryInfo;
+        private CategoryRelVo categoryInfo;
         private TextView categoryNameText;
         ViewHolder(View v) {
             this.categoryNameText = v.findViewById(R.id.categoryNameText);

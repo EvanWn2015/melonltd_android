@@ -29,10 +29,9 @@ import com.melonltd.naber.view.common.BaseCore;
 import com.melonltd.naber.view.factory.PageType;
 import com.melonltd.naber.view.user.UserMainActivity;
 import com.melonltd.naber.view.user.adapter.UserCategoryAdapter;
-import com.melonltd.naber.vo.RestaurantCategoryRelVo;
+import com.melonltd.naber.vo.CategoryRelVo;
 import com.melonltd.naber.vo.RestaurantInfoVo;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
@@ -43,7 +42,7 @@ import cn.bingoogolapple.refreshlayout.BGARefreshLayout;
 public class UserRestaurantDetailFragment extends Fragment {
 //    private static final String TAG = UserRestaurantDetailFragment.class.getSimpleName();
     public static UserRestaurantDetailFragment FRAGMENT = null;
-    public static List<RestaurantCategoryRelVo> restaurantCategoryRelVos = Lists.newArrayList();
+    public static List<CategoryRelVo> restaurantCategoryRelVos = Lists.newArrayList();
     private UserCategoryAdapter adapter;
     private ViewHolder holder;
     public static int TO_CATEGORY_MENU_INDEX = -1;
@@ -228,9 +227,9 @@ public class UserRestaurantDetailFragment extends Fragment {
         ApiManager.restaurantDetail(holder.uuid, new ThreadCallback(getContext()) {
             @Override
             public void onSuccess(String responseBody) {
-                List<RestaurantCategoryRelVo> vos = Tools.JSONPARSE.fromJsonList(responseBody, RestaurantCategoryRelVo[].class);
-                Collections.sort(vos, new Comparator<RestaurantCategoryRelVo>() {
-                    public int compare(RestaurantCategoryRelVo o1, RestaurantCategoryRelVo o2) {
+                List<CategoryRelVo> vos = Tools.JSONPARSE.fromJsonList(responseBody, CategoryRelVo[].class);
+                Collections.sort(vos, new Comparator<CategoryRelVo>() {
+                    public int compare(CategoryRelVo o1, CategoryRelVo o2) {
                         return o2.top - o1.top;
                     }
                 });

@@ -30,7 +30,7 @@ import com.melonltd.naber.view.factory.PageType;
 import com.melonltd.naber.view.seller.SellerMainActivity;
 import com.melonltd.naber.view.seller.adapter.SellerCategoryAdapter;
 import com.melonltd.naber.vo.ReqData;
-import com.melonltd.naber.vo.RestaurantCategoryRelVo;
+import com.melonltd.naber.vo.CategoryRelVo;
 
 import cn.bingoogolapple.refreshlayout.BGANormalRefreshViewHolder;
 import cn.bingoogolapple.refreshlayout.BGARefreshLayout;
@@ -139,7 +139,7 @@ public class SellerCategoryListFragment extends Fragment {
         ApiManager.sellerCategoryList(new ThreadCallback(getContext()) {
             @Override
             public void onSuccess(String responseBody) {
-                Model.SELLER_CATEGORY_LIST = Tools.JSONPARSE.fromJsonList(responseBody, RestaurantCategoryRelVo[].class);
+                Model.SELLER_CATEGORY_LIST = Tools.JSONPARSE.fromJsonList(responseBody, CategoryRelVo[].class);
                 adapter.notifyDataSetChanged();
             }
 
@@ -263,7 +263,7 @@ public class SellerCategoryListFragment extends Fragment {
                 ApiManager.sellerAddCategory(req, new ThreadCallback(getContext()) {
                     @Override
                     public void onSuccess(String responseBody) {
-                        RestaurantCategoryRelVo categoryRel = Tools.JSONPARSE.fromJson(responseBody, RestaurantCategoryRelVo.class);
+                        CategoryRelVo categoryRel = Tools.JSONPARSE.fromJson(responseBody, CategoryRelVo.class);
                         Model.SELLER_CATEGORY_LIST.add(0, categoryRel);
                         categoryEdit.setText("");
 

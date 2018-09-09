@@ -5,8 +5,7 @@ import com.melonltd.naber.model.service.Base64Service;
 import com.melonltd.naber.model.service.SPService;
 import com.melonltd.naber.util.Tools;
 import com.melonltd.naber.vo.AccountInfoVo;
-import com.melonltd.naber.vo.CategoryFoodRelVo;
-import com.melonltd.naber.vo.FoodItemVo;
+import com.melonltd.naber.vo.FoodVo;
 import com.melonltd.naber.vo.OrderDetail;
 import com.melonltd.naber.vo.ReqData;
 import com.melonltd.naber.vo.RestaurantInfoVo;
@@ -85,6 +84,18 @@ public class ApiManager {
     // 2.取得店家類型列表
     public static void storeCategoryList (ApiCallback callback) {
         Call call = getClient().post(ApiUrl.STORE_CATEGORY_LIST);
+        call.enqueue(callback);
+    }
+
+    // TODO 3.取得店家類型列表，回應 List<String> areaList
+    public static void storeAreaList (ApiCallback callback) {
+        Call call = getClient().post(ApiUrl.STORE_AREA_LIST);
+        call.enqueue(callback);
+    }
+
+    // TODO  4.取得App進入引導公告圖，回應 String url
+    public static void appIntroBulletin (ThreadCallback callback) {
+        Call call = getClient().post(ApiUrl.APP_INTRO_BULLETIN);
         call.enqueue(callback);
     }
 
@@ -252,8 +263,8 @@ public class ApiManager {
         call.enqueue(callback);
     }
 
-    //排序種類
-    public static void sellerSortCategory(List<CategoryFoodRelVo> req ,ThreadCallback callback){
+    // TODO  排序種類，回應 List<FoodVo> categoryList
+    public static void sellerSortCategory(List<FoodVo> req , ThreadCallback callback){
         Call call = getClient().postHeader(ApiUrl.SELLER_SORT_CATEGORY, SPService.getOauth(), Base64Service.encryptBASE64(Tools.JsonParse.toJson(req)));
         call.enqueue(callback);
     }
@@ -265,7 +276,7 @@ public class ApiManager {
     }
 
     // 品項更新
-    public static void sellerFoodUpdate(CategoryFoodRelVo req, ThreadCallback callback) {
+    public static void sellerFoodUpdate(FoodVo req, ThreadCallback callback) {
         Call call = getClient().postHeader(ApiUrl.SELLER_CHANGE_FOOD, SPService.getOauth(), Base64Service.encryptBASE64(Tools.JSONPARSE.toJson(req)));
         call.enqueue(callback);
     }
@@ -277,14 +288,14 @@ public class ApiManager {
     }
 
     // 品項刪除
-    public static void sellerFoodAdd(CategoryFoodRelVo req, ThreadCallback callback) {
+    public static void sellerFoodAdd(FoodVo req, ThreadCallback callback) {
         Call call = getClient().postHeader(ApiUrl.SELLER_ADD_FOOD, SPService.getOauth(), Base64Service.encryptBASE64(Tools.JSONPARSE.toJson(req)));
         call.enqueue(callback);
     }
 
-    //品項排序
-    public static void sellerFoodSort(List<FoodItemVo> req, ThreadCallback callback){
-        Call call =getClient().postHeader(ApiUrl.SELLER_SORT_FOOD,SPService.getOauth(),Base64Service.encryptBASE64(Tools.JSONPARSE.toJson(req)));
+    // TODO 品項排序回應 List<FoodVo> foodList
+    public static void sellerFoodSort(List<FoodVo> req, ThreadCallback callback){
+        Call call = getClient().postHeader(ApiUrl.SELLER_SORT_FOOD,SPService.getOauth(),Base64Service.encryptBASE64(Tools.JSONPARSE.toJson(req)));
         call.enqueue(callback);
     }
 

@@ -5,7 +5,7 @@ import com.melonltd.naber.model.type.SwitchStatus;
 
 import java.io.Serializable;
 
-public class CategoryFoodRelVo implements Serializable{
+public class FoodVo implements Serializable{
     private static final long serialVersionUID = 3254163581453552772L;
 
     public String food_uuid;
@@ -15,8 +15,12 @@ public class CategoryFoodRelVo implements Serializable{
     public String photo;
     public String photo_type;
     public FoodItemVo food_data;
-    public int top;
     public SwitchStatus status;
+
+    // TODO 新增
+    public int top;
+    public String enable;
+    public String create_date;
 
     @Override
     public String toString() {

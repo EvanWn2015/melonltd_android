@@ -8,18 +8,18 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.melonltd.naber.R;
-import com.melonltd.naber.vo.RestaurantCategoryRelVo;
+import com.melonltd.naber.vo.CategoryRelVo;
 
 import java.util.List;
 
 
 public class UserCategoryAdapter extends RecyclerView.Adapter<UserCategoryAdapter.ViewHolder> {
 //    private static final String TAG = UserCategoryAdapter.class.getSimpleName();
-    private List<RestaurantCategoryRelVo> listData;
+    private List<CategoryRelVo> listData;
     private View.OnClickListener itemClickListener;
 
 
-    public UserCategoryAdapter(List<RestaurantCategoryRelVo> listData) {
+    public UserCategoryAdapter(List<CategoryRelVo> listData) {
         this.listData = listData;
     }
 

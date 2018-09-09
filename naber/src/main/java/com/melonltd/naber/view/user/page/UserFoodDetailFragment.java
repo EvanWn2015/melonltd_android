@@ -32,7 +32,7 @@ import com.melonltd.naber.view.customize.NaberCheckButton;
 import com.melonltd.naber.view.customize.NaberRadioButton;
 import com.melonltd.naber.view.factory.PageType;
 import com.melonltd.naber.view.user.UserMainActivity;
-import com.melonltd.naber.vo.CategoryFoodRelVo;
+import com.melonltd.naber.vo.FoodVo;
 import com.melonltd.naber.vo.DemandsItemVo;
 import com.melonltd.naber.vo.ItemVo;
 import com.melonltd.naber.vo.OrderDetail;
@@ -116,7 +116,7 @@ public class UserFoodDetailFragment extends Fragment implements View.OnClickList
         contentLayout.removeAllViews();
 //        totalAmount = 0;
 
-        final CategoryFoodRelVo vo = (CategoryFoodRelVo) getArguments().getSerializable(NaberConstant.FOOD_INFO);
+        final FoodVo vo = (FoodVo) getArguments().getSerializable(NaberConstant.FOOD_INFO);
 
         if (vo != null) {
             UserMainActivity.toolbar.setTitle(vo.food_name);
@@ -128,7 +128,7 @@ public class UserFoodDetailFragment extends Fragment implements View.OnClickList
             ApiManager.restaurantFoodDetail(vo.food_uuid, new ThreadCallback(getContext()) {
                 @Override
                 public void onSuccess(String responseBody) {
-                    CategoryFoodRelVo food = Tools.JSONPARSE.fromJson(responseBody, CategoryFoodRelVo.class);
+                    FoodVo food = Tools.JSONPARSE.fromJson(responseBody, FoodVo.class);
                     getArguments().putString("FOOd_PHOTO", food.photo);
                     setScopeView(food.food_data.scopes);
                     setDemandView(food.food_data.demands);

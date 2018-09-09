@@ -12,7 +12,7 @@ import com.facebook.drawee.view.SimpleDraweeView;
 import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.imagepipeline.request.ImageRequestBuilder;
 import com.google.common.base.Strings;
-import com.melonltd.naber.vo.CategoryFoodRelVo;
+import com.melonltd.naber.vo.FoodVo;
 import com.melonltd.naber.R;
 
 import java.util.List;
@@ -20,10 +20,10 @@ import java.util.List;
 
 public class UserFoodAdapter extends RecyclerView.Adapter<UserFoodAdapter.ViewHolder> {
     private static final String TAG = UserFoodAdapter.class.getSimpleName();
-    private List<CategoryFoodRelVo> listData;
+    private List<FoodVo> listData;
     private View.OnClickListener itemClickListener;
 
-    public UserFoodAdapter(List<CategoryFoodRelVo> listData) {
+    public UserFoodAdapter(List<FoodVo> listData) {
         this.listData = listData;
     }
 
