@@ -7,6 +7,20 @@
     android:layout_marginBottom="2dp"
     android:background="@drawable/naber_text_base_line">
 
+    <EditText
+        android:id="@+id/top_edit"
+        android:layout_width="20dp"
+        android:layout_height="wrap_content"
+        android:background="@drawable/naber_reverse_gary_button_style"
+        android:maxLines="1"
+        android:textAlignment="center"
+        android:textSize="16sp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toBottomOf="@+id/categoryText"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@id/categoryText"
+        app:layout_constraintTop_toTopOf="@+id/categoryText" />
+
     <TextView
         android:id="@+id/categoryText"
         android:layout_width="0dp"
@@ -16,21 +30,9 @@
         android:layout_marginTop="8dp"
         android:text=""
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/top_edit"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/aSwitch"
+        app:layout_constraintStart_toEndOf="@id/top_edit"
         app:layout_constraintTop_toTopOf="parent" />
-
-    <EditText
-        android:id="@+id/top_edit"
-        android:layout_width="30dp"
-        android:layout_height="wrap_content"
-        android:background="@drawable/naber_reverse_gary_button_style"
-        android:maxLines="1"
-        android:textAlignment="center"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="@+id/categoryText"
-        app:layout_constraintStart_toEndOf="@id/categoryText"
-        app:layout_constraintTop_toTopOf="@+id/categoryText" />
 
     <com.melonltd.naber.view.customize.SwitchButton
         android:id="@+id/aSwitch"
@@ -43,7 +45,7 @@
         android:checked="true"
         app:layout_constraintBottom_toBottomOf="@+id/deleteBtn"
         app:layout_constraintEnd_toStartOf="@+id/deleteBtn"
-        app:layout_constraintStart_toEndOf="@+id/top_edit"
+        app:layout_constraintStart_toEndOf="@+id/categoryText"
         app:layout_constraintTop_toTopOf="@+id/deleteBtn"
         app:sb_checked="true"
         app:sb_show_indicator="false" />
@@ -79,19 +81,9 @@
         android:text="編輯"
         android:textColor="@android:color/white"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@id/categorySort"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/deleteBtn"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <Button
-        android:id="@+id/categorySort"
-        android:layout_width="wrap_content"
-        android:layout_height="32dp"
-        android:layout_marginEnd="8dp"
-        android:background="@drawable/naber_button_style"
-        android:text="排序種類"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toEndOf="@id/editBtn"/>
+
 </android.support.constraint.ConstraintLayout>
