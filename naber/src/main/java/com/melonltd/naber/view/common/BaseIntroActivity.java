@@ -3,27 +3,22 @@ package com.melonltd.naber.view.common;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.Button;
-import android.widget.ImageView;
 
-import com.bumptech.glide.Glide;
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.google.common.base.Strings;
 import com.melonltd.naber.R;
 import com.melonltd.naber.model.api.ApiManager;
-import com.melonltd.naber.model.api.ApiUrl;
 import com.melonltd.naber.model.api.ThreadCallback;
 
 public class BaseIntroActivity extends AppCompatActivity {
-    private SimpleDraweeView img_intro;
-    public Button btn_intro;
+    private static final String TAG =  BaseIntroActivity.class.getSimpleName();
+//    private SimpleDraweeView img_intro;
+//    public Button btn_intro;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,25 +29,39 @@ public class BaseIntroActivity extends AppCompatActivity {
     }
 
     private void getImage() {
-        img_intro = findViewById(R.id.imageView_intro);
-        btn_intro = findViewById(R.id.btn_intro);
+        final SimpleDraweeView img_intro = findViewById(R.id.imageView_intro);
+        final Button btn_intro = findViewById(R.id.btn_intro);
+        btn_intro.setVisibility(View.GONE);
+
         ApiManager.appIntroBulletin(new ThreadCallback(getApplicationContext()) {
             @Override
             public void onSuccess(String responseBody) {
-                Uri img_url = Uri.parse(ApiUrl.APP_INTRO_BULLETIN);
-                img_intro.setImageURI(img_url);
+                Log.i(TAG, responseBody);
+//                Uri img_url = Uri.parse(responseBody);
+                if (Strings.isNullOrEmpty(responseBody)) {
+                    startActivity();
+                } else {
+                    img_intro.setImageURI(Uri.parse(responseBody));
+                }
+                btn_intro.setVisibility(View.VISIBLE);
             }
 
             @Override
             public void onFail(Exception error, String msg) {
-
+                btn_intro.setVisibility(View.VISIBLE);
             }
         });
+
         btn_intro.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(BaseIntroActivity.this,BaseActivity.class));
+//                startActivity(new Intent(BaseIntroActivity.this,BaseActivity.class));
+                startActivity();
             }
         });
+    }
+
+    private void startActivity () {
+        startActivity(new Intent(BaseIntroActivity.this,BaseActivity.class));
     }
 }

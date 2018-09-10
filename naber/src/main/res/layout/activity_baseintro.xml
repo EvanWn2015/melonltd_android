@@ -10,8 +10,8 @@
 
     <com.facebook.drawee.view.SimpleDraweeView
         android:id="@+id/imageView_intro"
-        android:layout_width="320dp"
-        android:layout_height="480dp"
+        android:layout_width="291dp"
+        android:layout_height="530dp"
         android:layout_marginBottom="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
@@ -20,8 +20,9 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.476"
         fresco:failureImage="@drawable/naber_icon_logo_reverse"
-        fresco:roundedCornerRadius="12dp"/>
+        fresco:roundedCornerRadius="12dp" />
 
     <Button
         android:id="@+id/btn_intro"
