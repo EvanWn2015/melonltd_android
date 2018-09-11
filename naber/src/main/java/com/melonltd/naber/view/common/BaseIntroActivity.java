@@ -16,9 +16,7 @@ import com.melonltd.naber.model.api.ApiManager;
 import com.melonltd.naber.model.api.ThreadCallback;
 
 public class BaseIntroActivity extends AppCompatActivity {
-    private static final String TAG =  BaseIntroActivity.class.getSimpleName();
-//    private SimpleDraweeView img_intro;
-//    public Button btn_intro;
+//    private static final String TAG =  BaseIntroActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,8 +34,7 @@ public class BaseIntroActivity extends AppCompatActivity {
         ApiManager.appIntroBulletin(new ThreadCallback(getApplicationContext()) {
             @Override
             public void onSuccess(String responseBody) {
-                Log.i(TAG, responseBody);
-//                Uri img_url = Uri.parse(responseBody);
+//                Log.i(TAG, responseBody);
                 if (Strings.isNullOrEmpty(responseBody)) {
                     startActivity();
                 } else {
@@ -55,7 +52,6 @@ public class BaseIntroActivity extends AppCompatActivity {
         btn_intro.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                startActivity(new Intent(BaseIntroActivity.this,BaseActivity.class));
                 startActivity();
             }
         });
