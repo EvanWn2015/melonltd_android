@@ -13,8 +13,8 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -59,6 +59,7 @@ public class SellerMainActivity extends BaseCore implements TabLayout.OnTabSelec
 //    private static final String TAG = SellerMainActivity.class.getSimpleName();
     private static Context context;
     public static Toolbar toolbar;
+    public static Button sortBtn;
 
     private static Drawable defaultIcon;
     private static DrawerLayout drawer;
@@ -94,6 +95,8 @@ public class SellerMainActivity extends BaseCore implements TabLayout.OnTabSelec
 
     private void getViews() {
         toolbar = findViewById(R.id.toolbar);
+        // TODO 編輯排序按鈕
+        sortBtn = findViewById(R.id.sortBtn);
         setSupportActionBar(toolbar);
         drawer = findViewById(R.id.seller_drawer_layout);
         final BGARefreshLayout refreshLayout = findViewById(R.id.sellerGARefreshLayout);

@@ -2,21 +2,18 @@ package com.melonltd.naber.view.seller.page;
 
 
 import android.content.Context;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.Toolbar;
 
 import com.bigkoo.alertview.AlertView;
 import com.bigkoo.alertview.OnItemClickListener;
@@ -32,14 +29,14 @@ import com.melonltd.naber.view.customize.SwitchButton;
 import com.melonltd.naber.view.factory.PageType;
 import com.melonltd.naber.view.seller.SellerMainActivity;
 import com.melonltd.naber.view.seller.adapter.SellerCategoryAdapter;
-import com.melonltd.naber.vo.ReqData;
 import com.melonltd.naber.vo.CategoryRelVo;
+import com.melonltd.naber.vo.ReqData;
 
 import cn.bingoogolapple.refreshlayout.BGANormalRefreshViewHolder;
 import cn.bingoogolapple.refreshlayout.BGARefreshLayout;
 
 public class SellerCategoryListFragment extends Fragment {
-//    private static final String TAG = SellerCategoryListFragment.class.getSimpleName();
+    private static final String TAG = SellerCategoryListFragment.class.getSimpleName();
     public static SellerCategoryListFragment FRAGMENT = null;
 
     private EditText categoryEdit;
@@ -128,11 +125,34 @@ public class SellerCategoryListFragment extends Fragment {
         } else {
             loadData();
         }
+
+        if (SellerMainActivity.sortBtn != null) {
+            SellerMainActivity.sortBtn.setVisibility(View.VISIBLE);
+            SellerMainActivity.sortBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (SellerMainActivity.sortBtn.getText().equals("編輯排序")){
+                        adapter.setSortEdit(true).notifyDataSetChanged();
+                        SellerMainActivity.sortBtn.setText("儲存排序");
+                    }else {
+                        SellerMainActivity.sortBtn.setText("編輯排序");
+                        adapter.setSortEdit(false).notifyDataSetChanged();
+
+                        // TODO save
+                    }
+                }
+            });
+        }
     }
 
     @Override
     public void onStop() {
         super.onStop();
+        if (SellerMainActivity.sortBtn != null) {
+            adapter.setSortEdit(false);
+            SellerMainActivity.sortBtn.setVisibility(View.GONE);
+            SellerMainActivity.sortBtn.setText("編輯排序");
+        }
     }
 
     private void loadData() {

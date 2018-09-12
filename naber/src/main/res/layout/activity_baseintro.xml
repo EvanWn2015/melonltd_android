@@ -20,9 +20,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.476"
-        fresco:failureImage="@drawable/naber_icon_logo_reverse"
-        fresco:roundedCornerRadius="12dp" />
+        app:layout_constraintVertical_bias="0.476" />
 
     <Button
         android:id="@+id/btn_intro"
