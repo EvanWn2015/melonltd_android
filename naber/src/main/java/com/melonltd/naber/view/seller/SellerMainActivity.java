@@ -13,6 +13,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -272,16 +273,32 @@ public class SellerMainActivity extends BaseCore implements TabLayout.OnTabSelec
 
     public static void changeTabAndToolbarStatus() {
         int position = PageType.equalsPositionByName(BaseCore.FRAGMENT_TAG);
-        toolbar.setTitle(context.getResources().getString(PageType.equalsIdByName(FRAGMENT_TAG)));
+//        Log.i(TAG,"position");
+        if(position == 3){
+//                toolbar.setTitle(context.getResources().getString(PageType.equalsIdByName(FRAGMENT_TAG)));
 
-        for (View tab : tabViews) {
-            ImageView icon = tab.findViewById(R.id.tabIcon);
-            TextView text = tab.findViewById(R.id.tabTitle);
-            icon.setColorFilter(context.getResources().getColor(R.color.naber_tab_default_color));
-            text.setTextColor(context.getResources().getColor(R.color.naber_tab_default_color));
-            if (tabViews.indexOf(tab) == position) {
-                icon.setColorFilter(context.getResources().getColor(R.color.naber_basis));
-                text.setTextColor(context.getResources().getColor(R.color.naber_basis));
+                for (View tab : tabViews) {
+                    ImageView icon = tab.findViewById(R.id.tabIcon);
+                    TextView text = tab.findViewById(R.id.tabTitle);
+                    icon.setColorFilter(context.getResources().getColor(R.color.naber_tab_default_color));
+                    text.setTextColor(context.getResources().getColor(R.color.naber_tab_default_color));
+                    if (tabViews.indexOf(tab) == position) {
+                        icon.setColorFilter(context.getResources().getColor(R.color.naber_basis));
+                        text.setTextColor(context.getResources().getColor(R.color.naber_basis));
+                    }
+                }
+        } else {
+            toolbar.setTitle(context.getResources().getString(PageType.equalsIdByName(FRAGMENT_TAG)));
+
+            for (View tab : tabViews) {
+                ImageView icon = tab.findViewById(R.id.tabIcon);
+                TextView text = tab.findViewById(R.id.tabTitle);
+                icon.setColorFilter(context.getResources().getColor(R.color.naber_tab_default_color));
+                text.setTextColor(context.getResources().getColor(R.color.naber_tab_default_color));
+                if (tabViews.indexOf(tab) == position) {
+                    icon.setColorFilter(context.getResources().getColor(R.color.naber_basis));
+                    text.setTextColor(context.getResources().getColor(R.color.naber_basis));
+                }
             }
         }
     }

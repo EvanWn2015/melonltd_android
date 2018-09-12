@@ -2,18 +2,21 @@ package com.melonltd.naber.view.seller.page;
 
 
 import android.content.Context;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toolbar;
 
 import com.bigkoo.alertview.AlertView;
 import com.bigkoo.alertview.OnItemClickListener;
@@ -43,7 +46,6 @@ public class SellerCategoryListFragment extends Fragment {
     private Button newCategoryBtn;
     private SellerCategoryAdapter adapter;
     private Bundle bundle;
-
     public static int TO_CATEGORY_LIST_PAGE_INDEX = -1;
 
     public SellerCategoryListFragment() {
