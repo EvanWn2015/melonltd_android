@@ -9,17 +9,21 @@
 
     <EditText
         android:id="@+id/top_edit"
-        android:layout_width="20dp"
+        android:layout_width="40dp"
         android:layout_height="wrap_content"
         android:background="@drawable/naber_reverse_gary_button_style"
         android:maxLines="1"
+        android:inputType="number"
+        android:lines="1"
+        android:maxLength="2"
         android:textAlignment="center"
         android:textSize="16sp"
         android:layout_marginStart="8dp"
         app:layout_constraintBottom_toBottomOf="@+id/categoryText"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintStart_toEndOf="@id/categoryText"
-        app:layout_constraintTop_toTopOf="@+id/categoryText" />
+        app:layout_constraintTop_toTopOf="@+id/categoryText"
+        />
 
     <TextView
         android:id="@+id/categoryText"

@@ -63,56 +63,10 @@ public class BaseActivity extends BaseCore {
         }
 
         // 檢查app 版本 機制
-        new Handler().postDelayed(new CheckApp(), 1000);
+        new Handler().postDelayed(new StartUse(), 300);
     }
 
-    class CheckApp implements Runnable {
 
-        @Override
-        public void run() {
-            ApiManager.checkAppVersion(new ThreadCallback(context) {
-                @Override
-                public void onSuccess(String responseBody) {
-                    AppVersionLogVo vo = Tools.JSONPARSE.fromJson(responseBody, AppVersionLogVo.class);
-                    if (!vo.version.equals(BuildConfig.VERSION_NAME)) {
-                        final String[] action = new String[]{vo.need_upgrade.equals("Y") ? "前往更新" : "我知道了"};
-                        new AlertView.Builder()
-                                .setContext(context)
-                                .setTitle("NABER 系統提示")
-                                .setMessage("您目前的APP版本(V" + BuildConfig.VERSION_NAME + ")，不是最新版本(V" + vo.version + ")，為了您的使用權益，\n請前往Google Play更新您的App")
-                                .setStyle(AlertView.Style.Alert)
-                                .setOthers(action)
-                                .setOnItemClickListener(new OnItemClickListener() {
-                                    @Override
-                                    public void onItemClick(Object o, int position) {
-                                        if (position >= 0) {
-                                            if (action[position].equals("前往更新")) {
-                                                // TODO go to google play
-                                                Intent intent = new Intent(Intent.ACTION_VIEW);
-                                                intent.setData(Uri.parse("market://details?id=com.melonltd.naber"));
-                                                startActivity(intent);
-                                            } else if (action[position].equals("我知道了")) {
-                                                new Handler().postDelayed(new StartUse(), 500);
-                                            }
-                                        }
-                                    }
-                                })
-                                .build()
-                                .setCancelable(false)
-                                .show();
-                    } else {
-                        new Handler().postDelayed(new StartUse(), 500);
-                    }
-                }
-
-                @Override
-                public void onFail(Exception error, String msg) {
-//                    Log.i(TAG, msg);
-                    new Handler().postDelayed(new StartUse(), 500);
-                }
-            });
-        }
-    }
 
 
     class StartUse implements Runnable {

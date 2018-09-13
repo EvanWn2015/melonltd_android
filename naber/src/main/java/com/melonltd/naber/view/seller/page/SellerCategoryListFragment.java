@@ -8,6 +8,9 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -303,5 +306,32 @@ public class SellerCategoryListFragment extends Fragment {
             }
         }
     }
+
+
+//    class SortEditListener implements TextWatcher {
+//
+//        @Override
+//        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+//        }
+//
+//        @Override
+//        public void onTextChanged(CharSequence s, int start, int before, int count) {
+//        }
+//
+//        @Override
+//        public void afterTextChanged(Editable s) {
+//            Log.i(TAG,s.toString());
+//            if (Strings.isNullOrEmpty(s.toString())){
+//                s.clear();
+//                s.append("0");
+//            }else if("00".equals(s.toString())){
+//                s.clear();
+//                s.append("99");
+//            }
+//
+//            Log.i(TAG,s.toString());
+//            Log.i(TAG,s.toString());
+//        }
+//    }
 
 }

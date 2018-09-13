@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.Toolbar;
 import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -42,7 +43,7 @@ import java.util.List;
 
 
 public class UserMainActivity extends BaseCore implements View.OnClickListener, TabLayout.OnTabSelectedListener {
-//    private static final String TAG = UserMainActivity.class.getSimpleName();
+    private static final String TAG = UserMainActivity.class.getSimpleName();
     private static Context context;
     public static int LAYOUT_WIDTH = 0;
     public static Toolbar toolbar;
@@ -107,6 +108,22 @@ public class UserMainActivity extends BaseCore implements View.OnClickListener, 
 //                Log.i(TAG, msg);
             }
         });
+
+        ApiManager.storeAreaList(new ApiCallback(context) {
+            @Override
+            public void onSuccess(String responseBody) {
+                List<String> areas = Tools.JSONPARSE.fromJsonList(responseBody, String[].class);
+                NaberConstant.FILTER_AREAS = new String[areas.size()];
+                NaberConstant.FILTER_AREAS = areas.toArray(NaberConstant.FILTER_AREAS);
+            }
+
+            @Override
+            public void onFail(Exception error, String msg) {
+
+            }
+        });
+
+
     }
 
     @Override
