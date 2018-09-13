@@ -4,7 +4,6 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,33 +11,28 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.google.common.base.Strings;
 import com.melonltd.naber.R;
-import com.melonltd.naber.model.api.ApiManager;
-import com.melonltd.naber.model.api.ThreadCallback;
 import com.melonltd.naber.model.bean.Model;
+import com.melonltd.naber.util.IntegerTools;
 import com.melonltd.naber.view.common.HideKeyboardListener;
 import com.melonltd.naber.view.customize.SwitchButton;
-import com.melonltd.naber.vo.FoodItemVo;
-import com.melonltd.naber.vo.FoodVo;
-
-import java.util.List;
+import com.melonltd.naber.vo.CategoryRelVo;
 
 public class SellerCategoryAdapter extends RecyclerView.Adapter<SellerCategoryAdapter.ViewHolder> {
-    private static final String TAG = SellerCategoryAdapter.class.getSimpleName();
+//    private static final String TAG = SellerCategoryAdapter.class.getSimpleName();
     private SwitchButton.OnCheckedChangeListener aSwitchListener;
     private View.OnClickListener deleteListener, editListener;
     private View.OnClickListener hideKeyboardListener = new HideKeyboardListener();
     private boolean IS_SORT_EDIT = false;
 
-    public SellerCategoryAdapter(SwitchButton.OnCheckedChangeListener aSwitchListener, View.OnClickListener editListener, View.OnClickListener deleteListener) {
+    public SellerCategoryAdapter( SwitchButton.OnCheckedChangeListener aSwitchListener, View.OnClickListener editListener, View.OnClickListener deleteListener) {
+
         this.aSwitchListener = aSwitchListener;
         this.editListener = editListener;
         this.deleteListener = deleteListener;
     }
 
-    // TODO 新增可否編輯排序，用法
-    // 開啟編輯 adapter.setSortEdit(true).notifyDataSetChanged();
-    // 關閉編輯 adapter.setSortEdit(false).notifyDataSetChanged();
     public SellerCategoryAdapter setSortEdit(boolean isSortEdit) {
         this.IS_SORT_EDIT = isSortEdit;
         return this;
@@ -53,45 +47,25 @@ public class SellerCategoryAdapter extends RecyclerView.Adapter<SellerCategoryAd
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
+    public void onBindViewHolder(@NonNull  ViewHolder holder, int position) {
+        // TODO 成功後關閉編輯排序在通知 adapter 更新資料
+        CategoryRelVo vo = Model.SELLER_CATEGORY_LIST.get(position);
+
         holder.v.setOnClickListener(this.hideKeyboardListener);
-        holder.topEdit.setText(Model.SELLER_CATEGORY_LIST.get(position).top + "");
-
-        holder.topEdit.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-            }
-        });
-
-        holder.topEdit.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-            @Override
-            public void afterTextChanged(Editable s) {
-                Integer tmp = parseInt(s.toString(), 0);
-
-                Model.SELLER_CATEGORY_LIST.get(position).top = tmp;
-//                if (s.toString().length() != tmp.toString().length()) {
-//                    notifyItemChanged(position);
-//                }
-            }
-        });
-
-
         holder.topEdit.setEnabled(this.IS_SORT_EDIT);
 
-        holder.categoryText.setText(Model.SELLER_CATEGORY_LIST.get(position).category_name);
+        holder.categoryText.setText(vo.category_name);
         holder.setTag(position);
 
-        holder.aSwitch.setChecked(Model.SELLER_CATEGORY_LIST.get(position).status.getStatus());
+        holder.aSwitch.setChecked(vo.status.getStatus());
         holder.aSwitch.setOnCheckedChangeListener(this.aSwitchListener);
         holder.editBtn.setOnClickListener(this.editListener);
         holder.deleteBtn.setOnClickListener(this.deleteListener);
+        holder.topEdit.setText(vo.top);
+
+        // TODO 成功後關閉編輯排序在通知 adapter 更新資料
+        holder.topEdit.addTextChangedListener(new SortEditListener(vo));
+
     }
 
     @Override
@@ -100,7 +74,7 @@ public class SellerCategoryAdapter extends RecyclerView.Adapter<SellerCategoryAd
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView categoryText;
+        private TextView categoryText, topText;
         private EditText topEdit;
         private Button editBtn, deleteBtn;
         private SwitchButton aSwitch;
@@ -109,6 +83,8 @@ public class SellerCategoryAdapter extends RecyclerView.Adapter<SellerCategoryAd
         ViewHolder(View v) {
             super(v);
             this.v = v;
+            this.topText = v.findViewById(R.id.topText);
+            this.topText.setVisibility(View.GONE);
             this.categoryText = v.findViewById(R.id.categoryText);
             this.topEdit = v.findViewById(R.id.top_edit);
             this.editBtn = v.findViewById(R.id.editBtn);
@@ -123,15 +99,29 @@ public class SellerCategoryAdapter extends RecyclerView.Adapter<SellerCategoryAd
         }
     }
 
+    // TODO 成功後關閉編輯排序在通知 adapter 更新資料
+    class SortEditListener implements TextWatcher {
+        CategoryRelVo vo;  // TODO 成功後關閉編輯排序在通知 adapter 更新資料
 
-    public static int parseInt(String intStr, int dflt) {
-        if (intStr == null)
-            return dflt;
+        SortEditListener( CategoryRelVo vo ){
+            this.vo = vo;
+        }
 
-        try {
-            return Integer.parseInt(intStr);
-        } catch (NumberFormatException e) {
-            return dflt;
+        @Override
+        public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int i, int i1, int i2) {
+            if (Strings.isNullOrEmpty(s.toString())) {
+                vo.top = "0";
+            } else {
+                vo.top = IntegerTools.parseInt(s.toString(), 0) + "";
+            }
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
         }
     }
 

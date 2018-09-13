@@ -33,9 +33,8 @@ import com.melonltd.naber.view.customize.SwitchButton;
 import com.melonltd.naber.view.factory.PageType;
 import com.melonltd.naber.view.seller.SellerMainActivity;
 import com.melonltd.naber.view.seller.adapter.SellerFoodAdapter;
-import com.melonltd.naber.vo.CategoryRelVo;
-import com.melonltd.naber.vo.FoodVo;
 import com.melonltd.naber.vo.FoodItemVo;
+import com.melonltd.naber.vo.FoodVo;
 import com.melonltd.naber.vo.ItemVo;
 import com.melonltd.naber.vo.ReqData;
 
@@ -185,7 +184,7 @@ public class SellerFoodListFragment extends Fragment implements View.OnClickList
                                                 @Override
                                                 public void onSuccess(String responseBody) {
                                                     Model.SELLER_FOOD_LIST.clear();
-                                                    List<FoodVo> foodVo =Tools.JSONPARSE.fromJsonList(responseBody,FoodVo[].class);
+                                                    List<FoodVo> foodVo = Tools.JSONPARSE.fromJsonList(responseBody,FoodVo[].class);
                                                     Collections.sort(foodVo, new Comparator<FoodVo>() {
                                                         public int compare(FoodVo o1, FoodVo o2) {
                                                             return o1.top - o2.top;
