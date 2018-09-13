@@ -5,6 +5,7 @@ import com.melonltd.naber.model.service.Base64Service;
 import com.melonltd.naber.model.service.SPService;
 import com.melonltd.naber.util.Tools;
 import com.melonltd.naber.vo.AccountInfoVo;
+import com.melonltd.naber.vo.CategoryRelVo;
 import com.melonltd.naber.vo.FoodVo;
 import com.melonltd.naber.vo.OrderDetail;
 import com.melonltd.naber.vo.ReqData;
@@ -264,7 +265,7 @@ public class ApiManager {
     }
 
     // TODO  排序種類，回應 List<FoodVo> categoryList
-    public static void sellerSortCategory(List<FoodVo> req , ThreadCallback callback){
+    public static void sellerSortCategory(List<CategoryRelVo> req , ThreadCallback callback){
         Call call = getClient().postHeader(ApiUrl.SELLER_SORT_CATEGORY, SPService.getOauth(), Base64Service.encryptBASE64(Tools.JsonParse.toJson(req)));
         call.enqueue(callback);
     }

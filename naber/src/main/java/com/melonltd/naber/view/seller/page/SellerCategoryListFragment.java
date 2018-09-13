@@ -33,7 +33,12 @@ import com.melonltd.naber.view.factory.PageType;
 import com.melonltd.naber.view.seller.SellerMainActivity;
 import com.melonltd.naber.view.seller.adapter.SellerCategoryAdapter;
 import com.melonltd.naber.vo.CategoryRelVo;
+import com.melonltd.naber.vo.FoodItemVo;
 import com.melonltd.naber.vo.ReqData;
+
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 import cn.bingoogolapple.refreshlayout.BGANormalRefreshViewHolder;
 import cn.bingoogolapple.refreshlayout.BGARefreshLayout;
@@ -141,6 +146,43 @@ public class SellerCategoryListFragment extends Fragment {
                         SellerMainActivity.sortBtn.setText("編輯排序");
                         adapter.setSortEdit(false).notifyDataSetChanged();
 
+                        new AlertView.Builder()
+                                .setTitle("")
+                                .setMessage("確認排序結果")
+                                .setContext(getContext())
+                                .setStyle(AlertView.Style.Alert)
+                                .setOthers(new String[]{"取消", "確定"})
+                                .setOnItemClickListener(new OnItemClickListener() {
+                                    @Override
+                                    public void onItemClick(Object o, int position) {
+                                        if (position == 0) {
+                                            loadData();
+                                        } else if(position == 1){
+                                            ApiManager.sellerSortCategory(Model.SELLER_CATEGORY_LIST, new ThreadCallback(getContext()) {
+                                                @Override
+                                                public void onSuccess(String responseBody) {
+                                                    Model.SELLER_CATEGORY_LIST.clear();
+                                                    List<CategoryRelVo> categoryRelVos =Tools.JSONPARSE.fromJsonList(responseBody,CategoryRelVo[].class);
+                                                    Collections.sort(categoryRelVos, new Comparator<CategoryRelVo>() {
+                                                        public int compare(CategoryRelVo o1, CategoryRelVo o2) {
+                                                            return o1.top - o2.top;
+                                                        }
+                                                    });
+                                                    //TODO sort categoryRelVos top
+                                                    Model.SELLER_CATEGORY_LIST.addAll(categoryRelVos);
+                                                    adapter.notifyDataSetChanged();
+                                                }
+                                                @Override
+                                                public void onFail(Exception error, String msg) {
+
+                                                }
+                                            });
+                                        }
+                                    }
+                                })
+                                .build()
+                                .setCancelable(true)
+                                .show();
                         // TODO save
                     }
                 }
@@ -164,7 +206,16 @@ public class SellerCategoryListFragment extends Fragment {
         ApiManager.sellerCategoryList(new ThreadCallback(getContext()) {
             @Override
             public void onSuccess(String responseBody) {
-                Model.SELLER_CATEGORY_LIST = Tools.JSONPARSE.fromJsonList(responseBody, CategoryRelVo[].class);
+                List<CategoryRelVo> categoryRelVos =   Tools.JSONPARSE.fromJsonList(responseBody, CategoryRelVo[].class);
+
+                // TODO categoryRelVos top
+                Collections.sort(categoryRelVos, new Comparator<CategoryRelVo>() {
+                    public int compare(CategoryRelVo o1, CategoryRelVo o2) {
+                        return o1.top - o2.top;
+                    }
+                });
+
+                Model.SELLER_CATEGORY_LIST.addAll(categoryRelVos);
                 adapter.notifyDataSetChanged();
             }
 

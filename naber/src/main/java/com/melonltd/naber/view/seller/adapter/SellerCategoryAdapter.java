@@ -13,16 +13,21 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.melonltd.naber.R;
+import com.melonltd.naber.model.api.ApiManager;
+import com.melonltd.naber.model.api.ThreadCallback;
 import com.melonltd.naber.model.bean.Model;
 import com.melonltd.naber.view.common.HideKeyboardListener;
 import com.melonltd.naber.view.customize.SwitchButton;
+import com.melonltd.naber.vo.FoodItemVo;
+import com.melonltd.naber.vo.FoodVo;
+
+import java.util.List;
 
 public class SellerCategoryAdapter extends RecyclerView.Adapter<SellerCategoryAdapter.ViewHolder> {
     private static final String TAG = SellerCategoryAdapter.class.getSimpleName();
     private SwitchButton.OnCheckedChangeListener aSwitchListener;
     private View.OnClickListener deleteListener, editListener;
     private View.OnClickListener hideKeyboardListener = new HideKeyboardListener();
-
     private boolean IS_SORT_EDIT = false;
 
     public SellerCategoryAdapter(SwitchButton.OnCheckedChangeListener aSwitchListener, View.OnClickListener editListener, View.OnClickListener deleteListener) {
@@ -52,47 +57,33 @@ public class SellerCategoryAdapter extends RecyclerView.Adapter<SellerCategoryAd
         holder.v.setOnClickListener(this.hideKeyboardListener);
         holder.topEdit.setText(Model.SELLER_CATEGORY_LIST.get(position).top + "");
 
-
         holder.topEdit.setOnFocusChangeListener(new View.OnFocusChangeListener() {
             @Override
             public void onFocusChange(View v, boolean hasFocus) {
-                Log.i(TAG, v.toString());
             }
         });
 
         holder.topEdit.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-                Log.i(TAG, s.toString());
             }
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                Log.i(TAG, s.toString());
             }
-
             @Override
             public void afterTextChanged(Editable s) {
-                Log.i(TAG, s.toString());
-
                 Integer tmp = parseInt(s.toString(), 0);
-                Log.i(TAG, tmp.toString());
 
-                Log.i(TAG, "tmp.length: " + tmp.toString().length() + ", s.length: " + s.toString().length());
                 Model.SELLER_CATEGORY_LIST.get(position).top = tmp;
 //                if (s.toString().length() != tmp.toString().length()) {
 //                    notifyItemChanged(position);
 //                }
-
-
-                Log.i(TAG, "top : " + Model.SELLER_CATEGORY_LIST.get(position).top);
-
             }
         });
 
 
         holder.topEdit.setEnabled(this.IS_SORT_EDIT);
-
 
         holder.categoryText.setText(Model.SELLER_CATEGORY_LIST.get(position).category_name);
         holder.setTag(position);

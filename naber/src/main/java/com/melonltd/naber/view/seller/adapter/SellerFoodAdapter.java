@@ -3,10 +3,14 @@ package com.melonltd.naber.view.seller.adapter;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
@@ -17,14 +21,25 @@ import com.melonltd.naber.R;
 import com.melonltd.naber.model.bean.Model;
 import com.melonltd.naber.view.customize.SwitchButton;
 
+
 public class SellerFoodAdapter extends RecyclerView.Adapter<SellerFoodAdapter.ViewHolder> {
+    private static final String TAG = SellerFoodAdapter.class.getSimpleName();
     private SwitchButton.OnCheckedChangeListener switchListener;
     private View.OnClickListener deleteListener, editListener;
+    private boolean IS_SORT_EDIT = false;
 
     public SellerFoodAdapter(SwitchButton.OnCheckedChangeListener switchListener, View.OnClickListener deleteListener, View.OnClickListener editListener) {
         this.switchListener = switchListener;
         this.deleteListener = deleteListener;
         this.editListener = editListener;
+    }
+
+    // TODO 新增可否編輯排序，用法
+    // 開啟編輯 adapter.setSortEdit(true).notifyDataSetChanged();
+    // 關閉編輯 adapter.setSortEdit(false).notifyDataSetChanged();
+    public SellerFoodAdapter setSortEdit(boolean isSortEdit) {
+        this.IS_SORT_EDIT = isSortEdit;
+        return this;
     }
 
     @NonNull
@@ -36,7 +51,7 @@ public class SellerFoodAdapter extends RecyclerView.Adapter<SellerFoodAdapter.Vi
     }
 
     @Override
-    public void onBindViewHolder(@NonNull SellerFoodAdapter.ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull SellerFoodAdapter.ViewHolder holder,final int position) {
 
         holder.setTag(position);
         if (!Strings.isNullOrEmpty(Model.SELLER_FOOD_LIST.get(position).photo)){
@@ -53,6 +68,34 @@ public class SellerFoodAdapter extends RecyclerView.Adapter<SellerFoodAdapter.Vi
         holder.menuSwitch.setOnCheckedChangeListener(this.switchListener);
         holder.deleteBtn.setOnClickListener(this.deleteListener);
         holder.editBtn.setOnClickListener(this.editListener);
+
+
+        holder.topEdit.setText(Model.SELLER_FOOD_LIST.get(position).top + "");
+        holder.topEdit.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+            }
+        });
+
+        holder.topEdit.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+            }
+            @Override
+            public void afterTextChanged(Editable s) {
+                Integer tmp = parseInt(s.toString(), 0);
+                Log.i(TAG,s.toString());
+                Model.SELLER_FOOD_LIST.get(position).top = tmp;
+//                if (s.toString().length() != tmp.toString().length()) {
+//                    notifyItemChanged(position);
+//                }
+            }
+        });
+        holder.topEdit.setEnabled(this.IS_SORT_EDIT);
     }
 
     @Override
@@ -65,9 +108,13 @@ public class SellerFoodAdapter extends RecyclerView.Adapter<SellerFoodAdapter.Vi
         private TextView nameText, priceText;
         private Button deleteBtn, editBtn;
         private SwitchButton menuSwitch;
+        private EditText topEdit;
+        private View v;
 
         ViewHolder(View v) {
             super(v);
+            this.v = v;
+            this.topEdit = v.findViewById(R.id.top_edit);
             this.itemIconImageView = v.findViewById(R.id.ordersItemIconImageView);
             this.nameText = v.findViewById(R.id.ordersItemNameText);
             this.priceText = v.findViewById(R.id.itemPriceText);
@@ -87,6 +134,16 @@ public class SellerFoodAdapter extends RecyclerView.Adapter<SellerFoodAdapter.Vi
             this.deleteBtn.setTag(position);
             this.editBtn.setTag(position);
             this.itemIconImageView.setTag(position);
+        }
+    }
+    public static int parseInt(String intStr, int dflt) {
+        if (intStr == null)
+            return dflt;
+
+        try {
+            return Integer.parseInt(intStr);
+        } catch (NumberFormatException e) {
+            return dflt;
         }
     }
 }

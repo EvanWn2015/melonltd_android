@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -32,16 +33,21 @@ import com.melonltd.naber.view.customize.SwitchButton;
 import com.melonltd.naber.view.factory.PageType;
 import com.melonltd.naber.view.seller.SellerMainActivity;
 import com.melonltd.naber.view.seller.adapter.SellerFoodAdapter;
+import com.melonltd.naber.vo.CategoryRelVo;
 import com.melonltd.naber.vo.FoodVo;
 import com.melonltd.naber.vo.FoodItemVo;
 import com.melonltd.naber.vo.ItemVo;
 import com.melonltd.naber.vo.ReqData;
 
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
+
 import cn.bingoogolapple.refreshlayout.BGANormalRefreshViewHolder;
 import cn.bingoogolapple.refreshlayout.BGARefreshLayout;
 
 public class SellerFoodListFragment extends Fragment implements View.OnClickListener {
-//    private static final String TAG = SellerFoodListFragment.class.getSimpleName();
+    private static final String TAG = SellerFoodListFragment.class.getSimpleName();
     public static SellerFoodListFragment FRAGMENT = null;
 
     private TextView categoryNameText;
@@ -151,6 +157,60 @@ public class SellerFoodListFragment extends Fragment implements View.OnClickList
                 }
             });
         }
+        if (SellerMainActivity.sortBtn != null) {
+            SellerMainActivity.sortBtn.setVisibility(View.VISIBLE);
+            SellerMainActivity.sortBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (SellerMainActivity.sortBtn.getText().equals("編輯排序")){
+                        adapter.setSortEdit(true).notifyDataSetChanged();
+                        SellerMainActivity.sortBtn.setText("儲存排序");
+                    }else {
+                        SellerMainActivity.sortBtn.setText("編輯排序");
+                        adapter.setSortEdit(false).notifyDataSetChanged();
+
+                        new AlertView.Builder()
+                                .setTitle("")
+                                .setMessage("確認排序結果")
+                                .setContext(getContext())
+                                .setStyle(AlertView.Style.Alert)
+                                .setOthers(new String[]{"取消", "確定"})
+                                .setOnItemClickListener(new OnItemClickListener() {
+                                    @Override
+                                    public void onItemClick(Object o, int position) {
+                                        if (position == 0) {
+                                            loadData();
+                                        } else if(position == 1){
+                                            ApiManager.sellerFoodSort(Model.SELLER_FOOD_LIST, new ThreadCallback(getContext()) {
+                                                @Override
+                                                public void onSuccess(String responseBody) {
+                                                    Model.SELLER_FOOD_LIST.clear();
+                                                    List<FoodVo> foodVo =Tools.JSONPARSE.fromJsonList(responseBody,FoodVo[].class);
+                                                    Collections.sort(foodVo, new Comparator<FoodVo>() {
+                                                        public int compare(FoodVo o1, FoodVo o2) {
+                                                            return o1.top - o2.top;
+                                                        }
+                                                    });
+                                                    //TODO sort foodVo top
+                                                    Model.SELLER_FOOD_LIST.addAll(foodVo);
+                                                    adapter.notifyDataSetChanged();
+                                                }
+                                                @Override
+                                                public void onFail(Exception error, String msg) {
+
+                                                }
+                                            });
+                                        }
+                                    }
+                                })
+                                .build()
+                                .setCancelable(true)
+                                .show();
+                        // TODO save
+                    }
+                }
+            });
+        }
     }
 
     private void loadData() {
@@ -158,7 +218,19 @@ public class SellerFoodListFragment extends Fragment implements View.OnClickList
         ApiManager.sellerFoodList(req, new ThreadCallback(getContext()) {
             @Override
             public void onSuccess(String responseBody) {
-                Model.SELLER_FOOD_LIST = Tools.JSONPARSE.fromJsonList(responseBody, FoodVo[].class);
+//                Model.SELLER_FOOD_LIST = Tools.JSONPARSE.fromJsonList(responseBody, FoodVo[].class);
+//                adapter.notifyDataSetChanged();
+                List<FoodVo> foodVos =   Tools.JSONPARSE.fromJsonList(responseBody, FoodVo[].class);
+                Log.i(TAG,responseBody);
+                Log.i(TAG,responseBody);
+                // TODO foodVos top
+                Collections.sort(foodVos, new Comparator<FoodVo>() {
+                    public int compare(FoodVo o1, FoodVo o2) {
+                        return o1.top - o2.top;
+                    }
+                });
+
+                Model.SELLER_FOOD_LIST.addAll(foodVos);
                 adapter.notifyDataSetChanged();
             }
 
@@ -173,6 +245,11 @@ public class SellerFoodListFragment extends Fragment implements View.OnClickList
     public void onStop() {
         super.onStop();
         SellerMainActivity.navigationIconDisplay(false, null);
+        if (SellerMainActivity.sortBtn != null) {
+            adapter.setSortEdit(false);
+            SellerMainActivity.sortBtn.setVisibility(View.GONE);
+            SellerMainActivity.sortBtn.setText("編輯排序");
+        }
     }
 
     @Override
