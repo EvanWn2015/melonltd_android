@@ -28,6 +28,7 @@ import com.melonltd.naber.model.api.ThreadCallback;
 import com.melonltd.naber.model.bean.Model;
 import com.melonltd.naber.model.constant.NaberConstant;
 import com.melonltd.naber.model.type.SwitchStatus;
+import com.melonltd.naber.util.IntegerTools;
 import com.melonltd.naber.util.Tools;
 import com.melonltd.naber.view.customize.SwitchButton;
 import com.melonltd.naber.view.factory.PageType;
@@ -166,7 +167,7 @@ public class SellerFoodListFragment extends Fragment implements View.OnClickList
                         SellerMainActivity.sortBtn.setText("儲存排序");
                     }else {
                         SellerMainActivity.sortBtn.setText("編輯排序");
-                        adapter.setSortEdit(false).notifyDataSetChanged();
+                        adapter.setSortEdit(false);
 
                         new AlertView.Builder()
                                 .setTitle("")
@@ -184,10 +185,11 @@ public class SellerFoodListFragment extends Fragment implements View.OnClickList
                                                 @Override
                                                 public void onSuccess(String responseBody) {
                                                     Model.SELLER_FOOD_LIST.clear();
+                                                    adapter.notifyDataSetChanged();
                                                     List<FoodVo> foodVo = Tools.JSONPARSE.fromJsonList(responseBody,FoodVo[].class);
                                                     Collections.sort(foodVo, new Comparator<FoodVo>() {
                                                         public int compare(FoodVo o1, FoodVo o2) {
-                                                            return o1.top - o2.top;
+                                                            return IntegerTools.parseInt(o1.top,0) - IntegerTools.parseInt(o2.top,0);
                                                         }
                                                     });
                                                     //TODO sort foodVo top
@@ -203,7 +205,7 @@ public class SellerFoodListFragment extends Fragment implements View.OnClickList
                                     }
                                 })
                                 .build()
-                                .setCancelable(true)
+                                .setCancelable(false)
                                 .show();
                         // TODO save
                     }
@@ -214,23 +216,20 @@ public class SellerFoodListFragment extends Fragment implements View.OnClickList
 
     private void loadData() {
         Model.SELLER_FOOD_LIST.clear();
+        adapter.notifyDataSetChanged();
         ApiManager.sellerFoodList(req, new ThreadCallback(getContext()) {
             @Override
             public void onSuccess(String responseBody) {
-//                Model.SELLER_FOOD_LIST = Tools.JSONPARSE.fromJsonList(responseBody, FoodVo[].class);
-//                adapter.notifyDataSetChanged();
                 List<FoodVo> foodVos =   Tools.JSONPARSE.fromJsonList(responseBody, FoodVo[].class);
-                Log.i(TAG,responseBody);
-                Log.i(TAG,responseBody);
                 // TODO foodVos top
                 Collections.sort(foodVos, new Comparator<FoodVo>() {
                     public int compare(FoodVo o1, FoodVo o2) {
-                        return o1.top - o2.top;
+                        return IntegerTools.parseInt(o1.top,0) - IntegerTools.parseInt(o2.top,0);
                     }
                 });
 
                 Model.SELLER_FOOD_LIST.addAll(foodVos);
-                adapter.notifyDataSetChanged();
+                adapter.setSortEdit(false).notifyDataSetChanged();
             }
 
             @Override

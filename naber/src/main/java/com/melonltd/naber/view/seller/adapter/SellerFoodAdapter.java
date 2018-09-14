@@ -19,7 +19,9 @@ import com.facebook.imagepipeline.request.ImageRequestBuilder;
 import com.google.common.base.Strings;
 import com.melonltd.naber.R;
 import com.melonltd.naber.model.bean.Model;
+import com.melonltd.naber.util.IntegerTools;
 import com.melonltd.naber.view.customize.SwitchButton;
+import com.melonltd.naber.vo.FoodVo;
 
 
 public class SellerFoodAdapter extends RecyclerView.Adapter<SellerFoodAdapter.ViewHolder> {
@@ -52,6 +54,7 @@ public class SellerFoodAdapter extends RecyclerView.Adapter<SellerFoodAdapter.Vi
 
     @Override
     public void onBindViewHolder(@NonNull SellerFoodAdapter.ViewHolder holder,final int position) {
+        FoodVo vo = Model.SELLER_FOOD_LIST.get(position);
 
         holder.setTag(position);
         if (!Strings.isNullOrEmpty(Model.SELLER_FOOD_LIST.get(position).photo)){
@@ -69,33 +72,9 @@ public class SellerFoodAdapter extends RecyclerView.Adapter<SellerFoodAdapter.Vi
         holder.deleteBtn.setOnClickListener(this.deleteListener);
         holder.editBtn.setOnClickListener(this.editListener);
 
-
-        holder.topEdit.setText(Model.SELLER_FOOD_LIST.get(position).top + "");
-        holder.topEdit.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-            }
-        });
-
-        holder.topEdit.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-            }
-
-            @Override
-            public void onTextChanged(CharSequence s, int start, int before, int count) {
-            }
-            @Override
-            public void afterTextChanged(Editable s) {
-                Integer tmp = parseInt(s.toString(), 0);
-                Log.i(TAG,s.toString());
-                Model.SELLER_FOOD_LIST.get(position).top = tmp;
-//                if (s.toString().length() != tmp.toString().length()) {
-//                    notifyItemChanged(position);
-//                }
-            }
-        });
+        holder.topEdit.setText(vo.top);
         holder.topEdit.setEnabled(this.IS_SORT_EDIT);
+        holder.topEdit.addTextChangedListener(new SellerFoodAdapter.SortEditListener(vo));
     }
 
     @Override
@@ -144,6 +123,32 @@ public class SellerFoodAdapter extends RecyclerView.Adapter<SellerFoodAdapter.Vi
             return Integer.parseInt(intStr);
         } catch (NumberFormatException e) {
             return dflt;
+        }
+    }
+    class SortEditListener implements TextWatcher{
+        FoodVo vo;
+
+        public SortEditListener(FoodVo vo) {
+            this.vo = vo;
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            if (Strings.isNullOrEmpty(s.toString())) {
+                vo.top = "0";
+            } else {
+                vo.top = IntegerTools.parseInt(s.toString(), 0) + "";
+            }
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+
         }
     }
 }

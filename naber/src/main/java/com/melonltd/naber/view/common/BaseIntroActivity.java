@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 
@@ -20,7 +21,7 @@ import com.melonltd.naber.util.Tools;
 import com.melonltd.naber.vo.AppVersionLogVo;
 
 public class BaseIntroActivity extends AppCompatActivity {
-//    private static final String TAG =  BaseIntroActivity.class.getSimpleName();
+    private static final String TAG =  BaseIntroActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,6 +42,7 @@ public class BaseIntroActivity extends AppCompatActivity {
         ApiManager.checkAppVersion(new ThreadCallback(this) {
             @Override
             public void onSuccess(String responseBody) {
+                Log.i(TAG,responseBody);
                 AppVersionLogVo vo = Tools.JSONPARSE.fromJson(responseBody, AppVersionLogVo.class);
                 if (!vo.version.equals(BuildConfig.VERSION_NAME)) {
                     final String[] action = new String[]{vo.need_upgrade.equals("Y") ? "前往更新" : "我知道了"};
@@ -70,6 +72,7 @@ public class BaseIntroActivity extends AppCompatActivity {
             }
             @Override
             public void onFail(Exception error, String msg) {
+                Log.i(TAG,msg);
             }
         });
     }
@@ -101,9 +104,6 @@ public class BaseIntroActivity extends AppCompatActivity {
                 startActivity();
             }
         });
-
-        // TODO
-        btn_intro.callOnClick();
     }
 
     private void startActivity () {
