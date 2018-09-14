@@ -19,6 +19,8 @@ import android.view.ViewGroup;
 
 import com.facebook.drawee.backends.pipeline.Fresco;
 import com.facebook.drawee.view.SimpleDraweeView;
+import com.facebook.imagepipeline.request.ImageRequest;
+import com.facebook.imagepipeline.request.ImageRequestBuilder;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
@@ -117,7 +119,12 @@ public class UserHomeFragment extends Fragment {
             @Override
             public void fillBannerItem(BGABanner banner, CardView itemView, String model, int position) {
                 SimpleDraweeView simpleDraweeView = itemView.findViewById(R.id.sdv_item_fresco_content);
-                simpleDraweeView.setImageURI(Uri.parse(model));
+                if (!Strings.isNullOrEmpty(model)) {
+                    simpleDraweeView.setImageURI(Uri.parse(model));
+                } else {
+                    ImageRequest imageRequest = ImageRequestBuilder.newBuilderWithResourceId(R.drawable.naber_default_image).build();
+                    simpleDraweeView.setImageURI(imageRequest.getSourceUri());
+                }
             }
         });
 

@@ -24,13 +24,18 @@ import com.melonltd.naber.model.api.ThreadCallback;
 import com.melonltd.naber.model.bean.Model;
 import com.melonltd.naber.model.constant.NaberConstant;
 import com.melonltd.naber.model.type.SwitchStatus;
+import com.melonltd.naber.util.IntegerTools;
 import com.melonltd.naber.util.Tools;
 import com.melonltd.naber.view.customize.SwitchButton;
 import com.melonltd.naber.view.factory.PageType;
 import com.melonltd.naber.view.seller.SellerMainActivity;
 import com.melonltd.naber.view.seller.adapter.SellerCategoryAdapter;
+import com.melonltd.naber.vo.CategoryRelVo;
 import com.melonltd.naber.vo.ReqData;
-import com.melonltd.naber.vo.RestaurantCategoryRelVo;
+
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 import cn.bingoogolapple.refreshlayout.BGANormalRefreshViewHolder;
 import cn.bingoogolapple.refreshlayout.BGARefreshLayout;
@@ -43,7 +48,6 @@ public class SellerCategoryListFragment extends Fragment {
     private Button newCategoryBtn;
     private SellerCategoryAdapter adapter;
     private Bundle bundle;
-
     public static int TO_CATEGORY_LIST_PAGE_INDEX = -1;
 
     public SellerCategoryListFragment() {
@@ -68,13 +72,9 @@ public class SellerCategoryListFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-//        if (container.getTag(R.id.seller_category_list_main_page) == null) {
         View v = inflater.inflate(R.layout.fragment_seller_category_list, container, false);
         getViews(v);
-//            container.setTag(R.id.seller_category_list_main_page, v);
         return v;
-//        }
-//        return (View) container.getTag(R.id.seller_category_list_main_page);
     }
 
 
@@ -98,7 +98,6 @@ public class SellerCategoryListFragment extends Fragment {
         //setListener
         recyclerView.setAdapter(adapter);
         newCategoryBtn.setOnClickListener(new AddCategoryListener());
-
         refreshLayout.setDelegate(new BGARefreshLayout.BGARefreshLayoutDelegate() {
             @Override
             public void onBGARefreshLayoutBeginRefreshing(BGARefreshLayout refreshLayout) {
@@ -126,21 +125,92 @@ public class SellerCategoryListFragment extends Fragment {
         } else {
             loadData();
         }
+
+        if (SellerMainActivity.sortBtn != null) {
+            SellerMainActivity.sortBtn.setVisibility(View.VISIBLE);
+            SellerMainActivity.sortBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (SellerMainActivity.sortBtn.getText().equals("編輯排序")){
+                        adapter.setSortEdit(true).notifyDataSetChanged();
+                        SellerMainActivity.sortBtn.setText("儲存排序");
+                    }else {
+                        SellerMainActivity.sortBtn.setText("編輯排序");
+                        adapter.setSortEdit(false);
+                        new AlertView.Builder()
+                                .setTitle("")
+                                .setMessage("確認排序結果")
+                                .setContext(getContext())
+                                .setStyle(AlertView.Style.Alert)
+                                .setOthers(new String[]{"取消", "確定"})
+                                .setOnItemClickListener(new OnItemClickListener() {
+                                    @Override
+                                    public void onItemClick(Object o, int position) {
+                                        if (position == 0) {
+                                            loadData();
+                                        } else if(position == 1){
+
+                                            ApiManager.sellerSortCategory(Model.SELLER_CATEGORY_LIST, new ThreadCallback(getContext()) {
+                                                @Override
+                                                public void onSuccess(String responseBody) {
+                                                    Model.SELLER_CATEGORY_LIST.clear();
+                                                    adapter.notifyDataSetChanged();
+                                                    List<CategoryRelVo> categoryRelVos = Tools.JSONPARSE.fromJsonList(responseBody,CategoryRelVo[].class);
+                                                    Collections.sort(categoryRelVos, new Comparator<CategoryRelVo>() {
+                                                        public int compare(CategoryRelVo o1, CategoryRelVo o2) {
+                                                            return IntegerTools.parseInt(o1.top, 0) -  IntegerTools.parseInt(o2.top, 0);
+                                                        }
+                                                    });
+
+                                                    Model.SELLER_CATEGORY_LIST.addAll(categoryRelVos);
+
+                                                    adapter.notifyDataSetChanged();
+                                                }
+                                                @Override
+                                                public void onFail(Exception error, String msg) {
+
+                                                }
+                                            });
+                                        }
+                                    }
+                                })
+                                .build()
+                                .setCancelable(false)
+                                .show();
+                    }
+                }
+            });
+        }
     }
 
     @Override
     public void onStop() {
         super.onStop();
+        if (SellerMainActivity.sortBtn != null) {
+            adapter.setSortEdit(false);
+            SellerMainActivity.sortBtn.setVisibility(View.GONE);
+            SellerMainActivity.sortBtn.setText("編輯排序");
+        }
     }
 
     private void loadData() {
         Model.SELLER_CATEGORY_LIST.clear();
         adapter.notifyDataSetChanged();
+        if (SellerMainActivity.sortBtn != null) {
+            SellerMainActivity.sortBtn.setText("編輯排序");
+        }
         ApiManager.sellerCategoryList(new ThreadCallback(getContext()) {
             @Override
             public void onSuccess(String responseBody) {
-                Model.SELLER_CATEGORY_LIST = Tools.JSONPARSE.fromJsonList(responseBody, RestaurantCategoryRelVo[].class);
-                adapter.notifyDataSetChanged();
+                List<CategoryRelVo> categoryRelVos =   Tools.JSONPARSE.fromJsonList(responseBody, CategoryRelVo[].class);
+                Collections.sort(categoryRelVos, new Comparator<CategoryRelVo>() {
+                    public int compare(CategoryRelVo o1, CategoryRelVo o2) {
+                        return IntegerTools.parseInt(o1.top, 0) -  IntegerTools.parseInt(o2.top, 0);
+                    }
+                });
+
+                Model.SELLER_CATEGORY_LIST.addAll(categoryRelVos);
+                adapter.setSortEdit(false).notifyDataSetChanged();
             }
 
             @Override
@@ -263,7 +333,7 @@ public class SellerCategoryListFragment extends Fragment {
                 ApiManager.sellerAddCategory(req, new ThreadCallback(getContext()) {
                     @Override
                     public void onSuccess(String responseBody) {
-                        RestaurantCategoryRelVo categoryRel = Tools.JSONPARSE.fromJson(responseBody, RestaurantCategoryRelVo.class);
+                        CategoryRelVo categoryRel = Tools.JSONPARSE.fromJson(responseBody, CategoryRelVo.class);
                         Model.SELLER_CATEGORY_LIST.add(0, categoryRel);
                         categoryEdit.setText("");
 

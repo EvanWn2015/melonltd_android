@@ -2,6 +2,7 @@
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:fresco="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/naber_text_base_line">
@@ -109,6 +110,27 @@
         app:layout_constraintTop_toTopOf="@+id/deleteBtn"
         app:sb_checked="true"
         app:sb_show_indicator="false" />
+
+    <EditText
+        android:id="@+id/top_edit"
+        android:layout_width="36dp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/naber_reverse_gary_button_style"
+        android:hint="0"
+        android:visibility="gone"
+        android:inputType="number"
+        android:lines="1"
+        android:maxLength="2"
+        android:maxLines="1"
+        android:textAlignment="center"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/ordersItemIconImageView"
+        app:layout_constraintEnd_toEndOf="@+id/menuSwitch"
+        app:layout_constraintStart_toStartOf="@+id/menuSwitch"
+        app:layout_constraintTop_toBottomOf="@+id/menuSwitch" />
 
     <View
         android:id="@+id/lineView"

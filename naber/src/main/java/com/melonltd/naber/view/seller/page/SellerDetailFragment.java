@@ -260,7 +260,17 @@ public class SellerDetailFragment extends Fragment implements View.OnClickListen
                 vo.store_start = storeStartText.getTag().toString();
                 vo.store_end = storeEndText.getTag().toString();
                 vo.bulletin = bulletinEdit.getText().toString();
-                if (vo.store_end.equals(vo.store_start)) {
+                if(bulletinEdit.getText().toString().length() > 100){
+                    new AlertView.Builder()
+                            .setTitle("")
+                            .setMessage("公告編輯字數已超出最大範圍，\n請重新編輯至 100 字數以下")
+                            .setContext(getContext())
+                            .setStyle(AlertView.Style.Alert)
+                            .setOthers(new String[]{"我知道了"})
+                            .build()
+                            .setCancelable(true)
+                            .show();
+                } else if (vo.store_end.equals(vo.store_start)) {
                     new AlertView.Builder()
                             .setTitle("")
                             .setMessage("接單時間開始與結束，\n不可以相同。")

@@ -24,23 +24,26 @@ import com.melonltd.naber.model.api.ApiManager;
 import com.melonltd.naber.model.api.ThreadCallback;
 import com.melonltd.naber.model.bean.Model;
 import com.melonltd.naber.model.constant.NaberConstant;
+import com.melonltd.naber.util.IntegerTools;
 import com.melonltd.naber.util.Tools;
 import com.melonltd.naber.view.common.BaseCore;
 import com.melonltd.naber.view.factory.PageType;
 import com.melonltd.naber.view.user.UserMainActivity;
 import com.melonltd.naber.view.user.adapter.UserCategoryAdapter;
-import com.melonltd.naber.vo.RestaurantCategoryRelVo;
+import com.melonltd.naber.vo.CategoryRelVo;
 import com.melonltd.naber.vo.RestaurantInfoVo;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import cn.bingoogolapple.refreshlayout.BGANormalRefreshViewHolder;
 import cn.bingoogolapple.refreshlayout.BGARefreshLayout;
 
 public class UserRestaurantDetailFragment extends Fragment {
-//    private static final String TAG = UserRestaurantDetailFragment.class.getSimpleName();
+    //    private static final String TAG = UserRestaurantDetailFragment.class.getSimpleName();
     public static UserRestaurantDetailFragment FRAGMENT = null;
-    public static List<RestaurantCategoryRelVo> restaurantCategoryRelVos = Lists.newArrayList();
+    public static List<CategoryRelVo> restaurantCategoryRelVos = Lists.newArrayList();
     private UserCategoryAdapter adapter;
     private ViewHolder holder;
     public static int TO_CATEGORY_MENU_INDEX = -1;
@@ -100,14 +103,14 @@ public class UserRestaurantDetailFragment extends Fragment {
         holder.businessTimeText.setText("接單時間: " + vo.store_start + "~" + vo.store_end);
         holder.addressText.setText(vo.address);
 
-        if (Model.LOCATION != null){
+        if (Model.LOCATION != null) {
             Location rl = new Location("newlocation");
             rl.setLatitude(Double.parseDouble(vo.latitude));
             rl.setLongitude(Double.parseDouble(vo.longitude));
             double distance = Model.LOCATION.distanceTo(rl) / 1000;
             String result = Tools.FORMAT.decimal("0.0", distance);
             holder.distanceText.setText(result.equals("0.0") ? "0.1" : result + "公里");
-        }else {
+        } else {
             holder.distanceText.setText("");
         }
 
@@ -225,7 +228,12 @@ public class UserRestaurantDetailFragment extends Fragment {
         ApiManager.restaurantDetail(holder.uuid, new ThreadCallback(getContext()) {
             @Override
             public void onSuccess(String responseBody) {
-                List<RestaurantCategoryRelVo> vos = Tools.JSONPARSE.fromJsonList(responseBody, RestaurantCategoryRelVo[].class);
+                List<CategoryRelVo> vos = Tools.JSONPARSE.fromJsonList(responseBody, CategoryRelVo[].class);
+                Collections.sort(vos, new Comparator<CategoryRelVo>() {
+                    public int compare(CategoryRelVo o1, CategoryRelVo o2) {
+                        return IntegerTools.parseInt(o1.top, 0) - IntegerTools.parseInt(o2.top, 0);
+                    }
+                });
                 restaurantCategoryRelVos.addAll(vos);
                 adapter.notifyDataSetChanged();
             }

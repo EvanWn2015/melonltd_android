@@ -6,6 +6,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,13 +18,16 @@ import com.melonltd.naber.model.api.ApiManager;
 import com.melonltd.naber.model.api.ThreadCallback;
 import com.melonltd.naber.model.bean.Model;
 import com.melonltd.naber.model.constant.NaberConstant;
+import com.melonltd.naber.util.IntegerTools;
 import com.melonltd.naber.util.Tools;
 import com.melonltd.naber.view.factory.PageType;
 import com.melonltd.naber.view.user.UserMainActivity;
 import com.melonltd.naber.view.user.adapter.UserFoodAdapter;
-import com.melonltd.naber.vo.CategoryFoodRelVo;
-import com.melonltd.naber.vo.RestaurantCategoryRelVo;
+import com.melonltd.naber.vo.CategoryRelVo;
+import com.melonltd.naber.vo.FoodVo;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import cn.bingoogolapple.refreshlayout.BGANormalRefreshViewHolder;
@@ -71,7 +75,7 @@ public class UserFoodListFragment extends Fragment {
 
 
     private void serHeaderValue(Bundle bundle) {
-        RestaurantCategoryRelVo vo = (RestaurantCategoryRelVo) bundle.getSerializable(NaberConstant.RESTAURANT_CATEGORY_REL);
+        CategoryRelVo vo = (CategoryRelVo) bundle.getSerializable(NaberConstant.RESTAURANT_CATEGORY_REL);
         holder.categoryInfo = vo;
         holder.categoryNameText.setText(vo.category_name);
     }
@@ -121,7 +125,12 @@ public class UserFoodListFragment extends Fragment {
         ApiManager.restaurantFoodList(holder.categoryInfo.category_uuid, new ThreadCallback(getContext()) {
             @Override
             public void onSuccess(String responseBody) {
-                List<CategoryFoodRelVo> vos = Tools.JSONPARSE.fromJsonList(responseBody, CategoryFoodRelVo[].class);
+                List<FoodVo> vos = Tools.JSONPARSE.fromJsonList(responseBody, FoodVo[].class);
+                Collections.sort(vos, new Comparator<FoodVo>() {
+                    public int compare(FoodVo o1, FoodVo o2) {
+                        return IntegerTools.parseInt(o1.top,0) - IntegerTools.parseInt(o2.top,0);
+                    }
+                });
                 Model.CATEGORY_FOOD_REL_LIST.addAll(vos);
                 adapter.notifyDataSetChanged();
             }
@@ -185,7 +194,7 @@ public class UserFoodListFragment extends Fragment {
     }
 
     private class ViewHolder {
-        private RestaurantCategoryRelVo categoryInfo;
+        private CategoryRelVo categoryInfo;
         private TextView categoryNameText;
         ViewHolder(View v) {
             this.categoryNameText = v.findViewById(R.id.categoryNameText);

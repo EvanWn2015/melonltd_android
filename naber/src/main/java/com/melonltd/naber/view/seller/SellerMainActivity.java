@@ -14,6 +14,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -58,6 +59,7 @@ public class SellerMainActivity extends BaseCore implements TabLayout.OnTabSelec
 //    private static final String TAG = SellerMainActivity.class.getSimpleName();
     private static Context context;
     public static Toolbar toolbar;
+    public static Button sortBtn;
 
     private static Drawable defaultIcon;
     private static DrawerLayout drawer;
@@ -93,6 +95,7 @@ public class SellerMainActivity extends BaseCore implements TabLayout.OnTabSelec
 
     private void getViews() {
         toolbar = findViewById(R.id.toolbar);
+        sortBtn = findViewById(R.id.sortBtn);
         setSupportActionBar(toolbar);
         drawer = findViewById(R.id.seller_drawer_layout);
         final BGARefreshLayout refreshLayout = findViewById(R.id.sellerGARefreshLayout);
@@ -272,19 +275,22 @@ public class SellerMainActivity extends BaseCore implements TabLayout.OnTabSelec
 
     public static void changeTabAndToolbarStatus() {
         int position = PageType.equalsPositionByName(BaseCore.FRAGMENT_TAG);
-        toolbar.setTitle(context.getResources().getString(PageType.equalsIdByName(FRAGMENT_TAG)));
 
-        for (View tab : tabViews) {
-            ImageView icon = tab.findViewById(R.id.tabIcon);
-            TextView text = tab.findViewById(R.id.tabTitle);
-            icon.setColorFilter(context.getResources().getColor(R.color.naber_tab_default_color));
-            text.setTextColor(context.getResources().getColor(R.color.naber_tab_default_color));
-            if (tabViews.indexOf(tab) == position) {
-                icon.setColorFilter(context.getResources().getColor(R.color.naber_basis));
-                text.setTextColor(context.getResources().getColor(R.color.naber_basis));
+
+            toolbar.setTitle(context.getResources().getString(PageType.equalsIdByName(FRAGMENT_TAG)));
+
+            for (View tab : tabViews) {
+                ImageView icon = tab.findViewById(R.id.tabIcon);
+                TextView text = tab.findViewById(R.id.tabTitle);
+                icon.setColorFilter(context.getResources().getColor(R.color.naber_tab_default_color));
+                text.setTextColor(context.getResources().getColor(R.color.naber_tab_default_color));
+                if (tabViews.indexOf(tab) == position) {
+                    icon.setColorFilter(context.getResources().getColor(R.color.naber_basis));
+                    text.setTextColor(context.getResources().getColor(R.color.naber_basis));
+                }
             }
         }
-    }
+
 
 
     public static void navigationIconDisplay(boolean show, View.OnClickListener listener) {

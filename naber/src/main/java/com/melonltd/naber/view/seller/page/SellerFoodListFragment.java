@@ -27,21 +27,26 @@ import com.melonltd.naber.model.api.ThreadCallback;
 import com.melonltd.naber.model.bean.Model;
 import com.melonltd.naber.model.constant.NaberConstant;
 import com.melonltd.naber.model.type.SwitchStatus;
+import com.melonltd.naber.util.IntegerTools;
 import com.melonltd.naber.util.Tools;
 import com.melonltd.naber.view.customize.SwitchButton;
 import com.melonltd.naber.view.factory.PageType;
 import com.melonltd.naber.view.seller.SellerMainActivity;
 import com.melonltd.naber.view.seller.adapter.SellerFoodAdapter;
-import com.melonltd.naber.vo.CategoryFoodRelVo;
 import com.melonltd.naber.vo.FoodItemVo;
+import com.melonltd.naber.vo.FoodVo;
 import com.melonltd.naber.vo.ItemVo;
 import com.melonltd.naber.vo.ReqData;
+
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.List;
 
 import cn.bingoogolapple.refreshlayout.BGANormalRefreshViewHolder;
 import cn.bingoogolapple.refreshlayout.BGARefreshLayout;
 
 public class SellerFoodListFragment extends Fragment implements View.OnClickListener {
-//    private static final String TAG = SellerFoodListFragment.class.getSimpleName();
+    private static final String TAG = SellerFoodListFragment.class.getSimpleName();
     public static SellerFoodListFragment FRAGMENT = null;
 
     private TextView categoryNameText;
@@ -151,15 +156,76 @@ public class SellerFoodListFragment extends Fragment implements View.OnClickList
                 }
             });
         }
+        if (SellerMainActivity.sortBtn != null) {
+            SellerMainActivity.sortBtn.setVisibility(View.VISIBLE);
+            SellerMainActivity.sortBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (SellerMainActivity.sortBtn.getText().equals("編輯排序")){
+                        adapter.setSortEdit(true).notifyDataSetChanged();
+                        SellerMainActivity.sortBtn.setText("儲存排序");
+                    }else {
+                        SellerMainActivity.sortBtn.setText("編輯排序");
+                        adapter.setSortEdit(false);
+
+                        new AlertView.Builder()
+                                .setTitle("")
+                                .setMessage("確認排序結果")
+                                .setContext(getContext())
+                                .setStyle(AlertView.Style.Alert)
+                                .setOthers(new String[]{"取消", "確定"})
+                                .setOnItemClickListener(new OnItemClickListener() {
+                                    @Override
+                                    public void onItemClick(Object o, int position) {
+                                        if (position == 0) {
+                                            loadData();
+                                        } else if(position == 1){
+                                            ApiManager.sellerFoodSort(Model.SELLER_FOOD_LIST, new ThreadCallback(getContext()) {
+                                                @Override
+                                                public void onSuccess(String responseBody) {
+                                                    Model.SELLER_FOOD_LIST.clear();
+                                                    adapter.notifyDataSetChanged();
+                                                    List<FoodVo> foodVo = Tools.JSONPARSE.fromJsonList(responseBody,FoodVo[].class);
+                                                    Collections.sort(foodVo, new Comparator<FoodVo>() {
+                                                        public int compare(FoodVo o1, FoodVo o2) {
+                                                            return IntegerTools.parseInt(o1.top,0) - IntegerTools.parseInt(o2.top,0);
+                                                        }
+                                                    });
+                                                    Model.SELLER_FOOD_LIST.addAll(foodVo);
+                                                    adapter.notifyDataSetChanged();
+                                                }
+                                                @Override
+                                                public void onFail(Exception error, String msg) {
+
+                                                }
+                                            });
+                                        }
+                                    }
+                                })
+                                .build()
+                                .setCancelable(false)
+                                .show();
+                    }
+                }
+            });
+        }
     }
 
     private void loadData() {
         Model.SELLER_FOOD_LIST.clear();
+        adapter.notifyDataSetChanged();
         ApiManager.sellerFoodList(req, new ThreadCallback(getContext()) {
             @Override
             public void onSuccess(String responseBody) {
-                Model.SELLER_FOOD_LIST = Tools.JSONPARSE.fromJsonList(responseBody, CategoryFoodRelVo[].class);
-                adapter.notifyDataSetChanged();
+                List<FoodVo> foodVos =   Tools.JSONPARSE.fromJsonList(responseBody, FoodVo[].class);
+                Collections.sort(foodVos, new Comparator<FoodVo>() {
+                    public int compare(FoodVo o1, FoodVo o2) {
+                        return IntegerTools.parseInt(o1.top,0) - IntegerTools.parseInt(o2.top,0);
+                    }
+                });
+
+                Model.SELLER_FOOD_LIST.addAll(foodVos);
+                adapter.setSortEdit(false).notifyDataSetChanged();
             }
 
             @Override
@@ -173,6 +239,11 @@ public class SellerFoodListFragment extends Fragment implements View.OnClickList
     public void onStop() {
         super.onStop();
         SellerMainActivity.navigationIconDisplay(false, null);
+        if (SellerMainActivity.sortBtn != null) {
+            adapter.setSortEdit(false);
+            SellerMainActivity.sortBtn.setVisibility(View.GONE);
+            SellerMainActivity.sortBtn.setText("編輯排序");
+        }
     }
 
     @Override
@@ -214,7 +285,7 @@ public class SellerFoodListFragment extends Fragment implements View.OnClickList
             final int index = (int) view.getTag();
             final SwitchStatus status = SwitchStatus.of(isChecked);
             if (!status.equals(Model.SELLER_FOOD_LIST.get(index).status)) {
-                CategoryFoodRelVo req = Model.SELLER_FOOD_LIST.get(index);
+                FoodVo req = Model.SELLER_FOOD_LIST.get(index);
                 req.status = status;
                 ApiManager.sellerFoodUpdate(req, new ThreadCallback(getContext()) {
                     @Override
@@ -269,7 +340,7 @@ public class SellerFoodListFragment extends Fragment implements View.OnClickList
 
         @Override
         public void run() {
-            CategoryFoodRelVo req = new CategoryFoodRelVo();
+            FoodVo req = new FoodVo();
             req.category_uuid = this.category_uuid;
             req.food_name = this.name;
             req.default_price = this.price;
@@ -282,7 +353,7 @@ public class SellerFoodListFragment extends Fragment implements View.OnClickList
             ApiManager.sellerFoodAdd(req, new ThreadCallback(getContext()) {
                 @Override
                 public void onSuccess(String responseBody) {
-                    CategoryFoodRelVo vo = Tools.JSONPARSE.fromJson(responseBody, CategoryFoodRelVo.class);
+                    FoodVo vo = Tools.JSONPARSE.fromJson(responseBody, FoodVo.class);
                     Model.SELLER_FOOD_LIST.add(0, vo);
                     TO_MENU_EDIT_PAGE_INDEX = 0;
                     Bundle bundle = new Bundle();
