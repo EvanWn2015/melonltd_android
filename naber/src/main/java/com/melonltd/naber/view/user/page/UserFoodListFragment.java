@@ -18,6 +18,7 @@ import com.melonltd.naber.model.api.ApiManager;
 import com.melonltd.naber.model.api.ThreadCallback;
 import com.melonltd.naber.model.bean.Model;
 import com.melonltd.naber.model.constant.NaberConstant;
+import com.melonltd.naber.util.IntegerTools;
 import com.melonltd.naber.util.Tools;
 import com.melonltd.naber.view.factory.PageType;
 import com.melonltd.naber.view.user.UserMainActivity;
@@ -25,6 +26,8 @@ import com.melonltd.naber.view.user.adapter.UserFoodAdapter;
 import com.melonltd.naber.vo.CategoryRelVo;
 import com.melonltd.naber.vo.FoodVo;
 
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import cn.bingoogolapple.refreshlayout.BGANormalRefreshViewHolder;
@@ -123,9 +126,11 @@ public class UserFoodListFragment extends Fragment {
             @Override
             public void onSuccess(String responseBody) {
                 List<FoodVo> vos = Tools.JSONPARSE.fromJsonList(responseBody, FoodVo[].class);
-
-                Log.d("",vos.toString());
-
+                Collections.sort(vos, new Comparator<FoodVo>() {
+                    public int compare(FoodVo o1, FoodVo o2) {
+                        return IntegerTools.parseInt(o1.top,0) - IntegerTools.parseInt(o2.top,0);
+                    }
+                });
                 Model.CATEGORY_FOOD_REL_LIST.addAll(vos);
                 adapter.notifyDataSetChanged();
             }

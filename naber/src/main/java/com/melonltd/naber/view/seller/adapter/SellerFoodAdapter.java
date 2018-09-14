@@ -94,6 +94,7 @@ public class SellerFoodAdapter extends RecyclerView.Adapter<SellerFoodAdapter.Vi
             super(v);
             this.v = v;
             this.topEdit = v.findViewById(R.id.top_edit);
+            this.topEdit.setVisibility(View.VISIBLE);
             this.itemIconImageView = v.findViewById(R.id.ordersItemIconImageView);
             this.nameText = v.findViewById(R.id.ordersItemNameText);
             this.priceText = v.findViewById(R.id.itemPriceText);
