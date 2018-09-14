@@ -160,7 +160,6 @@ public class SellerFoodEditFragment extends Fragment implements View.OnFocusChan
                     }
                 });
             } else {
-                // TODO 圖片上傳失敗
             }
         }
     }

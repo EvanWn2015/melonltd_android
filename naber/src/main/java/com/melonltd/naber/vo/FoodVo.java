@@ -17,7 +17,6 @@ public class FoodVo implements Serializable{
     public FoodItemVo food_data;
     public SwitchStatus status;
 
-    // TODO 新增
     public String top;
     public String enable;
     public String create_date;

@@ -27,7 +27,6 @@
             app:popupTheme="@style/AppTheme.NoActionBar.PopupOverlay"
             app:titleTextColor="@android:color/black" >
 
-            <!-- TODO  -->
             <Button
                 android:id="@+id/sortBtn"
                 android:layout_marginRight="8dp"

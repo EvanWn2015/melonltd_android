@@ -136,7 +136,6 @@ public class SellerCategoryListFragment extends Fragment {
                         SellerMainActivity.sortBtn.setText("儲存排序");
                     }else {
                         SellerMainActivity.sortBtn.setText("編輯排序");
-                        // TODO 成功後關閉編輯排序在通知 adapter 更新資料
                         adapter.setSortEdit(false);
                         new AlertView.Builder()
                                 .setTitle("")
@@ -176,7 +175,7 @@ public class SellerCategoryListFragment extends Fragment {
                                     }
                                 })
                                 .build()
-                                .setCancelable(false) // TODO 成功後關閉編輯排序在通知 adapter 更新資料
+                                .setCancelable(false)
                                 .show();
                     }
                 }
@@ -197,7 +196,6 @@ public class SellerCategoryListFragment extends Fragment {
     private void loadData() {
         Model.SELLER_CATEGORY_LIST.clear();
         adapter.notifyDataSetChanged();
-        // TODO 成功後關閉編輯排序在通知 adapter 更新資料
         if (SellerMainActivity.sortBtn != null) {
             SellerMainActivity.sortBtn.setText("編輯排序");
         }
@@ -212,7 +210,6 @@ public class SellerCategoryListFragment extends Fragment {
                 });
 
                 Model.SELLER_CATEGORY_LIST.addAll(categoryRelVos);
-                // TODO 成功後關閉編輯排序在通知 adapter 更新資料
                 adapter.setSortEdit(false).notifyDataSetChanged();
             }
 

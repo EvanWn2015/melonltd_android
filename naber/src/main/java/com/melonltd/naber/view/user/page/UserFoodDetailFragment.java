@@ -170,9 +170,9 @@ public class UserFoodDetailFragment extends Fragment implements View.OnClickList
                     .setId(i + 669696)
                     .setChecked(i == 0 ? true : false)
                     .build();
-            if (UserMainActivity.LAYOUT_WIDTH != 0 && RADIO_BUTTON_HIGH != 0){
+            if (UserMainActivity.LAYOUT_WIDTH != 0 && RADIO_BUTTON_HIGH != 0) {
                 group.addView(radio, RADIO_BUTTON_WIDTH, RADIO_BUTTON_HIGH);
-            }else {
+            } else {
                 group.addView(radio);
             }
         }
@@ -190,7 +190,6 @@ public class UserFoodDetailFragment extends Fragment implements View.OnClickList
     }
 
     private void setDemandView(final List<DemandsItemVo> demands) {
-
 
         for (int i = 0; i < demands.size(); i++) {
             View v = LayoutInflater.from(getContext()).inflate(R.layout.menu_detail_demand, null);
@@ -214,9 +213,9 @@ public class UserFoodDetailFragment extends Fragment implements View.OnClickList
                         .setId(j + 369646)
                         .setChecked(j == 0 ? true : false)
                         .build();
-                if (UserMainActivity.LAYOUT_WIDTH != 0 && RADIO_BUTTON_HIGH != 0){
+                if (UserMainActivity.LAYOUT_WIDTH != 0 && RADIO_BUTTON_HIGH != 0) {
                     group.addView(radio, RADIO_BUTTON_WIDTH, 80);
-                }else {
+                } else {
                     group.addView(radio);
                 }
             }
@@ -264,16 +263,10 @@ public class UserFoodDetailFragment extends Fragment implements View.OnClickList
                         int width = box.getWidth();
                         int high = box.getHeight();
                         Log.i("RADIO_BUTTON_HIGH", RADIO_BUTTON_HIGH + "");
-                        Log.i("View width" ,  width + ":" + high) ;
+                        Log.i("View width", width + ":" + high);
                     }
                 });
-
-//                if (UserMainActivity.LAYOUT_WIDTH != 0 && RADIO_BUTTON_HIGH != 0){
-//                    optLayout.addView(box, RADIO_BUTTON_WIDTH, RADIO_BUTTON_HIGH);
-//                }else {
-                    optLayout.addView(box);
-//                }
-
+                optLayout.addView(box);
             }
             contentLayout.addView(v);
         }
@@ -292,7 +285,7 @@ public class UserFoodDetailFragment extends Fragment implements View.OnClickList
 
     @Override
     public void onClick(View v) {
-        RestaurantInfoVo restaurantInfo = (RestaurantInfoVo)getArguments().getSerializable(NaberConstant.RESTAURANT_INFO);
+        RestaurantInfoVo restaurantInfo = (RestaurantInfoVo) getArguments().getSerializable(NaberConstant.RESTAURANT_INFO);
         String categortName = getArguments().getString(NaberConstant.CATEGORY_NAME);
         orderData.item.price = totalAmountText.getText().toString();
 
@@ -310,7 +303,6 @@ public class UserFoodDetailFragment extends Fragment implements View.OnClickList
         for (OrderDetail o : Model.USER_CACHE_SHOPPING_CART) {
             if (restaurantInfo.restaurant_uuid.equals(o.restaurant_uuid)) {
                 o.restaurant_name = restaurantInfo.name;
-                // TODO 位置配送類型 ＆ 結算類型，預設 原價 自取
                 o.order_type = OrderDetail.OrderType.setDefault();
                 o.restaurant_address = restaurantInfo.address;
                 o.can_discount = restaurantInfo.can_discount;
@@ -324,7 +316,6 @@ public class UserFoodDetailFragment extends Fragment implements View.OnClickList
             OrderDetail orderDetail = OrderDetail.ofOrders(Lists.newArrayList(data));
             orderDetail.restaurant_uuid = restaurantInfo.restaurant_uuid;
             orderDetail.restaurant_name = restaurantInfo.name;
-            // TODO 位置配送類型 ＆ 結算類型，預設 原價 自取
             orderDetail.order_type = OrderDetail.OrderType.setDefault();
             orderDetail.restaurant_address = restaurantInfo.address;
             orderDetail.can_discount = restaurantInfo.can_discount;

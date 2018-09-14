@@ -95,7 +95,6 @@ public class SellerMainActivity extends BaseCore implements TabLayout.OnTabSelec
 
     private void getViews() {
         toolbar = findViewById(R.id.toolbar);
-        // TODO 編輯排序按鈕
         sortBtn = findViewById(R.id.sortBtn);
         setSupportActionBar(toolbar);
         drawer = findViewById(R.id.seller_drawer_layout);

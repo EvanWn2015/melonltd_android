@@ -48,7 +48,6 @@ public class SellerCategoryAdapter extends RecyclerView.Adapter<SellerCategoryAd
 
     @Override
     public void onBindViewHolder(@NonNull  ViewHolder holder, int position) {
-        // TODO 成功後關閉編輯排序在通知 adapter 更新資料
         CategoryRelVo vo = Model.SELLER_CATEGORY_LIST.get(position);
 
         holder.v.setOnClickListener(this.hideKeyboardListener);
@@ -63,7 +62,6 @@ public class SellerCategoryAdapter extends RecyclerView.Adapter<SellerCategoryAd
         holder.deleteBtn.setOnClickListener(this.deleteListener);
         holder.topEdit.setText(vo.top);
 
-        // TODO 成功後關閉編輯排序在通知 adapter 更新資料
         holder.topEdit.addTextChangedListener(new SortEditListener(vo));
 
     }
@@ -99,9 +97,8 @@ public class SellerCategoryAdapter extends RecyclerView.Adapter<SellerCategoryAd
         }
     }
 
-    // TODO 成功後關閉編輯排序在通知 adapter 更新資料
     class SortEditListener implements TextWatcher {
-        CategoryRelVo vo;  // TODO 成功後關閉編輯排序在通知 adapter 更新資料
+        CategoryRelVo vo;
 
         SortEditListener( CategoryRelVo vo ){
             this.vo = vo;

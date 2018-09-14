@@ -88,13 +88,13 @@ public class ApiManager {
         call.enqueue(callback);
     }
 
-    // TODO 3.取得店家類型列表，回應 List<String> areaList
+    // 3.取得店家類型列表
     public static void storeAreaList (ApiCallback callback) {
         Call call = getClient().post(ApiUrl.STORE_AREA_LIST);
         call.enqueue(callback);
     }
 
-    // TODO  4.取得App進入引導公告圖，回應 String url
+    // 4.取得App進入引導公告圖
     public static void appIntroBulletin (ThreadCallback callback) {
         Call call = getClient().post(ApiUrl.APP_INTRO_BULLETIN);
         call.enqueue(callback);
@@ -245,7 +245,6 @@ public class ApiManager {
         call.enqueue(callback);
     }
 
-    //    {"uuid":"RESTAURANT_CATEGORY_db001826-9169-4230-a747-c6d9f8d0a582","status":"open"}
     // 新增種類
     public static void sellerAddCategory(ReqData req, ThreadCallback callback) {
         Call call = getClient().postHeader(ApiUrl.SELLER_ADD_CATEGORY, SPService.getOauth(), Base64Service.encryptBASE64(Tools.JSONPARSE.toJson(req)));
@@ -264,7 +263,7 @@ public class ApiManager {
         call.enqueue(callback);
     }
 
-    // TODO  排序種類，回應 List<FoodVo> categoryList
+    // 排序種類
     public static void sellerSortCategory(List<CategoryRelVo> req , ThreadCallback callback){
         Call call = getClient().postHeader(ApiUrl.SELLER_SORT_CATEGORY, SPService.getOauth(), Base64Service.encryptBASE64(Tools.JsonParse.toJson(req)));
         call.enqueue(callback);
@@ -294,7 +293,7 @@ public class ApiManager {
         call.enqueue(callback);
     }
 
-    // TODO 品項排序回應 List<FoodVo> foodList
+    // 品項排序
     public static void sellerFoodSort(List<FoodVo> req, ThreadCallback callback){
         Call call = getClient().postHeader(ApiUrl.SELLER_SORT_FOOD,SPService.getOauth(),Base64Service.encryptBASE64(Tools.JSONPARSE.toJson(req)));
         call.enqueue(callback);

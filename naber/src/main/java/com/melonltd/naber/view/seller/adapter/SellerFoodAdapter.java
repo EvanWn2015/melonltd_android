@@ -5,7 +5,6 @@ import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +24,7 @@ import com.melonltd.naber.vo.FoodVo;
 
 
 public class SellerFoodAdapter extends RecyclerView.Adapter<SellerFoodAdapter.ViewHolder> {
-    private static final String TAG = SellerFoodAdapter.class.getSimpleName();
+//    private static final String TAG = SellerFoodAdapter.class.getSimpleName();
     private SwitchButton.OnCheckedChangeListener switchListener;
     private View.OnClickListener deleteListener, editListener;
     private boolean IS_SORT_EDIT = false;
@@ -36,9 +35,6 @@ public class SellerFoodAdapter extends RecyclerView.Adapter<SellerFoodAdapter.Vi
         this.editListener = editListener;
     }
 
-    // TODO 新增可否編輯排序，用法
-    // 開啟編輯 adapter.setSortEdit(true).notifyDataSetChanged();
-    // 關閉編輯 adapter.setSortEdit(false).notifyDataSetChanged();
     public SellerFoodAdapter setSortEdit(boolean isSortEdit) {
         this.IS_SORT_EDIT = isSortEdit;
         return this;

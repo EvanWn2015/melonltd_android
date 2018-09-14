@@ -11,7 +11,7 @@ public class CategoryRelVo implements Serializable{
     public String category_uuid;
     public String restaurant_uuid;
     public String category_name;
-    public String top; // TODO 成功後關閉編輯排序在通知 adapter 更新資料
+    public String top;
     public SwitchStatus status;
     public String enable;
     public String create_date;

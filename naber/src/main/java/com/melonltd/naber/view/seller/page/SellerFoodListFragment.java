@@ -8,7 +8,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -192,7 +191,6 @@ public class SellerFoodListFragment extends Fragment implements View.OnClickList
                                                             return IntegerTools.parseInt(o1.top,0) - IntegerTools.parseInt(o2.top,0);
                                                         }
                                                     });
-                                                    //TODO sort foodVo top
                                                     Model.SELLER_FOOD_LIST.addAll(foodVo);
                                                     adapter.notifyDataSetChanged();
                                                 }
@@ -207,7 +205,6 @@ public class SellerFoodListFragment extends Fragment implements View.OnClickList
                                 .build()
                                 .setCancelable(false)
                                 .show();
-                        // TODO save
                     }
                 }
             });
@@ -221,7 +218,6 @@ public class SellerFoodListFragment extends Fragment implements View.OnClickList
             @Override
             public void onSuccess(String responseBody) {
                 List<FoodVo> foodVos =   Tools.JSONPARSE.fromJsonList(responseBody, FoodVo[].class);
-                // TODO foodVos top
                 Collections.sort(foodVos, new Comparator<FoodVo>() {
                     public int compare(FoodVo o1, FoodVo o2) {
                         return IntegerTools.parseInt(o1.top,0) - IntegerTools.parseInt(o2.top,0);

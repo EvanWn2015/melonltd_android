@@ -270,7 +270,7 @@ public class UserShoppingCartFragment extends Fragment {
 
             holder.setSubViews(position);
             holder.totalAmountText.setText(amount + "");
-            // TODO 未更新APP會生錯誤
+            //  未更新APP會生錯誤
             if (Strings.isNullOrEmpty(Model.USER_CACHE_SHOPPING_CART.get(position).can_discount)){
                 Model.USER_CACHE_SHOPPING_CART.get(position).can_discount = "Y";
             }
@@ -280,7 +280,6 @@ public class UserShoppingCartFragment extends Fragment {
             }else {
                 holder.bonusText.setText(((int) Math.floor(amount / 10d)) + "");
             }
-//            holder.bonusText.setText(((int) Math.floor(amount / 10d)) + "");
             holder.nameText.setText(Model.USER_CACHE_SHOPPING_CART.get(position).restaurant_name);
             holder.cancelBtn.setTag(position);
             holder.submitBtn.setTag(position);
