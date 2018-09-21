@@ -13,6 +13,7 @@ import com.melonltd.naber.model.bean.Model;
 import com.melonltd.naber.model.constant.NaberConstant;
 import com.melonltd.naber.model.type.OrderStatus;
 import com.melonltd.naber.util.Tools;
+import com.melonltd.naber.view.user.page.UserOrderHistoryFragment;
 import com.melonltd.naber.vo.OrderDetail;
 
 
@@ -52,7 +53,7 @@ public class UserOrderHistoryAdapter extends RecyclerView.Adapter<UserOrderHisto
                 holder.orderStatusText.setText(status.getText());
             }
         }
-        holder.totalAmountText.setText("$" + Model.USER_ORDER_HISTORY_LIST.get(position).order_price);
+        holder.totalAmountText.setText("$" + (Model.USER_ORDER_HISTORY_LIST.get(position).order_price));
     }
 
     @Override

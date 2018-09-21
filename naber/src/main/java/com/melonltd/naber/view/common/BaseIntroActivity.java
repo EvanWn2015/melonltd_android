@@ -42,7 +42,7 @@ public class BaseIntroActivity extends AppCompatActivity {
         ApiManager.checkAppVersion(new ThreadCallback(this) {
             @Override
             public void onSuccess(String responseBody) {
-                Log.i(TAG,responseBody);
+//                Log.i(TAG,responseBody);
                 AppVersionLogVo vo = Tools.JSONPARSE.fromJson(responseBody, AppVersionLogVo.class);
                 if (!vo.version.equals(BuildConfig.VERSION_NAME)) {
                     final String[] action = new String[]{vo.need_upgrade.equals("Y") ? "前往更新" : "我知道了"};

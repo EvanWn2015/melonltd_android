@@ -18,6 +18,7 @@ public class OrderDetail implements Serializable {
     public String user_phone;
     public String fetch_date;
     public String user_message;
+    public String use_bonus;
     public OrderType order_type;
     public List<OrderData> orders;
 
@@ -40,6 +41,7 @@ public class OrderDetail implements Serializable {
                 .add("user_message", user_message)
                 .add("order_type", order_type)
                 .add("orders", orders)
+                .add("use_bonus", use_bonus)
                 .toString();
     }
 

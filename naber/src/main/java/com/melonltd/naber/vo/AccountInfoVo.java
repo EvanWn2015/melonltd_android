@@ -18,6 +18,7 @@ public class AccountInfoVo implements Serializable{
     public String identity;
     public String school_name;
     public String bonus;
+    public String use_bonus;
     public String level;
     public String enable;
     public String is_login;
