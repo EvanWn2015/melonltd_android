@@ -3,6 +3,7 @@ package com.melonltd.naber.view.user.adapter;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,13 +13,15 @@ import com.melonltd.naber.R;
 import com.melonltd.naber.model.bean.Model;
 import com.melonltd.naber.model.constant.NaberConstant;
 import com.melonltd.naber.model.type.OrderStatus;
+import com.melonltd.naber.util.IntegerTools;
 import com.melonltd.naber.util.Tools;
 import com.melonltd.naber.view.user.page.UserOrderHistoryFragment;
 import com.melonltd.naber.vo.OrderDetail;
+import com.melonltd.naber.vo.OrderVo;
 
 
 public class UserOrderHistoryAdapter extends RecyclerView.Adapter<UserOrderHistoryAdapter.ViewHolder> {
-//    private static final String TAG = UserOrderHistoryAdapter.class.getSimpleName();
+    private static final String TAG = UserOrderHistoryAdapter.class.getSimpleName();
     private View.OnClickListener itemClickListener;
     private Context context;
 
@@ -53,8 +56,18 @@ public class UserOrderHistoryAdapter extends RecyclerView.Adapter<UserOrderHisto
                 holder.orderStatusText.setText(status.getText());
             }
         }
-        holder.totalAmountText.setText("$" + (Model.USER_ORDER_HISTORY_LIST.get(position).order_price));
-    }
+        OrderDetail orderDetail = Model.USER_ORDER_HISTORY_LIST.get(position).order_detail;
+        IntegerTools.parseInt(orderDetail.use_bonus,0);
+        int use_bonus = IntegerTools.parseInt(Model.USER_ORDER_HISTORY_LIST.get(position).order_detail.use_bonus,0);
+            if( use_bonus > 0){
+                int price = IntegerTools.parseInt(Model.USER_ORDER_HISTORY_LIST.get(position).order_price,0);
+                holder.totalAmountText.setText("$" + (price));
+                holder.totalAmountText.setText("$" + (price - (use_bonus / 10 * 3) ));
+            } else {
+                holder.totalAmountText.setText("$" + (Model.USER_ORDER_HISTORY_LIST.get(position).order_price));
+            }
+        }
+
 
     @Override
     public int getItemCount() {

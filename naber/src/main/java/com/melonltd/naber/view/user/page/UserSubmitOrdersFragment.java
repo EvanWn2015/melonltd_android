@@ -149,6 +149,7 @@ public class UserSubmitOrdersFragment extends Fragment implements View.OnClickLi
     @Override
     public void onResume() {
         super.onResume();
+        useBonus = -1;
         UserMainActivity.changeTabAndToolbarStatus();
         if (UserMainActivity.toolbar != null) {
             UserMainActivity.navigationIconDisplay(true, new View.OnClickListener() {
@@ -165,8 +166,6 @@ public class UserSubmitOrdersFragment extends Fragment implements View.OnClickLi
             public void onSuccess(String responseBody) {
                 AccountInfoVo account = Tools.JSONPARSE.fromJson(responseBody, AccountInfoVo.class);
                 options1Items.clear();
-//                account.bonus
-//                account.use_bonus
                 int userBonus = IntegerTools.parseInt(account.bonus, 0);
                 int useBonus = IntegerTools.parseInt(account.use_bonus, 0);
                 int canBonus = (userBonus - useBonus)/10;
@@ -450,12 +449,15 @@ public class UserSubmitOrdersFragment extends Fragment implements View.OnClickLi
                                         @Override
                                         public void onItemClick(Object o, int position) {
                                             if (position == 1) {
-//                                                OrderDetail orderDetail = new OrderDetail();
-//                                                IntegerTools.parseInt(orderDetail.use_bonus,0);
-//                                                if(useBonus >=0){
-//                                                    orderDetail.order_type.billing = BillingType.of("DISCOUNT");
-//                                                    orderDetail.use_bonus = String.valueOf((useBonus+1)*10);
-//                                                }
+                                                OrderDetail orderDetail = Model.USER_CACHE_SHOPPING_CART.get(dataIndex);
+                                                IntegerTools.parseInt(orderDetail.use_bonus,0);
+                                                if(useBonus > 0){
+                                                    orderDetail.order_type.billing = BillingType.of("DISCOUNT");
+                                                    orderDetail.use_bonus = String.valueOf(useBonus);
+                                                } else {
+                                                    orderDetail.order_type.billing = BillingType.of("ORIGINAL");
+                                                    orderDetail.use_bonus = "0";
+                                                }
                                                 ApiManager.userOrderSubmit(Model.USER_CACHE_SHOPPING_CART.get(dataIndex), new ThreadCallback(getContext()) {
                                                     @Override
                                                     public void onSuccess(String responseBody) {
@@ -512,16 +514,13 @@ public class UserSubmitOrdersFragment extends Fragment implements View.OnClickLi
                 @Override
                 public void onOptionsSelect(int index1, int option2, int options3, View v) {
                     STATUS = 1;
-                    int useBonus =(index1+1)*10;
+                    useBonus =(index1+1)*10;
                     int countBonus = (index1+1)*3;
-
-                    if(STATUS == 1){
                         int amount = 0;
                         for (int i = 0; i < Model.USER_CACHE_SHOPPING_CART.get(dataIndex).orders.size(); i++) {
                             amount += Integer.parseInt(Model.USER_CACHE_SHOPPING_CART.get(dataIndex).orders.get(i).item.price);
                         }
                         ordersPriceText.setText("$ " + (amount- countBonus));
-
 
                         if (Model.USER_CACHE_SHOPPING_CART.get(dataIndex).can_discount.equals("N")) {
                             ordersBonusText.setText("該店家不提供紅利");
@@ -529,9 +528,6 @@ public class UserSubmitOrdersFragment extends Fragment implements View.OnClickLi
                             ordersBonusText.setText("應得紅利 " + ((int) Math.floor((amount - countBonus) / 10d)) + "");
                         }
                         bounschooseText.setText(options1Items.get(index1));
-
-                    }
-
                 }
             }) .setTitleSize(20)
                     .setSubmitText("選擇紅利")//确定按钮文字
@@ -548,6 +544,7 @@ public class UserSubmitOrdersFragment extends Fragment implements View.OnClickLi
                         STATUS = -1;
                        // TODO 代表按了確認
                     } else {
+                        useBonus = -1 ;
                         bounschooseText.setText("");
                         int amount = 0;
                         for (int i = 0; i < Model.USER_CACHE_SHOPPING_CART.get(dataIndex).orders.size(); i++) {
