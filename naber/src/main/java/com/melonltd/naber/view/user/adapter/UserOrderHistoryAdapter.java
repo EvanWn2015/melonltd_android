@@ -24,6 +24,8 @@ public class UserOrderHistoryAdapter extends RecyclerView.Adapter<UserOrderHisto
     private static final String TAG = UserOrderHistoryAdapter.class.getSimpleName();
     private View.OnClickListener itemClickListener;
     private Context context;
+    private int dataIndex = -1;
+    private int useBonus = -1;
 
     public void setListener(View.OnClickListener itemClickListener){
         this.itemClickListener = itemClickListener;
@@ -56,16 +58,14 @@ public class UserOrderHistoryAdapter extends RecyclerView.Adapter<UserOrderHisto
                 holder.orderStatusText.setText(status.getText());
             }
         }
-        OrderDetail orderDetail = Model.USER_ORDER_HISTORY_LIST.get(position).order_detail;
-        IntegerTools.parseInt(orderDetail.use_bonus,0);
-        int use_bonus = IntegerTools.parseInt(Model.USER_ORDER_HISTORY_LIST.get(position).order_detail.use_bonus,0);
-            if( use_bonus > 0){
-                int price = IntegerTools.parseInt(Model.USER_ORDER_HISTORY_LIST.get(position).order_price,0);
-                holder.totalAmountText.setText("$" + (price));
-                holder.totalAmountText.setText("$" + (price - (use_bonus / 10 * 3) ));
-            } else {
+
+//        int use_bonus = IntegerTools.parseInt(Model.USER_CACHE_SHOPPING_CART.get(position).use_bonus,0);
+//            if( use_bonus > 0){
+//                int price = IntegerTools.parseInt(Model.USER_ORDER_HISTORY_LIST.get(position).order_price,0);
+//                holder.totalAmountText.setText("$" + (price - (use_bonus / 10 * 3) ));
+//            } else {
                 holder.totalAmountText.setText("$" + (Model.USER_ORDER_HISTORY_LIST.get(position).order_price));
-            }
+//            }
         }
 
 
