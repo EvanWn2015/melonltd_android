@@ -29,7 +29,7 @@ public class Model {
 //    public static List<CategoryRelVo> RESTAURANT_CATEGORY_REL_LIST = Lists.<CategoryRelVo>newArrayList();
     public static List<RestaurantInfoVo> RESTAURANT_INFO_FILTER_LIST = Lists.<RestaurantInfoVo>newArrayList();
     public static List<FoodVo> CATEGORY_FOOD_REL_LIST = Lists.<FoodVo>newArrayList();
-    public static List<OrderVo> USER_ORDER_HISTORY_LIST = Lists.newArrayList();
+//    public static List<OrderVo> USER_ORDER_HISTORY_LIST = Lists.newArrayList();
 
     // key restaurant_uuid
     public static List<OrderDetail> USER_CACHE_SHOPPING_CART = Lists.<OrderDetail>newArrayList();

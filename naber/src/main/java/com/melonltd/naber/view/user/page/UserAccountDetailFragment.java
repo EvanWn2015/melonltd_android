@@ -28,11 +28,9 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.melonltd.naber.R;
 import com.melonltd.naber.model.api.ApiManager;
 import com.melonltd.naber.model.api.ThreadCallback;
-import com.melonltd.naber.model.bean.Model;
 import com.melonltd.naber.model.constant.NaberConstant;
 import com.melonltd.naber.model.service.SPService;
 import com.melonltd.naber.model.type.Identity;
-import com.melonltd.naber.util.IntegerTools;
 import com.melonltd.naber.util.LoadingBarTools;
 import com.melonltd.naber.util.PhotoTools;
 import com.melonltd.naber.util.UpLoadCallBack;
@@ -40,7 +38,6 @@ import com.melonltd.naber.view.common.BaseCore;
 import com.melonltd.naber.view.factory.PageType;
 import com.melonltd.naber.view.user.UserMainActivity;
 import com.melonltd.naber.vo.AccountInfoVo;
-import com.melonltd.naber.vo.OrderDetail;
 import com.melonltd.naber.vo.ReqData;
 
 import java.io.ByteArrayOutputStream;
@@ -53,8 +50,6 @@ public class UserAccountDetailFragment extends Fragment implements View.OnClickL
     private static final int PICK_FROM_CAMERA = 9902;
     private static final int PICK_FROM_GALLERY = 9909;
     private ViewHolder holder;
-//    private int bonus = -1;
-//    private int use_bonus = -1;
 
     public UserAccountDetailFragment() {
     }
