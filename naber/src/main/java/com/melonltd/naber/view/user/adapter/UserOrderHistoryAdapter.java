@@ -24,8 +24,6 @@ public class UserOrderHistoryAdapter extends RecyclerView.Adapter<UserOrderHisto
     private static final String TAG = UserOrderHistoryAdapter.class.getSimpleName();
     private View.OnClickListener itemClickListener;
     private Context context;
-//    private int dataIndex = -1;
-//    private int useBonus = -1;
     private List<OrderVo> orderHistoryList = Lists.newArrayList();
 
     public UserOrderHistoryAdapter(List<OrderVo> orderHistoryList){

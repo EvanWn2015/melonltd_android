@@ -13,6 +13,7 @@ import com.google.common.base.Strings;
 import com.melonltd.naber.R;
 import com.melonltd.naber.model.bean.Model;
 import com.melonltd.naber.model.type.OrderStatus;
+import com.melonltd.naber.util.IntegerTools;
 
 public class SellerOrdersLogsAdapter extends RecyclerView.Adapter<SellerOrdersLogsAdapter.ViewHolder> {
     private Context context;
@@ -33,7 +34,13 @@ public class SellerOrdersLogsAdapter extends RecyclerView.Adapter<SellerOrdersLo
 
     @Override
     public void onBindViewHolder(@NonNull SellerOrdersLogsAdapter.ViewHolder holder, int position) {
-        holder.amountText.setText("$ " + Model.SELLER_STAT_LOGS.get(position).order_price);
+        int use_bonus = IntegerTools.parseInt(Model.SELLER_STAT_LOGS.get(position).use_bonus,0);
+        if(use_bonus > 0){
+            int price = IntegerTools.parseInt(Model.SELLER_STAT_LOGS.get(position).order_price,0);
+            holder.amountText.setText("$ " + (price - (use_bonus/10*3)));
+        } else {
+            holder.amountText.setText("$ " + Model.SELLER_STAT_LOGS.get(position).order_price);
+        }
 
         String content = "電話  ";
         content += Strings.padEnd(Model.SELLER_STAT_LOGS.get(position).order_detail.user_phone, 25, '\u0020');

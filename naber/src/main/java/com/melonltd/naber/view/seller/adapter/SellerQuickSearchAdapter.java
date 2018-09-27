@@ -13,6 +13,7 @@ import com.melonltd.naber.R;
 import com.melonltd.naber.model.bean.Model;
 import com.melonltd.naber.model.constant.NaberConstant;
 import com.melonltd.naber.model.type.OrderStatus;
+import com.melonltd.naber.util.IntegerTools;
 import com.melonltd.naber.util.Tools;
 import com.melonltd.naber.vo.DemandsItemVo;
 import com.melonltd.naber.vo.ItemVo;
@@ -60,7 +61,14 @@ public class SellerQuickSearchAdapter extends RecyclerView.Adapter<SellerQuickSe
 
         holder.userPhoneNumberText.setText(Model.SELLER_QUICK_SEARCH_ORDERS.get(position).order_detail.user_phone);
         holder.userNameText.setText(Model.SELLER_QUICK_SEARCH_ORDERS.get(position).order_detail.user_name);
-        holder.totalAmountText.setText("$ " + Model.SELLER_QUICK_SEARCH_ORDERS.get(position).order_price);
+        int use_bonus = IntegerTools.parseInt(Model.SELLER_QUICK_SEARCH_ORDERS.get(position).use_bonus,0);
+        if( use_bonus > 0){
+            int price = IntegerTools.parseInt(Model.SELLER_QUICK_SEARCH_ORDERS.get(position).order_price,0);
+            holder.totalAmountText.setText("$ " + (price - (use_bonus/10*3)));
+        } else {
+            holder.totalAmountText.setText("$ " + Model.SELLER_QUICK_SEARCH_ORDERS.get(position).order_price);
+        }
+
 
         String content = "";
         for (OrderDetail.OrderData data : Model.SELLER_QUICK_SEARCH_ORDERS.get(position).order_detail.orders) {

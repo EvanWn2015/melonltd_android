@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.google.common.collect.Lists;
 import com.melonltd.naber.R;
 import com.melonltd.naber.model.constant.NaberConstant;
+import com.melonltd.naber.util.IntegerTools;
 import com.melonltd.naber.util.Tools;
 import com.melonltd.naber.util.UiUtil;
 import com.melonltd.naber.view.factory.PageType;
@@ -75,11 +76,17 @@ public class UserOrderDetailFragment extends Fragment {
             });
 
             holder.sellerNameText.setText(orderDetail.restaurant_name);
-            holder.priceText.setText("$ " + vo.order_price);
+            int use_bonus = IntegerTools.parseInt(vo.use_bonus,0);
+            if(use_bonus > 0){
+                int price = IntegerTools.parseInt(vo.order_price,0);
+                holder.priceText.setText("$ " + (price - (use_bonus/10*3)));
+            } else {
+                holder.priceText.setText("$ " + vo.order_price);
+            }
             holder.addressText.setText(orderDetail.restaurant_address);
             holder.messageText.setText(vo.user_message);
             holder.bonusText.setText(vo.order_bonus);
-
+            holder.usebonusText.setText(""+use_bonus);
             holder.orderingTimeText.setText(Tools.FORMAT.format(NaberConstant.DATE_FORMAT_PATTERN, "dd日 HH時 mm分", vo.create_date));
             holder.fetchDateText.setText(Tools.FORMAT.format(NaberConstant.DATE_FORMAT_PATTERN, "dd日 HH時 mm分", vo.fetch_date));
 
@@ -114,7 +121,7 @@ public class UserOrderDetailFragment extends Fragment {
     }
 
     class ViewHolder {
-        TextView sellerNameText, priceText, addressText, messageText, bonusText, orderingTimeText, fetchDateText;
+        TextView sellerNameText, priceText, addressText, messageText, bonusText, orderingTimeText, fetchDateText,usebonusText;
         ListView orderDatas;
         ViewHolder(View v) {
             this.orderDatas = v.findViewById(R.id.orderDatas);
@@ -126,6 +133,7 @@ public class UserOrderDetailFragment extends Fragment {
             this.bonusText = v.findViewById(R.id.bonusText);
             this.orderingTimeText = v.findViewById(R.id.orderingTimeText);
             this.fetchDateText = v.findViewById(R.id.fetchDateText);
+            this.usebonusText = v.findViewById(R.id.use_bonusText);
         }
     }
 

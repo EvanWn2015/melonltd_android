@@ -57,12 +57,13 @@ import java.util.List;
 public class UserSubmitOrdersFragment extends Fragment implements View.OnClickListener {
     private static final String TAG = UserSubmitOrdersFragment.class.getSimpleName();
     public static UserSubmitOrdersFragment FRAGMENT = null;
-    private TextView selectDateText, userNameText, userPhoneNumberText, ordersPriceText, ordersBonusText, bounschooseText;
+    private TextView selectDateText, userNameText, userPhoneNumberText, ordersPriceText, ordersBonusText, bounschooseText,mealText;
     private EditText userMessageEdit;
     private TimePickerView timePickerView;
     private CheckBox readRuleCheckBtn;
     private int dataIndex = -1;
     private List<String> options1Items = Lists.newArrayList();
+    private String[] options2Items = {"內用","外帶"};
     private Handler handler = new Handler();
     private int useBonus = -1;
 
@@ -105,12 +106,15 @@ public class UserSubmitOrdersFragment extends Fragment implements View.OnClickLi
         userMessageEdit = v.findViewById(R.id.userMessageEdit);
         readRuleCheckBtn = v.findViewById(R.id.readRuleCheckBtn);
         bounschooseText = v.findViewById(R.id.bounsChooseText);
+        mealText = v.findViewById(R.id.mealText);
         Button submitOrdersBtn = v.findViewById(R.id.submitOrdersBtn);
         HideKeyboard hideKeyboard = new HideKeyboard();
 
         bounschooseText.setOnFocusChangeListener(hideKeyboard);
+        mealText.setOnFocusChangeListener(hideKeyboard);
 
         bounschooseText.setOnClickListener(new pickBounsChoose());
+        mealText.setOnClickListener(new pickMeal());
         selectDateText.setOnClickListener(this);
         submitOrdersBtn.setOnClickListener(this);
         readRuleCheckBtn.setOnClickListener(new View.OnClickListener() {
@@ -431,8 +435,6 @@ public class UserSubmitOrdersFragment extends Fragment implements View.OnClickLi
     class pickBounsChoose implements View.OnClickListener {
         @Override
         public void onClick(final View view) {
-
-
             InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
             OptionsPickerView pvOptions = new OptionsPickerBuilder(getContext(), new OnOptionsSelectListener() {
@@ -486,6 +488,36 @@ public class UserSubmitOrdersFragment extends Fragment implements View.OnClickLi
                 }
             });
             pvOptions.setPicker(options1Items);
+            pvOptions.show();
+        }
+    }
+    class pickMeal implements View.OnClickListener{
+
+        @Override
+        public void onClick(final View view) {
+            InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            OptionsPickerView pvOptions = new OptionsPickerBuilder(getContext(), new OnOptionsSelectListener() {
+                @Override
+                public void onOptionsSelect(int index1, int option2, int options3, View v) {
+//                    String meal = options2Items.get()
+
+                }
+            }) .setTitleSize(20)
+                    .setSubmitText("選擇紅利")//确定按钮文字
+                    .setCancelText("取消折抵")//取消按钮文字
+                    .setTitleBgColor(getResources().getColor(R.color.naber_dividing_line_gray))
+                    .setCancelColor(getResources().getColor(R.color.naber_dividing_gray))
+                    .setSubmitColor(getResources().getColor(R.color.naber_dividing_gray))
+                    .build();
+
+            pvOptions.setOnDismissListener(new com.bigkoo.pickerview.listener.OnDismissListener() {
+                @Override
+                public void onDismiss(Object o) {
+
+                }
+            });
+//            pvOptions.setPicker(options2Items);
             pvOptions.show();
         }
     }

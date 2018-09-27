@@ -5,6 +5,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,7 @@ import com.melonltd.naber.model.api.ApiManager;
 import com.melonltd.naber.model.api.ThreadCallback;
 import com.melonltd.naber.model.constant.NaberConstant;
 import com.melonltd.naber.model.service.SPService;
+import com.melonltd.naber.util.IntegerTools;
 import com.melonltd.naber.util.Tools;
 import com.melonltd.naber.view.customize.SwitchButton;
 import com.melonltd.naber.view.factory.PageType;
@@ -30,11 +32,10 @@ import com.melonltd.naber.vo.AccountInfoVo;
 
 
 public class UserSetUpFragment extends Fragment{
-//    private static final String TAG = UserHomeFragment.class.getSimpleName();
+    private static final String TAG = UserHomeFragment.class.getSimpleName();
     public static UserSetUpFragment FRAGMENT = null;
     public static int TO_ACCOUNT_DETAIL_INDEX = -1;
     public static int TO_SIMPLE_INFO_INDEX = -1;
-
     private ViewHolder holder;
 
     public UserSetUpFragment() {
@@ -84,16 +85,23 @@ public class UserSetUpFragment extends Fragment{
             ApiManager.userFindAccountInfo(new ThreadCallback(getContext()) {
                 @Override
                 public void onSuccess(String responseBody) {
-                    holder.accountInfoVo = Tools.JSONPARSE.fromJson(responseBody, AccountInfoVo.class);
-                    holder.accountText.setText(holder.accountInfoVo.phone);
+                holder.accountInfoVo = Tools.JSONPARSE.fromJson(responseBody, AccountInfoVo.class);
+                holder.accountText.setText(holder.accountInfoVo.phone);
+                int use_bonus = IntegerTools.parseInt(holder.accountInfoVo.use_bonus,0);
+                if(use_bonus > 0){
+                    int bonus = IntegerTools.parseInt(holder.accountInfoVo.bonus,0);
+                    int newBonus = bonus - use_bonus;
+                    holder.bonusText.setText(""+newBonus);
+                } else {
                     holder.bonusText.setText(holder.accountInfoVo.bonus);
-                    if (!Strings.isNullOrEmpty(holder.accountInfoVo.photo)){
-                        holder.accountPotoh.setImageURI(Uri.parse(holder.accountInfoVo.photo));
-                    }else {
-                        ImageRequest request = ImageRequestBuilder.newBuilderWithResourceId(R.drawable.naber_icon_logo).build();
-                        holder.accountPotoh.setImageURI(request.getSourceUri());
-                    }
                 }
+                if (!Strings.isNullOrEmpty(holder.accountInfoVo.photo)){
+                    holder.accountPotoh.setImageURI(Uri.parse(holder.accountInfoVo.photo));
+                }else {
+                    ImageRequest request = ImageRequestBuilder.newBuilderWithResourceId(R.drawable.naber_icon_logo).build();
+                    holder.accountPotoh.setImageURI(request.getSourceUri());
+                }
+            }
 
                 @Override
                 public void onFail(Exception error, String msg) {

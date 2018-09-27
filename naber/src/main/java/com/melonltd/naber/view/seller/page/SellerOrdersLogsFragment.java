@@ -7,6 +7,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,7 +39,7 @@ import cn.bingoogolapple.refreshlayout.BGANormalRefreshViewHolder;
 import cn.bingoogolapple.refreshlayout.BGARefreshLayout;
 
 public class SellerOrdersLogsFragment extends Fragment implements View.OnClickListener {
-//    private static final String TAG = SellerOrdersLogsFragment.class.getSimpleName();
+    private static final String TAG = SellerOrdersLogsFragment.class.getSimpleName();
     public static SellerOrdersLogsFragment FRAGMENT = null;
 
     private TextView startTimeText, endTimeText;
