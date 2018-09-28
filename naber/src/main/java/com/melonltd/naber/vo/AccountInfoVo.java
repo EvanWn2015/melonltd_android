@@ -25,7 +25,7 @@ public class AccountInfoVo implements Serializable{
     public String login_date;
     public String photo;
     public String photo_type;
-
+    public String gender;
     public String device_token;
     public String device_category;
 
@@ -51,6 +51,7 @@ public class AccountInfoVo implements Serializable{
                 .add("login_date", login_date)
                 .add("photo", photo)
                 .add("photo_type", photo_type)
+                .add("gender",gender)
                 .add("devlcie_token", device_token)
                 .add("device_category", device_category)
                 .toString();

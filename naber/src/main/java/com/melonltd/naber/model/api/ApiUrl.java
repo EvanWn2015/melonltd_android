@@ -23,6 +23,10 @@ public class ApiUrl {
     public final static String STORE_CATEGORY_LIST = DOMAIN + "/common/store/category/list";
     public final static String STORE_AREA_LIST = DOMAIN + "/common/store/area/list";
     public final static String CHECK_APP_VERSION = DOMAIN + "/common/check/app/version";
+    //紅利兌換
+    public final static String ACT_LIST = DOMAIN + "/common/activities/list";
+    public final static String SUBJECTION_REGIONS = DOMAIN + "/common/subjection/region/list";
+    public final static String ACT_SUBMIT = DOMAIN + "/activities/submit";
 
     // user
     public final static String ADVERTISEMENT = DOMAIN + "/naber/advertisement";
@@ -39,7 +43,6 @@ public class ApiUrl {
     public final static String FORGET_PSW = DOMAIN + "/account/forget/password";
 
     public final static String IMAGE_UPLOAD = DOMAIN + "/image/upload";
-
 
     // seller
     public final static String SELLER_SORT_FOOD = DOMAIN + "/seller/food/sort";

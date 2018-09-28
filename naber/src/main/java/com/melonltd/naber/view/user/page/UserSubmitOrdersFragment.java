@@ -38,6 +38,7 @@ import com.melonltd.naber.model.bean.Model;
 import com.melonltd.naber.model.constant.NaberConstant;
 import com.melonltd.naber.model.service.SPService;
 import com.melonltd.naber.model.type.BillingType;
+import com.melonltd.naber.model.type.Delivery;
 import com.melonltd.naber.model.type.Identity;
 import com.melonltd.naber.util.IntegerTools;
 import com.melonltd.naber.util.Tools;
@@ -63,7 +64,7 @@ public class UserSubmitOrdersFragment extends Fragment implements View.OnClickLi
     private CheckBox readRuleCheckBtn;
     private int dataIndex = -1;
     private List<String> options1Items = Lists.newArrayList();
-    private String[] options2Items = {"內用","外帶"};
+    private List<String> options2Items = Lists.newArrayList();
     private Handler handler = new Handler();
     private int useBonus = -1;
 
@@ -112,6 +113,8 @@ public class UserSubmitOrdersFragment extends Fragment implements View.OnClickLi
 
         bounschooseText.setOnFocusChangeListener(hideKeyboard);
         mealText.setOnFocusChangeListener(hideKeyboard);
+        options2Items.add("內用");
+        options2Items.add("外帶");
 
         bounschooseText.setOnClickListener(new pickBounsChoose());
         mealText.setOnClickListener(new pickMeal());
@@ -194,12 +197,12 @@ public class UserSubmitOrdersFragment extends Fragment implements View.OnClickLi
                     }
                 }
             }
-
             @Override
             public void onFail(Exception error, String msg) {
 
             }
         });
+        mealText.setText("外帶");
         dataIndex = getArguments().getInt(NaberConstant.ORDER_DETAIL_INDEX);
         Model.USER_CACHE_SHOPPING_CART.get(dataIndex).fetch_date = "";
         userNameText.setText(SPService.getUserName());
@@ -380,13 +383,16 @@ public class UserSubmitOrdersFragment extends Fragment implements View.OnClickLi
                                             if (position == 1) {
                                                 OrderDetail orderDetail = Model.USER_CACHE_SHOPPING_CART.get(dataIndex);
                                                 IntegerTools.parseInt(orderDetail.use_bonus,0);
+
                                                 if(useBonus > 0){
-                                                    orderDetail.order_type.billing = BillingType.of("DISCOUNT");
+                                                    orderDetail.order_type.billing = BillingType.DISCOUNT;
                                                     orderDetail.use_bonus = String.valueOf(useBonus);
                                                 } else {
-                                                    orderDetail.order_type.billing = BillingType.of("ORIGINAL");
+                                                    orderDetail.order_type.billing = BillingType.ORIGINAL;
                                                     orderDetail.use_bonus = "0";
                                                 }
+
+                                                orderDetail.order_type.delivery = mealText.getText().toString().equals("外帶") ? Delivery.OUT : Delivery.IN;
                                                 ApiManager.userOrderSubmit(Model.USER_CACHE_SHOPPING_CART.get(dataIndex), new ThreadCallback(getContext()) {
                                                     @Override
                                                     public void onSuccess(String responseBody) {
@@ -500,12 +506,13 @@ public class UserSubmitOrdersFragment extends Fragment implements View.OnClickLi
             OptionsPickerView pvOptions = new OptionsPickerBuilder(getContext(), new OnOptionsSelectListener() {
                 @Override
                 public void onOptionsSelect(int index1, int option2, int options3, View v) {
-//                    String meal = options2Items.get()
-
+                    STATUS = 1;
+                    String meal = options2Items.get(index1);
+                    mealText.setText(meal);
                 }
             }) .setTitleSize(20)
-                    .setSubmitText("選擇紅利")//确定按钮文字
-                    .setCancelText("取消折抵")//取消按钮文字
+                    .setSubmitText("選擇取餐方式")//确定按钮文字
+                    .setCancelText("取消")//取消按钮文字
                     .setTitleBgColor(getResources().getColor(R.color.naber_dividing_line_gray))
                     .setCancelColor(getResources().getColor(R.color.naber_dividing_gray))
                     .setSubmitColor(getResources().getColor(R.color.naber_dividing_gray))
@@ -514,10 +521,15 @@ public class UserSubmitOrdersFragment extends Fragment implements View.OnClickLi
             pvOptions.setOnDismissListener(new com.bigkoo.pickerview.listener.OnDismissListener() {
                 @Override
                 public void onDismiss(Object o) {
-
+                    if(STATUS == 1){
+                        STATUS = -1;
+                        // TODO 代表按了確認
+                    } else {
+                        mealText.setText("");
+                    }
                 }
             });
-//            pvOptions.setPicker(options2Items);
+            pvOptions.setPicker(options2Items);
             pvOptions.show();
         }
     }

@@ -4,6 +4,7 @@
     <string name="logo_text_2">你的好鄰居</string>
     <string name="account_edit_hint_text">手機號或帳號</string>
     <string name="password_edit_hint_text">密碼</string>
+    <string name="gender_text">性別</string>
     <string name="forget_password_text">忘記密碼？</string>
     <string name="login_btn_text">登入</string>
     <string name="registered_btn_text">註冊</string>

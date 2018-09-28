@@ -100,6 +100,17 @@ public class ApiManager {
         call.enqueue(callback);
     }
 
+    // 5.取得全部營消活動列表
+    public static void getAllActivities(ThreadCallback callback){
+        Call call = getClient().post(ApiUrl.ACT_LIST);
+        call.enqueue(callback);
+    }
+
+    // 6.取得行政區域列表
+    public static void getSubjectionRegions(ThreadCallback callback){
+        Call call = getClient().post(ApiUrl.SUBJECTION_REGIONS);
+        call.enqueue(callback);
+    }
 
     /**
      * 以下為使用者是使用 API
