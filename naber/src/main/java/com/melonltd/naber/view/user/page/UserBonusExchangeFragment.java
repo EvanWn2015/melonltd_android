@@ -6,16 +6,23 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.google.common.collect.Lists;
 import com.melonltd.naber.R;
+import com.melonltd.naber.model.api.ApiManager;
+import com.melonltd.naber.model.api.ThreadCallback;
+import com.melonltd.naber.util.Tools;
 import com.melonltd.naber.view.factory.PageType;
 import com.melonltd.naber.view.user.UserMainActivity;
 import com.melonltd.naber.view.user.adapter.UserBonusExchangeAdapter;
+import com.melonltd.naber.vo.ActivitiesVo;
 
 import java.util.List;
 
@@ -31,7 +38,7 @@ public class UserBonusExchangeFragment extends Fragment {
     public static UserBonusExchangeFragment FRAGMENT = null;
 
     private UserBonusExchangeAdapter adapter;
-
+    private List<ActivitiesVo> list = Lists.newArrayList();
     public UserBonusExchangeFragment() {
     }
 
@@ -47,18 +54,18 @@ public class UserBonusExchangeFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        List<BonusExchange> list = Lists.newArrayList(
-                BonusExchange.newInstance("10點", "下次消費折抵3元" ,"(無上限)"),
-                BonusExchange.newInstance("500點", "KKBOX 30天","(點數卡)"),
-                BonusExchange.newInstance("667點", "中壢威尼斯","(電影票)"),
-                BonusExchange.newInstance("767點", "桃園IN89統領","(電影票)"),
-                BonusExchange.newInstance("767點", "美麗華影城","(電影票)"),
-                BonusExchange.newInstance("800點", "LINE 240P","(點數卡)"),
-                BonusExchange.newInstance("834點", "SBC星橋","(電影票)"),
-                BonusExchange.newInstance("834點", "威秀影城","(電影票)"),
-                BonusExchange.newInstance("1000點", "SOGO 300","(禮卷)"),
-                BonusExchange.newInstance("1000點", "MYCARD 300P","(點數卡)")
-        );
+//        List<BonusExchange> list = Lists.newArrayList(
+//                BonusExchange.newInstance("10點", "下次消費折抵3元" ,"(無上限)"),
+//                BonusExchange.newInstance("500點", "KKBOX 30天","(點數卡)"),
+//                BonusExchange.newInstance("667點", "中壢威尼斯","(電影票)"),
+//                BonusExchange.newInstance("767點", "桃園IN89統領","(電影票)"),
+//                BonusExchange.newInstance("767點", "美麗華影城","(電影票)"),
+//                BonusExchange.newInstance("800點", "LINE 240P","(點數卡)"),
+//                BonusExchange.newInstance("834點", "SBC星橋","(電影票)"),
+//                BonusExchange.newInstance("834點", "威秀影城","(電影票)"),
+//                BonusExchange.newInstance("1000點", "SOGO 300","(禮卷)"),
+//                BonusExchange.newInstance("1000點", "MYCARD 300P","(點數卡)")
+//        );
         adapter = new UserBonusExchangeAdapter(list);
     }
 
@@ -92,6 +99,20 @@ public class UserBonusExchangeFragment extends Fragment {
 
         bgaRefreshLayout.setRefreshViewHolder(refreshViewHolder);
 
+        bgaRefreshLayout.setDelegate(new BGARefreshLayout.BGARefreshLayoutDelegate() {
+            @Override
+            public void onBGARefreshLayoutBeginRefreshing(BGARefreshLayout refreshLayout) {
+                bgaRefreshLayout.endRefreshing();
+                doLoadData();
+            }
+
+            @Override
+            public boolean onBGARefreshLayoutBeginLoadingMore(BGARefreshLayout refreshLayout) {
+                bgaRefreshLayout.endLoadingMore();
+                return false;
+            }
+        });
+
         final LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
@@ -99,6 +120,27 @@ public class UserBonusExchangeFragment extends Fragment {
         // setListener
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
+        adapter.setOnItemClickListener(new ItemClick());
+    }
+
+
+    private void doLoadData (){
+        list.clear();
+        adapter.notifyDataSetChanged();
+
+        ApiManager.getAllActivities(new ThreadCallback(getContext()) {
+            @Override
+            public void onSuccess(String responseBody) {
+                List<ActivitiesVo> activitiesList = Tools.JSONPARSE.fromJsonList(responseBody,ActivitiesVo[].class);
+                list.addAll(activitiesList);
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFail(Exception error, String msg) {
+
+            }
+        });
     }
 
 
@@ -115,21 +157,38 @@ public class UserBonusExchangeFragment extends Fragment {
                 }
             });
         }
+
+        this.doLoadData();
     }
 
-    public static class BonusExchange {
-        public String title;
-        public String content;
-        public String type;
 
-        BonusExchange(String title, String content, String type){
-            this.title = title;
-            this.content = content;
-            this.type = type;
-        }
+    class ItemClick implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            Log.i(TAG, "item tag : " + v.getTag() );
+            int index = (int)v.getTag();
+            ActivitiesVo data = list.get(index);
+            Log.i(TAG, "data "  + data );
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("BONUS_DETAIL", data);
+            UserMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.USER_BONUS_EXCHANGE_DETAIL, bundle);
 
-        private static BonusExchange newInstance(String title, String content, String type){
-            return new BonusExchange(title, content, type);
         }
     }
+
+//    public static class BonusExchange {
+//        public String title;
+//        public String content;
+//        public String type;
+//
+//        BonusExchange(String title, String content, String type){
+//            this.title = title;
+//            this.content = content;
+//            this.type = type;
+//        }
+//
+//        private static BonusExchange newInstance(String title, String content, String type){
+//            return new BonusExchange(title, content, type);
+//        }
+//    }
 }

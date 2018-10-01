@@ -185,50 +185,45 @@ public class VerifySMSFragment extends Fragment implements View.OnClickListener 
                 readCheckBox.setChecked(false);
                 map = Maps.newHashMap();
                 BaseActivity.removeAndReplaceWhere(FRAGMENT, PageType.REGISTERED_USER, bundle);
+                if (Strings.isNullOrEmpty(map.get("batch_id")) || Strings.isNullOrEmpty(phoneNamberEdit.getText().toString()) || Strings.isNullOrEmpty(verifySMSEdit.getText().toString())) {
+                    new AlertView.Builder()
+                            .setContext(getContext())
+                            .setStyle(AlertView.Style.Alert)
+                            .setTitle("")
+                            .setMessage("請取得驗證碼後再送出驗證!")
+                            .setCancelText("關閉")
+                            .build()
+                            .setCancelable(true)
+                            .show();
+                    break;
+                }
+                map.put("phone", phoneNamberEdit.getText().toString());
+                map.put("code", verifySMSEdit.getText().toString());
+                ApiManager.verifySMSCode(map, new ThreadCallback(getContext()) {
+                    @Override
+                    public void onSuccess(String responseBody) {
+                        Bundle bundle = new Bundle();
+                        bundle.putString("phone", phoneNamberEdit.getText().toString());
+                        phoneNamberEdit.setText("");
+                        verifySMSEdit.setText("");
+                        readCheckBox.setChecked(false);
+                        map = Maps.newHashMap();
+                        BaseActivity.removeAndReplaceWhere(FRAGMENT, PageType.REGISTERED_USER, bundle);
+                    }
 
-
-
-
-
-//                if (Strings.isNullOrEmpty(map.get("batch_id")) || Strings.isNullOrEmpty(phoneNamberEdit.getText().toString()) || Strings.isNullOrEmpty(verifySMSEdit.getText().toString())) {
-//                    new AlertView.Builder()
-//                            .setContext(getContext())
-//                            .setStyle(AlertView.Style.Alert)
-//                            .setTitle("")
-//                            .setMessage("請取得驗證碼後再送出驗證!")
-//                            .setCancelText("關閉")
-//                            .build()
-//                            .setCancelable(true)
-//                            .show();
-//                    break;
-//                }
-//                map.put("phone", phoneNamberEdit.getText().toString());
-//                map.put("code", verifySMSEdit.getText().toString());
-//                ApiManager.verifySMSCode(map, new ThreadCallback(getContext()) {
-//                    @Override
-//                    public void onSuccess(String responseBody) {
-//                        Bundle bundle = new Bundle();
-//                        bundle.putString("phone", phoneNamberEdit.getText().toString());
-//                        phoneNamberEdit.setText("");
-//                        verifySMSEdit.setText("");
-//                        readCheckBox.setChecked(false);
-//                        map = Maps.newHashMap();
-//                        BaseActivity.removeAndReplaceWhere(FRAGMENT, PageType.REGISTERED_USER, bundle);
-//                    }
-//
-//                    @Override
-//                    public void onFail(Exception error, String msg) {
-//                        new AlertView.Builder()
-//                                .setContext(getContext())
-//                                .setStyle(AlertView.Style.Alert)
-//                                .setTitle("")
-//                                .setMessage(msg)
-//                                .setCancelText("關閉")
-//                                .build()
-//                                .setCancelable(true)
-//                                .show();
-//                    }
-//                });
+                    @Override
+                    public void onFail(Exception error, String msg) {
+                        new AlertView.Builder()
+                                .setContext(getContext())
+                                .setStyle(AlertView.Style.Alert)
+                                .setTitle("")
+                                .setMessage(msg)
+                                .setCancelText("關閉")
+                                .build()
+                                .setCancelable(true)
+                                .show();
+                    }
+                });
                 break;
         }
     }

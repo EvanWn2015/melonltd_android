@@ -21,6 +21,7 @@ import com.melonltd.naber.view.seller.page.SellerSetUpFragment;
 import com.melonltd.naber.view.seller.page.SellerSimpleInformationFragment;
 import com.melonltd.naber.view.seller.page.SellerStatFragment;
 import com.melonltd.naber.view.user.page.UserAccountDetailFragment;
+import com.melonltd.naber.view.user.page.UserBonusExchangeDetailFragment;
 import com.melonltd.naber.view.user.page.UserBonusExchangeFragment;
 import com.melonltd.naber.view.user.page.UserFoodDetailFragment;
 import com.melonltd.naber.view.user.page.UserFoodListFragment;
@@ -56,6 +57,8 @@ public enum PageType {
     USER_SIMPLE_INFO(R.string.user_page_simple_info_title, 4, UserSimpleInformationFragment.class),
     USER_RESET_PASSWORD(R.string.common_page_reset_password_title, 4, UserResetPasswordFragment.class),
     USER_BONUS_EXCHANGE(R.string.user_page_bonus_exchange_title,4, UserBonusExchangeFragment.class),
+//    UserBonusExchangeDetailFragment
+    USER_BONUS_EXCHANGE_DETAIL(R.string.user_page_bonus_exchange_detail_title,4, UserBonusExchangeDetailFragment.class),
 
     SELLER_SEARCH(R.string.seller_menu_search_btn, 0, SellerSearchFragment.class),
     SELLER_ORDERS(R.string.seller_menu_orders_btn, 1, SellerOrdersFragment.class),

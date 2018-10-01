@@ -2,7 +2,10 @@ package com.melonltd.naber.vo;
 
 import com.google.common.base.MoreObjects;
 
-public class ActivitiesVo {
+import java.io.Serializable;
+
+public class ActivitiesVo implements Serializable {
+
     public String act_uuid;
     public String serial;
     public String act_category;
