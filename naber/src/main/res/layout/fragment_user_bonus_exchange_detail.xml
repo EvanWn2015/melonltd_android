@@ -31,6 +31,7 @@
         app:layout_constraintTop_toBottomOf="@+id/imageView7" />
 
     <TextView
+        android:id="@+id/needBonusText"
         android:layout_width="wrap_content"
         android:layout_height="0dp"
         android:layout_marginEnd="8dp"
@@ -52,7 +53,7 @@
         app:layout_constraintTop_toBottomOf="@+id/titleText" />
 
         <TextView
-            android:id="@+id/textView49"
+            android:id="@+id/haveBonusText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
@@ -60,12 +61,12 @@
             android:layout_marginTop="8dp"
             android:text="擁有紅利"
             android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="@+id/nameText"
+            app:layout_constraintBottom_toBottomOf="@+id/nameEdit"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/nameText" />
+            app:layout_constraintTop_toTopOf="@+id/nameEdit" />
 
         <EditText
-            android:id="@+id/nameText"
+            android:id="@+id/nameEdit"
             android:layout_width="0dp"
             android:layout_height="36dp"
             android:layout_marginEnd="8dp"
@@ -73,14 +74,14 @@
             android:layout_marginTop="8dp"
             android:background="@drawable/naber_white_text_box"
             android:paddingStart="8dp"
-            app:layout_constraintEnd_toStartOf="@+id/textView49"
+            app:layout_constraintEnd_toStartOf="@+id/haveBonusText"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView48" />
 
     <EditText
         android:enabled="false"
-        android:id="@+id/phoneText"
+        android:id="@+id/phoneEdit"
         android:layout_width="match_parent"
         android:layout_height="36dp"
         android:text="0909090909"
@@ -92,56 +93,62 @@
         android:background="@drawable/naber_white_text_box"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/nameText" />
-
-    <EditText
-        android:id="@+id/emailText"
-        android:layout_width="match_parent"
-        android:layout_height="36dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:paddingStart="8dp"
-        android:background="@drawable/naber_white_text_box"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/phoneText" />
-
-    <EditText
-        android:id="@+id/cityText"
-        android:layout_width="wrap_content"
-        android:layout_height="36dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:paddingStart="8dp"
-        android:background="@drawable/naber_white_text_box"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/emailText" />
+        app:layout_constraintTop_toBottomOf="@+id/nameEdit" />
 
         <EditText
-            android:id="@+id/city_areaText"
+            android:id="@+id/emailEdit"
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/naber_white_text_box"
+            android:hint="請輸入Email"
+            android:paddingStart="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/phoneEdit" />
+
+        <EditText
+            android:id="@+id/cityEdit"
+            android:layout_width="wrap_content"
+            android:layout_height="36dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/naber_white_text_box"
+            android:hint="請選擇縣市"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/emailEdit" />
+
+        <EditText
+            android:id="@+id/areaEdit"
             android:layout_width="wrap_content"
             android:layout_height="36dp"
             android:layout_marginEnd="16dp"
             android:layout_marginTop="8dp"
             android:background="@drawable/naber_white_text_box"
+            android:hint="請選擇區域"
+            android:paddingStart="8dp"
+            android:paddingEnd="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/emailEdit" />
+
+        <EditText
+            android:id="@+id/addressEdit"
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/naber_white_text_box"
+            android:hint="請輸入地址"
             android:paddingStart="8dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/emailText" />
-
-    <EditText
-        android:id="@+id/addressText"
-        android:layout_width="match_parent"
-        android:layout_height="36dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:paddingStart="8dp"
-        android:background="@drawable/naber_white_text_box"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/cityText" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cityEdit" />
 
     <Button
         android:id="@+id/serial_btn"
@@ -154,7 +161,7 @@
         android:textColor="@android:color/black"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/addressText" />
+        app:layout_constraintTop_toBottomOf="@+id/addressEdit" />
 
     </android.support.constraint.ConstraintLayout>
 </ScrollView>

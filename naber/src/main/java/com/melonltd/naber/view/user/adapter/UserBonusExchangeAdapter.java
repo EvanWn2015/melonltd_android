@@ -58,7 +58,6 @@ public class UserBonusExchangeAdapter extends RecyclerView.Adapter<UserBonusExch
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView title, content, type;
-        EditText serialChange;
         public ViewHolder(View v) {
             super(v);
             this.title = v.findViewById(R.id.titleText);
