@@ -4,8 +4,8 @@ import com.google.common.base.MoreObjects;
 
 import java.io.Serializable;
 
-public class ContactInfo implements Serializable{
-//    private static final long serialVersionUID = 1L;
+public class ContactInfo implements Serializable {
+    private static final long serialVersionUID = 1279921928557717157L;
     public String name;
     public String phone;
     public String email;
@@ -27,4 +27,5 @@ public class ContactInfo implements Serializable{
                 .add("address", address)
                 .toString();
     }
+
 }

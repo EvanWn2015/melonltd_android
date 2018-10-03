@@ -53,19 +53,6 @@ public class UserBonusExchangeFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-//        List<BonusExchange> list = Lists.newArrayList(
-//                BonusExchange.newInstance("10點", "下次消費折抵3元" ,"(無上限)"),
-//                BonusExchange.newInstance("500點", "KKBOX 30天","(點數卡)"),
-//                BonusExchange.newInstance("667點", "中壢威尼斯","(電影票)"),
-//                BonusExchange.newInstance("767點", "桃園IN89統領","(電影票)"),
-//                BonusExchange.newInstance("767點", "美麗華影城","(電影票)"),
-//                BonusExchange.newInstance("800點", "LINE 240P","(點數卡)"),
-//                BonusExchange.newInstance("834點", "SBC星橋","(電影票)"),
-//                BonusExchange.newInstance("834點", "威秀影城","(電影票)"),
-//                BonusExchange.newInstance("1000點", "SOGO 300","(禮卷)"),
-//                BonusExchange.newInstance("1000點", "MYCARD 300P","(點數卡)")
-//        );
         adapter = new UserBonusExchangeAdapter(list);
     }
 

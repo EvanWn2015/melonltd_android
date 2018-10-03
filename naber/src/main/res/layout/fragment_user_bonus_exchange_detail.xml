@@ -74,26 +74,28 @@
             android:layout_marginTop="8dp"
             android:background="@drawable/naber_white_text_box"
             android:paddingStart="8dp"
+            android:singleLine="true"
             app:layout_constraintEnd_toStartOf="@+id/haveBonusText"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView48" />
 
-    <EditText
-        android:enabled="false"
-        android:id="@+id/phoneEdit"
-        android:layout_width="match_parent"
-        android:layout_height="36dp"
-        android:text="0909090909"
-        android:textSize="16sp"
-        android:paddingStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:background="@drawable/naber_white_text_box"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/nameEdit" />
+        <EditText
+            android:id="@+id/phoneEdit"
+            android:layout_width="match_parent"
+            android:layout_height="36dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/naber_white_text_box"
+            android:enabled="false"
+            android:paddingStart="8dp"
+            android:singleLine="true"
+            android:text="0909090909"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/nameEdit" />
 
         <EditText
             android:id="@+id/emailEdit"
@@ -105,12 +107,14 @@
             android:background="@drawable/naber_white_text_box"
             android:hint="請輸入Email"
             android:paddingStart="8dp"
+            android:singleLine="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/phoneEdit" />
 
-        <EditText
+        <TextView
+            android:gravity="center"
             android:id="@+id/cityEdit"
             android:layout_width="wrap_content"
             android:layout_height="36dp"
@@ -123,16 +127,18 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/emailEdit" />
 
-        <EditText
+        <TextView
             android:id="@+id/areaEdit"
             android:layout_width="wrap_content"
             android:layout_height="36dp"
             android:layout_marginEnd="16dp"
             android:layout_marginTop="8dp"
             android:background="@drawable/naber_white_text_box"
+            android:gravity="center"
             android:hint="請選擇區域"
-            android:paddingStart="8dp"
             android:paddingEnd="8dp"
+            android:paddingStart="8dp"
+            android:visibility="gone"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/emailEdit" />
 
@@ -146,6 +152,7 @@
             android:background="@drawable/naber_white_text_box"
             android:hint="請輸入地址"
             android:paddingStart="8dp"
+            android:singleLine="true"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/cityEdit" />

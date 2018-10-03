@@ -27,6 +27,7 @@ public class ApiUrl {
     public final static String ACT_LIST = DOMAIN + "/common/activities/list";
     public final static String SUBJECTION_REGIONS = DOMAIN + "/common/subjection/region/list";
     public final static String ACT_SUBMIT = DOMAIN + "/activities/submit";
+    public final static String SERIAL_SUBMIT = DOMAIN + "/serial/number/submit";
 
     // user
     public final static String ADVERTISEMENT = DOMAIN + "/naber/advertisement";

@@ -95,6 +95,7 @@ public class BaseIntroActivity extends AppCompatActivity {
             @Override
             public void onFail(Exception error, String msg) {
                 btn_intro.setVisibility(View.VISIBLE);
+                startActivity();
             }
         });
 

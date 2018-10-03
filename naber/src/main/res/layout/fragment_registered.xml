@@ -141,7 +141,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="4dp"
             android:background="@drawable/naber_text_base_line"
-            android:digits="0123456789abcdefghigklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+            android:digits="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
             android:inputType="textPassword"
             android:maxLines="1"
             android:paddingBottom="8dp"
