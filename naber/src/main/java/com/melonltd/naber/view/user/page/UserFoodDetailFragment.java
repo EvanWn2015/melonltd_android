@@ -340,7 +340,6 @@ public class UserFoodDetailFragment extends Fragment implements View.OnClickList
         }
         msg += "數量：" + orderData.count + "\n";
         msg += "金額：" + totalAmountText.getText().toString() + "\n";
-        msg += "品項內容以規格為主！";
 
         new AlertView.Builder()
                 .setContext(getContext())

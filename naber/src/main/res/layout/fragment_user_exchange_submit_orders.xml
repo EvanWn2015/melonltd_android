@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/user_submit_order_page"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/naber_dividing_gray"
-    tools:context=".view.user.page.UserSubmitOrdersFragment">
+    android:id="@+id/user_exchange_submit_order_page"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".view.user.page.UserExchangeSubmitOrdersFragment">
 
     <ScrollView
         android:id="@+id/scrollView2"
@@ -156,50 +155,50 @@
                 android:background="@drawable/naber_white_text_box"
                 android:padding="18dp"
                 android:textSize="14sp"
-                app:layout_constraintBottom_toTopOf="@id/textView82"
+                app:layout_constraintBottom_toTopOf="@id/textView83"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView81" />
-            <TextView
-                android:id="@+id/textView82"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:paddingBottom="8dp"
-                android:paddingLeft="8dp"
-                android:paddingStart="8dp"
-                android:text="選擇折抵紅利"
-                android:textSize="12sp"
-                app:layout_constraintBottom_toTopOf="@+id/userPhoneText"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/userPhoneText"/>
-            <TextView
-                android:id="@+id/bounsChooseText"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:layout_marginStart="8dp"
-                android:background="@drawable/naber_white_text_box"
-                android:padding="18dp"
-                android:textSize="14sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView82"/>
-            <ImageView
-                android:id="@+id/bounsChooseImage"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_marginBottom="4dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginTop="8dp"
-                android:background="@drawable/shape_reverse_triangle"
-                app:layout_constraintBottom_toBottomOf="@+id/bounsChooseText"
-                app:layout_constraintEnd_toEndOf="@+id/bounsChooseText"
-                app:layout_constraintTop_toTopOf="@+id/bounsChooseText" />
+            <!--<TextView-->
+                <!--android:id="@+id/textView82"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginEnd="8dp"-->
+                <!--android:layout_marginStart="8dp"-->
+                <!--android:layout_marginTop="8dp"-->
+                <!--android:paddingBottom="8dp"-->
+                <!--android:paddingLeft="8dp"-->
+                <!--android:paddingStart="8dp"-->
+                <!--android:text="選擇折抵紅利"-->
+                <!--android:textSize="12sp"-->
+                <!--app:layout_constraintBottom_toTopOf="@+id/userPhoneText"-->
+                <!--app:layout_constraintEnd_toEndOf="parent"-->
+                <!--app:layout_constraintStart_toStartOf="parent"-->
+                <!--app:layout_constraintTop_toBottomOf="@+id/userPhoneText"/>-->
+            <!--<TextView-->
+                <!--android:id="@+id/bounsChooseText"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginEnd="8dp"-->
+                <!--android:layout_marginStart="8dp"-->
+                <!--android:background="@drawable/naber_white_text_box"-->
+                <!--android:padding="18dp"-->
+                <!--android:textSize="14sp"-->
+                <!--app:layout_constraintEnd_toEndOf="parent"-->
+                <!--app:layout_constraintStart_toStartOf="parent"-->
+                <!--app:layout_constraintTop_toBottomOf="@+id/textView82"/>-->
+            <!--<ImageView-->
+                <!--android:id="@+id/bounsChooseImage"-->
+                <!--android:layout_width="24dp"-->
+                <!--android:layout_height="24dp"-->
+                <!--android:layout_marginBottom="4dp"-->
+                <!--android:layout_marginEnd="16dp"-->
+                <!--android:layout_marginRight="16dp"-->
+                <!--android:layout_marginTop="8dp"-->
+                <!--android:background="@drawable/shape_reverse_triangle"-->
+                <!--app:layout_constraintBottom_toBottomOf="@+id/bounsChooseText"-->
+                <!--app:layout_constraintEnd_toEndOf="@+id/bounsChooseText"-->
+                <!--app:layout_constraintTop_toTopOf="@+id/bounsChooseText" />-->
             <TextView
                 android:id="@+id/textView83"
                 android:layout_width="0dp"
@@ -215,7 +214,7 @@
                 app:layout_constraintBottom_toTopOf="@+id/mealText"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/bounsChooseText"/>
+                app:layout_constraintTop_toBottomOf="@+id/userPhoneText"/>
             <TextView
                 android:id="@+id/mealText"
                 android:layout_width="0dp"
@@ -274,41 +273,41 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/textView84"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="8dp"
-            android:text="總金額"
-            android:textColor="@android:color/black"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/view8" />
+        <!--<TextView-->
+            <!--android:id="@+id/textView84"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginLeft="16dp"-->
+            <!--android:layout_marginStart="16dp"-->
+            <!--android:layout_marginTop="8dp"-->
+            <!--android:text="總金額"-->
+            <!--android:textColor="@android:color/black"-->
+            <!--app:layout_constraintStart_toStartOf="parent"-->
+            <!--app:layout_constraintTop_toBottomOf="@+id/view8" />-->
 
-        <TextView
-            android:id="@+id/ordersPriceText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:text="$"
-            android:textColor="@color/naber_basis_red"
-            android:textSize="14sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="@+id/textView84"
-            app:layout_constraintTop_toBottomOf="@+id/textView84" />
+        <!--<TextView-->
+            <!--android:id="@+id/ordersPriceText"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginBottom="8dp"-->
+            <!--android:text="$"-->
+            <!--android:textColor="@color/naber_basis_red"-->
+            <!--android:textSize="14sp"-->
+            <!--android:textStyle="bold"-->
+            <!--app:layout_constraintBottom_toBottomOf="parent"-->
+            <!--app:layout_constraintStart_toStartOf="@+id/textView84"-->
+            <!--app:layout_constraintTop_toBottomOf="@+id/textView84" />-->
 
-        <TextView
-            android:id="@+id/ordersBonusText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginStart="8dp"
-            android:textColor="@color/naber_basis_red"
-            android:textSize="12sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/ordersPriceText" />
+        <!--<TextView-->
+            <!--android:id="@+id/ordersBonusText"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_marginBottom="8dp"-->
+            <!--android:layout_marginStart="8dp"-->
+            <!--android:textColor="@color/naber_basis_red"-->
+            <!--android:textSize="12sp"-->
+            <!--app:layout_constraintBottom_toBottomOf="parent"-->
+            <!--app:layout_constraintStart_toEndOf="@+id/ordersPriceText" />-->
 
         <Button
             android:id="@+id/submitOrdersBtn"
@@ -320,9 +319,12 @@
             android:text="送出訂單"
             android:textColor="@android:color/white"
             android:textSize="14sp"
+            android:layout_marginTop="8dp"
+            android:layout_marginBottom="8dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/view8" />
     </android.support.constraint.ConstraintLayout>
+
 
 </android.support.constraint.ConstraintLayout>

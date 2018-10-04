@@ -99,7 +99,6 @@ public class UserBonusExchangeDetailFragment extends Fragment {
         super.onResume();
 
         UserMainActivity.changeTabAndToolbarStatus();
-
         if (UserMainActivity.toolbar != null) {
             UserMainActivity.navigationIconDisplay(true, new View.OnClickListener() {
                 @Override
@@ -108,6 +107,12 @@ public class UserBonusExchangeDetailFragment extends Fragment {
                 }
             });
         }
+
+        holder.emailEdit.setText("");
+        holder.cityEdit.setText("");
+        holder.areaEdit.setText("");
+        holder.addressEdit.setText("");
+
         holder.activitiesVo = (ActivitiesVo) getArguments().getSerializable("BONUS_DETAIL");
         holder.titleText.setText(holder.activitiesVo.title);
         holder.needBonusText.setText("所需紅利(" + holder.activitiesVo.need_bonus + ")");
@@ -219,7 +224,7 @@ public class UserBonusExchangeDetailFragment extends Fragment {
         }
     }
 
-    private class ViewHolder {
+    class ViewHolder {
         TextView titleText, needBonusText, haveBonusText;
         EditText nameEdit, phoneEdit, emailEdit, addressEdit;
         TextView cityEdit, areaEdit;

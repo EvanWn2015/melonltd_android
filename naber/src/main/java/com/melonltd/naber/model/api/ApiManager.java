@@ -333,19 +333,9 @@ public class ApiManager {
         Call call = getClient().postHeader(ApiUrl.ACT_SUBMIT,SPService.getOauth(),Base64Service.encryptBASE64(Tools.JSONPARSE.toJson(req)));
         call.enqueue(callback);
     }
-    public static void serialSubmit(){
-
-    }
     //提交兌換序號
-//    public static func serialSubmit (req: ReqData, ui: UIViewController, onSuccess: @escaping (String) -> (), onFail: @escaping (String) -> ()) {
-//        self.postAutho(url: ApiUrl.SERIAL_SUBMIT, data: ReqData.toJson(structs: req) , ui:ui, complete: { response in
-//            let resp: RespData = RespData.parse(src: base64Decoding(decode: response.result.value!))!
-//            if resp.status.uppercased().elementsEqual(RespStatus.TRUE.rawValue) {
-//                onSuccess("")
-//            }else {
-//                onFail(resp.err_msg)
-//            }
-//        })
-//    }
-
+    public static void serialSubmit(ReqData req,ThreadCallback callback){
+        Call call = getClient().postHeader(ApiUrl.SERIAL_SUBMIT,SPService.getOauth(),Base64Service.encryptBASE64(Tools.JSONPARSE.toJson(req)));
+        call.enqueue(callback);
+    }
 }
