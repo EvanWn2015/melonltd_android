@@ -84,7 +84,7 @@ public class UserExchangeSubmitOrdersFragment extends Fragment implements View.O
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Bundle bundle = new Bundle();
-        Log.i(TAG,bundle.toString());
+
     }
 
     @Override

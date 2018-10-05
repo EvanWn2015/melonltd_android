@@ -46,7 +46,6 @@ public class UserBonusExchangeDetailFragment extends Fragment {
     public ViewHolder holder;
     private List<SubjectionRegionVo> subjectionRegionVo = Lists.newArrayList();
 
-
     private int CITY_INDEX = 0;
     private int AREA_INDEX = 0;
 

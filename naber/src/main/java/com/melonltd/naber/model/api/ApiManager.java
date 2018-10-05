@@ -112,6 +112,11 @@ public class ApiManager {
         Call call = getClient().post(ApiUrl.SUBJECTION_REGIONS);
         call.enqueue(callback);
     }
+    //7.取得區域學校列表
+    public static void getSchoolDivided(ThreadCallback callback){
+        Call call = getClient().post(ApiUrl.SCHOOL_DIVIDED_LIST);
+        call.enqueue(callback);
+    }
 
     /**
      * 以下為使用者是使用 API

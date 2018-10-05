@@ -190,6 +190,7 @@ public class UserBonusExchangeFragment extends Fragment {
 
             final ReqData req = new ReqData();
             req.data = serialChangeEdit.getText().toString();
+            req.data = req.data.toUpperCase();
             ApiManager.serialSubmit(req, new ThreadCallback(getContext()) {
                 @Override
                 public void onSuccess(String responseBody) {
