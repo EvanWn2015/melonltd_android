@@ -312,17 +312,6 @@ public class UserRestaurantListFragment extends Fragment implements View.OnClick
                         })
                         .show();
                 break;
-//            case R.id.filterCategoryBtn:
-
-//                    reqData = new ReqData();
-//                    reqData.search_type = "SCHOOL_DIVIDED";
-//                    reqData.category = "";
-//                    reqData.area = area;
-//                    Log.i(TAG,area);
-//                    reqData.name = name;
-//                    reqData.page = 1;
-//                    doLoadData(true);
-//                break;
             case R.id.filterAreaBtn:
             setFilterBtnsColor(v);
                 reqData = new ReqData();
@@ -428,8 +417,8 @@ public class UserRestaurantListFragment extends Fragment implements View.OnClick
             OptionsPickerView pvOptions = new OptionsPickerBuilder(getContext(), new OnOptionsSelectListener() {
                 @Override
                 public void onOptionsSelect(int index1, int index2, int options3, View v) {
-                    String area = areaVo.get(index1).area;
-                    String name  = schoolVo.get(index1).get(index2);
+                    area = areaVo.get(index1).area;
+                    name  = schoolVo.get(index1).get(index2);
                     reqData = new ReqData();
                     reqData.search_type = "SCHOOL_DIVIDED";
                     reqData.category = "";

@@ -343,4 +343,9 @@ public class ApiManager {
         Call call = getClient().postHeader(ApiUrl.SERIAL_SUBMIT,SPService.getOauth(),Base64Service.encryptBASE64(Tools.JSONPARSE.toJson(req)));
         call.enqueue(callback);
     }
+    //取得兌換序號
+    public static void resEventSubmit(ReqData req,ThreadCallback callback){
+        Call call = getClient().postHeader(ApiUrl.SERIAL,SPService.getOauth(),Base64Service.encryptBASE64(Tools.JSONPARSE.toJson(req)));
+        call.enqueue(callback);
+    }
 }

@@ -16,7 +16,9 @@ import com.google.common.base.Strings;
 import com.melonltd.naber.BuildConfig;
 import com.melonltd.naber.R;
 import com.melonltd.naber.model.api.ApiManager;
+import com.melonltd.naber.model.api.ClientManager;
 import com.melonltd.naber.model.api.ThreadCallback;
+import com.melonltd.naber.model.service.SPService;
 import com.melonltd.naber.util.Tools;
 import com.melonltd.naber.vo.AppVersionLogVo;
 
@@ -45,6 +47,7 @@ public class BaseIntroActivity extends AppCompatActivity {
 //                Log.i(TAG,responseBody);
                 AppVersionLogVo vo = Tools.JSONPARSE.fromJson(responseBody, AppVersionLogVo.class);
                 if (!vo.version.equals(BuildConfig.VERSION_NAME)) {
+                    SPService.removeAll();
                     final String[] action = new String[]{vo.need_upgrade.equals("Y") ? "前往更新" : "我知道了"};
                     new AlertView.Builder()
                             .setContext(BaseIntroActivity.this)

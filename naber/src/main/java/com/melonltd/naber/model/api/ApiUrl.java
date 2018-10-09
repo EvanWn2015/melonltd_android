@@ -29,6 +29,7 @@ public class ApiUrl {
     public final static String SUBJECTION_REGIONS = DOMAIN + "/common/subjection/region/list";
     public final static String ACT_SUBMIT = DOMAIN + "/activities/submit";
     public final static String SERIAL_SUBMIT = DOMAIN + "/serial/number/submit";
+    public final static String SERIAL = DOMAIN + "/serial/res/event/submit";
 
     // user
     public final static String ADVERTISEMENT = DOMAIN + "/naber/advertisement";
@@ -73,7 +74,7 @@ public class ApiUrl {
     public final static String SELLER_RESTAURANT_SETTING_BUSINESS = DOMAIN + "/seller/setting/business";
 
 
-    //        public final static String test = "https://211.75.132.15:8443/api/eca/1/fen/device/list?group_id=11&query_type=4&apsystem=ECA&user_id=ecadmin&dev_categorys=SENSOR";
+//    public final static String test = "https://211.75.132.15:8443/api/eca/1/fen/device/list?group_id=11&query_type=4&apsystem=ECA&user_id=ecadmin&dev_categorys=SENSOR";
 //    public final static String test = "https://ap.melonltd.com.tw/login";
 //    public final static String test = "https://www.ap.melonltd.com.tw/login";
 //    public final static String test ="http://ap.melonltd.com.tw/users";

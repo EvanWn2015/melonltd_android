@@ -45,13 +45,13 @@ public class OrderDetail implements Serializable {
                 .toString();
     }
 
-    public static class OrderType implements  Serializable {
+    public static class OrderType implements Serializable {
         private static final long serialVersionUID = 2277467248368339049L;
         public BillingType billing;
         public Delivery delivery;
 
 
-        OrderType(){
+        public OrderType(){
         }
 
         public static OrderType setDefault(){

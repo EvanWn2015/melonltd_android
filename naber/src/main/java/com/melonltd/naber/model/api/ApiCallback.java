@@ -35,7 +35,6 @@ public abstract class ApiCallback implements Callback {
             return;
         }
         if (e.getMessage().contains("Canceled") || e.getMessage().contains("Socket closed")) {
-//            Log.e(TAG, "fail", e);
         } else {
             onFail(e, e.getMessage());
         }
@@ -57,7 +56,6 @@ public abstract class ApiCallback implements Callback {
             }
 
         } catch (Exception e) {
-//            Log.e(TAG, "fail", e);
             onFailure(call, new IOException("Failed"));
         }
     }

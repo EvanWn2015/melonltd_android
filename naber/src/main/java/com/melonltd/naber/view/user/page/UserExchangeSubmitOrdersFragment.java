@@ -11,13 +11,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.TextView;
 
 import com.bigkoo.alertview.AlertView;
-import com.bigkoo.alertview.OnDismissListener;
 import com.bigkoo.alertview.OnItemClickListener;
 import com.bigkoo.pickerview.builder.OptionsPickerBuilder;
 import com.bigkoo.pickerview.builder.TimePickerBuilder;
@@ -26,28 +27,25 @@ import com.bigkoo.pickerview.listener.OnTimeSelectChangeListener;
 import com.bigkoo.pickerview.listener.OnTimeSelectListener;
 import com.bigkoo.pickerview.view.OptionsPickerView;
 import com.bigkoo.pickerview.view.TimePickerView;
-import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.melonltd.naber.R;
 import com.melonltd.naber.model.api.ApiManager;
 import com.melonltd.naber.model.api.ThreadCallback;
-import com.melonltd.naber.model.bean.Model;
-import com.melonltd.naber.model.constant.NaberConstant;
 import com.melonltd.naber.model.service.SPService;
 import com.melonltd.naber.model.type.BillingType;
 import com.melonltd.naber.model.type.Delivery;
-import com.melonltd.naber.util.IntegerTools;
 import com.melonltd.naber.util.Tools;
+import com.melonltd.naber.util.UiUtil;
 import com.melonltd.naber.view.factory.PageType;
 import com.melonltd.naber.view.user.UserMainActivity;
-import com.melonltd.naber.vo.AccountInfoVo;
+import com.melonltd.naber.vo.ActivitiesVo;
 import com.melonltd.naber.vo.OrderDetail;
+import com.melonltd.naber.vo.ReqData;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 /**
@@ -57,44 +55,42 @@ public class UserExchangeSubmitOrdersFragment extends Fragment implements View.O
     private static final String TAG = UserExchangeSubmitOrdersFragment.class.getSimpleName();
     public static UserExchangeSubmitOrdersFragment FRAGMENT = null;
     private TextView selectDateText, userNameText, userPhoneNumberText,mealText;
+    private ListView exchangeListView;
     private EditText userMessageEdit;
     private TimePickerView timePickerView;
     private CheckBox readRuleCheckBtn;
-    private int dataIndex = -1;
+//    private int dataIndex = -1;
+
+
+    private  ActivitiesVo activities;
+    private  OrderDetail detail;
+
 //    private List<String> options1Items = Lists.newArrayList();
-    private List<String> options2Items = Lists.newArrayList();
+    private List<String> options2Items = Lists.newArrayList("外帶", "內用");
+//    private List<OrderDetail.OrderData> orders = Lists.newArrayList();
     private Handler handler = new Handler();
-    private int useBonus = -1;
 
     public UserExchangeSubmitOrdersFragment() {
 
     }
 
     public Fragment getInstance(Bundle bundle) {
-        if (FRAGMENT == null) {
-            FRAGMENT = new UserExchangeSubmitOrdersFragment();
-        }
-        if (bundle != null) {
-            FRAGMENT.setArguments(bundle);
-        }
-        return FRAGMENT;
+
+        UserExchangeSubmitOrdersFragment fragment = new UserExchangeSubmitOrdersFragment();
+        fragment.setArguments(bundle);
+        return fragment;
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        Bundle bundle = new Bundle();
-
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        if (container.getTag(R.id.user_exchange_submit_order_page) == null) {
-            View v = inflater.inflate(R.layout.fragment_user_exchange_submit_orders, container, false);
-            getViews(v);
-            container.setTag(R.id.user_exchange_submit_order_page, v);
-        }
-        return (View) container.getTag(R.id.user_exchange_submit_order_page);
+        View v = inflater.inflate(R.layout.fragment_user_exchange_submit_orders, container, false);
+        getViews(v);
+        return v;
     }
 
     private void getViews(View v) {
@@ -104,13 +100,24 @@ public class UserExchangeSubmitOrdersFragment extends Fragment implements View.O
         userMessageEdit = v.findViewById(R.id.userMessageEdit);
         readRuleCheckBtn = v.findViewById(R.id.readRuleCheckBtn);
         mealText = v.findViewById(R.id.mealText);
+        exchangeListView = v.findViewById(R.id.exchangeDatas);
+        exchangeListView.setAdapter(new OrderAdapter());
+        // TODO
+        exchangeListView.setClickable(false);
+        exchangeListView.setItemsCanFocus(false);
+        exchangeListView.dispatchSetSelected(false);
+
+
+
         Button submitOrdersBtn = v.findViewById(R.id.submitOrdersBtn);
         UserExchangeSubmitOrdersFragment.HideKeyboard hideKeyboard = new UserExchangeSubmitOrdersFragment.HideKeyboard();
 
+//        bounschooseText.setOnFocusChangeListener(hideKeyboard);
         mealText.setOnFocusChangeListener(hideKeyboard);
-        options2Items.add("內用");
-        options2Items.add("外帶");
+//        options2Items.add("內用");
+//        options2Items.add("外帶");
 
+//        bounschooseText.setOnClickListener(new UserExchangeSubmitOrdersFragment.pickBounsChoose());
         mealText.setOnClickListener(new UserExchangeSubmitOrdersFragment.pickMeal());
         selectDateText.setOnClickListener(this);
         submitOrdersBtn.setOnClickListener(this);
@@ -150,25 +157,33 @@ public class UserExchangeSubmitOrdersFragment extends Fragment implements View.O
     @Override
     public void onResume() {
         super.onResume();
-        useBonus = -1;
+
         UserMainActivity.changeTabAndToolbarStatus();
         if (UserMainActivity.toolbar != null) {
             UserMainActivity.navigationIconDisplay(true, new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     UserShoppingCartFragment.TO_SUBMIT_ORDERS_PAGE_INDEX = -1;
-                    UserMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.USER_SHOPPING_CART, null);
+                    UserMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.USER_BONUS_EXCHANGE, null);
                     UserMainActivity.navigationIconDisplay(false, null);
                 }
             });
         }
 
+        Bundle bundle = this.getArguments();
+
+        activities = (ActivitiesVo)bundle.getSerializable("ACTIVITIES");
+        detail = (OrderDetail)bundle.getSerializable("ORDER_DETAIL");
+        BaseAdapter adapter = (BaseAdapter) exchangeListView.getAdapter();
+        adapter.notifyDataSetChanged();
+        UiUtil.setListViewHeightBasedOnChildren(exchangeListView);
+
+        // TODO set activities.title to TextView
         mealText.setText("外帶");
-        dataIndex = getArguments().getInt(NaberConstant.ORDER_DETAIL_INDEX);
-        Model.USER_CACHE_SHOPPING_CART.get(dataIndex).fetch_date = "";
+
         userNameText.setText(SPService.getUserName());
         userPhoneNumberText.setText(SPService.getUserPhone());
-        userMessageEdit.setText(Model.USER_CACHE_SHOPPING_CART.get(dataIndex).user_message);
+        userMessageEdit.setText("");
         readRuleCheckBtn.setChecked(false);
     }
 
@@ -193,7 +208,7 @@ public class UserExchangeSubmitOrdersFragment extends Fragment implements View.O
                 new OnTimeSelectListener() {
                     @Override
                     public void onTimeSelect(Date date, View v) {
-                        Model.USER_CACHE_SHOPPING_CART.get(dataIndex).fetch_date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSS'Z'").format(date);
+//                        Model.USER_CACHE_SHOPPING_CART.get(dataIndex).fetch_date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSS'Z'").format(date);
                         selectDateText.setText(new SimpleDateFormat("yyyy-MM-dd HH:mm").format(date));
                     }
                 })
@@ -201,11 +216,11 @@ public class UserExchangeSubmitOrdersFragment extends Fragment implements View.O
                     @Override
                     public void onTimeSelectChanged(Date date) {
                         if (startDate.getTime().getTime() > date.getTime()) {
-                            Model.USER_CACHE_SHOPPING_CART.get(dataIndex).fetch_date = "";
+//                            Model.USER_CACHE_SHOPPING_CART.get(dataIndex).fetch_date = "";
                             setDate(startDate);
                         }
                         if (endDate.getTime().getTime() < date.getTime()) {
-                            Model.USER_CACHE_SHOPPING_CART.get(dataIndex).fetch_date = "";
+//                            Model.USER_CACHE_SHOPPING_CART.get(dataIndex).fetch_date = "";
                             setDate(endDate);
                         }
                     }
@@ -240,41 +255,41 @@ public class UserExchangeSubmitOrdersFragment extends Fragment implements View.O
         super.onDestroy();
     }
 
-    class OnResponseAlert implements Runnable {
-        private String msg;
-        private boolean isSuccess;
-
-        OnResponseAlert(String msg, boolean isSuccess) {
-            this.msg = msg;
-            this.isSuccess = isSuccess;
-        }
-
-        @Override
-        public void run() {
-            if (this.isSuccess) {
-                Model.USER_CACHE_SHOPPING_CART.remove(dataIndex);
-                SPService.setUserCacheShoppingCarData(Model.USER_CACHE_SHOPPING_CART);
-            }
-
-            new AlertView.Builder()
-                    .setTitle("")
-                    .setMessage(this.msg)
-                    .setContext(getContext())
-                    .setStyle(AlertView.Style.Alert)
-                    .setOthers(new String[]{"我知道了"})
-                    .build()
-                    .setOnDismissListener(new OnDismissListener() {
-                        @Override
-                        public void onDismiss(Object o) {
-                            if (isSuccess) {
-                                UserShoppingCartFragment.TO_SUBMIT_ORDERS_PAGE_INDEX = -1;
-                                UserMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.USER_ORDER_HISTORY, null);
-                            }
-                        }
-                    })
-                    .show();
-        }
-    }
+//    class OnResponseAlert implements Runnable {
+//        private String msg;
+//        private boolean isSuccess;
+//
+//        OnResponseAlert(String msg, boolean isSuccess) {
+//            this.msg = msg;
+//            this.isSuccess = isSuccess;
+//        }
+//
+//        @Override
+//        public void run() {
+//            if (this.isSuccess) {
+//                Model.USER_CACHE_SHOPPING_CART.remove(dataIndex);
+//                SPService.setUserCacheShoppingCarData(Model.USER_CACHE_SHOPPING_CART);
+//            }
+//
+//            new AlertView.Builder()
+//                    .setTitle("")
+//                    .setMessage(this.msg)
+//                    .setContext(getContext())
+//                    .setStyle(AlertView.Style.Alert)
+//                    .setOthers(new String[]{"我知道了"})
+//                    .build()
+//                    .setOnDismissListener(new OnDismissListener() {
+//                        @Override
+//                        public void onDismiss(Object o) {
+//                            if (isSuccess) {
+//                                UserShoppingCartFragment.TO_SUBMIT_ORDERS_PAGE_INDEX = -1;
+//                                UserMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.USER_ORDER_HISTORY, null);
+//                            }
+//                        }
+//                    })
+//                    .show();
+//        }
+//    }
 
     @Override
     public void onClick(View view) {
@@ -285,8 +300,9 @@ public class UserExchangeSubmitOrdersFragment extends Fragment implements View.O
                 showTimePicker();
                 break;
             case R.id.submitOrdersBtn:
-                Model.USER_CACHE_SHOPPING_CART.get(dataIndex).user_message = userMessageEdit.getText().toString();
-                if (Strings.isNullOrEmpty(Model.USER_CACHE_SHOPPING_CART.get(dataIndex).fetch_date)) {
+
+                // TODO
+                if (Strings.isNullOrEmpty(selectDateText.getText().toString())) {
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
@@ -328,26 +344,25 @@ public class UserExchangeSubmitOrdersFragment extends Fragment implements View.O
                                         @Override
                                         public void onItemClick(Object o, int position) {
                                             if (position == 1) {
-                                                OrderDetail orderDetail = Model.USER_CACHE_SHOPPING_CART.get(dataIndex);
-                                                orderDetail.order_type.delivery = mealText.getText().toString().equals("外帶") ? Delivery.OUT : Delivery.IN;
-                                                ApiManager.userOrderSubmit(Model.USER_CACHE_SHOPPING_CART.get(dataIndex), new ThreadCallback(getContext()) {
+                                                detail.order_type = new OrderDetail.OrderType();
+                                                detail.order_type.billing = BillingType.COUPON;
+                                                detail.order_type.delivery = mealText.getText().toString().equals("外帶") ? Delivery.OUT : Delivery.IN;
+
+                                                Log.i(TAG, detail.toString());
+
+                                                ReqData req = new ReqData();
+                                                req.uuid = activities.act_uuid;
+                                                req.data = Tools.JSONPARSE.toJson(detail);
+
+                                                ApiManager.resEventSubmit(req, new ThreadCallback(getContext()) {
                                                     @Override
                                                     public void onSuccess(String responseBody) {
-                                                        handler.postDelayed(new OnResponseAlert(
-                                                                "商家已看到您的訂單囉！\n" +
-                                                                        "你可前往訂單頁面查看商品狀態，\n" +
-                                                                        "提醒您，商品只保留至取餐時間後20分鐘。",
-                                                                true), 500);
+
                                                     }
 
                                                     @Override
                                                     public void onFail(Exception error, String msg) {
-                                                        Iterator<String> iterator = Splitter.on("$split").split(msg).iterator();
-                                                        String content_text = "";
-                                                        while (iterator.hasNext()) {
-                                                            content_text += iterator.next() + "\n";
-                                                        }
-                                                        handler.postDelayed(new OnResponseAlert(content_text, false), 500);
+
                                                     }
                                                 });
                                             }
@@ -359,7 +374,6 @@ public class UserExchangeSubmitOrdersFragment extends Fragment implements View.O
                         }
                     }, 500);
                 }
-//                submitOrder();
                 break;
 
         }
@@ -410,6 +424,81 @@ public class UserExchangeSubmitOrdersFragment extends Fragment implements View.O
             });
             pvOptions.setPicker(options2Items);
             pvOptions.show();
+        }
+    }
+
+    class OrderAdapter extends BaseAdapter {
+        @Override
+        public int getCount() {
+            return detail != null ? detail.orders.size() : 0 ;
+//            return orders.size();
+        }
+
+        @Override
+        public Object getItem(int i) {
+            return detail.orders.get(i);
+        }
+
+        @Override
+        public long getItemId(int i) {
+            return i;
+        }
+
+        @Override
+        public View getView(int i, View view, ViewGroup viewGroup) {
+            // TODO
+            ViewHolder holder;
+            if (view == null){
+                view = LayoutInflater.from(getContext()).inflate(R.layout.order_detail_datas_item,viewGroup, false);
+                holder = new ViewHolder(view);
+                view.setTag(holder);
+            }else {
+                holder = (ViewHolder) view.getTag();
+            }
+
+            OrderDetail.OrderData data = detail.orders.get(i);
+            holder.countText.setText("X " + data.count);
+            holder.foodNameText.setText(data.item.food_name);
+            String datas = "";
+            datas += "規格 :" ;
+            if (!data.item.scopes.isEmpty()){
+                for(int ii=0; ii<data.item.scopes.size(); ii++){
+                    datas += data.item.scopes.get(ii).name + ", ";
+                }
+                datas += "\n";
+            }else {
+                datas += "預設, ";
+                datas += "\n";
+            }
+
+            if (!data.item.opts.isEmpty()){
+                datas += "附加 :" ;
+                for(int ii=0; ii<data.item.opts.size(); ii++){
+                    datas += data.item.opts.get(ii).name + ", ";
+                }
+                datas += "\n";
+            }
+
+            for(int ii=0; ii< data.item.demands.size(); ii++){
+                datas += data.item.demands.get(ii).name + " ：";
+                for(int jj=0; jj< data.item.demands.get(ii).datas.size(); jj++){
+                    datas += data.item.demands.get(ii).datas.get(jj).name;
+                }
+                datas +="\n";
+            }
+            holder.datasText.setText(datas);
+            return view;
+        }
+
+        class ViewHolder {
+            TextView foodNameText, countText, datasText;
+            ViewHolder(View v){
+                // TODO
+                v.setClickable(false);
+                this.foodNameText = v.findViewById(R.id.nameEdit);
+                this.countText = v.findViewById(R.id.countText);
+                this.datasText = v.findViewById(R.id.datasText);
+            }
         }
     }
 }
