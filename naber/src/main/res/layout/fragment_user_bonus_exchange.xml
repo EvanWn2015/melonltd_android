@@ -28,6 +28,8 @@
                 android:layout_height="wrap_content">
 
                 <EditText
+                    android:inputType="textCapWords"
+                    android:textAllCaps="true"
                     android:lines="1"
                     android:id="@+id/serialChangeEdit"
                     android:layout_width="0dp"

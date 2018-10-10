@@ -9,6 +9,7 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
+import android.text.InputFilter;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -84,24 +85,7 @@ public class UserBonusExchangeFragment extends Fragment {
     private void getViews (View v){
         final Button sendBtn = v.findViewById(R.id.sendBtn);
         serialChangeEdit = v.findViewById(R.id.serialChangeEdit);
-        serialChangeEdit.addTextChangedListener(new TextWatcher() {
-            @Override
-            public void onTextChanged(CharSequence arg0, int arg1, int arg2, int arg3) {
-                String s=arg0.toString();
-                if(!s.equals(s.toUpperCase())) {
-                    s = s.toUpperCase();
-                    serialChangeEdit.setText(s);
-                }
-            }
-            @Override
-            public void beforeTextChanged(CharSequence arg0, int arg1, int arg2,
-                                          int arg3) {
-            }
-            @Override
-            public void afterTextChanged(Editable et) {
-
-            }
-        });
+        serialChangeEdit.setFilters(new InputFilter[]{new InputFilter.AllCaps()});
 
         TextView description = v.findViewById(R.id.descriptionText);
         description.setText("凡是透過NABER訂餐，\n一律回饋消費金額之10%紅利點數\n" +
