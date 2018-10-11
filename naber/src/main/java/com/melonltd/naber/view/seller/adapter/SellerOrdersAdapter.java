@@ -68,7 +68,7 @@ public class SellerOrdersAdapter extends RecyclerView.Adapter<SellerOrdersAdapte
         int use_bonus = IntegerTools.parseInt(Model.SELLER_TMP_ORDERS_LIST.get(position).use_bonus,0);
         if(use_bonus > 0 ){
             int price = IntegerTools.parseInt(Model.SELLER_TMP_ORDERS_LIST.get(position).order_price,0);
-            holder.totalAmountText.setText("$ " + (price - (use_bonus/10*3)));
+            holder.totalAmountText.setText("$ " + (price - (use_bonus/10*3)) + ", 使用紅利: " + use_bonus);
         } else {
             holder.totalAmountText.setText("$ " + Model.SELLER_TMP_ORDERS_LIST.get(position).order_price);
         }

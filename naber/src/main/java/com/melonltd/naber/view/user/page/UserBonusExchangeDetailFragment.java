@@ -1,5 +1,6 @@
 package com.melonltd.naber.view.user.page;
 import android.content.Context;
+import android.net.Uri;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -18,6 +19,10 @@ import com.bigkoo.alertview.OnItemClickListener;
 import com.bigkoo.pickerview.builder.OptionsPickerBuilder;
 import com.bigkoo.pickerview.listener.OnOptionsSelectListener;
 import com.bigkoo.pickerview.view.OptionsPickerView;
+import com.facebook.drawee.backends.pipeline.Fresco;
+import com.facebook.drawee.view.SimpleDraweeView;
+import com.facebook.imagepipeline.request.ImageRequest;
+import com.facebook.imagepipeline.request.ImageRequestBuilder;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.melonltd.naber.R;
@@ -61,8 +66,7 @@ public class UserBonusExchangeDetailFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         subjectionRegionVo.clear();
-
-
+        Fresco.initialize(getContext());
         ApiManager.getSubjectionRegions(new ThreadCallback(getContext()) {
             @Override
             public void onSuccess(String responseBody) {
@@ -115,6 +119,13 @@ public class UserBonusExchangeDetailFragment extends Fragment {
         holder.activitiesVo = (ActivitiesVo) getArguments().getSerializable("BONUS_DETAIL");
         holder.titleText.setText(holder.activitiesVo.title);
         holder.needBonusText.setText("所需紅利(" + holder.activitiesVo.need_bonus + ")");
+
+        if (!Strings.isNullOrEmpty(holder.activitiesVo.photo)) {
+            holder.photoImage.setImageURI(Uri.parse(holder.activitiesVo.photo));
+        } else {
+            ImageRequest request = ImageRequestBuilder.newBuilderWithResourceId(R.drawable.naber_default_image).build();
+            holder.photoImage.setImageURI(request.getSourceUri());
+        }
 
         holder.serial_btn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -228,10 +239,12 @@ public class UserBonusExchangeDetailFragment extends Fragment {
         EditText nameEdit, phoneEdit, emailEdit, addressEdit;
         TextView cityEdit, areaEdit;
         Button serial_btn;
+        SimpleDraweeView photoImage;
         AccountInfoVo accountInfoVo;
         ActivitiesVo activitiesVo;
 
         ViewHolder(View v) {
+            this.photoImage = v.findViewById(R.id.photoImage);
             this.titleText = v.findViewById(R.id.titleText);
             this.needBonusText = v.findViewById(R.id.needBonusText);
             this.haveBonusText = v.findViewById(R.id.haveBonusText);

@@ -70,7 +70,7 @@ public class SellerQuickSearchAdapter extends RecyclerView.Adapter<SellerQuickSe
         int use_bonus = IntegerTools.parseInt(Model.SELLER_QUICK_SEARCH_ORDERS.get(position).use_bonus,0);
         if( use_bonus > 0){
             int price = IntegerTools.parseInt(Model.SELLER_QUICK_SEARCH_ORDERS.get(position).order_price,0);
-            holder.totalAmountText.setText("$ " + (price - (use_bonus/10*3)));
+            holder.totalAmountText.setText("$ " + (price - (use_bonus/10*3)) + ", 使用紅利: " + use_bonus);
         } else {
             holder.totalAmountText.setText("$ " + Model.SELLER_QUICK_SEARCH_ORDERS.get(position).order_price);
         }

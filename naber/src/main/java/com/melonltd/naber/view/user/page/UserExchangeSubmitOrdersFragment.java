@@ -40,6 +40,8 @@ import com.melonltd.naber.util.UiUtil;
 import com.melonltd.naber.view.factory.PageType;
 import com.melonltd.naber.view.user.UserMainActivity;
 import com.melonltd.naber.vo.ActivitiesVo;
+import com.melonltd.naber.vo.DemandsItemVo;
+import com.melonltd.naber.vo.ItemVo;
 import com.melonltd.naber.vo.OrderDetail;
 import com.melonltd.naber.vo.ReqData;
 
@@ -54,20 +56,16 @@ import java.util.List;
 public class UserExchangeSubmitOrdersFragment extends Fragment implements View.OnClickListener{
     private static final String TAG = UserExchangeSubmitOrdersFragment.class.getSimpleName();
     public static UserExchangeSubmitOrdersFragment FRAGMENT = null;
-    private TextView selectDateText, userNameText, userPhoneNumberText,mealText;
+    private TextView selectDateText, userNameText, userPhoneNumberText,mealText,exchangeTitle;
     private ListView exchangeListView;
     private EditText userMessageEdit;
     private TimePickerView timePickerView;
     private CheckBox readRuleCheckBtn;
-//    private int dataIndex = -1;
 
 
     private  ActivitiesVo activities;
     private  OrderDetail detail;
-
-//    private List<String> options1Items = Lists.newArrayList();
     private List<String> options2Items = Lists.newArrayList("外帶", "內用");
-//    private List<OrderDetail.OrderData> orders = Lists.newArrayList();
     private Handler handler = new Handler();
 
     public UserExchangeSubmitOrdersFragment() {
@@ -75,7 +73,6 @@ public class UserExchangeSubmitOrdersFragment extends Fragment implements View.O
     }
 
     public Fragment getInstance(Bundle bundle) {
-
         UserExchangeSubmitOrdersFragment fragment = new UserExchangeSubmitOrdersFragment();
         fragment.setArguments(bundle);
         return fragment;
@@ -100,6 +97,7 @@ public class UserExchangeSubmitOrdersFragment extends Fragment implements View.O
         userMessageEdit = v.findViewById(R.id.userMessageEdit);
         readRuleCheckBtn = v.findViewById(R.id.readRuleCheckBtn);
         mealText = v.findViewById(R.id.mealText);
+        exchangeTitle = v.findViewById(R.id.exchangeTitle);
         exchangeListView = v.findViewById(R.id.exchangeDatas);
         exchangeListView.setAdapter(new OrderAdapter());
         // TODO
@@ -107,17 +105,9 @@ public class UserExchangeSubmitOrdersFragment extends Fragment implements View.O
         exchangeListView.setItemsCanFocus(false);
         exchangeListView.dispatchSetSelected(false);
 
-
-
         Button submitOrdersBtn = v.findViewById(R.id.submitOrdersBtn);
         UserExchangeSubmitOrdersFragment.HideKeyboard hideKeyboard = new UserExchangeSubmitOrdersFragment.HideKeyboard();
-
-//        bounschooseText.setOnFocusChangeListener(hideKeyboard);
         mealText.setOnFocusChangeListener(hideKeyboard);
-//        options2Items.add("內用");
-//        options2Items.add("外帶");
-
-//        bounschooseText.setOnClickListener(new UserExchangeSubmitOrdersFragment.pickBounsChoose());
         mealText.setOnClickListener(new UserExchangeSubmitOrdersFragment.pickMeal());
         selectDateText.setOnClickListener(this);
         submitOrdersBtn.setOnClickListener(this);
@@ -180,7 +170,7 @@ public class UserExchangeSubmitOrdersFragment extends Fragment implements View.O
 
         // TODO set activities.title to TextView
         mealText.setText("外帶");
-
+        exchangeTitle.setText(activities.title);
         userNameText.setText(SPService.getUserName());
         userPhoneNumberText.setText(SPService.getUserPhone());
         userMessageEdit.setText("");
@@ -208,24 +198,26 @@ public class UserExchangeSubmitOrdersFragment extends Fragment implements View.O
                 new OnTimeSelectListener() {
                     @Override
                     public void onTimeSelect(Date date, View v) {
-//                        Model.USER_CACHE_SHOPPING_CART.get(dataIndex).fetch_date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSS'Z'").format(date);
                         selectDateText.setText(new SimpleDateFormat("yyyy-MM-dd HH:mm").format(date));
+                        selectDateText.setTag(Tools.FORMAT.formatDate(date));
                     }
                 })
                 .setTimeSelectChangeListener(new OnTimeSelectChangeListener() {
                     @Override
                     public void onTimeSelectChanged(Date date) {
                         if (startDate.getTime().getTime() > date.getTime()) {
-//                            Model.USER_CACHE_SHOPPING_CART.get(dataIndex).fetch_date = "";
+                            selectDateText.setTag(Tools.FORMAT.formatDate(date));
                             setDate(startDate);
                         }
                         if (endDate.getTime().getTime() < date.getTime()) {
-//                            Model.USER_CACHE_SHOPPING_CART.get(dataIndex).fetch_date = "";
+                            selectDateText.setTag(Tools.FORMAT.formatDate(date));
                             setDate(endDate);
                         }
                     }
                 }).setType(new boolean[]{true, true, true, true, true, false})
                 .setTitleSize(20)
+                .setCancelText("取消")
+                .setSubmitText("確定")
                 .setOutSideCancelable(true)
                 .isCyclic(false)
                 .setTitleBgColor(getResources().getColor(R.color.naber_dividing_line_gray))
@@ -255,42 +247,6 @@ public class UserExchangeSubmitOrdersFragment extends Fragment implements View.O
         super.onDestroy();
     }
 
-//    class OnResponseAlert implements Runnable {
-//        private String msg;
-//        private boolean isSuccess;
-//
-//        OnResponseAlert(String msg, boolean isSuccess) {
-//            this.msg = msg;
-//            this.isSuccess = isSuccess;
-//        }
-//
-//        @Override
-//        public void run() {
-//            if (this.isSuccess) {
-//                Model.USER_CACHE_SHOPPING_CART.remove(dataIndex);
-//                SPService.setUserCacheShoppingCarData(Model.USER_CACHE_SHOPPING_CART);
-//            }
-//
-//            new AlertView.Builder()
-//                    .setTitle("")
-//                    .setMessage(this.msg)
-//                    .setContext(getContext())
-//                    .setStyle(AlertView.Style.Alert)
-//                    .setOthers(new String[]{"我知道了"})
-//                    .build()
-//                    .setOnDismissListener(new OnDismissListener() {
-//                        @Override
-//                        public void onDismiss(Object o) {
-//                            if (isSuccess) {
-//                                UserShoppingCartFragment.TO_SUBMIT_ORDERS_PAGE_INDEX = -1;
-//                                UserMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.USER_ORDER_HISTORY, null);
-//                            }
-//                        }
-//                    })
-//                    .show();
-//        }
-//    }
-
     @Override
     public void onClick(View view) {
         InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
@@ -300,7 +256,6 @@ public class UserExchangeSubmitOrdersFragment extends Fragment implements View.O
                 showTimePicker();
                 break;
             case R.id.submitOrdersBtn:
-
                 // TODO
                 if (Strings.isNullOrEmpty(selectDateText.getText().toString())) {
                     handler.postDelayed(new Runnable() {
@@ -347,22 +302,38 @@ public class UserExchangeSubmitOrdersFragment extends Fragment implements View.O
                                                 detail.order_type = new OrderDetail.OrderType();
                                                 detail.order_type.billing = BillingType.COUPON;
                                                 detail.order_type.delivery = mealText.getText().toString().equals("外帶") ? Delivery.OUT : Delivery.IN;
-
-                                                Log.i(TAG, detail.toString());
-
+                                                detail.fetch_date = (String)selectDateText.getTag();
+                                                detail.use_bonus = "0";
+                                                detail.can_discount = "";
+                                                detail.user_name = SPService.getUserName();
+                                                detail.user_phone = SPService.getUserPhone();
+                                                detail.user_message = userMessageEdit.getText().toString();
+                                                Log.i(TAG,detail.toString());
                                                 ReqData req = new ReqData();
                                                 req.uuid = activities.act_uuid;
                                                 req.data = Tools.JSONPARSE.toJson(detail);
-
+                                                Log.i(TAG,req.toString());
                                                 ApiManager.resEventSubmit(req, new ThreadCallback(getContext()) {
                                                     @Override
                                                     public void onSuccess(String responseBody) {
-
+                                                        UserMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.USER_BONUS_EXCHANGE, null);
                                                     }
-
                                                     @Override
-                                                    public void onFail(Exception error, String msg) {
-
+                                                    public void onFail(Exception error, final String msg) {
+                                                        handler.postDelayed(new Runnable() {
+                                                            @Override
+                                                            public void run() {
+                                                                new AlertView.Builder()
+                                                                        .setContext(getContext())
+                                                                        .setTitle("")
+                                                                        .setMessage(msg)
+                                                                        .setStyle(AlertView.Style.Alert)
+                                                                        .setOthers(new String[]{"我知道了"})
+                                                                        .build()
+                                                                        .setCancelable(false)
+                                                                        .show();
+                                                            }
+                                                        }, 500);
                                                     }
                                                 });
                                             }
@@ -431,7 +402,6 @@ public class UserExchangeSubmitOrdersFragment extends Fragment implements View.O
         @Override
         public int getCount() {
             return detail != null ? detail.orders.size() : 0 ;
-//            return orders.size();
         }
 
         @Override
@@ -470,7 +440,6 @@ public class UserExchangeSubmitOrdersFragment extends Fragment implements View.O
                 datas += "預設, ";
                 datas += "\n";
             }
-
             if (!data.item.opts.isEmpty()){
                 datas += "附加 :" ;
                 for(int ii=0; ii<data.item.opts.size(); ii++){
@@ -478,13 +447,15 @@ public class UserExchangeSubmitOrdersFragment extends Fragment implements View.O
                 }
                 datas += "\n";
             }
-
-            for(int ii=0; ii< data.item.demands.size(); ii++){
-                datas += data.item.demands.get(ii).name + " ：";
-                for(int jj=0; jj< data.item.demands.get(ii).datas.size(); jj++){
-                    datas += data.item.demands.get(ii).datas.get(jj).name;
+            if(!data.item.demands.isEmpty()){
+                datas += "需求: ";
+                for(int ii=0; ii< data.item.demands.size(); ii++){
+                    datas += data.item.demands.get(ii).name + " ：";
+                    for(int jj=0; jj< data.item.demands.get(ii).datas.size(); jj++){
+                        datas += data.item.demands.get(ii).datas.get(jj).name;
+                    }
+                    datas +="\n";
                 }
-                datas +="\n";
             }
             holder.datasText.setText(datas);
             return view;

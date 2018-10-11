@@ -1,5 +1,6 @@
 package com.melonltd.naber.view.common;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
@@ -16,7 +17,6 @@ import com.google.common.base.Strings;
 import com.melonltd.naber.BuildConfig;
 import com.melonltd.naber.R;
 import com.melonltd.naber.model.api.ApiManager;
-import com.melonltd.naber.model.api.ClientManager;
 import com.melonltd.naber.model.api.ThreadCallback;
 import com.melonltd.naber.model.service.SPService;
 import com.melonltd.naber.util.Tools;
@@ -24,46 +24,62 @@ import com.melonltd.naber.vo.AppVersionLogVo;
 
 public class BaseIntroActivity extends AppCompatActivity {
     private static final String TAG =  BaseIntroActivity.class.getSimpleName();
+    private SimpleDraweeView img_intro;
+    private Button btn_intro;
+    private String[] others = new String[]{"我知道了"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Fresco.initialize(this);
         setContentView(R.layout.activity_baseintro);
-        getImage();
-
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        checkapp();
+        img_intro = findViewById(R.id.imageView_intro);
+        btn_intro = findViewById(R.id.btn_intro);
+        btn_intro.setVisibility(View.GONE);
+        btn_intro.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity();
+            }
+        });
+        others = new String[]{"我知道了"};
+        this.checkapp();
     }
 
-    private void checkapp() {
+    private boolean checkapp() {
         ApiManager.checkAppVersion(new ThreadCallback(this) {
             @Override
             public void onSuccess(String responseBody) {
-//                Log.i(TAG,responseBody);
                 AppVersionLogVo vo = Tools.JSONPARSE.fromJson(responseBody, AppVersionLogVo.class);
                 if (!vo.version.equals(BuildConfig.VERSION_NAME)) {
-                    SPService.removeAll();
-                    final String[] action = new String[]{vo.need_upgrade.equals("Y") ? "前往更新" : "我知道了"};
+                    if(vo.need_upgrade.equals("Y")){
+                        SPService.getInstance(getSharedPreferences(getString(R.string.shared_preferences_key), Context.MODE_PRIVATE));
+                        SPService.removeAll();
+                        others = new String[]{"前往更新"};
+                    }
+
                     new AlertView.Builder()
                             .setContext(BaseIntroActivity.this)
                             .setTitle("NABER 系統提示")
                             .setMessage("您目前的APP版本(V" + BuildConfig.VERSION_NAME + ")，不是最新版本(V" + vo.version + ")，為了您的使用權益，\n請前往Google Play更新您的App")
                             .setStyle(AlertView.Style.Alert)
-                            .setOthers(action)
+                            .setOthers(others)
                             .setOnItemClickListener(new OnItemClickListener() {
                                 @Override
                                 public void onItemClick(Object o, int position) {
                                     if (position >= 0) {
-                                        if (action[position].equals("前往更新")) {
+                                        if (others[position].equals("前往更新")) {
                                             // TODO go to google play
                                             Intent intent = new Intent(Intent.ACTION_VIEW);
                                             intent.setData(Uri.parse("market://details?id=com.melonltd.naber"));
                                             startActivity(intent);
+                                        }else {
+                                            getIntro();
                                         }
                                     }
                                 }
@@ -71,20 +87,21 @@ public class BaseIntroActivity extends AppCompatActivity {
                             .build()
                             .setCancelable(false)
                             .show();
+                }else {
+                    getIntro();
                 }
+
             }
             @Override
             public void onFail(Exception error, String msg) {
                 Log.i(TAG,msg);
+                getIntro();
             }
         });
+        return true;
     }
 
-    private void getImage() {
-        final SimpleDraweeView img_intro = findViewById(R.id.imageView_intro);
-        final Button btn_intro = findViewById(R.id.btn_intro);
-        btn_intro.setVisibility(View.GONE);
-
+    private void getIntro() {
         ApiManager.appIntroBulletin(new ThreadCallback(getApplicationContext()) {
             @Override
             public void onSuccess(String responseBody) {
@@ -92,19 +109,11 @@ public class BaseIntroActivity extends AppCompatActivity {
                     startActivity();
                 } else {
                     img_intro.setImageURI(Uri.parse(Tools.JSONPARSE.fromJson(responseBody, String.class)));
+                    btn_intro.setVisibility(View.VISIBLE);
                 }
-                btn_intro.setVisibility(View.VISIBLE);
             }
             @Override
             public void onFail(Exception error, String msg) {
-                btn_intro.setVisibility(View.VISIBLE);
-                startActivity();
-            }
-        });
-
-        btn_intro.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
                 startActivity();
             }
         });

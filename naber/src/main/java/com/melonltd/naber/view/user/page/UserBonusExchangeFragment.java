@@ -85,7 +85,7 @@ public class UserBonusExchangeFragment extends Fragment {
     private void getViews (View v){
         final Button sendBtn = v.findViewById(R.id.sendBtn);
         serialChangeEdit = v.findViewById(R.id.serialChangeEdit);
-        serialChangeEdit.setFilters(new InputFilter[]{new InputFilter.AllCaps()});
+        serialChangeEdit.setFilters(new InputFilter[]{new InputFilter.AllCaps(), new InputFilter.LengthFilter(8)});
 
         TextView description = v.findViewById(R.id.descriptionText);
         description.setText("凡是透過NABER訂餐，\n一律回饋消費金額之10%紅利點數\n" +
@@ -194,7 +194,6 @@ public class UserBonusExchangeFragment extends Fragment {
         imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
         if(!Strings.isNullOrEmpty(serialChangeEdit.getText().toString()) && serialChangeEdit.getText().toString().length() == 8){
 
-//            ActivitiesVo activitiesVo = new ActivitiesVo();
             final ReqData req = new ReqData();
             req.data = serialChangeEdit.getText().toString().toUpperCase();
 

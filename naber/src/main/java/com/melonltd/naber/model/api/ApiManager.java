@@ -1,5 +1,7 @@
 package com.melonltd.naber.model.api;
 
+import android.util.Log;
+
 import com.google.common.collect.Maps;
 import com.melonltd.naber.model.service.Base64Service;
 import com.melonltd.naber.model.service.SPService;
@@ -343,9 +345,9 @@ public class ApiManager {
         Call call = getClient().postHeader(ApiUrl.SERIAL_SUBMIT,SPService.getOauth(),Base64Service.encryptBASE64(Tools.JSONPARSE.toJson(req)));
         call.enqueue(callback);
     }
-    //取得兌換序號
+    //送出活動
     public static void resEventSubmit(ReqData req,ThreadCallback callback){
-        Call call = getClient().postHeader(ApiUrl.SERIAL,SPService.getOauth(),Base64Service.encryptBASE64(Tools.JSONPARSE.toJson(req)));
+        Call call = getClient().postHeader(ApiUrl.SERIAL, SPService.getOauth(), Base64Service.encryptBASE64(Tools.JSONPARSE.toJson(req)));
         call.enqueue(callback);
     }
 }
