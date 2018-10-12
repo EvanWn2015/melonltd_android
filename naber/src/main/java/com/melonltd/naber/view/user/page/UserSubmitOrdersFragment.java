@@ -6,9 +6,6 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.text.Editable;
-import android.text.TextWatcher;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,12 +31,10 @@ import com.google.common.collect.Lists;
 import com.melonltd.naber.R;
 import com.melonltd.naber.model.api.ApiManager;
 import com.melonltd.naber.model.api.ThreadCallback;
-import com.melonltd.naber.model.bean.Model;
 import com.melonltd.naber.model.constant.NaberConstant;
 import com.melonltd.naber.model.service.SPService;
 import com.melonltd.naber.model.type.BillingType;
 import com.melonltd.naber.model.type.Delivery;
-import com.melonltd.naber.model.type.Identity;
 import com.melonltd.naber.util.IntegerTools;
 import com.melonltd.naber.util.Tools;
 import com.melonltd.naber.view.factory.PageType;
@@ -48,7 +43,6 @@ import com.melonltd.naber.vo.AccountInfoVo;
 import com.melonltd.naber.vo.OrderDetail;
 
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.Iterator;
@@ -62,11 +56,14 @@ public class UserSubmitOrdersFragment extends Fragment implements View.OnClickLi
     private EditText userMessageEdit;
     private TimePickerView timePickerView;
     private CheckBox readRuleCheckBtn;
-    private int dataIndex = -1;
+//    private int dataIndex = -1;
     private List<String> options1Items = Lists.newArrayList();
     private List<String> options2Items = Lists.newArrayList();
     private Handler handler = new Handler();
     private int useBonus = -1;
+
+    private List<OrderDetail> cacheSoppingCar = Lists.<OrderDetail>newArrayList();
+    private OrderDetail orderDetail = OrderDetail.getDefInstance();
 
     public UserSubmitOrdersFragment() {
 
@@ -168,6 +165,14 @@ public class UserSubmitOrdersFragment extends Fragment implements View.OnClickLi
                 }
             });
         }
+
+        int dataIndex = getArguments().getInt(NaberConstant.ORDER_DETAIL_INDEX);
+        this.cacheSoppingCar = SPService.getUserCacheShoppingCarData();
+
+        if (dataIndex < this.cacheSoppingCar.size()){
+            this.orderDetail = cacheSoppingCar.get(dataIndex);
+        }
+
         ApiManager.userFindAccountInfo(new ThreadCallback(getContext()) {
             @Override
             public void onSuccess(String responseBody) {
@@ -177,16 +182,28 @@ public class UserSubmitOrdersFragment extends Fragment implements View.OnClickLi
                 int useBonus = IntegerTools.parseInt(account.use_bonus, 0);
                 int canBonus = (userBonus - useBonus)/10;
                 int price = 0;
-                for (int i = 0; i < Model.USER_CACHE_SHOPPING_CART.get(dataIndex).orders.size(); i++) {
-                    price += Integer.parseInt(Model.USER_CACHE_SHOPPING_CART.get(dataIndex).orders.get(i).item.price);
+//                for (int i = 0; i < Model.USER_CACHE_SHOPPING_CART.get(dataIndex).orders.size(); i++) {
+//                    price += Integer.parseInt(Model.USER_CACHE_SHOPPING_CART.get(dataIndex).orders.get(i).item.price);
+//                }
+
+//                if count <= 0 {
+//                    self.selectBnonus.placeholder = "紅利不足折抵"
+//                } else if price < 3 {
+//                    self.selectBnonus.placeholder = "該品項無法折抵"
+//                } else if count > 0 {
+
+
+
+
+                for (int i = 0; i < orderDetail.orders.size(); i++) {
+                    price += Integer.parseInt(orderDetail.orders.get(i).item.price);
                 }
                 if(canBonus < 1){
-                    //TODO 代表無點數可折抵
-
+                    //TODO 代表無點數可折抵 ordersBonusText.setText("")
                 } else if( useBonus >= userBonus){
-                    //TODO 因多端登入，有可能超出以使用所得
+                    //TODO 因多端登入，有可能超出以使用所得 ordersBonusText.setText("")
                 } else if(price < 3){
-                    //TODO 因為訂單價格不滿3元
+                    //TODO 因為訂單價格不滿3元 ordersBonusText.setText("")
                 }else {
                     for (int i = 1; i < canBonus+1; i++) {
                         if( i > (price/3)){
@@ -203,23 +220,37 @@ public class UserSubmitOrdersFragment extends Fragment implements View.OnClickLi
             }
         });
         mealText.setText("外帶");
-        dataIndex = getArguments().getInt(NaberConstant.ORDER_DETAIL_INDEX);
-        Model.USER_CACHE_SHOPPING_CART.get(dataIndex).fetch_date = "";
+
+
+
+//        Model.USER_CACHE_SHOPPING_CART.get(dataIndex).fetch_date = "";
+        this.orderDetail.fetch_date = "";
         userNameText.setText(SPService.getUserName());
         userPhoneNumberText.setText(SPService.getUserPhone());
-        userMessageEdit.setText(Model.USER_CACHE_SHOPPING_CART.get(dataIndex).user_message);
+//        userMessageEdit.setText(Model.USER_CACHE_SHOPPING_CART.get(dataIndex).user_message);
+        userMessageEdit.setText(this.orderDetail.user_message);
         int amount = 0;
-        for (int i = 0; i < Model.USER_CACHE_SHOPPING_CART.get(dataIndex).orders.size(); i++) {
-            amount += Integer.parseInt(Model.USER_CACHE_SHOPPING_CART.get(dataIndex).orders.get(i).item.price);
+//        for (int i = 0; i < Model.USER_CACHE_SHOPPING_CART.get(dataIndex).orders.size(); i++) {
+//            amount += Integer.parseInt(Model.USER_CACHE_SHOPPING_CART.get(dataIndex).orders.get(i).item.price);
+//        }
+        for (int i = 0; i < this.orderDetail.orders.size(); i++) {
+            amount += Integer.parseInt(this.orderDetail.orders.get(i).item.price);
         }
         readRuleCheckBtn.setChecked(false);
         ordersPriceText.setText("$ " + amount);
 
-        if (Model.USER_CACHE_SHOPPING_CART.get(dataIndex).can_discount.equals("N")) {
+        if (this.orderDetail.can_discount.equals("N")) {
             ordersBonusText.setText("該店家不提供紅利");
         } else {
             ordersBonusText.setText("應得紅利 " + ((int) Math.floor(amount / 10d)) + "");
         }
+
+
+//        if (Model.USER_CACHE_SHOPPING_CART.get(dataIndex).can_discount.equals("N")) {
+//            ordersBonusText.setText("該店家不提供紅利");
+//        } else {
+//            ordersBonusText.setText("應得紅利 " + ((int) Math.floor(amount / 10d)) + "");
+//        }
 
     }
 
@@ -246,7 +277,8 @@ public class UserSubmitOrdersFragment extends Fragment implements View.OnClickLi
                 new OnTimeSelectListener() {
                     @Override
                     public void onTimeSelect(Date date, View v) {
-                        Model.USER_CACHE_SHOPPING_CART.get(dataIndex).fetch_date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSS'Z'").format(date);
+                        orderDetail.fetch_date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSS'Z'").format(date);
+//                        Model.USER_CACHE_SHOPPING_CART.get(dataIndex).fetch_date = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSS'Z'").format(date);
                         selectDateText.setText(new SimpleDateFormat("yyyy-MM-dd HH:mm").format(date));
                     }
                 })
@@ -254,11 +286,13 @@ public class UserSubmitOrdersFragment extends Fragment implements View.OnClickLi
                     @Override
                     public void onTimeSelectChanged(Date date) {
                         if (startDate.getTime().getTime() > date.getTime()) {
-                            Model.USER_CACHE_SHOPPING_CART.get(dataIndex).fetch_date = "";
+//                            Model.USER_CACHE_SHOPPING_CART.get(dataIndex).fetch_date = "";
+                            orderDetail.fetch_date = "";
                             setDate(startDate);
                         }
                         if (endDate.getTime().getTime() < date.getTime()) {
-                            Model.USER_CACHE_SHOPPING_CART.get(dataIndex).fetch_date = "";
+//                            Model.USER_CACHE_SHOPPING_CART.get(dataIndex).fetch_date = "";
+                            orderDetail.fetch_date = "";
                             setDate(endDate);
                         }
                     }
@@ -305,8 +339,11 @@ public class UserSubmitOrdersFragment extends Fragment implements View.OnClickLi
         @Override
         public void run() {
             if (this.isSuccess) {
-                Model.USER_CACHE_SHOPPING_CART.remove(dataIndex);
-                SPService.setUserCacheShoppingCarData(Model.USER_CACHE_SHOPPING_CART);
+//                cacheSoppingCar.remove(dataIndex);
+                cacheSoppingCar.remove(orderDetail);
+                SPService.setUserCacheShoppingCarData(cacheSoppingCar);
+//                Model.USER_CACHE_SHOPPING_CART.remove(dataIndex);
+//                SPService.setUserCacheShoppingCarData(Model.USER_CACHE_SHOPPING_CART);
             }
 
             new AlertView.Builder()
@@ -338,8 +375,10 @@ public class UserSubmitOrdersFragment extends Fragment implements View.OnClickLi
                 showTimePicker();
                 break;
             case R.id.submitOrdersBtn:
-                Model.USER_CACHE_SHOPPING_CART.get(dataIndex).user_message = userMessageEdit.getText().toString();
-                if (Strings.isNullOrEmpty(Model.USER_CACHE_SHOPPING_CART.get(dataIndex).fetch_date)) {
+                this.orderDetail.user_message = userMessageEdit.getText().toString();
+//                Model.USER_CACHE_SHOPPING_CART.get(dataIndex).user_message = userMessageEdit.getText().toString();
+//                if (Strings.isNullOrEmpty(Model.USER_CACHE_SHOPPING_CART.get(dataIndex).fetch_date)) {
+                if (Strings.isNullOrEmpty(this.orderDetail.fetch_date)) {
                     handler.postDelayed(new Runnable() {
                         @Override
                         public void run() {
@@ -381,7 +420,7 @@ public class UserSubmitOrdersFragment extends Fragment implements View.OnClickLi
                                         @Override
                                         public void onItemClick(Object o, int position) {
                                             if (position == 1) {
-                                                OrderDetail orderDetail = Model.USER_CACHE_SHOPPING_CART.get(dataIndex);
+//                                                OrderDetail orderDetail = Model.USER_CACHE_SHOPPING_CART.get(dataIndex);
                                                 IntegerTools.parseInt(orderDetail.use_bonus,0);
 
                                                 if(useBonus > 0){
@@ -393,7 +432,9 @@ public class UserSubmitOrdersFragment extends Fragment implements View.OnClickLi
                                                 }
 
                                                 orderDetail.order_type.delivery = mealText.getText().toString().equals("外帶") ? Delivery.OUT : Delivery.IN;
-                                                ApiManager.userOrderSubmit(Model.USER_CACHE_SHOPPING_CART.get(dataIndex), new ThreadCallback(getContext()) {
+//                                                ApiManager.userOrderSubmit(Model.USER_CACHE_SHOPPING_CART.get(dataIndex), new ThreadCallback(getContext()) {
+                                                ApiManager.userOrderSubmit(orderDetail, new ThreadCallback(getContext()) {
+
                                                     @Override
                                                     public void onSuccess(String responseBody) {
                                                         handler.postDelayed(new OnResponseAlert(
@@ -450,12 +491,18 @@ public class UserSubmitOrdersFragment extends Fragment implements View.OnClickLi
                     useBonus =(index1+1)*10;
                     int countBonus = (index1+1)*3;
                         int amount = 0;
-                        for (int i = 0; i < Model.USER_CACHE_SHOPPING_CART.get(dataIndex).orders.size(); i++) {
-                            amount += Integer.parseInt(Model.USER_CACHE_SHOPPING_CART.get(dataIndex).orders.get(i).item.price);
-                        }
-                        ordersPriceText.setText("$ " + (amount- countBonus));
+//                        for (int i = 0; i < Model.USER_CACHE_SHOPPING_CART.get(dataIndex).orders.size(); i++) {
+//                            amount += Integer.parseInt(Model.USER_CACHE_SHOPPING_CART.get(dataIndex).orders.get(i).item.price);
+//                        }
 
-                        if (Model.USER_CACHE_SHOPPING_CART.get(dataIndex).can_discount.equals("N")) {
+                        for (int i = 0; i < orderDetail.orders.size(); i++) {
+                            amount += Integer.parseInt(orderDetail.orders.get(i).item.price);
+                        }
+
+
+                        ordersPriceText.setText("$ " + (amount- countBonus));
+//                        if (Model.USER_CACHE_SHOPPING_CART.get(dataIndex).can_discount.equals("N")) {
+                        if (orderDetail.can_discount.equals("N")) {
                             ordersBonusText.setText("該店家不提供紅利");
                         } else {
                             ordersBonusText.setText("應得紅利 " + ((int) Math.floor((amount - countBonus) / 10d)) + "");
@@ -480,16 +527,27 @@ public class UserSubmitOrdersFragment extends Fragment implements View.OnClickLi
                         useBonus = -1 ;
                         bounschooseText.setText("");
                         int amount = 0;
-                        for (int i = 0; i < Model.USER_CACHE_SHOPPING_CART.get(dataIndex).orders.size(); i++) {
-                            amount += Integer.parseInt(Model.USER_CACHE_SHOPPING_CART.get(dataIndex).orders.get(i).item.price);
+                        for (int i = 0; i < orderDetail.orders.size(); i++) {
+                            amount += Integer.parseInt(orderDetail.orders.get(i).item.price);
                         }
                         ordersPriceText.setText("$ " + amount);
 
-                        if (Model.USER_CACHE_SHOPPING_CART.get(dataIndex).can_discount.equals("N")) {
+                        if (orderDetail.can_discount.equals("N")) {
                             ordersBonusText.setText("該店家不提供紅利");
                         } else {
                             ordersBonusText.setText("應得紅利 " + ((int) Math.floor( amount / 10d)) + "");
                         }
+
+//                        for (int i = 0; i < Model.USER_CACHE_SHOPPING_CART.get(dataIndex).orders.size(); i++) {
+//                            amount += Integer.parseInt(Model.USER_CACHE_SHOPPING_CART.get(dataIndex).orders.get(i).item.price);
+//                        }
+//                        ordersPriceText.setText("$ " + amount);
+//
+//                        if (Model.USER_CACHE_SHOPPING_CART.get(dataIndex).can_discount.equals("N")) {
+//                            ordersBonusText.setText("該店家不提供紅利");
+//                        } else {
+//                            ordersBonusText.setText("應得紅利 " + ((int) Math.floor( amount / 10d)) + "");
+//                        }
                     }
                 }
             });

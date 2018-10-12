@@ -81,7 +81,7 @@ public class BaseActivity extends BaseCore {
                 getSupportFragmentManager().beginTransaction().replace(R.id.baseContainer, fragment, PageType.LOGIN.toClass().getSimpleName()).addToBackStack(fragment.toString()).commit();
             }else {
                 if (Identity.getUserValues().contains(Identity.of(identity))) {
-                    Model.USER_CACHE_SHOPPING_CART = SPService.getUserCacheShoppingCarData();
+//                    Model.USER_CACHE_SHOPPING_CART = SPService.getUserCacheShoppingCarData();
                     startActivity(new Intent(context, UserMainActivity.class));
                 } else if (Identity.SELLERS.equals(Identity.of(identity))) {
                     startActivity(new Intent(context, SellerMainActivity.class));
