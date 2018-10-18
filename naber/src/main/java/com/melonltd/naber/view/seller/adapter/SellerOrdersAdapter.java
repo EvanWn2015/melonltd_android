@@ -2,6 +2,7 @@ package com.melonltd.naber.view.seller.adapter;
 
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,14 +13,16 @@ import com.google.common.base.Strings;
 import com.melonltd.naber.R;
 import com.melonltd.naber.model.bean.Model;
 import com.melonltd.naber.model.constant.NaberConstant;
+import com.melonltd.naber.model.type.Delivery;
 import com.melonltd.naber.model.type.OrderStatus;
+import com.melonltd.naber.util.IntegerTools;
 import com.melonltd.naber.util.Tools;
 import com.melonltd.naber.vo.DemandsItemVo;
 import com.melonltd.naber.vo.ItemVo;
 import com.melonltd.naber.vo.OrderDetail;
 
 public class SellerOrdersAdapter extends RecyclerView.Adapter<SellerOrdersAdapter.ViewHolder> {
-//    private static final String TAG = SellerOrdersAdapter.class.getSimpleName();
+    private static final String TAG = SellerOrdersAdapter.class.getSimpleName();
     private View.OnClickListener cancelListener,failureListener, statusChangeClickListener;
 
     public SellerOrdersAdapter(View.OnClickListener cancelListener, View.OnClickListener  failureListener, View.OnClickListener statusChangeClickListener) {
@@ -50,7 +53,11 @@ public class SellerOrdersAdapter extends RecyclerView.Adapter<SellerOrdersAdapte
         holder.setTag(position);
 
         OrderStatus status = OrderStatus.of(Model.SELLER_TMP_ORDERS_LIST.get(position).status);
-
+        if(Model.SELLER_TMP_ORDERS_LIST.get(position).order_detail.order_type.delivery.equals(Delivery.IN)){
+            holder.mealText.setText("內用");
+        } else if(Model.SELLER_TMP_ORDERS_LIST.get(position).order_detail.order_type.delivery.equals(Delivery.OUT)){
+            holder.mealText.setText("外帶");
+        }
         holder.fetchTimeText.setText(Tools.FORMAT.format(NaberConstant.DATE_FORMAT_PATTERN, "dd日 HH時 mm分", Model.SELLER_TMP_ORDERS_LIST.get(position).fetch_date));
         holder.remarkText.setText(Model.SELLER_TMP_ORDERS_LIST.get(position).user_message);
 
@@ -58,7 +65,13 @@ public class SellerOrdersAdapter extends RecyclerView.Adapter<SellerOrdersAdapte
 
         holder.userPhoneNumberText.setText(Model.SELLER_TMP_ORDERS_LIST.get(position).order_detail.user_phone);
         holder.userNameText.setText(Model.SELLER_TMP_ORDERS_LIST.get(position).order_detail.user_name);
-        holder.totalAmountText.setText("$ " + Model.SELLER_TMP_ORDERS_LIST.get(position).order_price);
+        int use_bonus = IntegerTools.parseInt(Model.SELLER_TMP_ORDERS_LIST.get(position).use_bonus,0);
+        if(use_bonus > 0 ){
+            int price = IntegerTools.parseInt(Model.SELLER_TMP_ORDERS_LIST.get(position).order_price,0);
+            holder.totalAmountText.setText("$ " + (price - (use_bonus/10*3)) + ", 使用紅利: " + use_bonus);
+        } else {
+            holder.totalAmountText.setText("$ " + Model.SELLER_TMP_ORDERS_LIST.get(position).order_price);
+        }
         String content = "";
         for (OrderDetail.OrderData data : Model.SELLER_TMP_ORDERS_LIST.get(position).order_detail.orders) {
             content += data.item.category_name +": " +
@@ -114,7 +127,7 @@ public class SellerOrdersAdapter extends RecyclerView.Adapter<SellerOrdersAdapte
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView foodItemsCountText, foodItemsText, remarkText, fetchTimeText, userPhoneNumberText, userNameText, totalAmountText;
+        private TextView foodItemsCountText, foodItemsText, remarkText, fetchTimeText, userPhoneNumberText, userNameText, totalAmountText,mealText;
         private Button cancelBtn, failureBtn, processingBtn, canFetchBtn, finishBtn;
 
         ViewHolder(View v) {
@@ -129,6 +142,7 @@ public class SellerOrdersAdapter extends RecyclerView.Adapter<SellerOrdersAdapte
             canFetchBtn = v.findViewById(R.id.canFetchBtn);
             finishBtn = v.findViewById(R.id.finishBtn);
 
+            mealText = v.findViewById(R.id.meal_Text);
             fetchTimeText = v.findViewById(R.id.fetchDateText);
             userPhoneNumberText = v.findViewById(R.id.userPhoneText);
             userNameText = v.findViewById(R.id.userNameText);

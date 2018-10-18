@@ -8,6 +8,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,6 +26,7 @@ import com.melonltd.naber.model.api.ApiManager;
 import com.melonltd.naber.model.api.ThreadCallback;
 import com.melonltd.naber.model.bean.Model;
 import com.melonltd.naber.model.constant.NaberConstant;
+import com.melonltd.naber.model.type.Delivery;
 import com.melonltd.naber.model.type.OrderStatus;
 import com.melonltd.naber.util.Tools;
 import com.melonltd.naber.view.seller.SellerMainActivity;
@@ -49,7 +51,7 @@ import static com.melonltd.naber.model.type.OrderStatus.UNFINISH;
 
 
 public class SellerOrdersFragment extends Fragment {
-    //    private static final String TAG = SellerOrdersFragment.class.getSimpleName();
+        private static final String TAG = SellerOrdersFragment.class.getSimpleName();
     public static SellerOrdersFragment FRAGMENT = null;
     private TextView searchDateText;
     private TextView liveText, untreatedText, processingText, canFetchText;
@@ -140,7 +142,6 @@ public class SellerOrdersFragment extends Fragment {
         // setListener
         searchDateText.setOnClickListener(new SelectDateListener());
         TabClickListener tabClickListener = new TabClickListener();
-
 
         liveText.setTag(LIVE);
         untreatedText.setTag(UNFINISH);

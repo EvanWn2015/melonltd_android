@@ -51,7 +51,7 @@ public abstract class ThreadCallback implements Callback {
                     return;
                 }
                 if (e.getMessage().contains("Canceled") || e.getMessage().contains("Socket closed")) {
-//                    Log.e(TAG, "fail", e);
+
                 } else {
                     if (DIALOG != null){
                         DIALOG.cancel();

@@ -31,6 +31,7 @@ import com.melonltd.naber.model.api.ThreadCallback;
 import com.melonltd.naber.model.constant.NaberConstant;
 import com.melonltd.naber.model.service.SPService;
 import com.melonltd.naber.model.type.Identity;
+import com.melonltd.naber.util.IntegerTools;
 import com.melonltd.naber.util.LoadingBarTools;
 import com.melonltd.naber.util.PhotoTools;
 import com.melonltd.naber.util.UpLoadCallBack;
@@ -113,13 +114,19 @@ public class UserAccountDetailFragment extends Fragment implements View.OnClickL
             UserMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.USER_RESET_PASSWORD, null);
         } else {
             holder.accountInfo = (AccountInfoVo) getArguments().getSerializable(NaberConstant.ACCOUNT_INFO);
+            int use_bonus = IntegerTools.parseInt(holder.accountInfo.use_bonus,0);
             if (holder.accountInfo != null) {
                 holder.nameText.setText(holder.accountInfo.name);
                 holder.phoneText.setText(holder.accountInfo.phone);
                 holder.emailText.setText(holder.accountInfo.email);
                 holder.birthdayText.setText(holder.accountInfo.birth_day);
-                holder.bonusText.setText(holder.accountInfo.bonus);
-
+                if(use_bonus > 0){
+                    int bonus = IntegerTools.parseInt(holder.accountInfo.bonus,0);
+                    int newBonus = bonus - use_bonus;
+                    holder.bonusText.setText(""+newBonus);
+                } else {
+                    holder.bonusText.setText(holder.accountInfo.bonus);
+                }
                 holder.identityText.setText(Identity.of(holder.accountInfo.identity).name);
                 if (!Strings.isNullOrEmpty(holder.accountInfo.photo)) {
                     holder.avatarImage.setImageURI(Uri.parse(holder.accountInfo.photo));

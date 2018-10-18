@@ -96,32 +96,32 @@ public class UserMainActivity extends BaseCore implements View.OnClickListener, 
     @Override
     protected void onResume() {
         super.onResume();
-        ApiManager.storeCategoryList(new ApiCallback(context) {
-            @Override
-            public void onSuccess(String responseBody) {
-                List<String> categoryNames = Tools.JSONPARSE.fromJsonList(responseBody, String[].class);
-                NaberConstant.FILTER_CATEGORYS = new String[categoryNames.size()];
-                NaberConstant.FILTER_CATEGORYS = categoryNames.toArray(NaberConstant.FILTER_CATEGORYS);
-            }
-            @Override
-            public void onFail(Exception error, String msg) {
-//                Log.i(TAG, msg);
-            }
-        });
+//        ApiManager.storeCategoryList(new ApiCallback(context) {
+//            @Override
+//            public void onSuccess(String responseBody) {
+//                List<String> categoryNames = Tools.JSONPARSE.fromJsonList(responseBody, String[].class);
+//                NaberConstant.FILTER_CATEGORYS = new String[categoryNames.size()];
+//                NaberConstant.FILTER_CATEGORYS = categoryNames.toArray(NaberConstant.FILTER_CATEGORYS);
+//            }
+//            @Override
+//            public void onFail(Exception error, String msg) {
+////                Log.i(TAG, msg);
+//            }
+//        });
 
-        ApiManager.storeAreaList(new ApiCallback(context) {
-            @Override
-            public void onSuccess(String responseBody) {
-                List<String> areas = Tools.JSONPARSE.fromJsonList(responseBody, String[].class);
-                NaberConstant.FILTER_AREAS = new String[areas.size()];
-                NaberConstant.FILTER_AREAS = areas.toArray(NaberConstant.FILTER_AREAS);
-            }
-
-            @Override
-            public void onFail(Exception error, String msg) {
-
-            }
-        });
+//        ApiManager.storeAreaList(new ApiCallback(context) {
+//            @Override
+//            public void onSuccess(String responseBody) {
+//                List<String> areas = Tools.JSONPARSE.fromJsonList(responseBody, String[].class);
+//                NaberConstant.FILTER_AREAS = new String[areas.size()];
+//                NaberConstant.FILTER_AREAS = areas.toArray(NaberConstant.FILTER_AREAS);
+//            }
+//
+//            @Override
+//            public void onFail(Exception error, String msg) {
+//
+//            }
+//        });
 
 
     }

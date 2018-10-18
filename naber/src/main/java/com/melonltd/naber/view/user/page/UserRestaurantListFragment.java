@@ -11,6 +11,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +22,9 @@ import android.widget.EditText;
 import com.bigkoo.alertview.AlertView;
 import com.bigkoo.alertview.OnDismissListener;
 import com.bigkoo.alertview.OnItemClickListener;
+import com.bigkoo.pickerview.builder.OptionsPickerBuilder;
+import com.bigkoo.pickerview.listener.OnOptionsSelectListener;
+import com.bigkoo.pickerview.view.OptionsPickerView;
 import com.google.common.base.Function;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
@@ -38,16 +42,21 @@ import com.melonltd.naber.vo.LocationVo;
 import com.melonltd.naber.vo.ReqData;
 import com.melonltd.naber.vo.RestaurantInfoVo;
 import com.melonltd.naber.vo.RestaurantTemplate;
+import com.melonltd.naber.vo.SchoolsVo;
+import com.melonltd.naber.vo.SubjectionRegionVo;
 
+import java.util.Collection;
 import java.util.List;
 
 import cn.bingoogolapple.refreshlayout.BGANormalRefreshViewHolder;
 import cn.bingoogolapple.refreshlayout.BGARefreshLayout;
 
+import static com.melonltd.naber.model.constant.NaberConstant.SCHOOL_DIVIDED_TEMP;
+import static com.melonltd.naber.model.constant.NaberConstant.SUBJECTION_REGION;
 import static com.melonltd.naber.view.common.BaseCore.LOCATION_MG;
 
 public class UserRestaurantListFragment extends Fragment implements View.OnClickListener {
-//    private static final String TAG = UserRestaurantListFragment.class.getSimpleName();
+    private static final String TAG = UserRestaurantListFragment.class.getSimpleName();
     public static UserRestaurantListFragment FRAGMENT = null;
     private List<RestaurantTemplate> restaurantTemplates = Lists.<RestaurantTemplate>newArrayList();
     private List<List<RestaurantTemplate>> restaurantTemplatePages = Lists.<List<RestaurantTemplate>>newArrayList();
@@ -56,6 +65,13 @@ public class UserRestaurantListFragment extends Fragment implements View.OnClick
     private List<Button> filterBtns = Lists.newArrayList();
     private ReqData reqData = new ReqData();
     private UserRestaurantAdapter adapter;
+    private boolean INIT_STATUS = true;
+    private List<SchoolsVo> areaVo = Lists.newArrayList();
+    private List<List<String>> schoolVo = Lists.newArrayList();
+    private String area,name;
+
+    private int AREA_INDEX = 0;
+    private int SCHOOL_INDEX = 0;
 //    private Location location;
 
     public static int TO_RESTAURANT_DETAIL_INDEX = -1;
@@ -76,6 +92,25 @@ public class UserRestaurantListFragment extends Fragment implements View.OnClick
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         adapter = new UserRestaurantAdapter(Model.RESTAURANT_INFO_FILTER_LIST, new ItemOnClickListener());
+        ApiManager.getSchoolDivided(new ThreadCallback(getContext()) {
+            @Override
+            public void onSuccess(String responseBody) {
+                List<SchoolsVo> schoolsVos = Tools.JSONPARSE.fromJsonList(responseBody, SchoolsVo[].class);
+                areaVo.addAll(schoolsVos);
+                for(int i = 0;i < areaVo.size(); i++){
+                    List<String> school = Lists.newArrayList();
+                    for(int s = 0;s <areaVo.get(i).getSchools().size(); s++){
+                        String schoolName = areaVo.get(i).getSchools().get(s);
+                        school.add(schoolName);
+                    }
+                    schoolVo.add(school);
+                }
+            }
+            @Override
+            public void onFail(Exception error, String msg) {
+                areaVo.addAll(Tools.JSONPARSE.fromJsonList(SCHOOL_DIVIDED_TEMP,SchoolsVo[].class));
+            }
+        });
     }
 
     @Override
@@ -114,8 +149,12 @@ public class UserRestaurantListFragment extends Fragment implements View.OnClick
         // setListener
         recyclerView.setAdapter(adapter);
 
+        filterNameBtn.setEnabled(false);
+        filterCategoryBtn.setEnabled(false);
+        filterAreaBtn.setEnabled(false);
+
         filterNameBtn.setOnClickListener(this);
-        filterCategoryBtn.setOnClickListener(this);
+        filterCategoryBtn.setOnClickListener(new pickAreaSchool());
         filterAreaBtn.setOnClickListener(this);
         filterDistanceBtn.setOnClickListener(this);
 
@@ -166,7 +205,6 @@ public class UserRestaurantListFragment extends Fragment implements View.OnClick
                 for (int i = 0; i < list.size(); i++) {
                     list.get(i).distance = DistanceTools.getDistance(Model.LOCATION, LocationVo.of(list.get(i).latitude, list.get(i).longitude));
                 }
-
                 if (reqData.search_type.equals("DISTANCE")) {
                     reqData.loadingMore = restaurantTemplatePages.size() > reqData.page;
                     Ordering<RestaurantInfoVo> ordering = Ordering.natural()
@@ -176,8 +214,13 @@ public class UserRestaurantListFragment extends Fragment implements View.OnClick
                                     return info.distance;
                                 }
                             });
-
                     Model.RESTAURANT_INFO_FILTER_LIST.addAll(ordering.sortedCopy(list));
+                    if(INIT_STATUS){
+                        filterNameBtn.setEnabled(true);
+                        filterCategoryBtn.setEnabled(true);
+                        filterAreaBtn.setEnabled(true);
+                        INIT_STATUS = false;
+                    }
                 } else {
                     Model.RESTAURANT_INFO_FILTER_LIST.addAll(list);
                 }
@@ -186,7 +229,9 @@ public class UserRestaurantListFragment extends Fragment implements View.OnClick
 
             @Override
             public void onFail(Exception error, String msg) {
-//                Log.i(TAG, msg);
+                filterNameBtn.setEnabled(true);
+                filterCategoryBtn.setEnabled(true);
+                filterAreaBtn.setEnabled(true);
             }
         });
     }
@@ -267,56 +312,12 @@ public class UserRestaurantListFragment extends Fragment implements View.OnClick
                         })
                         .show();
                 break;
-            case R.id.filterCategoryBtn:
-                new AlertView.Builder()
-                        .setContext(getContext())
-                        .setStyle(AlertView.Style.ActionSheet)
-                        .setCancelText("取消")
-                        .setOthers(NaberConstant.FILTER_CATEGORYS)
-                        .setOnItemClickListener(new OnItemClickListener() {
-                            @Override
-                            public void onItemClick(Object o, int position) {
-                                if (position != -1) {
-                                    setFilterBtnsColor(v);
-                                    if (!reqData.category.equals(NaberConstant.FILTER_CATEGORYS[position])) {
-                                        reqData = new ReqData();
-                                        reqData.search_type = "CATEGORY";
-                                        reqData.category = NaberConstant.FILTER_CATEGORYS[position];
-                                        reqData.page = 1;
-                                        doLoadData(true);
-                                    }
-                                }
-                            }
-                        })
-                        .build()
-                        .setCancelable(true)
-                        .show();
-                break;
             case R.id.filterAreaBtn:
-                new AlertView.Builder()
-                        .setContext(getContext())
-                        .setStyle(AlertView.Style.ActionSheet)
-//                        .setTitle("請選擇區域")
-                        .setOthers(NaberConstant.FILTER_AREAS)
-                        .setCancelText("取消")
-                        .setOnItemClickListener(new OnItemClickListener() {
-                            @Override
-                            public void onItemClick(Object o, int position) {
-                                if (position != -1) {
-                                    setFilterBtnsColor(v);
-                                    if (!reqData.area.equals(NaberConstant.FILTER_AREAS[position])) {
-                                        reqData = new ReqData();
-                                        reqData.search_type = "AREA";
-                                        reqData.area = NaberConstant.FILTER_AREAS[position];
-                                        reqData.page = 1;
-                                        doLoadData(true);
-                                    }
-                                }
-                            }
-                        })
-                        .build()
-                        .setCancelable(true)
-                        .show();
+            setFilterBtnsColor(v);
+                reqData = new ReqData();
+                reqData.search_type = "NOT_SCHOOL";
+                reqData.page = 1;
+                doLoadData(true);
                 break;
             case R.id.filterDistanceBtn:
                 if (Model.LOCATION == null){
@@ -406,6 +407,37 @@ public class UserRestaurantListFragment extends Fragment implements View.OnClick
             bundle.putSerializable(NaberConstant.RESTAURANT_INFO, Model.RESTAURANT_INFO_FILTER_LIST.get(index));
             TO_RESTAURANT_DETAIL_INDEX = index;
             UserMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.USER_RESTAURANT_DETAIL, bundle);
+        }
+    }
+    class pickAreaSchool implements View.OnClickListener {
+        @Override
+        public void onClick(final View view) {
+            InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+            OptionsPickerView pvOptions = new OptionsPickerBuilder(getContext(), new OnOptionsSelectListener() {
+                @Override
+                public void onOptionsSelect(int index1, int index2, int options3, View v) {
+                    area = areaVo.get(index1).area;
+                    name  = schoolVo.get(index1).get(index2);
+                    reqData = new ReqData();
+                    reqData.search_type = "SCHOOL_DIVIDED";
+                    reqData.category = "";
+                    reqData.area = area;
+                    reqData.name = name;
+                    reqData.page = 1;
+                    setFilterBtnsColor(view);
+                    doLoadData(true);
+                }
+            }).setTitleSize(20)
+                    .setSubmitText("確定")//确定按钮文字
+                    .setCancelText("取消")//取消按钮文字
+                    .setTitleBgColor(getResources().getColor(R.color.naber_dividing_line_gray))
+                    .setCancelColor(getResources().getColor(R.color.naber_dividing_gray))
+                    .setSubmitColor(getResources().getColor(R.color.naber_dividing_gray))
+                    .build();
+
+            pvOptions.setPicker(areaVo,schoolVo);
+            pvOptions.show();
         }
     }
 

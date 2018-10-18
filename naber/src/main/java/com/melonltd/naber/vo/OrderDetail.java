@@ -1,6 +1,7 @@
 package com.melonltd.naber.vo;
 
 import com.google.common.base.MoreObjects;
+import com.google.common.collect.Lists;
 import com.melonltd.naber.model.type.BillingType;
 import com.melonltd.naber.model.type.Delivery;
 
@@ -10,16 +11,33 @@ import java.util.List;
 public class OrderDetail implements Serializable {
 
     private static final long serialVersionUID = -5397846887657210105L;
-    public String restaurant_uuid;
-    public String restaurant_name = "";
+    public String restaurant_uuid ;
+    public String restaurant_name ;
     public String restaurant_address;
-    public String can_discount;
-    public String user_name;
-    public String user_phone;
-    public String fetch_date;
-    public String user_message;
-    public OrderType order_type;
-    public List<OrderData> orders;
+    public String can_discount ;
+    public String user_name ;
+    public String user_phone ;
+    public String fetch_date ;
+    public String user_message ;
+    public String use_bonus ;
+    public OrderType order_type ;
+    public List<OrderData> orders ;
+
+    public static OrderDetail getDefInstance(){
+        OrderDetail info = new OrderDetail();
+        info.restaurant_uuid = "";
+        info.restaurant_name = "";
+        info.restaurant_address = "";
+        info.can_discount = "";
+        info.user_name = "";
+        info.user_phone = "";
+        info.fetch_date = "";
+        info.user_message = "";
+        info.use_bonus = "";
+        info.order_type  = OrderType.setDefault();
+        info.orders = Lists.<OrderData>newArrayList();
+        return  info;
+    }
 
     public static OrderDetail ofOrders(List<OrderData> orders) {
         OrderDetail data = new OrderDetail();
@@ -40,16 +58,17 @@ public class OrderDetail implements Serializable {
                 .add("user_message", user_message)
                 .add("order_type", order_type)
                 .add("orders", orders)
+                .add("use_bonus", use_bonus)
                 .toString();
     }
 
-    public static class OrderType implements  Serializable {
+    public static class OrderType implements Serializable {
         private static final long serialVersionUID = 2277467248368339049L;
         public BillingType billing;
         public Delivery delivery;
 
 
-        OrderType(){
+        public OrderType(){
         }
 
         public static OrderType setDefault(){
@@ -71,7 +90,7 @@ public class OrderDetail implements Serializable {
     public static class OrderData implements Serializable {
         private static final long serialVersionUID = -7710327114343945469L;
         public int count;
-        public String category_uuid;
+        public String category_uuid = "";
         public FoodItemVo item = new FoodItemVo();
 
         @Override

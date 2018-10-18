@@ -13,6 +13,7 @@ public class OrderVo implements Serializable{
     public String update_date;
     public String order_price;
     public String order_bonus;
+    public String use_bonus;
     public String fetch_date;
     public String order_data;
     public String status;

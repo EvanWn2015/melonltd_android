@@ -14,6 +14,7 @@ import com.google.common.base.Strings;
 import com.melonltd.naber.R;
 import com.melonltd.naber.model.constant.NaberConstant;
 import com.melonltd.naber.model.type.OrderStatus;
+import com.melonltd.naber.util.IntegerTools;
 import com.melonltd.naber.util.Tools;
 import com.melonltd.naber.view.factory.PageType;
 import com.melonltd.naber.view.seller.SellerMainActivity;
@@ -103,10 +104,16 @@ public class SellerOrderLogsDetailFragment extends Fragment {
 
             foodContentText.setText(content);
             userMessageText.setText(orderVo.user_message);
-            fetchDateText.setText(Tools.FORMAT.format(NaberConstant.DATE_FORMAT_PATTERN, "dd日 HH時 mm分", orderVo.fetch_date));
+            fetchDateText.setText(Tools.FORMAT.format(NaberConstant.DATE_FORMAT_PATTERN, "dd日 HH時 mm分", orderVo.create_date));
             userPhoneText.setText(orderVo.order_detail.user_phone);
             userNameText.setText(orderVo.order_detail.user_name);
-            priceText.setText(orderVo.order_price);
+            int use_bonus = IntegerTools.parseInt(orderVo.use_bonus,0);
+            if(use_bonus > 0){
+                int price = IntegerTools.parseInt(orderVo.order_price,0);
+                priceText.setText(""+ (price - (use_bonus/10*3)));
+            } else {
+                priceText.setText(orderVo.order_price);
+            }
 
             OrderStatus status = OrderStatus.of(orderVo.status);
             statusBtn.setText(status.getText());

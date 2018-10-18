@@ -1,11 +1,14 @@
 package com.melonltd.naber.model.api;
 
+import android.util.Log;
+
 import com.google.common.collect.Maps;
 import com.melonltd.naber.model.service.Base64Service;
 import com.melonltd.naber.model.service.SPService;
 import com.melonltd.naber.util.Tools;
 import com.melonltd.naber.vo.AccountInfoVo;
 import com.melonltd.naber.vo.CategoryRelVo;
+import com.melonltd.naber.vo.ContactInfo;
 import com.melonltd.naber.vo.FoodVo;
 import com.melonltd.naber.vo.OrderDetail;
 import com.melonltd.naber.vo.ReqData;
@@ -100,6 +103,22 @@ public class ApiManager {
         call.enqueue(callback);
     }
 
+    // 5.取得全部營消活動列表
+    public static void getAllActivities(ThreadCallback callback){
+        Call call = getClient().post(ApiUrl.ACT_LIST);
+        call.enqueue(callback);
+    }
+
+    // 6.取得行政區域列表
+    public static void getSubjectionRegions(ThreadCallback callback){
+        Call call = getClient().post(ApiUrl.SUBJECTION_REGIONS);
+        call.enqueue(callback);
+    }
+    //7.取得區域學校列表
+    public static void getSchoolDivided(ThreadCallback callback){
+        Call call = getClient().post(ApiUrl.SCHOOL_DIVIDED_LIST);
+        call.enqueue(callback);
+    }
 
     /**
      * 以下為使用者是使用 API
@@ -316,5 +335,19 @@ public class ApiManager {
         Call call = getClient().postHeader(ApiUrl.SELLER_RESTAURANT_SETTING_BUSINESS, SPService.getOauth(), Base64Service.encryptBASE64(Tools.JSONPARSE.toJson(req)));
         call.enqueue(callback);
     }
-
+    //提交兌換
+    public static void actSubmit(ReqData req,ThreadCallback callback){
+        Call call = getClient().postHeader(ApiUrl.ACT_SUBMIT,SPService.getOauth(),Base64Service.encryptBASE64(Tools.JSONPARSE.toJson(req)));
+        call.enqueue(callback);
+    }
+    //提交兌換序號
+    public static void serialSubmit(ReqData req,ThreadCallback callback){
+        Call call = getClient().postHeader(ApiUrl.SERIAL_SUBMIT,SPService.getOauth(),Base64Service.encryptBASE64(Tools.JSONPARSE.toJson(req)));
+        call.enqueue(callback);
+    }
+    //送出活動
+    public static void resEventSubmit(ReqData req,ThreadCallback callback){
+        Call call = getClient().postHeader(ApiUrl.SERIAL, SPService.getOauth(), Base64Service.encryptBASE64(Tools.JSONPARSE.toJson(req)));
+        call.enqueue(callback);
+    }
 }

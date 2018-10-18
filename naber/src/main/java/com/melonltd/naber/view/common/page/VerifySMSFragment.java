@@ -20,6 +20,7 @@ import com.google.common.collect.Maps;
 import com.melonltd.naber.R;
 import com.melonltd.naber.model.api.ApiManager;
 import com.melonltd.naber.model.api.ThreadCallback;
+import com.melonltd.naber.model.constant.NaberConstant;
 import com.melonltd.naber.util.Tools;
 import com.melonltd.naber.util.VerifyUtil;
 import com.melonltd.naber.view.common.BaseActivity;
@@ -105,9 +106,9 @@ public class VerifySMSFragment extends Fragment implements View.OnClickListener 
     public void onClick(View v) {
         InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
-
         switch (v.getId()) {
             case R.id.requestVerifyCodeBtn:
+
                 if (!readCheckBox.isChecked()) {
                     new AlertView.Builder()
                             .setContext(getContext())
@@ -176,6 +177,14 @@ public class VerifySMSFragment extends Fragment implements View.OnClickListener 
                         .show();
                 break;
             case R.id.submitToRegisteredBun:
+                //TODO test Debug
+                Bundle bundle = new Bundle();
+                bundle.putString("phone", phoneNamberEdit.getText().toString());
+                phoneNamberEdit.setText("");
+                verifySMSEdit.setText("");
+                readCheckBox.setChecked(false);
+                map = Maps.newHashMap();
+                BaseActivity.removeAndReplaceWhere(FRAGMENT, PageType.REGISTERED_USER, bundle);
                 if (Strings.isNullOrEmpty(map.get("batch_id")) || Strings.isNullOrEmpty(phoneNamberEdit.getText().toString()) || Strings.isNullOrEmpty(verifySMSEdit.getText().toString())) {
                     new AlertView.Builder()
                             .setContext(getContext())

@@ -12,7 +12,9 @@ import com.google.common.base.Strings;
 import com.melonltd.naber.R;
 import com.melonltd.naber.model.bean.Model;
 import com.melonltd.naber.model.constant.NaberConstant;
+import com.melonltd.naber.model.type.Delivery;
 import com.melonltd.naber.model.type.OrderStatus;
+import com.melonltd.naber.util.IntegerTools;
 import com.melonltd.naber.util.Tools;
 import com.melonltd.naber.vo.DemandsItemVo;
 import com.melonltd.naber.vo.ItemVo;
@@ -53,6 +55,11 @@ public class SellerQuickSearchAdapter extends RecyclerView.Adapter<SellerQuickSe
         OrderStatus status = OrderStatus.of(Model.SELLER_QUICK_SEARCH_ORDERS.get(position).status);
         holder.ordersStatusText.setText(status.getText());
 
+        if(Model.SELLER_QUICK_SEARCH_ORDERS.get(position).order_detail.order_type.delivery.equals(Delivery.IN)){
+            holder.mealText.setText("內用");
+        } else if(Model.SELLER_QUICK_SEARCH_ORDERS.get(position).order_detail.order_type.delivery.equals(Delivery.OUT)){
+            holder.mealText.setText("外帶");
+        }
         holder.fetchTimeText.setText(Tools.FORMAT.format(NaberConstant.DATE_FORMAT_PATTERN, "dd日 HH時 mm分", Model.SELLER_QUICK_SEARCH_ORDERS.get(position).fetch_date));
         holder.userMessageText.setText(Model.SELLER_QUICK_SEARCH_ORDERS.get(position).user_message);
 
@@ -60,7 +67,14 @@ public class SellerQuickSearchAdapter extends RecyclerView.Adapter<SellerQuickSe
 
         holder.userPhoneNumberText.setText(Model.SELLER_QUICK_SEARCH_ORDERS.get(position).order_detail.user_phone);
         holder.userNameText.setText(Model.SELLER_QUICK_SEARCH_ORDERS.get(position).order_detail.user_name);
-        holder.totalAmountText.setText("$ " + Model.SELLER_QUICK_SEARCH_ORDERS.get(position).order_price);
+        int use_bonus = IntegerTools.parseInt(Model.SELLER_QUICK_SEARCH_ORDERS.get(position).use_bonus,0);
+        if( use_bonus > 0){
+            int price = IntegerTools.parseInt(Model.SELLER_QUICK_SEARCH_ORDERS.get(position).order_price,0);
+            holder.totalAmountText.setText("$ " + (price - (use_bonus/10*3)) + ", 使用紅利: " + use_bonus);
+        } else {
+            holder.totalAmountText.setText("$ " + Model.SELLER_QUICK_SEARCH_ORDERS.get(position).order_price);
+        }
+
 
         String content = "";
         for (OrderDetail.OrderData data : Model.SELLER_QUICK_SEARCH_ORDERS.get(position).order_detail.orders) {
@@ -117,7 +131,7 @@ public class SellerQuickSearchAdapter extends RecyclerView.Adapter<SellerQuickSe
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView ordersStatusText, foodItemsCountText, foodItemsText, userMessageText, fetchTimeText, userPhoneNumberText, userNameText, totalAmountText;
+        private TextView ordersStatusText, foodItemsCountText, foodItemsText, userMessageText, fetchTimeText, userPhoneNumberText, userNameText, totalAmountText,mealText;
         private Button cancelBtn, failureBtn, processingBtn, canFetchBtn, finishBtn;
 
         public ViewHolder(View v) {
@@ -134,6 +148,7 @@ public class SellerQuickSearchAdapter extends RecyclerView.Adapter<SellerQuickSe
             canFetchBtn = v.findViewById(R.id.canFetchBtn);
             finishBtn = v.findViewById(R.id.finishBtn);
 
+            mealText= v.findViewById(R.id.meal_Text);
             fetchTimeText = v.findViewById(R.id.fetchDateText);
             userPhoneNumberText = v.findViewById(R.id.userPhoneText);
             userNameText = v.findViewById(R.id.userNameText);

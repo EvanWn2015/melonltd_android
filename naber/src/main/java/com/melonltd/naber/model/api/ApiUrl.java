@@ -23,6 +23,13 @@ public class ApiUrl {
     public final static String STORE_CATEGORY_LIST = DOMAIN + "/common/store/category/list";
     public final static String STORE_AREA_LIST = DOMAIN + "/common/store/area/list";
     public final static String CHECK_APP_VERSION = DOMAIN + "/common/check/app/version";
+    public final static String SCHOOL_DIVIDED_LIST = DOMAIN + "/common/school/divided/list";
+    //紅利兌換
+    public final static String ACT_LIST = DOMAIN + "/common/activities/list";
+    public final static String SUBJECTION_REGIONS = DOMAIN + "/common/subjection/region/list";
+    public final static String ACT_SUBMIT = DOMAIN + "/activities/submit";
+    public final static String SERIAL_SUBMIT = DOMAIN + "/serial/number/submit";
+    public final static String SERIAL = DOMAIN + "/serial/res/event/submit";
 
     // user
     public final static String ADVERTISEMENT = DOMAIN + "/naber/advertisement";
@@ -38,8 +45,8 @@ public class ApiUrl {
     public final static String RESEAT_PSW = DOMAIN + "/account/update/password";
     public final static String FORGET_PSW = DOMAIN + "/account/forget/password";
 
-    public final static String IMAGE_UPLOAD = DOMAIN + "/image/upload";
 
+    public final static String IMAGE_UPLOAD = DOMAIN + "/image/upload";
 
     // seller
     public final static String SELLER_SORT_FOOD = DOMAIN + "/seller/food/sort";
@@ -67,7 +74,7 @@ public class ApiUrl {
     public final static String SELLER_RESTAURANT_SETTING_BUSINESS = DOMAIN + "/seller/setting/business";
 
 
-    //        public final static String test = "https://211.75.132.15:8443/api/eca/1/fen/device/list?group_id=11&query_type=4&apsystem=ECA&user_id=ecadmin&dev_categorys=SENSOR";
+//    public final static String test = "https://211.75.132.15:8443/api/eca/1/fen/device/list?group_id=11&query_type=4&apsystem=ECA&user_id=ecadmin&dev_categorys=SENSOR";
 //    public final static String test = "https://ap.melonltd.com.tw/login";
 //    public final static String test = "https://www.ap.melonltd.com.tw/login";
 //    public final static String test ="http://ap.melonltd.com.tw/users";

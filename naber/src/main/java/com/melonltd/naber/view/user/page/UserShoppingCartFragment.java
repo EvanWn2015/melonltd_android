@@ -25,14 +25,16 @@ import com.facebook.imagepipeline.request.ImageRequest;
 import com.facebook.imagepipeline.request.ImageRequestBuilder;
 import com.google.common.base.Splitter;
 import com.google.common.base.Strings;
+import com.google.common.collect.Lists;
 import com.melonltd.naber.R;
-import com.melonltd.naber.model.bean.Model;
 import com.melonltd.naber.model.constant.NaberConstant;
 import com.melonltd.naber.model.service.SPService;
 import com.melonltd.naber.view.factory.PageType;
 import com.melonltd.naber.view.user.UserMainActivity;
+import com.melonltd.naber.vo.OrderDetail;
 
 import java.util.Iterator;
+import java.util.List;
 
 import cn.bingoogolapple.refreshlayout.BGANormalRefreshViewHolder;
 import cn.bingoogolapple.refreshlayout.BGARefreshLayout;
@@ -42,6 +44,7 @@ public class UserShoppingCartFragment extends Fragment {
     public static UserShoppingCartFragment FRAGMENT = null;
     private ShoppingCartAdapter adapter;
     public static int TO_SUBMIT_ORDERS_PAGE_INDEX = -1;
+    private List<OrderDetail> cacheShoppingCar = Lists.<OrderDetail>newArrayList();
 
     public UserShoppingCartFragment() {
     }
@@ -98,8 +101,10 @@ public class UserShoppingCartFragment extends Fragment {
             @Override
             public void onBGARefreshLayoutBeginRefreshing(BGARefreshLayout refreshLayout) {
                 bgaRefreshLayout.endRefreshing();
-                Model.USER_CACHE_SHOPPING_CART.clear();
-                Model.USER_CACHE_SHOPPING_CART.addAll(SPService.getUserCacheShoppingCarData());
+//                Model.USER_CACHE_SHOPPING_CART.clear();
+//                Model.USER_CACHE_SHOPPING_CART.addAll(SPService.getUserCacheShoppingCarData());
+                cacheShoppingCar.clear();
+                cacheShoppingCar.addAll(SPService.getUserCacheShoppingCarData());
                 adapter.notifyDataSetChanged();
             }
 
@@ -115,8 +120,10 @@ public class UserShoppingCartFragment extends Fragment {
     public void onResume() {
         super.onResume();
         // 清除 model 已 偏好儲存資料為主，並刷新 model
-        Model.USER_CACHE_SHOPPING_CART.clear();
-        Model.USER_CACHE_SHOPPING_CART.addAll(SPService.getUserCacheShoppingCarData());
+//        Model.USER_CACHE_SHOPPING_CART.clear();
+//        Model.USER_CACHE_SHOPPING_CART.addAll(SPService.getUserCacheShoppingCarData());
+        this.cacheShoppingCar.clear();
+        this.cacheShoppingCar.addAll(SPService.getUserCacheShoppingCarData());
         UserMainActivity.changeTabAndToolbarStatus();
         adapter.notifyDataSetChanged();
     }
@@ -145,8 +152,13 @@ public class UserShoppingCartFragment extends Fragment {
                         @Override
                         public void onItemClick(Object o, int position) {
                             if (position == 0) {
-                                Model.USER_CACHE_SHOPPING_CART.remove(index);
-                                SPService.setUserCacheShoppingCarData(Model.USER_CACHE_SHOPPING_CART);
+
+//                                Model.USER_CACHE_SHOPPING_CART.remove(index);
+//                                SPService.setUserCacheShoppingCarData(Model.USER_CACHE_SHOPPING_CART);
+
+                                cacheShoppingCar.remove(index);
+                                SPService.setUserCacheShoppingCarData(cacheShoppingCar);
+
                                 adapter.notifyItemRemoved(index);
                             }
                         }
@@ -162,13 +174,19 @@ public class UserShoppingCartFragment extends Fragment {
         public void onClick(View v) {
             int index = (int) v.getTag();
             int amount = 0;
-            for (int i = 0; i < Model.USER_CACHE_SHOPPING_CART.get(index).orders.size(); i++) {
-                amount += Integer.parseInt(Model.USER_CACHE_SHOPPING_CART.get(index).orders.get(i).item.price);
+//            for (int i = 0; i < Model.USER_CACHE_SHOPPING_CART.get(index).orders.size(); i++) {
+//                amount += Integer.parseInt(Model.USER_CACHE_SHOPPING_CART.get(index).orders.get(i).item.price);
+//            }
+
+            for (int i = 0; i < cacheShoppingCar.get(index).orders.size(); i++) {
+                amount += Integer.parseInt(cacheShoppingCar.get(index).orders.get(i).item.price);
             }
-            if (amount <= 5000) {
+
+            if (amount <= NaberConstant.ORDER_MAX_AMOUNT) {
                 TO_SUBMIT_ORDERS_PAGE_INDEX = index;
                 Bundle bundle = new Bundle();
                 bundle.putInt(NaberConstant.ORDER_DETAIL_INDEX, index);
+                // 帶 index 到 提交訂單頁面
                 UserMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.USER_SUBMIT_ORDER, bundle);
             } else {
                 new AlertView.Builder()
@@ -190,21 +208,45 @@ public class UserShoppingCartFragment extends Fragment {
             Iterator<String> iterator = Splitter.on("$split").split(v.getTag().toString()).iterator();
             int rootIndex = Integer.parseInt(iterator.next());
             int subIndex = Integer.parseInt(iterator.next());
-            int price = Integer.parseInt(Model.USER_CACHE_SHOPPING_CART.get(rootIndex).orders.get(subIndex).item.price) / Model.USER_CACHE_SHOPPING_CART.get(rootIndex).orders.get(subIndex).count;
+
+            OrderDetail orderDetail = cacheShoppingCar.get(rootIndex);
+
+            int price = Integer.parseInt(orderDetail.orders.get(subIndex).item.price) / orderDetail.orders.get(subIndex).count;
 
             if (v.getId() == R.id.ordersItemAddBtn) {
-                Model.USER_CACHE_SHOPPING_CART.get(rootIndex).orders.get(subIndex).count++;
-                if (Model.USER_CACHE_SHOPPING_CART.get(rootIndex).orders.get(subIndex).count > 50) {
-                    Model.USER_CACHE_SHOPPING_CART.get(rootIndex).orders.get(subIndex).count = 50;
+                orderDetail.orders.get(subIndex).count++;
+                if (orderDetail.orders.get(subIndex).count > 50) {
+                    orderDetail.orders.get(subIndex).count = 50;
                 }
             } else if (v.getId() == R.id.ordersItemMinusBtn) {
-                Model.USER_CACHE_SHOPPING_CART.get(rootIndex).orders.get(subIndex).count--;
-                if (Model.USER_CACHE_SHOPPING_CART.get(rootIndex).orders.get(subIndex).count <= 0) {
-                    Model.USER_CACHE_SHOPPING_CART.get(rootIndex).orders.get(subIndex).count = 1;
+                orderDetail.orders.get(subIndex).count--;
+                if (orderDetail.orders.get(subIndex).count <= 0) {
+                    orderDetail.orders.get(subIndex).count = 1;
                 }
             }
-            Model.USER_CACHE_SHOPPING_CART.get(rootIndex).orders.get(subIndex).item.price = (price * Model.USER_CACHE_SHOPPING_CART.get(rootIndex).orders.get(subIndex).count) + "";
-            SPService.setUserCacheShoppingCarData(Model.USER_CACHE_SHOPPING_CART);
+            orderDetail.orders.get(subIndex).item.price = (price * orderDetail.orders.get(subIndex).count) + "";
+            SPService.setUserCacheShoppingCarData(cacheShoppingCar);
+
+
+
+
+
+
+//            int price = Integer.parseInt(Model.USER_CACHE_SHOPPING_CART.get(rootIndex).orders.get(subIndex).item.price) / Model.USER_CACHE_SHOPPING_CART.get(rootIndex).orders.get(subIndex).count;
+//
+//            if (v.getId() == R.id.ordersItemAddBtn) {
+//                Model.USER_CACHE_SHOPPING_CART.get(rootIndex).orders.get(subIndex).count++;
+//                if (Model.USER_CACHE_SHOPPING_CART.get(rootIndex).orders.get(subIndex).count > 50) {
+//                    Model.USER_CACHE_SHOPPING_CART.get(rootIndex).orders.get(subIndex).count = 50;
+//                }
+//            } else if (v.getId() == R.id.ordersItemMinusBtn) {
+//                Model.USER_CACHE_SHOPPING_CART.get(rootIndex).orders.get(subIndex).count--;
+//                if (Model.USER_CACHE_SHOPPING_CART.get(rootIndex).orders.get(subIndex).count <= 0) {
+//                    Model.USER_CACHE_SHOPPING_CART.get(rootIndex).orders.get(subIndex).count = 1;
+//                }
+//            }
+//            Model.USER_CACHE_SHOPPING_CART.get(rootIndex).orders.get(subIndex).item.price = (price * Model.USER_CACHE_SHOPPING_CART.get(rootIndex).orders.get(subIndex).count) + "";
+//            SPService.setUserCacheShoppingCarData(Model.USER_CACHE_SHOPPING_CART);
             adapter.notifyItemChanged(rootIndex);
         }
     }
@@ -215,9 +257,12 @@ public class UserShoppingCartFragment extends Fragment {
             Iterator<String> iterator = Splitter.on("$split").split(v.getTag().toString()).iterator();
             final int rootIndex = Integer.parseInt(iterator.next());
             int subIndex = Integer.parseInt(iterator.next());
-            if (Model.USER_CACHE_SHOPPING_CART.get(rootIndex).orders.size() > 1) {
-                Model.USER_CACHE_SHOPPING_CART.get(rootIndex).orders.remove(subIndex);
-                SPService.setUserCacheShoppingCarData(Model.USER_CACHE_SHOPPING_CART);
+
+            OrderDetail orderDetail = cacheShoppingCar.get(rootIndex);
+
+            if (orderDetail.orders.size() > 1) {
+                orderDetail.orders.remove(subIndex);
+                SPService.setUserCacheShoppingCarData(cacheShoppingCar);
                 adapter.notifyDataSetChanged();
             } else {
                 new AlertView.Builder()
@@ -230,8 +275,8 @@ public class UserShoppingCartFragment extends Fragment {
                             @Override
                             public void onItemClick(Object o, int position) {
                                 if (position == 0) {
-                                    Model.USER_CACHE_SHOPPING_CART.remove(rootIndex);
-                                    SPService.setUserCacheShoppingCarData(Model.USER_CACHE_SHOPPING_CART);
+                                    cacheShoppingCar.remove(rootIndex);
+                                    SPService.setUserCacheShoppingCarData(cacheShoppingCar);
                                     adapter.notifyDataSetChanged();
                                 }
                             }
@@ -240,6 +285,32 @@ public class UserShoppingCartFragment extends Fragment {
                         .setCancelable(true)
                         .show();
             }
+
+//            if (Model.USER_CACHE_SHOPPING_CART.get(rootIndex).orders.size() > 1) {
+//                Model.USER_CACHE_SHOPPING_CART.get(rootIndex).orders.remove(subIndex);
+//                SPService.setUserCacheShoppingCarData(Model.USER_CACHE_SHOPPING_CART);
+//                adapter.notifyDataSetChanged();
+//            } else {
+//                new AlertView.Builder()
+//                        .setContext(getContext())
+//                        .setStyle(AlertView.Style.Alert)
+//                        .setTitle("")
+//                        .setMessage("剩下最後一筆菜單，\n如果刪除該筆訂單也會連同刪除，\n確定是否刪除!!")
+//                        .setOthers(new String[]{"刪除", "返回"})
+//                        .setOnItemClickListener(new OnItemClickListener() {
+//                            @Override
+//                            public void onItemClick(Object o, int position) {
+//                                if (position == 0) {
+//                                    Model.USER_CACHE_SHOPPING_CART.remove(rootIndex);
+//                                    SPService.setUserCacheShoppingCarData(Model.USER_CACHE_SHOPPING_CART);
+//                                    adapter.notifyDataSetChanged();
+//                                }
+//                            }
+//                        })
+//                        .build()
+//                        .setCancelable(true)
+//                        .show();
+//            }
         }
     }
 
@@ -263,33 +334,61 @@ public class UserShoppingCartFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+            OrderDetail orderDetail = cacheShoppingCar.get(position);
             int amount = 0;
-            for (int i = 0; i < Model.USER_CACHE_SHOPPING_CART.get(position).orders.size(); i++) {
-                amount += Integer.parseInt(Model.USER_CACHE_SHOPPING_CART.get(position).orders.get(i).item.price);
+            for (int i = 0; i < orderDetail.orders.size(); i++) {
+                amount += Integer.parseInt(orderDetail.orders.get(i).item.price);
             }
 
             holder.setSubViews(position);
             holder.totalAmountText.setText(amount + "");
             //  未更新APP會生錯誤
-            if (Strings.isNullOrEmpty(Model.USER_CACHE_SHOPPING_CART.get(position).can_discount)){
-                Model.USER_CACHE_SHOPPING_CART.get(position).can_discount = "Y";
+            if (Strings.isNullOrEmpty(orderDetail.can_discount)){
+                orderDetail.can_discount = "Y";
             }
 
-            if (Model.USER_CACHE_SHOPPING_CART.get(position).can_discount.equals("N")){
+            if (orderDetail.can_discount.equals("N")){
                 holder.bonusText.setText("該店家不提供紅利");
             }else {
                 holder.bonusText.setText(((int) Math.floor(amount / 10d)) + "");
             }
-            holder.nameText.setText(Model.USER_CACHE_SHOPPING_CART.get(position).restaurant_name);
+            holder.nameText.setText(orderDetail.restaurant_name);
             holder.cancelBtn.setTag(position);
             holder.submitBtn.setTag(position);
             holder.cancelBtn.setOnClickListener(this.cancelListener);
             holder.submitBtn.setOnClickListener(this.submitListener);
+
+
+
+
+
+//            int amount = 0;
+//            for (int i = 0; i < Model.USER_CACHE_SHOPPING_CART.get(position).orders.size(); i++) {
+//                amount += Integer.parseInt(Model.USER_CACHE_SHOPPING_CART.get(position).orders.get(i).item.price);
+//            }
+//
+//            holder.setSubViews(position);
+//            holder.totalAmountText.setText(amount + "");
+//            //  未更新APP會生錯誤
+//            if (Strings.isNullOrEmpty(Model.USER_CACHE_SHOPPING_CART.get(position).can_discount)){
+//                Model.USER_CACHE_SHOPPING_CART.get(position).can_discount = "Y";
+//            }
+//
+//            if (Model.USER_CACHE_SHOPPING_CART.get(position).can_discount.equals("N")){
+//                holder.bonusText.setText("該店家不提供紅利");
+//            }else {
+//                holder.bonusText.setText(((int) Math.floor(amount / 10d)) + "");
+//            }
+//            holder.nameText.setText(Model.USER_CACHE_SHOPPING_CART.get(position).restaurant_name);
+//            holder.cancelBtn.setTag(position);
+//            holder.submitBtn.setTag(position);
+//            holder.cancelBtn.setOnClickListener(this.cancelListener);
+//            holder.submitBtn.setOnClickListener(this.submitListener);
         }
 
         @Override
         public int getItemCount() {
-            return Model.USER_CACHE_SHOPPING_CART.size();
+            return cacheShoppingCar.size();
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder {
@@ -313,32 +412,35 @@ public class UserShoppingCartFragment extends Fragment {
 
             public void setSubViews(final int position) {
                 this.layout.removeAllViews();
-                for (int i = 0; i < Model.USER_CACHE_SHOPPING_CART.get(position).orders.size(); i++) {
+
+                OrderDetail orderDetail = cacheShoppingCar.get(position);
+
+                for (int i = 0; i < orderDetail.orders.size(); i++) {
                     FoodItem foodItem = new FoodItem(context, position + "$split" + i);
 
                     String msg = "規格：";
-                    msg += Model.USER_CACHE_SHOPPING_CART.get(position).orders.get(i).item.scopes.get(0).name + "\n";
-                    for (int j = 0; j < Model.USER_CACHE_SHOPPING_CART.get(position).orders.get(i).item.demands.size(); j++) {
-                        msg += Model.USER_CACHE_SHOPPING_CART.get(position).orders.get(i).item.demands.get(j).name + ":";
-                        msg += Model.USER_CACHE_SHOPPING_CART.get(position).orders.get(i).item.demands.get(j).datas.get(0).name + ",";
+                    msg += orderDetail.orders.get(i).item.scopes.get(0).name + "\n";
+                    for (int j = 0; j < orderDetail.orders.get(i).item.demands.size(); j++) {
+                        msg += orderDetail.orders.get(i).item.demands.get(j).name + ":";
+                        msg += orderDetail.orders.get(i).item.demands.get(j).datas.get(0).name + ",";
                     }
                     msg += "\n";
-                    if (Model.USER_CACHE_SHOPPING_CART.get(position).orders.get(i).item.opts.size() > 0) {
+                    if (orderDetail.orders.get(i).item.opts.size() > 0) {
                         msg += "追加：";
-                        for (int k = 0; k < Model.USER_CACHE_SHOPPING_CART.get(position).orders.get(i).item.opts.size(); k++) {
-                            msg += Model.USER_CACHE_SHOPPING_CART.get(position).orders.get(i).item.opts.get(k).name + ",";
+                        for (int k = 0; k < orderDetail.orders.get(i).item.opts.size(); k++) {
+                            msg += orderDetail.orders.get(i).item.opts.get(k).name + ",";
                         }
                     }
 
-                    foodItem.foodNameText.setText(Model.USER_CACHE_SHOPPING_CART.get(position).orders.get(i).item.food_name);
+                    foodItem.foodNameText.setText(orderDetail.orders.get(i).item.food_name);
                     foodItem.detailText.setText(msg);
-                    foodItem.priceText.setText(Model.USER_CACHE_SHOPPING_CART.get(position).orders.get(i).item.price);
-                    foodItem.countText.setText(Model.USER_CACHE_SHOPPING_CART.get(position).orders.get(i).count + "");
+                    foodItem.priceText.setText(orderDetail.orders.get(i).item.price);
+                    foodItem.countText.setText(orderDetail.orders.get(i).count + "");
                     foodItem.addBtn.setOnClickListener(this.foodAddAndMinusListener);
                     foodItem.minusBtn.setOnClickListener(this.foodAddAndMinusListener);
                     foodItem.deleteBtn.setOnClickListener(this.foodDeleteListener);
-                    if (!Strings.isNullOrEmpty(Model.USER_CACHE_SHOPPING_CART.get(position).orders.get(i).item.food_photo)){
-                        foodItem.foodPhotoImageView.setImageURI(Uri.parse(Model.USER_CACHE_SHOPPING_CART.get(position).orders.get(i).item.food_photo));
+                    if (!Strings.isNullOrEmpty(orderDetail.orders.get(i).item.food_photo)){
+                        foodItem.foodPhotoImageView.setImageURI(Uri.parse(orderDetail.orders.get(i).item.food_photo));
                     }else {
                         ImageRequest imageRequest = ImageRequestBuilder.newBuilderWithResourceId(R.drawable.naber_icon_logo_reverse).build();
                         foodItem.foodPhotoImageView.setImageURI(imageRequest.getSourceUri());
@@ -346,6 +448,41 @@ public class UserShoppingCartFragment extends Fragment {
 
                     this.layout.addView(foodItem.getView());
                 }
+
+
+//                for (int i = 0; i < Model.USER_CACHE_SHOPPING_CART.get(position).orders.size(); i++) {
+//                    FoodItem foodItem = new FoodItem(context, position + "$split" + i);
+//
+//                    String msg = "規格：";
+//                    msg += Model.USER_CACHE_SHOPPING_CART.get(position).orders.get(i).item.scopes.get(0).name + "\n";
+//                    for (int j = 0; j < Model.USER_CACHE_SHOPPING_CART.get(position).orders.get(i).item.demands.size(); j++) {
+//                        msg += Model.USER_CACHE_SHOPPING_CART.get(position).orders.get(i).item.demands.get(j).name + ":";
+//                        msg += Model.USER_CACHE_SHOPPING_CART.get(position).orders.get(i).item.demands.get(j).datas.get(0).name + ",";
+//                    }
+//                    msg += "\n";
+//                    if (Model.USER_CACHE_SHOPPING_CART.get(position).orders.get(i).item.opts.size() > 0) {
+//                        msg += "追加：";
+//                        for (int k = 0; k < Model.USER_CACHE_SHOPPING_CART.get(position).orders.get(i).item.opts.size(); k++) {
+//                            msg += Model.USER_CACHE_SHOPPING_CART.get(position).orders.get(i).item.opts.get(k).name + ",";
+//                        }
+//                    }
+//
+//                    foodItem.foodNameText.setText(Model.USER_CACHE_SHOPPING_CART.get(position).orders.get(i).item.food_name);
+//                    foodItem.detailText.setText(msg);
+//                    foodItem.priceText.setText(Model.USER_CACHE_SHOPPING_CART.get(position).orders.get(i).item.price);
+//                    foodItem.countText.setText(Model.USER_CACHE_SHOPPING_CART.get(position).orders.get(i).count + "");
+//                    foodItem.addBtn.setOnClickListener(this.foodAddAndMinusListener);
+//                    foodItem.minusBtn.setOnClickListener(this.foodAddAndMinusListener);
+//                    foodItem.deleteBtn.setOnClickListener(this.foodDeleteListener);
+//                    if (!Strings.isNullOrEmpty(Model.USER_CACHE_SHOPPING_CART.get(position).orders.get(i).item.food_photo)){
+//                        foodItem.foodPhotoImageView.setImageURI(Uri.parse(Model.USER_CACHE_SHOPPING_CART.get(position).orders.get(i).item.food_photo));
+//                    }else {
+//                        ImageRequest imageRequest = ImageRequestBuilder.newBuilderWithResourceId(R.drawable.naber_icon_logo_reverse).build();
+//                        foodItem.foodPhotoImageView.setImageURI(imageRequest.getSourceUri());
+//                    }
+//
+//                    this.layout.addView(foodItem.getView());
+//                }
             }
 
             class FoodItem {

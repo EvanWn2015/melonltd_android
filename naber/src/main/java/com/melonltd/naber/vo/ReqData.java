@@ -23,6 +23,7 @@ public class ReqData {
     public String type = "";
     public String name = "";
     public String status = "";
+    public String data = "";
     public boolean loadingMore = true;
 
     @Override
@@ -43,6 +44,7 @@ public class ReqData {
                 .add("type", type)
                 .add("name", name)
                 .add("status", status)
+                .add("data", data)
                 .toString();
     }
 }

@@ -12,6 +12,7 @@ import android.view.View;
 
 import com.bigkoo.alertview.AlertView;
 import com.bigkoo.alertview.OnItemClickListener;
+import com.google.common.base.Strings;
 import com.melonltd.naber.BuildConfig;
 import com.melonltd.naber.R;
 import com.melonltd.naber.model.api.ApiManager;
@@ -72,12 +73,15 @@ public class BaseActivity extends BaseCore {
     class StartUse implements Runnable {
         @Override
         public void run() {
-            long limit = SPService.getLoginLimit();
-            long now = new Date().getTime();
-            if (now - NaberConstant.REMEMBER_DAY < limit) {
-                String identity = SPService.getIdentity();
+            String identity = SPService.getIdentity();
+            if (Strings.isNullOrEmpty(identity)) {
+                SPService.removeAll();
+                FRAGMENT_TAG = PageType.LOGIN.name();
+                Fragment fragment = PageFragmentFactory.of(PageType.LOGIN, null);
+                getSupportFragmentManager().beginTransaction().replace(R.id.baseContainer, fragment, PageType.LOGIN.toClass().getSimpleName()).addToBackStack(fragment.toString()).commit();
+            }else {
                 if (Identity.getUserValues().contains(Identity.of(identity))) {
-                    Model.USER_CACHE_SHOPPING_CART = SPService.getUserCacheShoppingCarData();
+//                    Model.USER_CACHE_SHOPPING_CART = SPService.getUserCacheShoppingCarData();
                     startActivity(new Intent(context, UserMainActivity.class));
                 } else if (Identity.SELLERS.equals(Identity.of(identity))) {
                     startActivity(new Intent(context, SellerMainActivity.class));
@@ -87,64 +91,29 @@ public class BaseActivity extends BaseCore {
                     Fragment fragment = PageFragmentFactory.of(PageType.LOGIN, null);
                     getSupportFragmentManager().beginTransaction().replace(R.id.baseContainer, fragment, PageType.LOGIN.toClass().getSimpleName()).addToBackStack(fragment.toString()).commit();
                 }
-            } else {
-                FRAGMENT_TAG = PageType.LOGIN.name();
-                Fragment fragment = PageFragmentFactory.of(PageType.LOGIN, null);
-                getSupportFragmentManager().beginTransaction().replace(R.id.baseContainer, fragment).addToBackStack(fragment.toString()).commit();
             }
 
-//            View extView = getLayoutInflater().inflate(R.layout.common_intro, null);
-//            TextView title = extView.findViewById(R.id.title);
-//            TextView body = extView.findViewById(R.id.body);
-//            title.setText("用NABER訂餐享10%紅利回饋紅利兌換項目");
-//            body.setText("    10點 -> 下次消費折抵3元 (無上限)\n"+
-//                        "  500點 -> KKBOX 30天 (點數卡)\n"+
-//                        "  667點 -> 中壢威尼斯 (電影票)\n"+
-//                        "  767點 -> 桃園IN89統領 (電影票)\n"+
-//                        "  767點 -> 美麗華影城 (電影票)\n"+
-//                        "  800點 -> LINE 240P (點數卡)\n"+
-//                        "  834點 -> SBC星橋 (電影票)\n"+
-//                        "  834點 -> 威秀影城(電影票)\n"+
-//                        "1000點 -> SOGO 300(禮卷)\n"+
-//                        "1000點 -> MYCARD 300P (點數卡)\n\n"+
-//                        "* 10月開始兌換獎勵及現金折抵\n"+
-//                        "* 消費10元獲得1點紅利點數\n");
-//
-//            new AlertView.Builder()
-//                    .setContext(context)
-//                    .setStyle(AlertView.Style.Alert)
-//                    .setOthers(new String[]{"開始使用"})
-//                    .setOnItemClickListener(new OnItemClickListener() {
-//                        @Override
-//                        public void onItemClick(Object o, int position) {
-//                            if (position == 0) {
-//                                long limit = SPService.getLoginLimit();
-//                                long now = new Date().getTime();
-//                                if (now - NaberConstant.REMEMBER_DAY < limit) {
-//                                    String identity = SPService.getIdentity();
-//                                    if (Identity.getUserValues().contains(Identity.of(identity))) {
-//                                        Model.USER_CACHE_SHOPPING_CART = SPService.getUserCacheShoppingCarData();
-//                                        startActivity(new Intent(context, UserMainActivity.class));
-//                                    } else if (Identity.SELLERS.equals(Identity.of(identity))) {
-//                                        startActivity(new Intent(context, SellerMainActivity.class));
-//                                    } else {
-//                                        SPService.removeAll();
-//                                        FRAGMENT_TAG = PageType.LOGIN.name();
-//                                        Fragment fragment = PageFragmentFactory.of(PageType.LOGIN, null);
-//                                        getSupportFragmentManager().beginTransaction().replace(R.id.baseContainer, fragment, PageType.LOGIN.toClass().getSimpleName()).addToBackStack(fragment.toString()).commit();
-//                                    }
-//                                } else {
-//                                    FRAGMENT_TAG = PageType.LOGIN.name();
-//                                    Fragment fragment = PageFragmentFactory.of(PageType.LOGIN, null);
-//                                    getSupportFragmentManager().beginTransaction().replace(R.id.baseContainer, fragment).addToBackStack(fragment.toString()).commit();
-//                                }
-//                            }
-//                        }
-//                    })
-//                    .build()
-//                    .addExtView(extView)
-//                    .setCancelable(false)
-//                    .show();
+//            long limit = SPService.getLoginLimit();
+//            long now = new Date().getTime();
+//            if (now - NaberConstant.REMEMBER_DAY < limit) {
+//                String identity = SPService.getIdentity();
+//                if (Identity.getUserValues().contains(Identity.of(identity))) {
+//                    Model.USER_CACHE_SHOPPING_CART = SPService.getUserCacheShoppingCarData();
+//                    startActivity(new Intent(context, UserMainActivity.class));
+//                } else if (Identity.SELLERS.equals(Identity.of(identity))) {
+//                    startActivity(new Intent(context, SellerMainActivity.class));
+//                } else {
+//                    SPService.removeAll();
+//                    FRAGMENT_TAG = PageType.LOGIN.name();
+//                    Fragment fragment = PageFragmentFactory.of(PageType.LOGIN, null);
+//                    getSupportFragmentManager().beginTransaction().replace(R.id.baseContainer, fragment, PageType.LOGIN.toClass().getSimpleName()).addToBackStack(fragment.toString()).commit();
+//                }
+//            } else {
+//                FRAGMENT_TAG = PageType.LOGIN.name();
+//                Fragment fragment = PageFragmentFactory.of(PageType.LOGIN, null);
+//                getSupportFragmentManager().beginTransaction().replace(R.id.baseContainer, fragment).addToBackStack(fragment.toString()).commit();
+//            }
+
         }
     }
 

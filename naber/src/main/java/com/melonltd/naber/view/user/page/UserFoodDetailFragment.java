@@ -23,7 +23,6 @@ import com.google.common.collect.Lists;
 import com.melonltd.naber.R;
 import com.melonltd.naber.model.api.ApiManager;
 import com.melonltd.naber.model.api.ThreadCallback;
-import com.melonltd.naber.model.bean.Model;
 import com.melonltd.naber.model.constant.NaberConstant;
 import com.melonltd.naber.model.service.SPService;
 import com.melonltd.naber.util.DensityUtil;
@@ -32,8 +31,8 @@ import com.melonltd.naber.view.customize.NaberCheckButton;
 import com.melonltd.naber.view.customize.NaberRadioButton;
 import com.melonltd.naber.view.factory.PageType;
 import com.melonltd.naber.view.user.UserMainActivity;
-import com.melonltd.naber.vo.FoodVo;
 import com.melonltd.naber.vo.DemandsItemVo;
+import com.melonltd.naber.vo.FoodVo;
 import com.melonltd.naber.vo.ItemVo;
 import com.melonltd.naber.vo.OrderDetail;
 import com.melonltd.naber.vo.RestaurantInfoVo;
@@ -50,6 +49,7 @@ public class UserFoodDetailFragment extends Fragment implements View.OnClickList
     private int RADIO_BUTTON_WIDTH = 0;
     private int RADIO_BUTTON_HIGH = 0;
     private OrderDetail.OrderData orderData = new OrderDetail.OrderData();
+    private static List<OrderDetail> cacheShoppingCar = Lists.<OrderDetail>newArrayList();
 
     public UserFoodDetailFragment() {
     }
@@ -101,6 +101,8 @@ public class UserFoodDetailFragment extends Fragment implements View.OnClickList
     @Override
     public void onResume() {
         super.onResume();
+
+        this.cacheShoppingCar = SPService.getUserCacheShoppingCarData();
         UserMainActivity.changeTabAndToolbarStatus();
         if (UserMainActivity.toolbar != null) {
             UserMainActivity.navigationIconDisplay(true, new View.OnClickListener() {
@@ -129,7 +131,7 @@ public class UserFoodDetailFragment extends Fragment implements View.OnClickList
                 @Override
                 public void onSuccess(String responseBody) {
                     FoodVo food = Tools.JSONPARSE.fromJson(responseBody, FoodVo.class);
-                    getArguments().putString("FOOd_PHOTO", food.photo);
+                    getArguments().putString("FOOD_PHOTO", food.photo);
                     setScopeView(food.food_data.scopes);
                     setDemandView(food.food_data.demands);
                     setOptView(food.food_data.opts);
@@ -298,9 +300,9 @@ public class UserFoodDetailFragment extends Fragment implements View.OnClickList
         data.item.category_name = categortName;
         data.item.price = totalAmountText.getText().toString();
         data.item.food_name = UserMainActivity.toolbar.getTitle().toString();
-        data.item.food_photo = getArguments().getString("FOOd_PHOTO");
+        data.item.food_photo = getArguments().getString("FOOD_PHOTO");
         boolean has = false;
-        for (OrderDetail o : Model.USER_CACHE_SHOPPING_CART) {
+        for (OrderDetail o : this.cacheShoppingCar) {
             if (restaurantInfo.restaurant_uuid.equals(o.restaurant_uuid)) {
                 o.restaurant_name = restaurantInfo.name;
                 o.order_type = OrderDetail.OrderType.setDefault();
@@ -321,7 +323,7 @@ public class UserFoodDetailFragment extends Fragment implements View.OnClickList
             orderDetail.can_discount = restaurantInfo.can_discount;
             orderDetail.user_name = SPService.getUserName();
             orderDetail.user_phone = SPService.getUserPhone();
-            Model.USER_CACHE_SHOPPING_CART.add(0, orderDetail);
+            this.cacheShoppingCar.add(0, orderDetail);
         }
         String msg = "規格：";
         msg += orderData.item.scopes.get(0).name + "\n";
@@ -340,7 +342,6 @@ public class UserFoodDetailFragment extends Fragment implements View.OnClickList
         }
         msg += "數量：" + orderData.count + "\n";
         msg += "金額：" + totalAmountText.getText().toString() + "\n";
-        msg += "品項內容以規格為主！";
 
         new AlertView.Builder()
                 .setContext(getContext())
@@ -351,7 +352,7 @@ public class UserFoodDetailFragment extends Fragment implements View.OnClickList
                 .setOnItemClickListener(new OnItemClickListener() {
                     @Override
                     public void onItemClick(Object o, int position) {
-                        SPService.setUserCacheShoppingCarData(Model.USER_CACHE_SHOPPING_CART);
+                        SPService.setUserCacheShoppingCarData(cacheShoppingCar);
                         if (position == 0) {
                             UserFoodListFragment.TO_MENU_DETAIL_INDEX = -1;
                             UserMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.USER_SHOPPING_CART, null);

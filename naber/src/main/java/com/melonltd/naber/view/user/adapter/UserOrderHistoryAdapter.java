@@ -8,18 +8,27 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.common.collect.Lists;
 import com.melonltd.naber.R;
-import com.melonltd.naber.model.bean.Model;
 import com.melonltd.naber.model.constant.NaberConstant;
 import com.melonltd.naber.model.type.OrderStatus;
+import com.melonltd.naber.util.IntegerTools;
 import com.melonltd.naber.util.Tools;
 import com.melonltd.naber.vo.OrderDetail;
+import com.melonltd.naber.vo.OrderVo;
+
+import java.util.List;
 
 
 public class UserOrderHistoryAdapter extends RecyclerView.Adapter<UserOrderHistoryAdapter.ViewHolder> {
-//    private static final String TAG = UserOrderHistoryAdapter.class.getSimpleName();
+    private static final String TAG = UserOrderHistoryAdapter.class.getSimpleName();
     private View.OnClickListener itemClickListener;
     private Context context;
+    private List<OrderVo> orderHistoryList = Lists.newArrayList();
+
+    public UserOrderHistoryAdapter(List<OrderVo> orderHistoryList){
+        this.orderHistoryList = orderHistoryList;
+    }
 
     public void setListener(View.OnClickListener itemClickListener){
         this.itemClickListener = itemClickListener;
@@ -37,13 +46,15 @@ public class UserOrderHistoryAdapter extends RecyclerView.Adapter<UserOrderHisto
     @Override
     public void onBindViewHolder(@NonNull UserOrderHistoryAdapter.ViewHolder holder, int position) {
 
+        OrderVo orderVo = orderHistoryList.get(position);
+
         holder.itemView.setTag(position);
         holder.itemView.setOnClickListener(this.itemClickListener);
-        OrderDetail detail = Tools.JSONPARSE.fromJson(Model.USER_ORDER_HISTORY_LIST.get(position).order_data, OrderDetail.class);
-        holder.getOrderTimeText.setText(Tools.FORMAT.format(NaberConstant.DATE_FORMAT_PATTERN, "dd日 HH時 mm分", Model.USER_ORDER_HISTORY_LIST.get(position).fetch_date));
+        OrderDetail detail = Tools.JSONPARSE.fromJson(orderVo.order_data, OrderDetail.class);
+        holder.getOrderTimeText.setText(Tools.FORMAT.format(NaberConstant.DATE_FORMAT_PATTERN, "dd日 HH時 mm分", orderVo.fetch_date));
 
         holder.restaurantNameText.setText(detail.restaurant_name);
-        OrderStatus status = OrderStatus.of(Model.USER_ORDER_HISTORY_LIST.get(position).status);
+        OrderStatus status = OrderStatus.of(orderVo.status);
         if (status != null){
             holder.orderStatusText.setTextColor(this.context.getResources().getColor(status.getColor()));
             if(status.equals(OrderStatus.UNFINISH)){
@@ -52,12 +63,20 @@ public class UserOrderHistoryAdapter extends RecyclerView.Adapter<UserOrderHisto
                 holder.orderStatusText.setText(status.getText());
             }
         }
-        holder.totalAmountText.setText("$" + Model.USER_ORDER_HISTORY_LIST.get(position).order_price);
+
+        int use_bonus = IntegerTools.parseInt(orderVo.use_bonus, 0);
+        if( use_bonus > 0){
+            int price = IntegerTools.parseInt(orderVo.order_price,0);
+            holder.totalAmountText.setText("$" + (price - (use_bonus / 10 * 3) ));
+        } else {
+            holder.totalAmountText.setText("$" + (orderVo.order_price));
+        }
     }
+
 
     @Override
     public int getItemCount() {
-        return Model.USER_ORDER_HISTORY_LIST.size();
+        return orderHistoryList.size();
     }
 
 

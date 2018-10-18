@@ -110,6 +110,7 @@ public class RecoverPasswordFragment extends Fragment implements View.OnClickLis
 
     @Override
     public void onClick(View v) {
+
         InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
         if (v.getId() == R.id.submitRecoverPasswordBtn) {

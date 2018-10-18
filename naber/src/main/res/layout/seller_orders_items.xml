@@ -9,13 +9,28 @@
     <View
         android:id="@+id/toolerView"
         android:layout_width="wrap_content"
-        android:layout_height="30dp"
+        android:layout_height="38dp"
         android:layout_margin="1dp"
         android:background="@color/naber_basis"
         app:layout_constraintBottom_toTopOf="@+id/logsItemText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/meal_Text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="8dp"
+        android:padding="8dp"
+        android:paddingEnd="0dp"
+        android:paddingRight="0dp"
+        android:text="外帶"
+        android:textColor="@android:color/black"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/toolerView"
+        app:layout_constraintEnd_toEndOf="@+id/toolerView"
+        app:layout_constraintTop_toTopOf="@+id/toolerView" />
 
     <TextView
         android:id="@+id/ordersStatusText"

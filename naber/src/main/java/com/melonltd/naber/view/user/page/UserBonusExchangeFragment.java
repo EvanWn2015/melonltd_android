@@ -1,21 +1,40 @@
 package com.melonltd.naber.view.user.page;
 
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.InputFilter;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
+import com.bigkoo.alertview.AlertView;
+import com.bigkoo.alertview.OnItemClickListener;
+import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.melonltd.naber.R;
+import com.melonltd.naber.model.api.ApiManager;
+import com.melonltd.naber.model.api.ThreadCallback;
+import com.melonltd.naber.util.Tools;
+import com.melonltd.naber.view.common.BaseCore;
 import com.melonltd.naber.view.factory.PageType;
 import com.melonltd.naber.view.user.UserMainActivity;
 import com.melonltd.naber.view.user.adapter.UserBonusExchangeAdapter;
+import com.melonltd.naber.vo.ActivitiesVo;
+import com.melonltd.naber.vo.OrderDetail;
+import com.melonltd.naber.vo.ReqData;
 
 import java.util.List;
 
@@ -29,8 +48,9 @@ import cn.bingoogolapple.refreshlayout.BGARefreshLayout;
 public class UserBonusExchangeFragment extends Fragment {
     private static final String TAG = UserBonusExchangeFragment.class.getSimpleName();
     public static UserBonusExchangeFragment FRAGMENT = null;
-
+    private EditText serialChangeEdit;
     private UserBonusExchangeAdapter adapter;
+    private List<ActivitiesVo> list = Lists.newArrayList();
 
     public UserBonusExchangeFragment() {
     }
@@ -46,20 +66,8 @@ public class UserBonusExchangeFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
-        List<BonusExchange> list = Lists.newArrayList(
-                BonusExchange.newInstance("10點", "下次消費折抵3元" ,"(無上限)"),
-                BonusExchange.newInstance("500點", "KKBOX 30天","(點數卡)"),
-                BonusExchange.newInstance("667點", "中壢威尼斯","(電影票)"),
-                BonusExchange.newInstance("767點", "桃園IN89統領","(電影票)"),
-                BonusExchange.newInstance("767點", "美麗華影城","(電影票)"),
-                BonusExchange.newInstance("800點", "LINE 240P","(點數卡)"),
-                BonusExchange.newInstance("834點", "SBC星橋","(電影票)"),
-                BonusExchange.newInstance("834點", "威秀影城","(電影票)"),
-                BonusExchange.newInstance("1000點", "SOGO 300","(禮卷)"),
-                BonusExchange.newInstance("1000點", "MYCARD 300P","(點數卡)")
-        );
         adapter = new UserBonusExchangeAdapter(list);
+
     }
 
     @Override
@@ -75,6 +83,10 @@ public class UserBonusExchangeFragment extends Fragment {
     }
 
     private void getViews (View v){
+        final Button sendBtn = v.findViewById(R.id.sendBtn);
+        serialChangeEdit = v.findViewById(R.id.serialChangeEdit);
+        serialChangeEdit.setFilters(new InputFilter[]{new InputFilter.AllCaps(), new InputFilter.LengthFilter(8)});
+
         TextView description = v.findViewById(R.id.descriptionText);
         description.setText("凡是透過NABER訂餐，\n一律回饋消費金額之10%紅利點數\n" +
                             "，並能兌換NABER所提供之獎勵。\n\n" +
@@ -92,6 +104,27 @@ public class UserBonusExchangeFragment extends Fragment {
 
         bgaRefreshLayout.setRefreshViewHolder(refreshViewHolder);
 
+        bgaRefreshLayout.setDelegate(new BGARefreshLayout.BGARefreshLayoutDelegate() {
+            @Override
+            public void onBGARefreshLayoutBeginRefreshing(BGARefreshLayout refreshLayout) {
+                bgaRefreshLayout.endRefreshing();
+                doLoadData();
+            }
+
+            @Override
+            public boolean onBGARefreshLayoutBeginLoadingMore(BGARefreshLayout refreshLayout) {
+                bgaRefreshLayout.endLoadingMore();
+                return false;
+            }
+        });
+        sendBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                serialSend(sendBtn);
+
+            }
+        });
+
         final LinearLayoutManager layoutManager = new LinearLayoutManager(getContext());
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
@@ -99,12 +132,34 @@ public class UserBonusExchangeFragment extends Fragment {
         // setListener
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
+        adapter.setOnItemClickListener(new ItemClick());
     }
 
+    private void doLoadData (){
+        list.clear();
+        adapter.notifyDataSetChanged();
+
+
+        ApiManager.getAllActivities(new ThreadCallback(getContext()) {
+            @Override
+            public void onSuccess(String responseBody) {
+                List<ActivitiesVo> activitiesList = Tools.JSONPARSE.fromJsonList(responseBody,ActivitiesVo[].class);
+                list.addAll(activitiesList);
+                adapter.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onFail(Exception error, String msg) {
+
+            }
+        });
+    }
 
     @Override
     public void onResume() {
         super.onResume();
+        serialChangeEdit.setText("");
+
         UserMainActivity.changeTabAndToolbarStatus();
         if (UserMainActivity.toolbar != null) {
             UserMainActivity.navigationIconDisplay(true, new View.OnClickListener() {
@@ -115,21 +170,131 @@ public class UserBonusExchangeFragment extends Fragment {
                 }
             });
         }
+
+        this.doLoadData();
+
     }
 
-    public static class BonusExchange {
-        public String title;
-        public String content;
-        public String type;
+    class ItemClick implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            Log.i(TAG, "item tag : " + v.getTag() );
+            int index = (int)v.getTag();
+            ActivitiesVo data = list.get(index);
+            Log.i(TAG, "data "  + data );
+            Bundle bundle = new Bundle();
+            bundle.putSerializable("BONUS_DETAIL", data);
+            UserMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.USER_BONUS_EXCHANGE_DETAIL, bundle);
 
-        BonusExchange(String title, String content, String type){
-            this.title = title;
-            this.content = content;
-            this.type = type;
+        }
+    }
+    private void serialSend(final View v){
+
+        InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+        if(!Strings.isNullOrEmpty(serialChangeEdit.getText().toString()) && serialChangeEdit.getText().toString().length() == 8){
+
+            final ReqData req = new ReqData();
+            req.data = serialChangeEdit.getText().toString().toUpperCase();
+
+            ApiManager.serialSubmit(req, new ThreadCallback(getContext()) {
+                @Override
+                public void onSuccess(String responseBody) {
+                    ActivitiesVo activities =  Tools.JSONPARSE.fromJson(responseBody, ActivitiesVo.class);
+
+                    if (activities.act_category.equals("RES_EVENT")){
+                        // 到送單畫面
+                        OrderDetail detail = Tools.JSONPARSE.fromJson(activities.data, OrderDetail.class);
+                        if (detail != null){
+                            Bundle bundle = new Bundle();
+                            bundle.putSerializable("ACTIVITIES", activities);
+                            bundle.putSerializable("ORDER_DETAIL", detail);
+                            UserMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.USER_EXCHANGE_SUBMIT_ORDER, bundle);
+                        }else {
+                            new AlertView.Builder()
+                                    .setContext(getContext())
+                                    .setTitle("兌換成功")
+                                    .setMessage("該項目已結束兌換。")
+                                    .setStyle(AlertView.Style.Alert)
+                                    .setOthers(new String[]{"我知道了"})
+                                    .setOnItemClickListener(new OnItemClickListener() {
+                                        @Override
+                                        public void onItemClick(Object o, int position) {
+                                            InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                                            imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                                            serialChangeEdit.setText("");
+                                        }
+                                    })
+                                    .build()
+                                    .setCancelable(true)
+                                    .show();
+                        }
+                    }else if (activities.act_category.equals("TICKET")) {
+                        // Alert 成功充值紅利
+                        new AlertView.Builder()
+                                .setContext(getContext())
+                                .setTitle("兌換成功")
+                                .setMessage(activities.data + "紅利兌換成功。")
+                                .setStyle(AlertView.Style.Alert)
+                                .setOthers(new String[]{"我知道了"})
+                                .setOnItemClickListener(new OnItemClickListener() {
+                                    @Override
+                                    public void onItemClick(Object o, int position) {
+                                        InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                                        imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                                        serialChangeEdit.setText("");
+                                    }
+                                })
+                                .build()
+                                .setCancelable(true)
+                                .show();
+
+                    }
+                }
+
+                @Override
+                public void onFail(Exception error, String msg) {
+                    new AlertView.Builder()
+                            .setContext(getContext())
+                            .setTitle("兌換失敗")
+                            .setMessage(msg)
+                            .setStyle(AlertView.Style.Alert)
+                            .setOthers(new String[]{"我知道了"})
+                            .setOnItemClickListener(new OnItemClickListener() {
+                                @Override
+                                public void onItemClick(Object o, int position) {
+                                    InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                                    imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                                    serialChangeEdit.setText("");
+                                }
+                            })
+                            .build()
+                            .setCancelable(true)
+                            .show();
+                }
+            });
+
+
+        } else {
+            new AlertView.Builder()
+                    .setContext(getContext())
+                    .setTitle("系統提示")
+                    .setMessage("請正確輸入8碼兌換序號")
+                    .setStyle(AlertView.Style.Alert)
+                    .setOthers(new String[]{"我知道了"})
+                    .setOnItemClickListener(new OnItemClickListener() {
+                        @Override
+                        public void onItemClick(Object o, int position) {
+                            InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                            imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                            serialChangeEdit.setText("");
+                        }
+                    })
+                    .build()
+                    .setCancelable(true)
+                    .show();
         }
 
-        private static BonusExchange newInstance(String title, String content, String type){
-            return new BonusExchange(title, content, type);
-        }
+
     }
 }

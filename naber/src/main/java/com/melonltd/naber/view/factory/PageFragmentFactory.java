@@ -22,7 +22,9 @@ import com.melonltd.naber.view.seller.page.SellerSetUpFragment;
 import com.melonltd.naber.view.seller.page.SellerSimpleInformationFragment;
 import com.melonltd.naber.view.seller.page.SellerStatFragment;
 import com.melonltd.naber.view.user.page.UserAccountDetailFragment;
+import com.melonltd.naber.view.user.page.UserBonusExchangeDetailFragment;
 import com.melonltd.naber.view.user.page.UserBonusExchangeFragment;
+import com.melonltd.naber.view.user.page.UserExchangeSubmitOrdersFragment;
 import com.melonltd.naber.view.user.page.UserFoodDetailFragment;
 import com.melonltd.naber.view.user.page.UserFoodListFragment;
 import com.melonltd.naber.view.user.page.UserHomeFragment;
@@ -81,7 +83,10 @@ public class PageFragmentFactory {
                 return new UserFoodDetailFragment().getInstance(bundle);
             case USER_BONUS_EXCHANGE:
                 return new UserBonusExchangeFragment().getInstance(bundle);
-
+            case USER_BONUS_EXCHANGE_DETAIL:
+                return new UserBonusExchangeDetailFragment().getInstance(bundle);
+            case USER_EXCHANGE_SUBMIT_ORDER:
+                return new UserExchangeSubmitOrdersFragment().getInstance(bundle);
 
             // seller
             case SELLER_SEARCH:

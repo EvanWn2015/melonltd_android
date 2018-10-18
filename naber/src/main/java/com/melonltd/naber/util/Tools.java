@@ -15,6 +15,7 @@ import android.view.KeyEvent;
 import com.google.android.gms.common.GoogleApiAvailability;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
 import com.google.common.primitives.Doubles;
 import com.google.gson.Gson;
 
@@ -28,6 +29,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 import java.util.TimeZone;
 
 /**
@@ -101,6 +103,17 @@ public class Tools {
             }
             final T[] jsonToObject = GSON.fromJson(json, types);
             return Lists.newArrayList(jsonToObject);
+        }
+
+
+        public final static <T> Set<T> fromJsonSet(String json, Class<T[]> types) {
+            if (Strings.isNullOrEmpty(json)) {
+//                return Lists.<T>newArrayList();
+                return Sets.<T>newHashSet();
+            }
+            final T[] jsonToObject = GSON.fromJson(json, types);
+//            return Lists.newArrayList(jsonToObject);
+            return Sets.<T>newHashSet(jsonToObject);
         }
 
         public static String getJson(Context context, String fileName) {

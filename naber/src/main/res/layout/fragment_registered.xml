@@ -100,7 +100,7 @@
             android:paddingTop="8dp"
             android:singleLine="true"
             android:textSize="14sp"
-            android:visibility="gone"
+            android:visibility="visible"
             app:layout_constraintBottom_toTopOf="@+id/passwordEditText"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
@@ -116,7 +116,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="4dp"
             android:background="@drawable/naber_text_base_line"
-            android:digits="0123456789abcdefghigklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+            android:digits="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
             android:hint="請輸入6~20碼，英數組合密碼"
             android:inputType="textPassword"
             android:maxLines="1"
@@ -141,7 +141,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="4dp"
             android:background="@drawable/naber_text_base_line"
-            android:digits="0123456789abcdefghigklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+            android:digits="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
             android:inputType="textPassword"
             android:maxLines="1"
             android:paddingBottom="8dp"
@@ -173,12 +173,34 @@
             android:paddingTop="8dp"
             android:singleLine="true"
             android:textSize="14sp"
-            android:visibility="gone"
+            android:visibility="visible"
             app:layout_constraintBottom_toTopOf="@+id/submit"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/confirmPasswordEditText" />
+        <TextView
+            android:id="@+id/genderText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="32dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="4dp"
+            android:background="@drawable/naber_text_base_line"
+            android:maxLines="1"
+            android:paddingBottom="8dp"
+            android:paddingLeft="100dp"
+            android:paddingStart="100dp"
+            android:paddingTop="8dp"
+            android:singleLine="true"
+            android:textSize="14sp"
+            android:visibility="visible"
+            app:layout_constraintBottom_toTopOf="@+id/submit"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/birthdayEditText" />
 
         <Button
             android:id="@+id/submit"
@@ -257,7 +279,7 @@
             android:layout_marginTop="8dp"
             android:text="@string/registered_email_text"
             android:textSize="14sp"
-            android:visibility="gone"
+            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="@+id/emailEditText"
             app:layout_constraintStart_toStartOf="@+id/emailEditText"
             app:layout_constraintTop_toTopOf="@+id/emailEditText" />
@@ -299,10 +321,23 @@
             android:layout_marginTop="4dp"
             android:text="@string/registered_birthday_text"
             android:textSize="14sp"
-            android:visibility="gone"
+            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="@+id/birthdayEditText"
             app:layout_constraintStart_toStartOf="@+id/birthdayEditText"
             app:layout_constraintTop_toTopOf="@+id/birthdayEditText" />
+        <TextView
+            android:id="@+id/textView10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="12dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="4dp"
+            android:text="@string/gender_text"
+            android:textSize="14sp"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="@+id/genderText"
+            app:layout_constraintStart_toStartOf="@+id/genderText"
+            app:layout_constraintTop_toTopOf="@+id/genderText" />
 
         <ImageView
             android:id="@+id/imageView"
@@ -325,10 +360,23 @@
             android:layout_marginEnd="16dp"
             android:layout_marginTop="8dp"
             android:background="@drawable/shape_reverse_triangle"
-            android:visibility="gone"
+            android:visibility="visible"
             app:layout_constraintBottom_toBottomOf="@+id/birthdayEditText"
             app:layout_constraintEnd_toEndOf="@+id/birthdayEditText"
             app:layout_constraintTop_toTopOf="@+id/birthdayEditText" />
+        <ImageView
+            android:id="@+id/imageView3"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginBottom="4dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/shape_reverse_triangle"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="@+id/genderText"
+            app:layout_constraintEnd_toEndOf="@+id/genderText"
+            app:layout_constraintTop_toTopOf="@+id/genderText" />
+
 
     </android.support.constraint.ConstraintLayout>
 </ScrollView>

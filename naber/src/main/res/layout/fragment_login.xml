@@ -75,7 +75,7 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:digits="0123456789abcdefghigklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ@._-"
+                android:digits="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ@._-"
                 android:hint="@string/account_edit_hint_text"
                 android:inputType="text"
                 android:maxLines="1"
@@ -141,6 +141,7 @@
                 app:layout_constraintTop_toTopOf="@+id/toRegisteredSellerBtn" />
 
             <Button
+                android:visibility="gone"
                 android:id="@+id/toRegisteredSellerBtn"
                 android:layout_width="0dp"
                 android:layout_height="30dp"
