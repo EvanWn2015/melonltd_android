@@ -52,7 +52,7 @@ import java.util.List;
 public class UserSubmitOrdersFragment extends Fragment implements View.OnClickListener {
     private static final String TAG = UserSubmitOrdersFragment.class.getSimpleName();
     public static UserSubmitOrdersFragment FRAGMENT = null;
-    private TextView selectDateText, userNameText, userPhoneNumberText, ordersPriceText, ordersBonusText, bounschooseText,mealText;
+    private TextView selectDateText, userNameText, userPhoneNumberText, ordersPriceText, ordersBonusText, bounsChooseText,mealText;
     private EditText userMessageEdit;
     private TimePickerView timePickerView;
     private CheckBox readRuleCheckBtn;
@@ -103,17 +103,17 @@ public class UserSubmitOrdersFragment extends Fragment implements View.OnClickLi
         ordersBonusText = v.findViewById(R.id.ordersBonusText);
         userMessageEdit = v.findViewById(R.id.userMessageEdit);
         readRuleCheckBtn = v.findViewById(R.id.readRuleCheckBtn);
-        bounschooseText = v.findViewById(R.id.bounsChooseText);
+//        bounsChooseText = v.findViewById(R.id.bounsChooseText);
         mealText = v.findViewById(R.id.mealText);
         Button submitOrdersBtn = v.findViewById(R.id.submitOrdersBtn);
         HideKeyboard hideKeyboard = new HideKeyboard();
 
-        bounschooseText.setOnFocusChangeListener(hideKeyboard);
+//        bounsChooseText.setOnFocusChangeListener(hideKeyboard);
         mealText.setOnFocusChangeListener(hideKeyboard);
         options2Items.add("內用");
         options2Items.add("外帶");
 
-        bounschooseText.setOnClickListener(new pickBounsChoose());
+//        bounsChooseText.setOnClickListener(new pickBounsChoose());
         mealText.setOnClickListener(new pickMeal());
         selectDateText.setOnClickListener(this);
         submitOrdersBtn.setOnClickListener(this);
@@ -154,6 +154,7 @@ public class UserSubmitOrdersFragment extends Fragment implements View.OnClickLi
     public void onResume() {
         super.onResume();
         useBonus = -1;
+//        bounsChooseText.setText("");
         UserMainActivity.changeTabAndToolbarStatus();
         if (UserMainActivity.toolbar != null) {
             UserMainActivity.navigationIconDisplay(true, new View.OnClickListener() {
@@ -173,56 +174,48 @@ public class UserSubmitOrdersFragment extends Fragment implements View.OnClickLi
             this.orderDetail = cacheSoppingCar.get(dataIndex);
         }
 
-        ApiManager.userFindAccountInfo(new ThreadCallback(getContext()) {
-            @Override
-            public void onSuccess(String responseBody) {
-                AccountInfoVo account = Tools.JSONPARSE.fromJson(responseBody, AccountInfoVo.class);
-                options1Items.clear();
-                int userBonus = IntegerTools.parseInt(account.bonus, 0);
-                int useBonus = IntegerTools.parseInt(account.use_bonus, 0);
-                int canBonus = (userBonus - useBonus)/10;
-                int price = 0;
-//                for (int i = 0; i < Model.USER_CACHE_SHOPPING_CART.get(dataIndex).orders.size(); i++) {
-//                    price += Integer.parseInt(Model.USER_CACHE_SHOPPING_CART.get(dataIndex).orders.get(i).item.price);
+//        ApiManager.userFindAccountInfo(new ThreadCallback(getContext()) {
+//            @Override
+//            public void onSuccess(String responseBody) {
+//                AccountInfoVo account = Tools.JSONPARSE.fromJson(responseBody, AccountInfoVo.class);
+//                options1Items.clear();
+//                int userBonus = IntegerTools.parseInt(account.bonus, 0);
+//                int useBonus = IntegerTools.parseInt(account.use_bonus, 0);
+//                int canBonus = (userBonus - useBonus)/10;
+//                int price = 0;
+//
+//                for (int i = 0; i < orderDetail.orders.size(); i++) {
+//                    price += Integer.parseInt(orderDetail.orders.get(i).item.price);
 //                }
-
-//                if count <= 0 {
-//                    self.selectBnonus.placeholder = "紅利不足折抵"
-//                } else if price < 3 {
-//                    self.selectBnonus.placeholder = "該品項無法折抵"
-//                } else if count > 0 {
-
-
-
-
-                for (int i = 0; i < orderDetail.orders.size(); i++) {
-                    price += Integer.parseInt(orderDetail.orders.get(i).item.price);
-                }
-                if(canBonus < 1){
-                    //TODO 代表無點數可折抵 ordersBonusText.setText("")
-                } else if( useBonus >= userBonus){
-                    //TODO 因多端登入，有可能超出以使用所得 ordersBonusText.setText("")
-                } else if(price < 3){
-                    //TODO 因為訂單價格不滿3元 ordersBonusText.setText("")
-                }else {
-                    for (int i = 1; i < canBonus+1; i++) {
-                        if( i > (price/3)){
-
-                        } else {
-                            options1Items.add((i * 10) + "點紅利,折抵" + (i * 3) + "元");
-                        }
-                    }
-                }
-            }
-            @Override
-            public void onFail(Exception error, String msg) {
-
-            }
-        });
+//                if(canBonus < 1){
+//                    //TODO 代表無點數可折抵 ordersBonusText.setText("")
+//                    bounsChooseText.setText("紅利點數不足");
+//                    bounsChooseText.setEnabled(false);
+//                } else if( useBonus >= userBonus){
+//                    //TODO 因多端登入，有可能超出以使用所得 ordersBonusText.setText("")
+//                    bounsChooseText.setText("紅利點數不足");
+//                    bounsChooseText.setEnabled(false);
+//                } else if(price < 3){
+//                    //TODO 因為訂單價格不滿3元 ordersBonusText.setText("")
+//                    bounsChooseText.setText("價格不滿3元");
+//                    bounsChooseText.setEnabled(false);
+//                }else {
+//                    for (int i = 1; i < canBonus+1; i++) {
+//                        if( i > (price/3)){
+//
+//                        } else {
+//                            options1Items.add((i * 10) + "點紅利,折抵" + (i * 3) + "元");
+//                            bounsChooseText.setEnabled(true);
+//                        }
+//                    }
+//                }
+//            }
+//            @Override
+//            public void onFail(Exception error, String msg) {
+//
+//            }
+//        });
         mealText.setText("外帶");
-
-
-
 //        Model.USER_CACHE_SHOPPING_CART.get(dataIndex).fetch_date = "";
         this.orderDetail.fetch_date = "";
         userNameText.setText(SPService.getUserName());
@@ -244,14 +237,11 @@ public class UserSubmitOrdersFragment extends Fragment implements View.OnClickLi
         } else {
             ordersBonusText.setText("應得紅利 " + ((int) Math.floor(amount / 10d)) + "");
         }
-
-
 //        if (Model.USER_CACHE_SHOPPING_CART.get(dataIndex).can_discount.equals("N")) {
 //            ordersBonusText.setText("該店家不提供紅利");
 //        } else {
 //            ordersBonusText.setText("應得紅利 " + ((int) Math.floor(amount / 10d)) + "");
 //        }
-
     }
 
     @Override
@@ -479,84 +469,69 @@ public class UserSubmitOrdersFragment extends Fragment implements View.OnClickLi
         }
     }
     public int STATUS = -1;
-    class pickBounsChoose implements View.OnClickListener {
-        @Override
-        public void onClick(final View view) {
-            InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
-            OptionsPickerView pvOptions = new OptionsPickerBuilder(getContext(), new OnOptionsSelectListener() {
-                @Override
-                public void onOptionsSelect(int index1, int option2, int options3, View v) {
-                    STATUS = 1;
-                    useBonus =(index1+1)*10;
-                    int countBonus = (index1+1)*3;
-                        int amount = 0;
-//                        for (int i = 0; i < Model.USER_CACHE_SHOPPING_CART.get(dataIndex).orders.size(); i++) {
-//                            amount += Integer.parseInt(Model.USER_CACHE_SHOPPING_CART.get(dataIndex).orders.get(i).item.price);
+//    class pickBounsChoose implements View.OnClickListener {
+//        @Override
+//        public void onClick(final View view) {
+//            InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+//            imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+//            OptionsPickerView pvOptions = new OptionsPickerBuilder(getContext(), new OnOptionsSelectListener() {
+//                @Override
+//                public void onOptionsSelect(int index1, int option2, int options3, View v) {
+//                    STATUS = 1;
+//                    useBonus =(index1+1)*10;
+//                    int countBonus = (index1+1)*3;
+//                        int amount = 0;
+////                        for (int i = 0; i < Model.USER_CACHE_SHOPPING_CART.get(dataIndex).orders.size(); i++) {
+////                            amount += Integer.parseInt(Model.USER_CACHE_SHOPPING_CART.get(dataIndex).orders.get(i).item.price);
+////                        }
+//                        for (int i = 0; i < orderDetail.orders.size(); i++) {
+//                            amount += Integer.parseInt(orderDetail.orders.get(i).item.price);
 //                        }
-
-                        for (int i = 0; i < orderDetail.orders.size(); i++) {
-                            amount += Integer.parseInt(orderDetail.orders.get(i).item.price);
-                        }
-
-
-                        ordersPriceText.setText("$ " + (amount- countBonus));
-//                        if (Model.USER_CACHE_SHOPPING_CART.get(dataIndex).can_discount.equals("N")) {
-                        if (orderDetail.can_discount.equals("N")) {
-                            ordersBonusText.setText("該店家不提供紅利");
-                        } else {
-                            ordersBonusText.setText("應得紅利 " + ((int) Math.floor((amount - countBonus) / 10d)) + "");
-                        }
-                        bounschooseText.setText(options1Items.get(index1));
-                }
-            }) .setTitleSize(20)
-                    .setSubmitText("選擇紅利")//确定按钮文字
-                    .setCancelText("取消折抵")//取消按钮文字
-                    .setTitleBgColor(getResources().getColor(R.color.naber_dividing_line_gray))
-                    .setCancelColor(getResources().getColor(R.color.naber_dividing_gray))
-                    .setSubmitColor(getResources().getColor(R.color.naber_dividing_gray))
-                    .build();
-
-            pvOptions.setOnDismissListener(new com.bigkoo.pickerview.listener.OnDismissListener() {
-                @Override
-                public void onDismiss(Object o) {
-                    if(STATUS == 1){
-                        STATUS = -1;
-                       // TODO 代表按了確認
-                    } else {
-                        useBonus = -1 ;
-                        bounschooseText.setText("");
-                        int amount = 0;
-                        for (int i = 0; i < orderDetail.orders.size(); i++) {
-                            amount += Integer.parseInt(orderDetail.orders.get(i).item.price);
-                        }
-                        ordersPriceText.setText("$ " + amount);
-
-                        if (orderDetail.can_discount.equals("N")) {
-                            ordersBonusText.setText("該店家不提供紅利");
-                        } else {
-                            ordersBonusText.setText("應得紅利 " + ((int) Math.floor( amount / 10d)) + "");
-                        }
-
-//                        for (int i = 0; i < Model.USER_CACHE_SHOPPING_CART.get(dataIndex).orders.size(); i++) {
-//                            amount += Integer.parseInt(Model.USER_CACHE_SHOPPING_CART.get(dataIndex).orders.get(i).item.price);
+//                        ordersPriceText.setText("$ " + (amount- countBonus));
+////                        if (Model.USER_CACHE_SHOPPING_CART.get(dataIndex).can_discount.equals("N")) {
+//                        if (orderDetail.can_discount.equals("N")) {
+//                            ordersBonusText.setText("該店家不提供紅利");
+//                        } else {
+//                            ordersBonusText.setText("應得紅利 " + ((int) Math.floor((amount - countBonus) / 10d)) + "");
+//                        }
+//                    bounsChooseText.setText(options1Items.get(index1));
+//                }
+//            }) .setTitleSize(20)
+//                    .setSubmitText("選擇紅利")//确定按钮文字
+//                    .setCancelText("取消折抵")//取消按钮文字
+//                    .setTitleBgColor(getResources().getColor(R.color.naber_dividing_line_gray))
+//                    .setCancelColor(getResources().getColor(R.color.naber_dividing_gray))
+//                    .setSubmitColor(getResources().getColor(R.color.naber_dividing_gray))
+//                    .build();
+//
+//            pvOptions.setOnDismissListener(new com.bigkoo.pickerview.listener.OnDismissListener() {
+//                @Override
+//                public void onDismiss(Object o) {
+//                    if(STATUS == 1){
+//                        STATUS = -1;
+//                       // TODO 代表按了確認
+//                    } else {
+//                        useBonus = -1 ;
+//                        bounsChooseText.setText("");
+//                        int amount = 0;
+//                        for (int i = 0; i < orderDetail.orders.size(); i++) {
+//                            amount += Integer.parseInt(orderDetail.orders.get(i).item.price);
 //                        }
 //                        ordersPriceText.setText("$ " + amount);
 //
-//                        if (Model.USER_CACHE_SHOPPING_CART.get(dataIndex).can_discount.equals("N")) {
+//                        if (orderDetail.can_discount.equals("N")) {
 //                            ordersBonusText.setText("該店家不提供紅利");
 //                        } else {
 //                            ordersBonusText.setText("應得紅利 " + ((int) Math.floor( amount / 10d)) + "");
 //                        }
-                    }
-                }
-            });
-            pvOptions.setPicker(options1Items);
-            pvOptions.show();
-        }
-    }
+//                    }
+//                }
+//            });
+//            pvOptions.setPicker(options1Items);
+//            pvOptions.show();
+//        }
+//    }
     class pickMeal implements View.OnClickListener{
-
         @Override
         public void onClick(final View view) {
             InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);

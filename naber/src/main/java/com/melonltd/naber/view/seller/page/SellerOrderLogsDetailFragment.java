@@ -104,7 +104,7 @@ public class SellerOrderLogsDetailFragment extends Fragment {
 
             foodContentText.setText(content);
             userMessageText.setText(orderVo.user_message);
-            fetchDateText.setText(Tools.FORMAT.format(NaberConstant.DATE_FORMAT_PATTERN, "dd日 HH時 mm分", orderVo.fetch_date));
+            fetchDateText.setText(Tools.FORMAT.format(NaberConstant.DATE_FORMAT_PATTERN, "dd日 HH時 mm分", orderVo.create_date));
             userPhoneText.setText(orderVo.order_detail.user_phone);
             userNameText.setText(orderVo.order_detail.user_name);
             int use_bonus = IntegerTools.parseInt(orderVo.use_bonus,0);

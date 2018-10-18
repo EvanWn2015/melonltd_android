@@ -160,46 +160,46 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView81" />
-            <TextView
-                android:id="@+id/textView82"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:paddingBottom="8dp"
-                android:paddingLeft="8dp"
-                android:paddingStart="8dp"
-                android:text="選擇折抵紅利"
-                android:textSize="12sp"
-                app:layout_constraintBottom_toTopOf="@+id/userPhoneText"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/userPhoneText"/>
-            <TextView
-                android:id="@+id/bounsChooseText"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:layout_marginStart="8dp"
-                android:background="@drawable/naber_white_text_box"
-                android:padding="18dp"
-                android:textSize="14sp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView82"/>
-            <ImageView
-                android:id="@+id/bounsChooseImage"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
-                android:layout_marginBottom="4dp"
-                android:layout_marginEnd="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginTop="8dp"
-                android:background="@drawable/shape_reverse_triangle"
-                app:layout_constraintBottom_toBottomOf="@+id/bounsChooseText"
-                app:layout_constraintEnd_toEndOf="@+id/bounsChooseText"
-                app:layout_constraintTop_toTopOf="@+id/bounsChooseText" />
+            <!--<TextView-->
+                <!--android:id="@+id/textView82"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginEnd="8dp"-->
+                <!--android:layout_marginStart="8dp"-->
+                <!--android:layout_marginTop="8dp"-->
+                <!--android:paddingBottom="8dp"-->
+                <!--android:paddingLeft="8dp"-->
+                <!--android:paddingStart="8dp"-->
+                <!--android:text="選擇折抵紅利"-->
+                <!--android:textSize="12sp"-->
+                <!--app:layout_constraintBottom_toTopOf="@+id/userPhoneText"-->
+                <!--app:layout_constraintEnd_toEndOf="parent"-->
+                <!--app:layout_constraintStart_toStartOf="parent"-->
+                <!--app:layout_constraintTop_toBottomOf="@+id/userPhoneText"/>-->
+            <!--<TextView-->
+                <!--android:id="@+id/bounsChooseText"-->
+                <!--android:layout_width="0dp"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginEnd="8dp"-->
+                <!--android:layout_marginStart="8dp"-->
+                <!--android:background="@drawable/naber_white_text_box"-->
+                <!--android:padding="18dp"-->
+                <!--android:textSize="14sp"-->
+                <!--app:layout_constraintEnd_toEndOf="parent"-->
+                <!--app:layout_constraintStart_toStartOf="parent"-->
+                <!--app:layout_constraintTop_toBottomOf="@+id/textView82"/>-->
+            <!--<ImageView-->
+                <!--android:id="@+id/bounsChooseImage"-->
+                <!--android:layout_width="24dp"-->
+                <!--android:layout_height="24dp"-->
+                <!--android:layout_marginBottom="4dp"-->
+                <!--android:layout_marginEnd="16dp"-->
+                <!--android:layout_marginRight="16dp"-->
+                <!--android:layout_marginTop="8dp"-->
+                <!--android:background="@drawable/shape_reverse_triangle"-->
+                <!--app:layout_constraintBottom_toBottomOf="@+id/bounsChooseText"-->
+                <!--app:layout_constraintEnd_toEndOf="@+id/bounsChooseText"-->
+                <!--app:layout_constraintTop_toTopOf="@+id/bounsChooseText" />-->
             <TextView
                 android:id="@+id/textView83"
                 android:layout_width="0dp"
@@ -215,7 +215,7 @@
                 app:layout_constraintBottom_toTopOf="@+id/mealText"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/bounsChooseText"/>
+                app:layout_constraintTop_toBottomOf="@+id/userPhoneText"/>
             <TextView
                 android:id="@+id/mealText"
                 android:layout_width="0dp"
