@@ -9,6 +9,7 @@ import com.melonltd.naber.view.common.page.RecoverPasswordFragment;
 import com.melonltd.naber.view.common.page.RegisteredFragment;
 import com.melonltd.naber.view.common.page.RegisteredSellerFragment;
 import com.melonltd.naber.view.common.page.VerifySMSFragment;
+import com.melonltd.naber.view.seller.page.SellerCalendarFragment;
 import com.melonltd.naber.view.seller.page.SellerCategoryListFragment;
 import com.melonltd.naber.view.seller.page.SellerDetailFragment;
 import com.melonltd.naber.view.seller.page.SellerFoodEditFragment;
@@ -113,6 +114,8 @@ public class PageFragmentFactory {
                 return new SellerDetailFragment().getInstance(bundle);
             case SELLER_RESET_PASSWORD:
                 return new SellerResetPasswordFragment().getInstance(bundle);
+            case SELLER_CALENDAR:
+                return new SellerCalendarFragment().getInstance(bundle);
             default:
                 return new UserHomeFragment().getInstance(bundle);
         }
