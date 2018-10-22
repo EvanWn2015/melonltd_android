@@ -253,6 +253,9 @@ public class UserRestaurantListFragment extends Fragment implements View.OnClick
     private void getLocation() {
         if (ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(getContext(), Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
             if (Model.LOCATION == null) {
+                filterNameBtn.setEnabled(true);
+                filterCategoryBtn.setEnabled(true);
+                filterAreaBtn.setEnabled(true);
                 Model.LOCATION = LOCATION_MG.getLastKnownLocation(LocationManager.GPS_PROVIDER);
             }
         }
@@ -321,6 +324,9 @@ public class UserRestaurantListFragment extends Fragment implements View.OnClick
                 break;
             case R.id.filterDistanceBtn:
                 if (Model.LOCATION == null){
+                    filterNameBtn.setEnabled(true);
+                    filterCategoryBtn.setEnabled(true);
+                    filterAreaBtn.setEnabled(true);
                     new AlertView.Builder()
                             .setContext(getContext())
                             .setStyle(AlertView.Style.Alert)
