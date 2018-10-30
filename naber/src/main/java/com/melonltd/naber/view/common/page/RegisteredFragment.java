@@ -1,7 +1,9 @@
 package com.melonltd.naber.view.common.page;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
@@ -10,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 
@@ -23,14 +26,19 @@ import com.bigkoo.pickerview.view.OptionsPickerView;
 import com.bigkoo.pickerview.view.TimePickerView;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.melonltd.naber.R;
 import com.melonltd.naber.model.api.ApiManager;
 import com.melonltd.naber.model.api.ThreadCallback;
 import com.melonltd.naber.model.bean.Model;
+import com.melonltd.naber.model.service.SPService;
 import com.melonltd.naber.model.type.Identity;
+import com.melonltd.naber.util.Tools;
 import com.melonltd.naber.util.VerifyUtil;
 import com.melonltd.naber.view.common.BaseActivity;
 import com.melonltd.naber.view.factory.PageType;
+import com.melonltd.naber.view.seller.SellerMainActivity;
+import com.melonltd.naber.view.user.UserMainActivity;
 import com.melonltd.naber.vo.AccountInfoVo;
 
 import java.text.SimpleDateFormat;
@@ -45,6 +53,7 @@ public class RegisteredFragment extends Fragment implements View.OnClickListener
     private AccountInfoVo account = new AccountInfoVo();
     private TextView identityText,birthdayText,genderText;
     private EditText nameEditText, passwordEditText, confirmPasswordEditText, emailEditText;
+    private Handler handler = new Handler();
 //    addressEditText,
     private List<String> genderItems = Lists.newArrayList();
 
@@ -141,37 +150,97 @@ public class RegisteredFragment extends Fragment implements View.OnClickListener
                     ApiManager.userRegistered(account, new ThreadCallback(getContext()) {
                         @Override
                         public void onSuccess(String responseBody) {
-                            new AlertView.Builder()
-                                    .setContext(getContext())
-                                    .setStyle(AlertView.Style.Alert)
-                                    .setTitle("")
-                                    .setMessage("完成註冊，\n歡迎加入NABER！")
-                                    .setOthers(new String[]{"返回登入畫面"})
-                                    .setOnItemClickListener(new OnItemClickListener() {
-                                        @Override
-                                        public void onItemClick(Object o, int position) {
-                                            if (position == 0) {
-                                                BaseActivity.removeAndReplaceWhere(FRAGMENT, PageType.LOGIN, null);
-                                            }
-                                        }
-                                    })
-                                    .build()
-                                    .setCancelable(false)
-                                    .show();
+                            account.password = passwordEditText.getText().toString();
+                            account.device_token = FirebaseInstanceId.getInstance().getToken();
+                            account.device_category = "ANDROID";
+                            ApiManager.login(account, new ThreadCallback(getContext()) {
+                                @Override
+                                public void onSuccess(String responseBody) {
+                                    AccountInfoVo resp = Tools.JSONPARSE.fromJson(responseBody, AccountInfoVo.class);
+                                    resp.device_token = account.device_token;
+                                    resp.device_category = account.device_category;
+                                    SPService.clearAccount();
+                                    SPService.setRememberMe(false);
+                                    SPService.setLoginLimit(new Date().getTime());
+                                    SPService.setAccout(resp.account);
 
+                                    if (Identity.getUserValues().contains(Identity.of(resp.identity))) {
+                                        handler.postDelayed(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                new AlertView.Builder()
+                                                        .setContext(getContext())
+                                                        .setStyle(AlertView.Style.Alert)
+                                                        .setMessage("完成註冊，\n歡迎加入NABER！")
+                                                        .setOnItemClickListener(new OnItemClickListener() {
+                                                            @Override
+                                                            public void onItemClick(Object o, int position) {
+                                                                if (position == 0) {
+                                                                    BaseActivity.removeAndReplaceWhere(FRAGMENT, PageType.USER_HOME, null);
+                                                                }
+                                                            }
+                                                        })
+                                                        .build()
+                                                        .setCancelable(false)
+                                                        .show();
+                                            }
+                                        }, 500);
+                                    } else {
+                                        handler.postDelayed(new Runnable() {
+                                            @Override
+                                            public void run() {
+                                                new AlertView.Builder()
+                                                        .setContext(getContext())
+                                                        .setStyle(AlertView.Style.Alert)
+                                                        .setTitle("")
+                                                        .setMessage("查無此帳號!")
+                                                        .setCancelText("關閉")
+                                                        .build()
+                                                        .setCancelable(true)
+                                                        .show();
+                                            }
+                                        }, 500);
+                                    }
+                                }
+
+                                @Override
+                                public void onFail(Exception error, final String msg) {
+                                    handler.postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            new AlertView.Builder()
+                                                    .setTitle("")
+                                                    .setMessage(msg)
+                                                    .setContext(getContext())
+                                                    .setStyle(AlertView.Style.Alert)
+                                                    .setCancelText("取消")
+                                                    .build()
+                                                    .setCancelable(true)
+                                                    .show();
+                                        }
+                                    },500);
+
+                                }
+                            });
                         }
 
                         @Override
-                        public void onFail(Exception error, String msg) {
-                            new AlertView.Builder()
-                                    .setContext(getContext())
-                                    .setStyle(AlertView.Style.Alert)
-                                    .setTitle("")
-                                    .setMessage(msg)
-                                    .setCancelText("關閉")
-                                    .build()
-                                    .setCancelable(true)
-                                    .show();
+                        public void onFail(Exception error,final String msg) {
+                            handler.postDelayed(new Runnable() {
+                                @Override
+                                public void run() {
+                                    new AlertView.Builder()
+                                            .setContext(getContext())
+                                            .setStyle(AlertView.Style.Alert)
+                                            .setTitle("")
+                                            .setMessage(msg)
+                                            .setCancelText("關閉")
+                                            .build()
+                                            .setCancelable(true)
+                                            .show();
+                                }
+                            },500);
+
                         }
                     });
                 }
@@ -268,7 +337,16 @@ public class RegisteredFragment extends Fragment implements View.OnClickListener
             pvOptions.show();
         }
     }
-
+    private void errorAlert(){
+        new AlertView.Builder()
+                .setContext(getContext())
+                .setStyle(AlertView.Style.Alert)
+                .setTitle("")
+                .setCancelText("關閉")
+                .build()
+                .setCancelable(true)
+                .show();
+    }
     class HideKeyboard implements View.OnFocusChangeListener {
         @Override
         public void onFocusChange(View v, boolean hasFocus) {

@@ -15,6 +15,7 @@
     <color name="naber_basis_orange">#f06f49</color>
     <color name="naber_basis_purple">#847ec3</color>
 
+    <color name="naber_dividing_light_gray">#dfdfdf</color>
     <color name="naber_dividing_line_gray">#bcbcbc</color>
     <color name="naber_dividing_gray">#f6f6f6</color>
     <color name="naber_tab_default_color">#2d2d2d</color>
