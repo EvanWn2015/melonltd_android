@@ -55,6 +55,7 @@ public class SellerOrdersFragment extends Fragment {
     public static SellerOrdersFragment FRAGMENT = null;
     private TextView searchDateText;
     private TextView liveText, untreatedText, processingText, canFetchText;
+
     private ReqData unReq = new ReqData(), prReq = new ReqData(), canReq = new ReqData();
     private static OrderStatus STATUS_TAG = OrderStatus.LIVE;
     private static SellerOrdersAdapter adapter;
@@ -133,7 +134,7 @@ public class SellerOrdersFragment extends Fragment {
         refreshLayout.setRefreshViewHolder(refreshViewHolder);
         searchDateText = v.findViewById(R.id.searchDateText);
 
-        liveText = v.findViewById(R.id.liveText);
+//        liveText = v.findViewById(R.id.liveText);
         untreatedText = v.findViewById(R.id.untreatedText);
         processingText = v.findViewById(R.id.processingText);
         canFetchText = v.findViewById(R.id.canFetchText);
@@ -143,11 +144,11 @@ public class SellerOrdersFragment extends Fragment {
         searchDateText.setOnClickListener(new SelectDateListener());
         TabClickListener tabClickListener = new TabClickListener();
 
-        liveText.setTag(LIVE);
+//        liveText.setTag(LIVE);
         untreatedText.setTag(UNFINISH);
         processingText.setTag(PROCESSING);
         canFetchText.setTag(CAN_FETCH);
-        liveText.setOnClickListener(tabClickListener);
+//        liveText.setOnClickListener(tabClickListener);
         untreatedText.setOnClickListener(tabClickListener);
         processingText.setOnClickListener(tabClickListener);
         canFetchText.setOnClickListener(tabClickListener);
@@ -595,7 +596,8 @@ public class SellerOrdersFragment extends Fragment {
         }
 
         private void changeTab(TextView textView, OrderStatus status) {
-            List<TextView> views = Lists.newArrayList(liveText, untreatedText, processingText, canFetchText);
+//                                              liveText,
+            List<TextView> views = Lists.newArrayList(untreatedText, processingText, canFetchText);
             for (TextView tv : views) {
                 tv.setTextColor(getResources().getColor(android.R.color.black));
                 tv.setBackgroundColor(getResources().getColor(R.color.colorAccent));
