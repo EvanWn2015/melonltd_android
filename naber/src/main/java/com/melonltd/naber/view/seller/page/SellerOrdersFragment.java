@@ -41,7 +41,6 @@ import cn.bingoogolapple.refreshlayout.BGANormalRefreshViewHolder;
 import cn.bingoogolapple.refreshlayout.BGARefreshLayout;
 
 import static com.melonltd.naber.model.type.OrderStatus.CAN_FETCH;
-import static com.melonltd.naber.model.type.OrderStatus.FINISH;
 import static com.melonltd.naber.model.type.OrderStatus.PROCESSING;
 import static com.melonltd.naber.model.type.OrderStatus.UNFINISH;
 
@@ -169,11 +168,9 @@ public class SellerOrdersFragment extends Fragment {
             @Override
             public boolean onBGARefreshLayoutBeginLoadingMore(BGARefreshLayout refreshLayout) {
                 refreshLayout.endLoadingMore();
-
                 if (reqData.loadingMore) {
                     loadData(false);
                 }
-
                 return false;
             }
         });
@@ -234,42 +231,27 @@ public class SellerOrdersFragment extends Fragment {
             if (handler != null) {
                 handler.removeCallbacks(unFinishRun);
             }
-            final int index = (int) v.getTag();
-            final ReqData req = new ReqData();
+            final  ChangeTmp tmp = (ChangeTmp) v.getTag();
 
-            String alertMsg = "";
-            switch (v.getId()) {
-                case R.id.processingBtn:
-                    req.type = PROCESSING.name();
-                    alertMsg = "確認開始製作此訂單";
-                    break;
-                case R.id.canFetchBtn:
-                    req.type = CAN_FETCH.name();
-                    alertMsg = "確認此訂單已可領取";
-                    break;
-                case R.id.finishBtn:
-                    req.type = FINISH.name();
-                    alertMsg = "確認此訂單已交易完成";
-                    break;
-            }
-            req.uuid = orderList.get(index).order_uuid;
+            OnItemClickListener listener = new OnItemClickListener(){
+
+                @Override
+                public void onItemClick(Object o, int position) {
+                    if (position == 1) {
+                        new Handler().postDelayed(new StatusChangeRun(tmp.orderUUID, tmp.type, null), 300);
+                    } else if (position == 0 && OrderStatus.UNFINISH.equals(STATUS_TAG)){
+                        handler.postDelayed(unFinishRun, NaberConstant.SELLER_LIVE_ORDER_REFRESH_TIMER);
+                    }
+                }
+            };
 
             new AlertView.Builder()
                     .setContext(getContext())
                     .setStyle(AlertView.Style.Alert)
                     .setTitle("")
-                    .setMessage(alertMsg)
+                    .setMessage(tmp.alertMsg)
                     .setOthers(new String[]{"返回", "確定"})
-                    .setOnItemClickListener(new OnItemClickListener() {
-                        @Override
-                        public void onItemClick(Object o, int position) {
-                            if (position == 1) {
-                                new Handler().postDelayed(new StatusChangeRun(index, req), 300);
-                            } else if (position == 0 && OrderStatus.UNFINISH.equals(STATUS_TAG)){
-                                handler.postDelayed(unFinishRun, NaberConstant.SELLER_LIVE_ORDER_REFRESH_TIMER);
-                            }
-                        }
-                    })
+                    .setOnItemClickListener(listener)
                     .build()
                     .setCancelable(false)
                     .show();
@@ -278,12 +260,14 @@ public class SellerOrdersFragment extends Fragment {
 
 
     class StatusChangeRun implements Runnable {
-        private ReqData req;
-        private int index;
+        private String message;
+        private String orderUUID;
+        private String type;
 
-        StatusChangeRun(int index, ReqData req) {
-            this.index = index;
-            this.req = req;
+        StatusChangeRun(String orderUUID, String type, String message) {
+            this.orderUUID = orderUUID;
+            this.type = type;
+            this.message = message;
         }
 
         @Override
@@ -291,11 +275,21 @@ public class SellerOrdersFragment extends Fragment {
             if (handler != null) {
                 handler.removeCallbacks(unFinishRun);
             }
-            sellerChangeOrder(this.req, this.index);
+            sellerChangeOrder(this.orderUUID, this.type, this.message);
         }
     }
 
-    private void sellerChangeOrder(ReqData req, final int index) {
+
+    private void sellerChangeOrder(String orderUUID, String type, String message) {
+        ReqData req = new ReqData();
+        req.uuid = orderUUID;
+        req.type = type;
+        if (Strings.isNullOrEmpty(type)){
+            return;
+        }
+        if (!Strings.isNullOrEmpty(message)){
+            req.message = message;
+        }
 
         ApiManager.sellerChangeOrder(req, new ThreadCallback(getContext()) {
             @Override
@@ -307,8 +301,7 @@ public class SellerOrdersFragment extends Fragment {
                     }
                     handler.post(unFinishRun);
                 }else {
-                    orderList.remove(index);
-                    adapter.notifyDataSetChanged();
+                    loadData(true);
                 }
             }
 
@@ -380,10 +373,9 @@ public class SellerOrdersFragment extends Fragment {
             if (handler != null) {
                 handler.removeCallbacks(unFinishRun);
             }
-            final int index = (int) v.getTag();
-            final ReqData req = new ReqData();
-            req.uuid = orderList.get(index).order_uuid;
-            req.type = OrderStatus.CANCEL.name();
+
+            final ChangeTmp tmp = (ChangeTmp)v.getTag();
+
             final CancelListenerView extView = new CancelListenerView();
             new AlertView.Builder()
                     .setContext(getContext())
@@ -393,8 +385,7 @@ public class SellerOrdersFragment extends Fragment {
                         @Override
                         public void onItemClick(Object o, int position) {
                             if (position == 1) {
-                                req.message = extView.getMessage();
-                                sellerChangeOrder(req, index);
+                                sellerChangeOrder(tmp.orderUUID, tmp.type, extView.getMessage());
                             } else if (position == 0 && OrderStatus.UNFINISH.equals(STATUS_TAG)) {
                                 handler.postDelayed(unFinishRun, NaberConstant.SELLER_LIVE_ORDER_REFRESH_TIMER);
                             }
@@ -414,10 +405,7 @@ public class SellerOrdersFragment extends Fragment {
             if (handler != null) {
                 handler.removeCallbacks(unFinishRun);
             }
-            final int index = (int) v.getTag();
-            final ReqData req = new ReqData();
-            req.uuid = orderList.get(index).order_uuid;
-            req.type = OrderStatus.FAIL.name();
+            final ChangeTmp tmp = (ChangeTmp) v.getTag();
             final String msg = "確定客戶跑單嗎？\n會影響客戶點餐的權益以及紅利點數";
             new AlertView.Builder()
                     .setContext(getContext())
@@ -429,8 +417,7 @@ public class SellerOrdersFragment extends Fragment {
                         @Override
                         public void onItemClick(Object o, int position) {
                             if (position == 1) {
-                                req.message = "你的商品超過時間未領取，記點一次，請注意往後的訂餐權利！";
-                                sellerChangeOrder(req, index);
+                                sellerChangeOrder(tmp.orderUUID, tmp.type, "你的商品超過時間未領取，記點一次，請注意往後的訂餐權利！");
                             } else if (position == 0 && OrderStatus.UNFINISH.equals(STATUS_TAG)) {
                                 handler.postDelayed(unFinishRun, NaberConstant.SELLER_LIVE_ORDER_REFRESH_TIMER);
                             }
@@ -588,6 +575,19 @@ public class SellerOrdersFragment extends Fragment {
             } else {
                 loadData(true);
             }
+        }
+    }
+
+
+    public static class ChangeTmp {
+        public String orderUUID;
+        public String type;
+        public String alertMsg;
+
+        public ChangeTmp(String orderUUID, String type, String alertMsg){
+            this.orderUUID = orderUUID;
+            this.type = type;
+            this.alertMsg = alertMsg;
         }
     }
 

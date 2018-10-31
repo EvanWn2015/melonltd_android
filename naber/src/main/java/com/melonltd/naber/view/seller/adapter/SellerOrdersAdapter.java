@@ -16,6 +16,7 @@ import com.melonltd.naber.model.type.Delivery;
 import com.melonltd.naber.model.type.OrderStatus;
 import com.melonltd.naber.util.IntegerTools;
 import com.melonltd.naber.util.Tools;
+import com.melonltd.naber.view.seller.page.SellerOrdersFragment;
 import com.melonltd.naber.vo.DemandsItemVo;
 import com.melonltd.naber.vo.ItemVo;
 import com.melonltd.naber.vo.OrderDetail;
@@ -54,8 +55,10 @@ public class SellerOrdersAdapter extends RecyclerView.Adapter<SellerOrdersAdapte
         holder.finishBtn.setVisibility(View.GONE);
 
         // set Tag
-        holder.setTag(position);
+//        holder.setTag(position);
         OrderVo order = this.orderList.get(position);
+
+        holder.setTag(order.order_uuid);
         OrderStatus status = OrderStatus.of(order.status);
         if(order.order_detail.order_type.delivery.equals(Delivery.IN)){
             holder.mealText.setText("內用");
@@ -161,12 +164,13 @@ public class SellerOrdersAdapter extends RecyclerView.Adapter<SellerOrdersAdapte
             finishBtn.setOnClickListener(statusChangeClickListener);
         }
 
-        private void setTag(int position) {
-            this.cancelBtn.setTag(position);
-            this.processingBtn.setTag(position);
-            this.failureBtn.setTag(position);
-            this.canFetchBtn.setTag(position);
-            this.finishBtn.setTag(position);
+        private void setTag(String orderUUID) {
+            this.cancelBtn.setTag(new SellerOrdersFragment.ChangeTmp(orderUUID, OrderStatus.CANCEL.name(), null));
+            this.processingBtn.setTag(new SellerOrdersFragment.ChangeTmp(orderUUID, OrderStatus.PROCESSING.name(), "確認開始製作此訂單"));
+            this.failureBtn.setTag(new SellerOrdersFragment.ChangeTmp(orderUUID, OrderStatus.FAIL.name(), null));
+            this.canFetchBtn.setTag(new SellerOrdersFragment.ChangeTmp(orderUUID, OrderStatus.CAN_FETCH.name(), "確認此訂單已可領取"));
+            this.finishBtn.setTag(new SellerOrdersFragment.ChangeTmp(orderUUID, OrderStatus.FINISH.name(), "確認此訂單已交易完成"));
+
         }
     }
 }
