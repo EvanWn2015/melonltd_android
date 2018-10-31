@@ -107,75 +107,75 @@ public class VerifySMSFragment extends Fragment implements View.OnClickListener 
         InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
         switch (v.getId()) {
-//            case R.id.requestVerifyCodeBtn:
-//
-//                if (!readCheckBox.isChecked()) {
-//                    new AlertView.Builder()
-//                            .setContext(getContext())
-//                            .setStyle(AlertView.Style.Alert)
-//                            .setTitle("")
-//                            .setMessage("請先閱讀隱私權政策條款，再進行註冊！")
-//                            .setCancelText("確定")
-//                            .build()
-//                            .setCancelable(true)
-//                            .show();
-//                    break;
-//                }
-//                if (!VerifyUtil.phoneNumber(phoneNamberEdit.getText().toString())) {
-//                    new AlertView.Builder()
-//                            .setContext(getContext())
-//                            .setStyle(AlertView.Style.Alert)
-//                            .setTitle("")
-//                            .setMessage("請輸入正確手機號碼，避免無法正常接收SMS")
-//                            .setCancelText("關閉")
-//                            .build()
-//                            .setCancelable(true)
-//                            .show();
-//                } else {
-//                    map.put("phone", phoneNamberEdit.getText().toString());
-//                    ApiManager.getSMSCode(map, new ThreadCallback(getContext()) {
-//                        @Override
-//                        public void onSuccess(String responseBody) {
-//                            Map<String, String> response = Tools.JSONPARSE.fromJson(responseBody, Map.class);
-//                            map.put("batch_id", response.get("batch_id"));
-//                            verifySMSEdit.setEnabled(true);
-//                            requestVerifyCodeBtn.setVisibility(View.GONE);
-//
-//                        }
-//
-//                        @Override
-//                        public void onFail(Exception error, String msg) {
-//                            new AlertView.Builder()
-//                                    .setContext(getContext())
-//                                    .setStyle(AlertView.Style.Alert)
-//                                    .setTitle("")
-//                                    .setMessage("今天求SMS密碼次數已經用盡，請明天再嘗試！！")
-//                                    .setCancelText("關閉")
-//                                    .build()
-//                                    .setCancelable(true)
-//                                    .show();
-//                        }
-//                    });
-//                }
-//                break;
-//            case R.id.privacyPolicyText:
-//                View view = getLayoutInflater().inflate(R.layout.privacy_policy_content, null);
-//                new AlertView.Builder()
-//                        .setContext(getContext())
-//                        .setStyle(AlertView.Style.Alert)
-//                        .setTitle("NABER 隱私權政策")
-//                        .setCancelText("確定")
-//                        .build()
-//                        .addExtView(view)
-//                        .setCancelable(false)
-//                        .setOnDismissListener(new OnDismissListener() {
-//                            @Override
-//                            public void onDismiss(Object o) {
-//                                readCheckBox.setChecked(true);
-//                            }
-//                        })
-//                        .show();
-//                break;
+            case R.id.requestVerifyCodeBtn:
+
+                if (!readCheckBox.isChecked()) {
+                    new AlertView.Builder()
+                            .setContext(getContext())
+                            .setStyle(AlertView.Style.Alert)
+                            .setTitle("")
+                            .setMessage("請先閱讀隱私權政策條款，再進行註冊！")
+                            .setCancelText("確定")
+                            .build()
+                            .setCancelable(true)
+                            .show();
+                    break;
+                }
+                if (!VerifyUtil.phoneNumber(phoneNamberEdit.getText().toString())) {
+                    new AlertView.Builder()
+                            .setContext(getContext())
+                            .setStyle(AlertView.Style.Alert)
+                            .setTitle("")
+                            .setMessage("請輸入正確手機號碼，避免無法正常接收SMS")
+                            .setCancelText("關閉")
+                            .build()
+                            .setCancelable(true)
+                            .show();
+                } else {
+                    map.put("phone", phoneNamberEdit.getText().toString());
+                    ApiManager.getSMSCode(map, new ThreadCallback(getContext()) {
+                        @Override
+                        public void onSuccess(String responseBody) {
+                            Map<String, String> response = Tools.JSONPARSE.fromJson(responseBody, Map.class);
+                            map.put("batch_id", response.get("batch_id"));
+                            verifySMSEdit.setEnabled(true);
+                            requestVerifyCodeBtn.setVisibility(View.GONE);
+
+                        }
+
+                        @Override
+                        public void onFail(Exception error, String msg) {
+                            new AlertView.Builder()
+                                    .setContext(getContext())
+                                    .setStyle(AlertView.Style.Alert)
+                                    .setTitle("")
+                                    .setMessage("今天求SMS密碼次數已經用盡，請明天再嘗試！！")
+                                    .setCancelText("關閉")
+                                    .build()
+                                    .setCancelable(true)
+                                    .show();
+                        }
+                    });
+                }
+                break;
+            case R.id.privacyPolicyText:
+                View view = getLayoutInflater().inflate(R.layout.privacy_policy_content, null);
+                new AlertView.Builder()
+                        .setContext(getContext())
+                        .setStyle(AlertView.Style.Alert)
+                        .setTitle("NABER 隱私權政策")
+                        .setCancelText("確定")
+                        .build()
+                        .addExtView(view)
+                        .setCancelable(false)
+                        .setOnDismissListener(new OnDismissListener() {
+                            @Override
+                            public void onDismiss(Object o) {
+                                readCheckBox.setChecked(true);
+                            }
+                        })
+                        .show();
+                break;
             case R.id.submitToRegisteredBun:
                 //TODO test Debug
                 Bundle bundle = new Bundle();
@@ -185,46 +185,46 @@ public class VerifySMSFragment extends Fragment implements View.OnClickListener 
                 readCheckBox.setChecked(false);
                 map = Maps.newHashMap();
                 BaseActivity.removeAndReplaceWhere(FRAGMENT, PageType.REGISTERED_USER, bundle);
-//                if (Strings.isNullOrEmpty(map.get("batch_id")) || Strings.isNullOrEmpty(phoneNamberEdit.getText().toString()) || Strings.isNullOrEmpty(verifySMSEdit.getText().toString())) {
-//                    new AlertView.Builder()
-//                            .setContext(getContext())
-//                            .setStyle(AlertView.Style.Alert)
-//                            .setTitle("")
-//                            .setMessage("請取得驗證碼後再送出驗證!")
-//                            .setCancelText("關閉")
-//                            .build()
-//                            .setCancelable(true)
-//                            .show();
-//                    break;
-//                }
+                if (Strings.isNullOrEmpty(map.get("batch_id")) || Strings.isNullOrEmpty(phoneNamberEdit.getText().toString()) || Strings.isNullOrEmpty(verifySMSEdit.getText().toString())) {
+                    new AlertView.Builder()
+                            .setContext(getContext())
+                            .setStyle(AlertView.Style.Alert)
+                            .setTitle("")
+                            .setMessage("請取得驗證碼後再送出驗證!")
+                            .setCancelText("關閉")
+                            .build()
+                            .setCancelable(true)
+                            .show();
+                    break;
+                }
                 map.put("phone", phoneNamberEdit.getText().toString());
                 map.put("code", verifySMSEdit.getText().toString());
-//                ApiManager.verifySMSCode(map, new ThreadCallback(getContext()) {
-//                    @Override
-//                    public void onSuccess(String responseBody) {
-//                        Bundle bundle = new Bundle();
-//                        bundle.putString("phone", phoneNamberEdit.getText().toString());
-//                        phoneNamberEdit.setText("");
-//                        verifySMSEdit.setText("");
-//                        readCheckBox.setChecked(false);
-//                        map = Maps.newHashMap();
-//                        BaseActivity.removeAndReplaceWhere(FRAGMENT, PageType.REGISTERED_USER, bundle);
-//                    }
-//
-//                    @Override
-//                    public void onFail(Exception error, String msg) {
-//                        new AlertView.Builder()
-//                                .setContext(getContext())
-//                                .setStyle(AlertView.Style.Alert)
-//                                .setTitle("")
-//                                .setMessage(msg)
-//                                .setCancelText("關閉")
-//                                .build()
-//                                .setCancelable(true)
-//                                .show();
-//                    }
-//                });
-//                break;
+                ApiManager.verifySMSCode(map, new ThreadCallback(getContext()) {
+                    @Override
+                    public void onSuccess(String responseBody) {
+                        Bundle bundle = new Bundle();
+                        bundle.putString("phone", phoneNamberEdit.getText().toString());
+                        phoneNamberEdit.setText("");
+                        verifySMSEdit.setText("");
+                        readCheckBox.setChecked(false);
+                        map = Maps.newHashMap();
+                        BaseActivity.removeAndReplaceWhere(FRAGMENT, PageType.REGISTERED_USER, bundle);
+                    }
+
+                    @Override
+                    public void onFail(Exception error, String msg) {
+                        new AlertView.Builder()
+                                .setContext(getContext())
+                                .setStyle(AlertView.Style.Alert)
+                                .setTitle("")
+                                .setMessage(msg)
+                                .setCancelText("關閉")
+                                .build()
+                                .setCancelable(true)
+                                .show();
+                    }
+                });
+                break;
         }
     }
 }
