@@ -457,8 +457,6 @@ public class SellerOrdersFragment extends Fragment {
                 handler.removeCallbacks(unFinishRun);
             }
 
-            orderList.clear();
-            adapter.notifyDataSetChanged();
             handler.post(unFinishRun);
         }
     }
@@ -474,6 +472,10 @@ public class SellerOrdersFragment extends Fragment {
 
         @Override
         public void run() {
+
+            orderList.clear();
+            adapter.notifyDataSetChanged();
+
             reqData.page = 1;
             reqData.loadingMore = true;
 
@@ -500,6 +502,7 @@ public class SellerOrdersFragment extends Fragment {
                     reqData.loadingMore = list.size() % NaberConstant.PAGE == 0 && list.size() != 0;
                     orderList.addAll(list);
                     adapter.notifyDataSetChanged();
+
                     handler.postDelayed(unFinishRun, NaberConstant.SELLER_LIVE_ORDER_REFRESH_TIMER);
                 }
 
