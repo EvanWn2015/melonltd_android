@@ -8,7 +8,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,9 +23,7 @@ import com.google.common.collect.Lists;
 import com.melonltd.naber.R;
 import com.melonltd.naber.model.api.ApiManager;
 import com.melonltd.naber.model.api.ThreadCallback;
-import com.melonltd.naber.model.bean.Model;
 import com.melonltd.naber.model.constant.NaberConstant;
-import com.melonltd.naber.model.type.Delivery;
 import com.melonltd.naber.model.type.OrderStatus;
 import com.melonltd.naber.util.Tools;
 import com.melonltd.naber.view.seller.SellerMainActivity;
@@ -45,22 +42,23 @@ import cn.bingoogolapple.refreshlayout.BGARefreshLayout;
 
 import static com.melonltd.naber.model.type.OrderStatus.CAN_FETCH;
 import static com.melonltd.naber.model.type.OrderStatus.FINISH;
-import static com.melonltd.naber.model.type.OrderStatus.LIVE;
 import static com.melonltd.naber.model.type.OrderStatus.PROCESSING;
 import static com.melonltd.naber.model.type.OrderStatus.UNFINISH;
 
 
 public class SellerOrdersFragment extends Fragment {
-        private static final String TAG = SellerOrdersFragment.class.getSimpleName();
+    private static final String TAG = SellerOrdersFragment.class.getSimpleName();
     public static SellerOrdersFragment FRAGMENT = null;
-    private TextView searchDateText;
-    private TextView liveText, untreatedText, processingText, canFetchText;
+    private static TextView searchDateText;
+    private TextView untreatedText, processingText, canFetchText;
+    private static ReqData reqData = new ReqData();
+    private static OrderStatus STATUS_TAG = OrderStatus.UNFINISH;
 
-    private ReqData unReq = new ReqData(), prReq = new ReqData(), canReq = new ReqData();
-    private static OrderStatus STATUS_TAG = OrderStatus.LIVE;
+    private static List<OrderVo> orderList = Lists.<OrderVo>newArrayList();
     private static SellerOrdersAdapter adapter;
-    private static Handler handler;
-    private static LiveOrderRun liveOrderRun;
+    private static Handler handler = new Handler();
+
+    private static UnFinishRun unFinishRun;
     private static Context context;
 
     public SellerOrdersFragment() {
@@ -80,10 +78,7 @@ public class SellerOrdersFragment extends Fragment {
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        unReq.search_type = OrderStatus.UNFINISH.name();
-        prReq.search_type = OrderStatus.PROCESSING.name();
-        canReq.search_type = OrderStatus.CAN_FETCH.name();
-//        handler = new Handler();
+        reqData.search_type = OrderStatus.UNFINISH.name();
         this.context = getContext();
     }
 
@@ -107,9 +102,9 @@ public class SellerOrdersFragment extends Fragment {
 
         SellerMainActivity.notifyDateRange();
 
-        if (OrderStatus.LIVE.equals(STATUS_TAG)){
-            loadLiveData();
-        }else {
+        if (OrderStatus.UNFINISH.equals(STATUS_TAG)) {
+            loadUnData();
+        } else {
             loadData(true);
         }
     }
@@ -117,9 +112,8 @@ public class SellerOrdersFragment extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
-
-        if (handler != null){
-            handler.removeCallbacks(liveOrderRun);
+        if (handler != null) {
+            handler.removeCallbacks(unFinishRun);
         }
     }
 
@@ -134,7 +128,6 @@ public class SellerOrdersFragment extends Fragment {
         refreshLayout.setRefreshViewHolder(refreshViewHolder);
         searchDateText = v.findViewById(R.id.searchDateText);
 
-//        liveText = v.findViewById(R.id.liveText);
         untreatedText = v.findViewById(R.id.untreatedText);
         processingText = v.findViewById(R.id.processingText);
         canFetchText = v.findViewById(R.id.canFetchText);
@@ -144,11 +137,9 @@ public class SellerOrdersFragment extends Fragment {
         searchDateText.setOnClickListener(new SelectDateListener());
         TabClickListener tabClickListener = new TabClickListener();
 
-//        liveText.setTag(LIVE);
         untreatedText.setTag(UNFINISH);
         processingText.setTag(PROCESSING);
         canFetchText.setTag(CAN_FETCH);
-//        liveText.setOnClickListener(tabClickListener);
         untreatedText.setOnClickListener(tabClickListener);
         processingText.setOnClickListener(tabClickListener);
         canFetchText.setOnClickListener(tabClickListener);
@@ -157,10 +148,9 @@ public class SellerOrdersFragment extends Fragment {
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
 
-        adapter = new SellerOrdersAdapter(new CancelListener(), new FailureListener(), new StatusChangeClickListener());
+        this.adapter = new SellerOrdersAdapter(this.orderList, new CancelListener(), new FailureListener(), new StatusChangeClickListener());
         recyclerView.setAdapter(adapter);
         Calendar now = Calendar.getInstance();
-        searchDateText.setVisibility(View.GONE);
         searchDateText.setText(new SimpleDateFormat("yyyy-MM-dd").format(now.getTime()));
         searchDateText.setTag(Tools.FORMAT.formatDate(now.getTime()));
 
@@ -169,9 +159,9 @@ public class SellerOrdersFragment extends Fragment {
             public void onBGARefreshLayoutBeginRefreshing(BGARefreshLayout refreshLayout) {
                 refreshLayout.endRefreshing();
 
-                if (OrderStatus.LIVE.equals(STATUS_TAG)){
-                    loadLiveData();
-                }else {
+                if (OrderStatus.UNFINISH.equals(STATUS_TAG)) {
+                    loadUnData();
+                } else {
                     loadData(true);
                 }
             }
@@ -180,19 +170,7 @@ public class SellerOrdersFragment extends Fragment {
             public boolean onBGARefreshLayoutBeginLoadingMore(BGARefreshLayout refreshLayout) {
                 refreshLayout.endLoadingMore();
 
-                boolean loadingMore = false;
-                switch (STATUS_TAG) {
-                    case UNFINISH:
-                        loadingMore = unReq.loadingMore;
-                        break;
-                    case PROCESSING:
-                        loadingMore = prReq.loadingMore;
-                        break;
-                    case CAN_FETCH:
-                        loadingMore = canReq.loadingMore;
-                        break;
-                }
-                if (loadingMore) {
+                if (reqData.loadingMore) {
                     loadData(false);
                 }
 
@@ -204,51 +182,58 @@ public class SellerOrdersFragment extends Fragment {
     class SelectDateListener implements View.OnClickListener {
         @Override
         public void onClick(View view) {
-//            if (orderListRun != null) {
-//                handler.removeCallbacks(orderListRun);
-//            }
-            if (OrderStatus.LIVE.equals(STATUS_TAG)){
 
-            }else {
-                long date = 1000 * 60 * 60 * 24 * 2L;
-                long dayOne = 1000 * 60 * 60 * 24 * 1L;
-
-                Calendar now = Calendar.getInstance();
-                Calendar startDate = Calendar.getInstance();
-                startDate.setTimeInMillis(now.getTime().getTime() - dayOne);
-                Calendar endDate = Calendar.getInstance();
-                endDate.setTimeInMillis(now.getTime().getTime() + date);
-
-                new TimePickerBuilder(getContext(),
-                        new OnTimeSelectListener() {
-                            @Override
-                            public void onTimeSelect(Date date, View v) {
-                                searchDateText.setTag(Tools.FORMAT.formatDate(date));
-                                searchDateText.setText(new SimpleDateFormat("yyyy-MM-dd").format(date));
-                                loadData(true);
-                            }
-                        })
-                        .setType(new boolean[]{true, true, true, false, false, false})
-                        .setTitleSize(20)
-                        .setOutSideCancelable(true)
-                        .isCyclic(false)
-                        .setTitleBgColor(getResources().getColor(R.color.naber_dividing_line_gray))
-                        .setCancelColor(getResources().getColor(R.color.naber_dividing_gray))
-                        .setSubmitColor(getResources().getColor(R.color.naber_dividing_gray))
-                        .setDate(now)
-                        .setRangDate(startDate, endDate)
-                        .isCenterLabel(false)
-                        .isDialog(false)
-                        .build()
-                        .show();
+            if (OrderStatus.UNFINISH.equals(STATUS_TAG)){
+                handler.removeCallbacks(unFinishRun);
             }
 
+            long date = 1000 * 60 * 60 * 24 * 2L;
+            long dayOne = 1000 * 60 * 60 * 24 * 1L;
+
+            Calendar now = Calendar.getInstance();
+            Calendar startDate = Calendar.getInstance();
+            startDate.setTimeInMillis(now.getTime().getTime() - dayOne);
+            Calendar endDate = Calendar.getInstance();
+            endDate.setTimeInMillis(now.getTime().getTime() + date);
+
+            new TimePickerBuilder(getContext(),
+                    new OnTimeSelectListener() {
+                        @Override
+                        public void onTimeSelect(Date date, View v) {
+                            searchDateText.setTag(Tools.FORMAT.formatDate(date));
+                            searchDateText.setText(new SimpleDateFormat("yyyy-MM-dd").format(date));
+
+                            if (OrderStatus.UNFINISH.equals(STATUS_TAG)){
+                                handler.post(unFinishRun);
+                            }else {
+                                loadData(true);
+                            }
+                        }
+                    })
+                    .setType(new boolean[]{true, true, true, false, false, false})
+                    .setTitleSize(20)
+                    .setOutSideCancelable(true)
+                    .isCyclic(false)
+                    .setTitleBgColor(getResources().getColor(R.color.naber_dividing_line_gray))
+                    .setCancelColor(getResources().getColor(R.color.naber_dividing_gray))
+                    .setSubmitColor(getResources().getColor(R.color.naber_dividing_gray))
+                    .setDate(now)
+                    .setRangDate(startDate, endDate)
+                    .isCenterLabel(false)
+                    .isDialog(false)
+                    .build()
+                    .show();
         }
+
     }
 
     class StatusChangeClickListener implements View.OnClickListener {
+
         @Override
         public void onClick(View v) {
+            if (handler != null) {
+                handler.removeCallbacks(unFinishRun);
+            }
             final int index = (int) v.getTag();
             final ReqData req = new ReqData();
 
@@ -267,7 +252,7 @@ public class SellerOrdersFragment extends Fragment {
                     alertMsg = "確認此訂單已交易完成";
                     break;
             }
-            req.uuid = Model.SELLER_TMP_ORDERS_LIST.get(index).order_uuid;
+            req.uuid = orderList.get(index).order_uuid;
 
             new AlertView.Builder()
                     .setContext(getContext())
@@ -280,11 +265,13 @@ public class SellerOrdersFragment extends Fragment {
                         public void onItemClick(Object o, int position) {
                             if (position == 1) {
                                 new Handler().postDelayed(new StatusChangeRun(index, req), 300);
+                            } else if (position == 0 && OrderStatus.UNFINISH.equals(STATUS_TAG)){
+                                handler.postDelayed(unFinishRun, NaberConstant.SELLER_LIVE_ORDER_REFRESH_TIMER);
                             }
                         }
                     })
                     .build()
-                    .setCancelable(true)
+                    .setCancelable(false)
                     .show();
         }
     }
@@ -301,46 +288,37 @@ public class SellerOrdersFragment extends Fragment {
 
         @Override
         public void run() {
-//            req.uuid = Model.SELLER_TMP_ORDERS_LIST.get(index).order_uuid;
+            if (handler != null) {
+                handler.removeCallbacks(unFinishRun);
+            }
             sellerChangeOrder(this.req, this.index);
         }
     }
 
     private void sellerChangeOrder(ReqData req, final int index) {
-        if (handler != null){
-            handler.removeCallbacks(liveOrderRun);
-        }
+
         ApiManager.sellerChangeOrder(req, new ThreadCallback(getContext()) {
             @Override
             public void onSuccess(String responseBody) {
-                Model.SELLER_TMP_ORDERS_LIST.remove(index);
-                switch (STATUS_TAG) {
-                    case UNFINISH:
-                        Model.SELLER_UNFINISH_ORDERS_LIST.remove(index);
-                        adapter.notifyDataSetChanged();
-                        break;
-                    case PROCESSING:
-                        Model.SELLER_PROCESSING_ORDERS_LIST.remove(index);
-                        adapter.notifyDataSetChanged();
-                        break;
-                    case CAN_FETCH:
-                        Model.SELLER_CAN_FETCH_ORDERS_LIST.remove(index);
-                        adapter.notifyDataSetChanged();
-                        break;
-                    case LIVE:
-                        adapter.notifyDataSetChanged();
-                        handler.post(liveOrderRun);
-                        break;
+
+                if (OrderStatus.UNFINISH.equals(STATUS_TAG)){
+                    if (handler != null){
+                        handler.removeCallbacks(unFinishRun);
+                    }
+                    handler.post(unFinishRun);
+                }else {
+                    orderList.remove(index);
+                    adapter.notifyDataSetChanged();
                 }
             }
 
             @Override
             public void onFail(Exception error, String msg) {
-                if (OrderStatus.LIVE.equals(STATUS_TAG)){
-                    if (handler != null){
-                        handler.removeCallbacks(liveOrderRun);
+                if (OrderStatus.UNFINISH.equals(STATUS_TAG)) {
+                    if (handler != null) {
+                        handler.removeCallbacks(unFinishRun);
                     }
-                    handler.post(liveOrderRun);
+                    handler.post(unFinishRun);
                 }
             }
         });
@@ -399,9 +377,12 @@ public class SellerOrdersFragment extends Fragment {
     class CancelListener implements View.OnClickListener {
         @Override
         public void onClick(final View v) {
+            if (handler != null) {
+                handler.removeCallbacks(unFinishRun);
+            }
             final int index = (int) v.getTag();
             final ReqData req = new ReqData();
-            req.uuid = Model.SELLER_TMP_ORDERS_LIST.get(index).order_uuid;
+            req.uuid = orderList.get(index).order_uuid;
             req.type = OrderStatus.CANCEL.name();
             final CancelListenerView extView = new CancelListenerView();
             new AlertView.Builder()
@@ -414,12 +395,14 @@ public class SellerOrdersFragment extends Fragment {
                             if (position == 1) {
                                 req.message = extView.getMessage();
                                 sellerChangeOrder(req, index);
+                            } else if (position == 0 && OrderStatus.UNFINISH.equals(STATUS_TAG)) {
+                                handler.postDelayed(unFinishRun, NaberConstant.SELLER_LIVE_ORDER_REFRESH_TIMER);
                             }
                         }
                     })
                     .build()
                     .addExtView(extView.getView())
-                    .setCancelable(true)
+                    .setCancelable(false)
                     .show();
         }
     }
@@ -428,9 +411,12 @@ public class SellerOrdersFragment extends Fragment {
     class FailureListener implements View.OnClickListener {
         @Override
         public void onClick(final View v) {
+            if (handler != null) {
+                handler.removeCallbacks(unFinishRun);
+            }
             final int index = (int) v.getTag();
             final ReqData req = new ReqData();
-            req.uuid = Model.SELLER_TMP_ORDERS_LIST.get(index).order_uuid;
+            req.uuid = orderList.get(index).order_uuid;
             req.type = OrderStatus.FAIL.name();
             final String msg = "確定客戶跑單嗎？\n會影響客戶點餐的權益以及紅利點數";
             new AlertView.Builder()
@@ -445,132 +431,118 @@ public class SellerOrdersFragment extends Fragment {
                             if (position == 1) {
                                 req.message = "你的商品超過時間未領取，記點一次，請注意往後的訂餐權利！";
                                 sellerChangeOrder(req, index);
+                            } else if (position == 0 && OrderStatus.UNFINISH.equals(STATUS_TAG)) {
+                                handler.postDelayed(unFinishRun, NaberConstant.SELLER_LIVE_ORDER_REFRESH_TIMER);
                             }
                         }
                     })
                     .build()
-                    .setCancelable(true)
+                    .setCancelable(false)
                     .show();
         }
     }
 
 
-    public static void loadLiveData() {
-        if (OrderStatus.LIVE.equals(STATUS_TAG)){
+    public static void loadUnData() {
+        if (OrderStatus.UNFINISH.equals(STATUS_TAG)) {
             if (handler == null) {
                 handler = new Handler();
             }
 
-            if (liveOrderRun == null) {
-                liveOrderRun = new LiveOrderRun(context);
+            if (unFinishRun == null) {
+                unFinishRun = new UnFinishRun(context);
             }
 
-            if (handler != null && liveOrderRun!= null){
-                handler.removeCallbacks(liveOrderRun);
+            if (handler != null && unFinishRun != null) {
+                handler.removeCallbacks(unFinishRun);
             }
 
-            Model.SELLER_TMP_ORDERS_LIST.clear();
-            handler.post(liveOrderRun);
+            orderList.clear();
+            adapter.notifyDataSetChanged();
+            handler.post(unFinishRun);
         }
     }
 
 
-    static class LiveOrderRun implements Runnable {
+    // 問處理資料 輪循打Req
+    static class UnFinishRun implements Runnable {
         private Context context;
-        LiveOrderRun (Context context){
+
+        public UnFinishRun(Context context) {
             this.context = context;
         }
+
         @Override
         public void run() {
-            Model.SELLER_TMP_ORDERS_LIST.clear();
-            adapter.notifyDataSetChanged();
-            ApiManager.sellerOrderLive(new ThreadCallback(this.context) {
+            reqData.page = 1;
+            reqData.loadingMore = true;
+
+            ReqData req = new ReqData();
+            req.page = 1;
+            req.search_type = OrderStatus.UNFINISH.name();
+            if (searchDateText != null){
+                req.date = (String)searchDateText.getTag();
+            }else {
+                req.date = new SimpleDateFormat("yyyy-MM-dd").format(new Date());
+            }
+
+
+            ApiManager.sellerOrderList(req, new ThreadCallback(this.context) {
                 @Override
                 public void onSuccess(String responseBody) {
+                    orderList.clear();
                     List<OrderVo> list = Tools.JSONPARSE.fromJsonList(responseBody, OrderVo[].class);
+
                     for (int i = 0; i < list.size(); i++) {
                         list.get(i).order_detail = Tools.JSONPARSE.fromJson(list.get(i).order_data, OrderDetail.class);
                     }
-                    Model.SELLER_TMP_ORDERS_LIST.addAll(list);
+
+                    reqData.loadingMore = list.size() % NaberConstant.PAGE == 0 && list.size() != 0;
+                    orderList.addAll(list);
                     adapter.notifyDataSetChanged();
-                    handler.postDelayed(liveOrderRun, NaberConstant.SELLER_LIVE_ORDER_REFRESH_TIMER);
+                    handler.postDelayed(unFinishRun, NaberConstant.SELLER_LIVE_ORDER_REFRESH_TIMER);
                 }
 
                 @Override
                 public void onFail(Exception error, String msg) {
-                    handler.postDelayed(liveOrderRun, NaberConstant.SELLER_LIVE_ORDER_REFRESH_TIMER);
+                    handler.postDelayed(unFinishRun, NaberConstant.SELLER_LIVE_ORDER_REFRESH_TIMER);
                 }
             });
         }
     }
 
+
     private void loadData(boolean isRefresh) {
         if (isRefresh) {
-            Model.SELLER_TMP_ORDERS_LIST.clear();
-            switch (STATUS_TAG) {
-                case UNFINISH:
-                    unReq.page = 0;
-                    Model.SELLER_UNFINISH_ORDERS_LIST.clear();
-                    break;
-                case PROCESSING:
-                    prReq.page = 0;
-                    Model.SELLER_PROCESSING_ORDERS_LIST.clear();
-                    break;
-                case CAN_FETCH:
-                    canReq.page = 0;
-                    Model.SELLER_CAN_FETCH_ORDERS_LIST.clear();
-                    break;
-            }
+            orderList.clear();
+            adapter.notifyDataSetChanged();
+            reqData.page = 0;
         }
 
-        ReqData req = new ReqData();
-        switch (STATUS_TAG) {
-            case UNFINISH:
-                unReq.page++;
-                req = unReq;
-                break;
-            case PROCESSING:
-                prReq.page++;
-                req = prReq;
-                break;
-            case CAN_FETCH:
-                canReq.page++;
-                req = canReq;
-                break;
+        if (OrderStatus.UNFINISH.equals(STATUS_TAG)){
+            handler.removeCallbacks(unFinishRun);
         }
-        req.date = (String) searchDateText.getTag();
-        loadDataNotPost(req);
-    }
 
-    private void loadDataNotPost(final ReqData req) {
-        ApiManager.sellerOrderList(req, new ThreadCallback(getContext()) {
+        reqData.page++;
+        reqData.date = (String) searchDateText.getTag();
+
+        ApiManager.sellerOrderList(reqData, new ThreadCallback(getContext()) {
             @Override
             public void onSuccess(String responseBody) {
-                Model.SELLER_TMP_ORDERS_LIST.clear();
+
                 List<OrderVo> list = Tools.JSONPARSE.fromJsonList(responseBody, OrderVo[].class);
                 for (int i = 0; i < list.size(); i++) {
                     list.get(i).order_detail = Tools.JSONPARSE.fromJson(list.get(i).order_data, OrderDetail.class);
                 }
 
-                boolean loadingMore = list.size() % NaberConstant.PAGE == 0 && list.size() != 0;
-                switch (STATUS_TAG) {
-                    case UNFINISH:
-                        unReq.loadingMore = loadingMore;
-                        Model.SELLER_UNFINISH_ORDERS_LIST.addAll(list);
-                        Model.SELLER_TMP_ORDERS_LIST.addAll(Model.SELLER_UNFINISH_ORDERS_LIST);
-                        break;
-                    case PROCESSING:
-                        prReq.loadingMore = loadingMore;
-                        Model.SELLER_PROCESSING_ORDERS_LIST.addAll(list);
-                        Model.SELLER_TMP_ORDERS_LIST.addAll(Model.SELLER_PROCESSING_ORDERS_LIST);
-                        break;
-                    case CAN_FETCH:
-                        canReq.loadingMore = loadingMore;
-                        Model.SELLER_CAN_FETCH_ORDERS_LIST.addAll(list);
-                        Model.SELLER_TMP_ORDERS_LIST.addAll(Model.SELLER_CAN_FETCH_ORDERS_LIST);
-                        break;
-                }
+                reqData.loadingMore  = list.size() % NaberConstant.PAGE == 0 && list.size() != 0;
+
+                orderList.addAll(list);
                 adapter.notifyDataSetChanged();
+
+                if (OrderStatus.UNFINISH.equals(STATUS_TAG)){
+                    handler.postDelayed(unFinishRun, NaberConstant.SELLER_LIVE_ORDER_REFRESH_TIMER);
+                }
             }
 
             @Override
@@ -583,20 +555,22 @@ public class SellerOrdersFragment extends Fragment {
     class TabClickListener implements View.OnClickListener {
         @Override
         public void onClick(View view) {
-            if (handler != null){
-                handler.removeCallbacks(liveOrderRun);
+            if (handler != null) {
+                handler.removeCallbacks(unFinishRun);
             }
 
             OrderStatus status = (OrderStatus) view.getTag();
             if (STATUS_TAG.equals(status)) {
                 return;
             }
+
             STATUS_TAG = status;
+            reqData.search_type = STATUS_TAG.name();
+            reqData.loadingMore = true;
             changeTab((TextView) view, status);
         }
 
         private void changeTab(TextView textView, OrderStatus status) {
-//                                              liveText,
             List<TextView> views = Lists.newArrayList(untreatedText, processingText, canFetchText);
             for (TextView tv : views) {
                 tv.setTextColor(getResources().getColor(android.R.color.black));
@@ -606,11 +580,9 @@ public class SellerOrdersFragment extends Fragment {
                     tv.setTextColor(getResources().getColor(android.R.color.white));
                 }
             }
-            if (OrderStatus.LIVE.equals(STATUS_TAG)) {
-                loadLiveData();
-                searchDateText.setVisibility(View.GONE);
+            if (OrderStatus.UNFINISH.equals(STATUS_TAG)) {
+                loadUnData();
             } else {
-                searchDateText.setVisibility(View.VISIBLE);
                 loadData(true);
             }
         }

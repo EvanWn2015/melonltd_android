@@ -40,10 +40,6 @@ public class Model {
     public static List<OrderVo> SELLER_QUICK_SEARCH_ORDERS = Lists.<OrderVo>newArrayList();
 
     public static List<DateRangeVo> SELLER_BUSINESS_TIME_RANGE = Lists.<DateRangeVo>newArrayList();
-    public static List<OrderVo> SELLER_TMP_ORDERS_LIST = Lists.<OrderVo>newArrayList();
-    public static List<OrderVo> SELLER_UNFINISH_ORDERS_LIST = Lists.<OrderVo>newArrayList();
-    public static List<OrderVo> SELLER_PROCESSING_ORDERS_LIST = Lists.<OrderVo>newArrayList();
-    public static List<OrderVo> SELLER_CAN_FETCH_ORDERS_LIST = Lists.<OrderVo>newArrayList();
     public static SellerStatVo SELLER_STAT = new SellerStatVo();
 
     public static List<OrderVo> SELLER_STAT_LOGS = Lists.<OrderVo>newArrayList();
