@@ -83,6 +83,11 @@ public class Tools {
             simpleDate = new SimpleDateFormat("yyyy-MM-dd");
             return simpleDate.format(date) + value;
         }
+
+        public static String formatDate(Date date, String pattern) {
+            simpleDate = new SimpleDateFormat(pattern);
+            return simpleDate.format(date);
+        }
     }
 
     public static class JsonParse {

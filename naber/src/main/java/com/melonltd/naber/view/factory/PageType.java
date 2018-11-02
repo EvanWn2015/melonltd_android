@@ -8,6 +8,7 @@ import com.melonltd.naber.view.common.page.RecoverPasswordFragment;
 import com.melonltd.naber.view.common.page.RegisteredFragment;
 import com.melonltd.naber.view.common.page.RegisteredSellerFragment;
 import com.melonltd.naber.view.common.page.VerifySMSFragment;
+import com.melonltd.naber.view.seller.page.SellerCalendarFragment;
 import com.melonltd.naber.view.seller.page.SellerCategoryListFragment;
 import com.melonltd.naber.view.seller.page.SellerDetailFragment;
 import com.melonltd.naber.view.seller.page.SellerFoodEditFragment;
@@ -74,7 +75,8 @@ public enum PageType {
     SELLER_SET_UP(R.string.seller_menu_set_up_btn, 4, SellerSetUpFragment.class),
     SELLER_DETAIL(R.string.seller_menu_seller_detail, 4, SellerDetailFragment.class),
     SELLER_SIMPLE_INFO(R.string.seller_menu_simple_information, 4, SellerSimpleInformationFragment.class),
-    SELLER_RESET_PASSWORD(R.string.common_page_reset_password_title,4,SellerResetPasswordFragment.class);
+    SELLER_RESET_PASSWORD(R.string.common_page_reset_password_title,4,SellerResetPasswordFragment.class),
+    SELLER_CALENDAR(R.string.seller_page_calendar,4,SellerCalendarFragment.class);
 
 
     private final int id;

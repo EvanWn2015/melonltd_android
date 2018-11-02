@@ -135,6 +135,11 @@ public class SPService {
             SERVICE.preferences.edit().clear().commit();
         }
     }
+    public static void clearAccount(){
+        String account = getAccout();
+        SERVICE.preferences.edit().clear().commit();
+        setAccout(account);
+    }
 
     public void setPreferences(SharedPreferences preferences) {
         this.preferences = preferences;

@@ -47,25 +47,25 @@
                 android:textColor="@android:color/black"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toTopOf="@+id/logoText2"
+                app:layout_constraintBottom_toTopOf="@+id/accountEdit"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/logoImage" />
 
-            <TextView
-                android:id="@+id/logoText2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:text="@string/logo_text_2"
-                android:textAlignment="center"
-                android:textAllCaps="false"
-                android:textColor="@android:color/black"
-                android:textSize="18sp"
-                app:layout_constraintBottom_toTopOf="@+id/accountEdit"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/logoText1" />
+            <!--<TextView-->
+                <!--android:id="@+id/logoText2"-->
+                <!--android:layout_width="wrap_content"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:layout_marginBottom="8dp"-->
+                <!--android:text="@string/logo_text_2"-->
+                <!--android:textAlignment="center"-->
+                <!--android:textAllCaps="false"-->
+                <!--android:textColor="@android:color/black"-->
+                <!--android:textSize="18sp"-->
+                <!--app:layout_constraintBottom_toTopOf="@+id/accountEdit"-->
+                <!--app:layout_constraintEnd_toEndOf="parent"-->
+                <!--app:layout_constraintStart_toStartOf="parent"-->
+                <!--app:layout_constraintTop_toBottomOf="@+id/logoText1" />-->
 
 
             <EditText
@@ -86,13 +86,14 @@
                 app:layout_constraintBottom_toTopOf="@+id/passwordEdit"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/logoText2" />
+                app:layout_constraintTop_toBottomOf="@+id/logoText1" />
             <!--android:text="NER-18X1X11@melonltd.com.tw"-->
 
             <EditText
                 android:id="@+id/passwordEdit"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
@@ -112,12 +113,15 @@
             <Button
                 android:id="@+id/loginBtn"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
                 android:layout_marginBottom="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:background="@color/naber_basis"
+                android:background="@drawable/button_rectangle"
                 android:text="@string/login_btn_text"
-                android:textColor="@android:color/black"
+                android:textColor="@android:color/white"
+                app:layout_constraintBottom_toTopOf="@+id/toVerifySMSBtn"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/passwordEdit" />
@@ -125,23 +129,24 @@
             <Button
                 android:id="@+id/toVerifySMSBtn"
                 android:layout_width="0dp"
-                android:layout_height="30dp"
-                android:layout_marginBottom="8dp"
+                android:layout_height="40dp"
+                android:layout_marginBottom="16dp"
                 android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
-                android:background="@drawable/naber_reverse_orange_button_style"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/button_rectangle2"
                 android:includeFontPadding="false"
                 android:padding="0dp"
                 android:text="@string/registered_btn_text"
                 android:textAllCaps="false"
-                android:textColor="@color/naber_basis_orange"
+                android:textColor="@android:color/white"
                 android:textSize="14sp"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/recoverPasswordText"
                 app:layout_constraintEnd_toStartOf="@+id/toRegisteredSellerBtn"
-                app:layout_constraintTop_toTopOf="@+id/toRegisteredSellerBtn" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/loginBtn" />
 
             <Button
-                android:visibility="gone"
                 android:id="@+id/toRegisteredSellerBtn"
                 android:layout_width="0dp"
                 android:layout_height="30dp"
@@ -155,6 +160,7 @@
                 android:textAllCaps="false"
                 android:textColor="@color/naber_basis_orange"
                 android:textSize="14sp"
+                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/loginBtn" />
@@ -165,13 +171,15 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="16dp"
                 android:text="@string/forget_password_text"
                 android:textColor="@android:color/black"
                 android:textSize="12sp"
-                app:layout_constraintBottom_toBottomOf="@+id/passwordEdit"
-                app:layout_constraintEnd_toEndOf="@+id/passwordEdit"
-                app:layout_constraintTop_toTopOf="@+id/passwordEdit" />
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/toVerifySMSBtn" />
 
             <CheckBox
                 android:id="@+id/rememberMeCheckBox"
@@ -179,7 +187,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:layout_marginEnd="8dp"
-                android:layout_marginRight="8dp"
                 android:layout_marginTop="8dp"
                 android:text="記住帳號"
                 android:textSize="12sp"

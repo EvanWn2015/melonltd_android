@@ -40,7 +40,10 @@ public class MyFirebaseMessagingService extends FirebaseMessagingService {
         } else if (Lists.newArrayList(identity, currentIdentity).contains(Identity.SELLERS)) {
             sendNotification(remoteMessage.getNotification());
             if (SellerOrdersFragment.FRAGMENT != null){
-                SellerOrdersFragment.loadLiveData();
+                // 即時
+//                SellerOrdersFragment.loadLiveData();
+                // 為處理
+                SellerOrdersFragment.loadUnData();
             }
         }
     }

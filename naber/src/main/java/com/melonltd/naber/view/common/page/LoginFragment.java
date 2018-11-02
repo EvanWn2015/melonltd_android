@@ -113,7 +113,6 @@ public class LoginFragment extends Fragment implements View.OnClickListener {
                             SPService.setUserName(resp.name);
                             SPService.setAccout(resp.account);
                             SPService.setUserPhone(resp.phone);
-                            SPService.setOauth(resp.account_uuid);
                             SPService.setIdentity(resp.identity);
 
                             SPService.setRememberMe(rememberMe.isChecked());
