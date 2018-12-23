@@ -62,7 +62,6 @@ public class UserExchangeSubmitOrdersFragment extends Fragment implements View.O
     private TimePickerView timePickerView;
     private CheckBox readRuleCheckBtn;
 
-
     private  ActivitiesVo activities;
     private  OrderDetail detail;
     private List<String> options2Items = Lists.newArrayList("外帶", "內用");

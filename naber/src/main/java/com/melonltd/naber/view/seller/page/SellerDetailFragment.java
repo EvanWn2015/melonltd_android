@@ -47,7 +47,7 @@ public class SellerDetailFragment extends Fragment implements View.OnClickListen
     public static int TO_RESET_PASSWORD_INDEX = -1;
     private EditText bulletinEdit;
     private TextView storeStartText, storeEndText;
-    private LinearLayout businessLayout;
+//    private LinearLayout businessLayout;
     private Map<String, Boolean> notBusinessData = Maps.<String, Boolean>newHashMap();
 
     public SellerDetailFragment() {
@@ -79,12 +79,13 @@ public class SellerDetailFragment extends Fragment implements View.OnClickListen
         bulletinEdit = v.findViewById(R.id.bulletinEdit);
         Button submitBtn = v.findViewById(R.id.submitBtn);
         Button logoutBtn = v.findViewById(R.id.logoutBtn);
+        Button daysBtn = v.findViewById(R.id.daysBtn);
         Button toResetPasswordBtn = v.findViewById(R.id.toResetPasswordBtn);
-
         storeStartText = v.findViewById(R.id.storeStartText);
         storeEndText = v.findViewById(R.id.storeEndText);
-        businessLayout = v.findViewById(R.id.businessLayout);
+//        businessLayout = v.findViewById(R.id.businessLayout);
 
+        daysBtn.setOnClickListener(this);
         submitBtn.setOnClickListener(this);
         logoutBtn.setOnClickListener(this);
         toResetPasswordBtn.setOnClickListener(this);
@@ -168,7 +169,7 @@ public class SellerDetailFragment extends Fragment implements View.OnClickListen
 
     private void builderThreeBusiness(List<String> not_busines) {
         notBusinessData = Maps.newHashMap();
-        businessLayout.removeAllViews();
+//        businessLayout.removeAllViews();
         Date now = new Date();
         long day = 1000 * 60 * 60 * 24L;
         SimpleDateFormat format = new SimpleDateFormat("MM/dd");
@@ -184,7 +185,7 @@ public class SellerDetailFragment extends Fragment implements View.OnClickListen
             dateText.setText(format.format(now));
             now.setTime(now.getTime() + day);
             notBusinessData.put(date, switchButton.isChecked());
-            businessLayout.addView(v);
+//            businessLayout.addView(v);
         }
     }
 
@@ -316,6 +317,9 @@ public class SellerDetailFragment extends Fragment implements View.OnClickListen
                     }
                 });
 
+                break;
+            case R.id.daysBtn:
+                SellerMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.SELLER_CALENDAR, null);
                 break;
             case R.id.storeStartText:
                 showDatePicker(R.id.storeStartText);

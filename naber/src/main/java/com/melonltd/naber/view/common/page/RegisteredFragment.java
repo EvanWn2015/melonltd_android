@@ -1,7 +1,9 @@
 package com.melonltd.naber.view.common.page;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
@@ -23,14 +25,18 @@ import com.bigkoo.pickerview.view.OptionsPickerView;
 import com.bigkoo.pickerview.view.TimePickerView;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
+import com.google.firebase.iid.FirebaseInstanceId;
 import com.melonltd.naber.R;
 import com.melonltd.naber.model.api.ApiManager;
 import com.melonltd.naber.model.api.ThreadCallback;
 import com.melonltd.naber.model.bean.Model;
+import com.melonltd.naber.model.service.SPService;
 import com.melonltd.naber.model.type.Identity;
+import com.melonltd.naber.util.Tools;
 import com.melonltd.naber.util.VerifyUtil;
 import com.melonltd.naber.view.common.BaseActivity;
 import com.melonltd.naber.view.factory.PageType;
+import com.melonltd.naber.view.user.UserMainActivity;
 import com.melonltd.naber.vo.AccountInfoVo;
 
 import java.text.SimpleDateFormat;
@@ -39,14 +45,14 @@ import java.util.Date;
 import java.util.List;
 
 public class RegisteredFragment extends Fragment implements View.OnClickListener {
-//    private static final String TAG = RegisteredFragment.class.getSimpleName();
+    //    private static final String TAG = RegisteredFragment.class.getSimpleName();
     public static RegisteredFragment FRAGMENT = null;
-
-    private AccountInfoVo account = new AccountInfoVo();
-    private TextView identityText,birthdayText,genderText;
+    private int STATUS = -1;
+    private TextView identityText, birthdayText, genderText;
     private EditText nameEditText, passwordEditText, confirmPasswordEditText, emailEditText;
-//    addressEditText,
-    private List<String> genderItems = Lists.newArrayList();
+
+    private String schoolName = "";
+    private List<String> genderItems = Lists.newArrayList("男", "女");
 
     public RegisteredFragment() {
     }
@@ -106,9 +112,6 @@ public class RegisteredFragment extends Fragment implements View.OnClickListener
         birthdayText.setOnClickListener(new BirthdayClick());
         genderText.setOnClickListener(new GenderClick());
 
-        genderItems.add("男");
-        genderItems.add("女");
-
     }
 
     @Override
@@ -116,6 +119,7 @@ public class RegisteredFragment extends Fragment implements View.OnClickListener
         super.onResume();
         BaseActivity.changeToolbarStatus();
         genderText.setText("男");
+        schoolName = "";
     }
 
     @Override
@@ -130,6 +134,7 @@ public class RegisteredFragment extends Fragment implements View.OnClickListener
         switch (v.getId()) {
             case R.id.submit:
                 if (verifyInput()) {
+                    AccountInfoVo account = new AccountInfoVo();
                     account.password = passwordEditText.getText().toString();
                     account.name = nameEditText.getText().toString();
                     account.email = emailEditText.getText().toString();
@@ -138,40 +143,49 @@ public class RegisteredFragment extends Fragment implements View.OnClickListener
 //                    account.address = addressEditText.getText().toString();
                     account.level = "USER";
                     account.gender = genderText.getText().toString().equals("男") ? "M" : "W";
+                    account.identity = (String) identityText.getTag();
+                    account.school_name = schoolName;
                     ApiManager.userRegistered(account, new ThreadCallback(getContext()) {
                         @Override
                         public void onSuccess(String responseBody) {
-                            new AlertView.Builder()
-                                    .setContext(getContext())
-                                    .setStyle(AlertView.Style.Alert)
-                                    .setTitle("")
-                                    .setMessage("完成註冊，\n歡迎加入NABER！")
-                                    .setOthers(new String[]{"返回登入畫面"})
-                                    .setOnItemClickListener(new OnItemClickListener() {
+                            AccountInfoVo newAccount = Tools.JSONPARSE.fromJson(responseBody, AccountInfoVo.class);
+                            newAccount.password = passwordEditText.getText().toString();
+                            newAccount.device_category = "ANDROID";
+                            newAccount.device_token = FirebaseInstanceId.getInstance().getToken();
+                            ApiManager.login(newAccount, new ThreadCallback(getContext()) {
+                                @Override
+                                public void onSuccess(String responseBody) {
+                                    AccountInfoVo resp = Tools.JSONPARSE.fromJson(responseBody, AccountInfoVo.class);
+
+                                    SPService.clearAccount();
+                                    SPService.setOauth(resp.account_uuid);
+                                    SPService.setUserName(resp.name);
+                                    SPService.setAccout(resp.account);
+                                    SPService.setUserPhone(resp.phone);
+                                    SPService.setIdentity(resp.identity);
+                                    SPService.setLoginLimit(new Date().getTime());
+                                    SPService.setRememberAccount(resp.phone);
+
+                                    new Handler().postDelayed(new AlertRun("", "完成註冊，\n歡迎加入NABER！", new String[]{"開始使用"}, new OnItemClickListener() {
                                         @Override
                                         public void onItemClick(Object o, int position) {
                                             if (position == 0) {
-                                                BaseActivity.removeAndReplaceWhere(FRAGMENT, PageType.LOGIN, null);
+                                                startActivity(new Intent(getActivity().getBaseContext(), UserMainActivity.class));
                                             }
                                         }
-                                    })
-                                    .build()
-                                    .setCancelable(false)
-                                    .show();
+                                    }), 300);
+                                }
 
+                                @Override
+                                public void onFail(Exception error, final String msg) {
+                                    new Handler().postDelayed(new AlertRun("", msg, new String[]{"我知道了"}, null), 300);
+                                }
+                            });
                         }
 
                         @Override
-                        public void onFail(Exception error, String msg) {
-                            new AlertView.Builder()
-                                    .setContext(getContext())
-                                    .setStyle(AlertView.Style.Alert)
-                                    .setTitle("")
-                                    .setMessage(msg)
-                                    .setCancelText("關閉")
-                                    .build()
-                                    .setCancelable(true)
-                                    .show();
+                        public void onFail(Exception error, final String msg) {
+                            new Handler().postDelayed(new AlertRun("", msg, new String[]{"我知道了"}, null), 300);
                         }
                     });
                 }
@@ -179,6 +193,34 @@ public class RegisteredFragment extends Fragment implements View.OnClickListener
             case R.id.backToLoginBtn:
                 BaseActivity.removeAndReplaceWhere(FRAGMENT, PageType.LOGIN, null);
                 break;
+        }
+    }
+
+    class AlertRun implements Runnable {
+        private String title;
+        private String msg;
+        private String[] others;
+        private OnItemClickListener lstener;
+
+        AlertRun(String title, String msg, String[] others, OnItemClickListener lstener) {
+            this.title = title;
+            this.msg = msg;
+            this.others = others;
+            this.lstener = lstener;
+        }
+
+        @Override
+        public void run() {
+            new AlertView.Builder()
+                    .setContext(getContext())
+                    .setStyle(AlertView.Style.Alert)
+                    .setTitle(this.title)
+                    .setMessage(this.msg)
+                    .setOnItemClickListener(this.lstener)
+                    .setOthers(this.others)
+                    .build()
+                    .setCancelable(true)
+                    .show();
         }
     }
 
@@ -190,9 +232,9 @@ public class RegisteredFragment extends Fragment implements View.OnClickListener
             OptionsPickerView pvOptions = new OptionsPickerBuilder(getContext(), new OnOptionsSelectListener() {
                 @Override
                 public void onOptionsSelect(int options1, int option2, int options3, View v) {
-                    account.identity = Identity.ofName(Model.OPT_ITEM_1.get(options1)).name();
-                    account.school_name = Model.OPT_ITEM_2.get(options1).get(option2);
+                    schoolName = Model.OPT_ITEM_2.get(options1).get(option2);
                     identityText.setText(Model.OPT_ITEM_1.get(options1) + " " + Model.OPT_ITEM_2.get(options1).get(option2));
+                    identityText.setTag(Identity.ofName(Model.OPT_ITEM_1.get(options1)).name());
                 }
             }).setTitleSize(20)
                     .setTitleBgColor(getResources().getColor(R.color.naber_dividing_line_gray))
@@ -216,8 +258,8 @@ public class RegisteredFragment extends Fragment implements View.OnClickListener
             TimePickerView tp = new TimePickerBuilder(getContext(), new OnTimeSelectListener() {
                 @Override
                 public void onTimeSelect(Date date, View v) {
-                    account.birth_day = new SimpleDateFormat("yyyy-MM-dd").format(date);
-                    birthdayText.setText(account.birth_day);
+                    String birth_day = new SimpleDateFormat("yyyy-MM-dd").format(date);
+                    birthdayText.setText(birth_day);
                 }
             }).setType(new boolean[]{true, true, true, false, false, false})//"year","month","day","hours","minutes","seconds "
                     .setTitleSize(20)
@@ -235,7 +277,7 @@ public class RegisteredFragment extends Fragment implements View.OnClickListener
             tp.show();
         }
     }
-    public int STATUS = -1;
+
     class GenderClick implements View.OnClickListener {
         @Override
         public void onClick(final View view) {
@@ -256,7 +298,7 @@ public class RegisteredFragment extends Fragment implements View.OnClickListener
             pvOptions.setOnDismissListener(new com.bigkoo.pickerview.listener.OnDismissListener() {
                 @Override
                 public void onDismiss(Object o) {
-                    if(STATUS == 1){
+                    if (STATUS == 1) {
                         STATUS = -1;
                         // TODO 代表按了確認
                     } else {
@@ -329,15 +371,7 @@ public class RegisteredFragment extends Fragment implements View.OnClickListener
         }
 
         if (!result) {
-            new AlertView.Builder()
-                    .setTitle("")
-                    .setMessage(message)
-                    .setContext(getContext())
-                    .setStyle(AlertView.Style.Alert)
-                    .setCancelText("取消")
-                    .build()
-                    .setCancelable(true)
-                    .show();
+            new Handler().postDelayed(new AlertRun("", message, new String[]{"我知道了"}, null), 100);
         }
 
         return result;

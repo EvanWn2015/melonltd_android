@@ -25,24 +25,24 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/liveText"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="1dp"
-        android:background="@color/naber_basis"
-        android:gravity="bottom"
-        android:paddingBottom="8dp"
-        android:paddingLeft="8dp"
-        android:paddingStart="8dp"
-        android:paddingTop="16dp"
-        android:text="最新訂單"
-        android:textColor="@android:color/white"
-        android:textSize="14sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toStartOf="@+id/untreatedText"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/processingText" />
+    <!--<TextView-->
+        <!--android:id="@+id/liveText"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginEnd="1dp"-->
+        <!--android:background="@color/naber_basis"-->
+        <!--android:gravity="bottom"-->
+        <!--android:paddingBottom="8dp"-->
+        <!--android:paddingLeft="8dp"-->
+        <!--android:paddingStart="8dp"-->
+        <!--android:paddingTop="16dp"-->
+        <!--android:text="最新訂單"-->
+        <!--android:textColor="@android:color/white"-->
+        <!--android:textSize="14sp"-->
+        <!--android:textStyle="bold"-->
+        <!--app:layout_constraintEnd_toStartOf="@+id/untreatedText"-->
+        <!--app:layout_constraintStart_toStartOf="parent"-->
+        <!--app:layout_constraintTop_toTopOf="@+id/processingText" />-->
 
     <TextView
         android:id="@+id/untreatedText"
@@ -50,18 +50,18 @@
         android:layout_height="wrap_content"
         android:layout_marginEnd="1dp"
         android:layout_marginStart="1dp"
-        android:background="@color/colorAccent"
+        android:background="@color/naber_basis"
         android:gravity="bottom"
         android:paddingBottom="8dp"
         android:paddingLeft="8dp"
         android:paddingStart="8dp"
         android:paddingTop="16dp"
         android:text="未處理"
-        android:textColor="@android:color/black"
+        android:textColor="@android:color/white"
         android:textSize="14sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/processingText"
-        app:layout_constraintStart_toEndOf="@+id/liveText"
+        app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/searchDateText"
         app:layout_constraintTop_toTopOf="@+id/processingText" />
 

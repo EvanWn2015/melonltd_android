@@ -13,6 +13,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.DisplayMetrics;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -61,6 +62,7 @@ public class SellerMainActivity extends BaseCore implements TabLayout.OnTabSelec
     public static Toolbar toolbar;
     public static Button sortBtn;
 
+    public static int LAYOUT_WIDTH = 0;
     private static Drawable defaultIcon;
     private static DrawerLayout drawer;
     private static SellerTimeRangeAdapter adapter;
@@ -91,6 +93,11 @@ public class SellerMainActivity extends BaseCore implements TabLayout.OnTabSelec
         getViews();
 
         removeAndReplaceWhere(null, PageType.SELLER_SEARCH, null);
+
+        DisplayMetrics dm = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(dm);
+
+        LAYOUT_WIDTH = dm.widthPixels;
     }
 
     private void getViews() {

@@ -75,9 +75,14 @@ public class BaseIntroActivity extends AppCompatActivity {
                                     if (position >= 0) {
                                         if (others[position].equals("前往更新")) {
                                             // TODO go to google play
-                                            Intent intent = new Intent(Intent.ACTION_VIEW);
-                                            intent.setData(Uri.parse("market://details?id=com.melonltd.naber"));
-                                            startActivity(intent);
+//                                            Intent intent = new Intent(Intent.ACTION_VIEW);
+//                                            intent.setData(Uri.parse("market://details?id=com.melonltd.naber"));
+//                                            startActivity(intent);
+                                            try {
+                                                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("market://details?id=com.melonltd.naber")));
+                                            } catch (android.content.ActivityNotFoundException anfe) {
+                                                startActivity(new Intent(Intent.ACTION_VIEW, Uri.parse("https://play.google.com/store/apps/details?id=com.melonltd.naber")));
+                                            }
                                         }else {
                                             getIntro();
                                         }
