@@ -16,9 +16,6 @@ import java.util.Map;
 
 public class Model {
 
-    public static List<String> OPT_ITEM_1 = Lists.newArrayList();
-    public static List<List<String>> OPT_ITEM_2 = Lists.newArrayList();
-
     public static Map<String, Map<String, String>> BULLETIN_VOS = Maps.<String, Map<String, String>>newHashMap();
     public static List<String> BANNER_IMAGES = Lists.<String>newArrayList();
     public static Location LOCATION;

@@ -21,19 +21,15 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.common.collect.Lists;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.melonltd.naber.R;
-import com.melonltd.naber.model.bean.IdentityJsonBean;
 import com.melonltd.naber.model.bean.Model;
 import com.melonltd.naber.model.constant.NaberConstant;
 import com.melonltd.naber.model.service.SPService;
 import com.melonltd.naber.util.Tools;
 import com.melonltd.naber.view.factory.PageType;
-
-import java.util.List;
 
 
 public abstract class BaseCore extends AppCompatActivity implements LocationListener {
@@ -226,26 +222,6 @@ public abstract class BaseCore extends AppCompatActivity implements LocationList
             return true;
         }
         return super.onKeyDown(keyCode, event);
-    }
-
-    public static void loadJsonData(Context context) {
-        String jsonData = Tools.JSONPARSE.getJson(context, "identity.json");
-//        ArrayList<IdentityJsonBean> identityBean = Tools.JSONPARSE.parseData(JsonData);
-        List<IdentityJsonBean> identityBeans= Tools.JSONPARSE.fromJsonList(jsonData, IdentityJsonBean[].class);
-        List<String> opt1 = Lists.newArrayList();
-        List<List<String>> opt2 = Lists.newArrayList();
-        for (IdentityJsonBean b : identityBeans) {
-            opt1.add(b.getName());
-            List<String> datas = Lists.newArrayList();
-            for (String d : b.getDatas()) {
-                datas.add(d);
-            }
-            opt2.add(datas);
-        }
-        Model.OPT_ITEM_1.clear();
-        Model.OPT_ITEM_1.addAll(opt1);
-        Model.OPT_ITEM_2.clear();
-        Model.OPT_ITEM_2.addAll(opt2);
     }
 
 }

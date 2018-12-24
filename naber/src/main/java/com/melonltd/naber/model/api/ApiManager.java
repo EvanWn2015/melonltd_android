@@ -1,14 +1,11 @@
 package com.melonltd.naber.model.api;
 
-import android.util.Log;
-
 import com.google.common.collect.Maps;
 import com.melonltd.naber.model.service.Base64Service;
 import com.melonltd.naber.model.service.SPService;
 import com.melonltd.naber.util.Tools;
 import com.melonltd.naber.vo.AccountInfoVo;
 import com.melonltd.naber.vo.CategoryRelVo;
-import com.melonltd.naber.vo.ContactInfo;
 import com.melonltd.naber.vo.FoodVo;
 import com.melonltd.naber.vo.OrderDetail;
 import com.melonltd.naber.vo.ReqData;
@@ -119,6 +116,13 @@ public class ApiManager {
         Call call = getClient().post(ApiUrl.SCHOOL_DIVIDED_LIST);
         call.enqueue(callback);
     }
+
+    // 8.取得身份選擇三級資料，區域，身份，學校
+    public static void getIdentityTable(ThreadCallback callback){
+        Call call = getClient().post(ApiUrl.IDENTITY_TABLE);
+        call.enqueue(callback);
+    }
+
 
     /**
      * 以下為使用者是使用 API

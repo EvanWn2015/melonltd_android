@@ -21,8 +21,8 @@
         android:height="10dp" />
     <!-- 邊框線 -->
     <stroke
-        android:width="4dp"
+        android:width="1dp"
         android:color="@android:color/black"
         android:dashGap="0dp"
-        android:dashWidth="5dp" />
+        android:dashWidth="0dp" />
 </shape>

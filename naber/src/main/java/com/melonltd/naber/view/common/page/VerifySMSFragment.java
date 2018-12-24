@@ -2,7 +2,6 @@ package com.melonltd.naber.view.common.page;
 
 import android.content.Context;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,11 +19,9 @@ import com.google.common.collect.Maps;
 import com.melonltd.naber.R;
 import com.melonltd.naber.model.api.ApiManager;
 import com.melonltd.naber.model.api.ThreadCallback;
-import com.melonltd.naber.model.constant.NaberConstant;
 import com.melonltd.naber.util.Tools;
 import com.melonltd.naber.util.VerifyUtil;
 import com.melonltd.naber.view.common.BaseActivity;
-import com.melonltd.naber.view.common.BaseCore;
 import com.melonltd.naber.view.factory.PageType;
 
 import java.util.Map;
@@ -63,12 +60,7 @@ public class VerifySMSFragment extends Fragment implements View.OnClickListener 
     @Override
     public void onResume() {
         super.onResume();
-        new Handler().post(new Runnable() {
-            @Override
-            public void run() {
-                BaseCore.loadJsonData(getContext());
-            }
-        });
+
         BaseActivity.changeToolbarStatus();
         if (BaseActivity.toolbar != null) {
             BaseActivity.navigationIconDisplay(true, new View.OnClickListener() {

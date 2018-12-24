@@ -1,6 +1,5 @@
 package com.melonltd.naber.view.user.adapter;
 
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -8,12 +7,9 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.facebook.drawee.view.SimpleDraweeView;
-import com.facebook.imagepipeline.request.ImageRequest;
-import com.facebook.imagepipeline.request.ImageRequestBuilder;
 import com.google.common.base.Strings;
-import com.melonltd.naber.vo.FoodVo;
 import com.melonltd.naber.R;
+import com.melonltd.naber.vo.FoodVo;
 
 import java.util.List;
 
@@ -45,12 +41,12 @@ public class UserFoodAdapter extends RecyclerView.Adapter<UserFoodAdapter.ViewHo
         h.itemView.setTag(position);
         h.itemView.setOnClickListener(this.itemClickListener);
 
-        if (!Strings.isNullOrEmpty(listData.get(position).photo)){
-            h.itemIconImageView.setImageURI(Uri.parse(listData.get(position).photo));
-        }else {
-            ImageRequest imageRequest = ImageRequestBuilder.newBuilderWithResourceId(R.drawable.naber_icon_logo_reverse).build();
-            h.itemIconImageView.setImageURI(imageRequest.getSourceUri());
+        if (Strings.isNullOrEmpty(listData.get(position).food_content)){
+            h.foodContentText.setText("暫無介紹！");
+        } else {
+            h.foodContentText.setText(listData.get(position).food_content);
         }
+
         h.itemNameText.setText(listData.get(position).food_name);
         h.itemPriceText.setText(listData.get(position).default_price);
 
@@ -62,14 +58,13 @@ public class UserFoodAdapter extends RecyclerView.Adapter<UserFoodAdapter.ViewHo
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        private SimpleDraweeView itemIconImageView;
-        private TextView itemNameText, itemPriceText;
+        private TextView itemNameText, itemPriceText, foodContentText;
 
         public ViewHolder(View v) {
             super(v);
-            itemIconImageView = v.findViewById(R.id.ordersItemIconImageView);
             itemNameText = v.findViewById(R.id.ordersItemNameText);
             itemPriceText = v.findViewById(R.id.itemPriceText);
+            foodContentText = v.findViewById(R.id.foodContentText);
         }
     }
 }

@@ -1,6 +1,5 @@
 package com.melonltd.naber.view.seller.adapter;
 
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
@@ -13,8 +12,6 @@ import android.widget.EditText;
 import android.widget.TextView;
 
 import com.facebook.drawee.view.SimpleDraweeView;
-import com.facebook.imagepipeline.request.ImageRequest;
-import com.facebook.imagepipeline.request.ImageRequestBuilder;
 import com.google.common.base.Strings;
 import com.melonltd.naber.R;
 import com.melonltd.naber.model.bean.Model;
@@ -53,11 +50,10 @@ public class SellerFoodAdapter extends RecyclerView.Adapter<SellerFoodAdapter.Vi
         FoodVo vo = Model.SELLER_FOOD_LIST.get(position);
 
         holder.setTag(position);
-        if (!Strings.isNullOrEmpty(Model.SELLER_FOOD_LIST.get(position).photo)){
-            holder.itemIconImageView.setImageURI(Uri.parse(Model.SELLER_FOOD_LIST.get(position).photo));
-        }else {
-            ImageRequest imageRequest = ImageRequestBuilder.newBuilderWithResourceId(R.drawable.naber_icon_logo_reverse).build();
-            holder.itemIconImageView.setImageURI(imageRequest.getSourceUri());
+        if (Strings.isNullOrEmpty(Model.SELLER_FOOD_LIST.get(position).food_content)){
+            holder.foodContentText.setText("暫無介紹！");
+        } else {
+            holder.foodContentText.setText(Model.SELLER_FOOD_LIST.get(position).food_content);
         }
 
         holder.nameText.setText(Model.SELLER_FOOD_LIST.get(position).food_name);
@@ -80,7 +76,7 @@ public class SellerFoodAdapter extends RecyclerView.Adapter<SellerFoodAdapter.Vi
 
     class ViewHolder extends RecyclerView.ViewHolder {
         private SimpleDraweeView itemIconImageView;
-        private TextView nameText, priceText;
+        private TextView nameText, priceText, foodContentText;
         private Button deleteBtn, editBtn;
         private SwitchButton menuSwitch;
         private EditText topEdit;
@@ -91,8 +87,8 @@ public class SellerFoodAdapter extends RecyclerView.Adapter<SellerFoodAdapter.Vi
             this.v = v;
             this.topEdit = v.findViewById(R.id.top_edit);
             this.topEdit.setVisibility(View.VISIBLE);
-            this.itemIconImageView = v.findViewById(R.id.ordersItemIconImageView);
             this.nameText = v.findViewById(R.id.ordersItemNameText);
+            this.foodContentText =v.findViewById(R.id.foodContentText);
             this.priceText = v.findViewById(R.id.itemPriceText);
             this.deleteBtn = v.findViewById(R.id.deleteBtn);
             this.deleteBtn.setVisibility(View.VISIBLE);
@@ -109,7 +105,6 @@ public class SellerFoodAdapter extends RecyclerView.Adapter<SellerFoodAdapter.Vi
             this.menuSwitch.setTag(position);
             this.deleteBtn.setTag(position);
             this.editBtn.setTag(position);
-            this.itemIconImageView.setTag(position);
         }
     }
     public static int parseInt(String intStr, int dflt) {

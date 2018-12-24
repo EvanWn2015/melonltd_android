@@ -4,63 +4,49 @@
     xmlns:fresco="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="100dp"
     android:background="@drawable/naber_text_base_line">
-
-    <com.facebook.drawee.view.SimpleDraweeView
-        android:id="@+id/ordersItemIconImageView"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/ordersItemNameText"
-        app:layout_constraintHorizontal_chainStyle="spread_inside"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        fresco:failureImage="@drawable/naber_icon_logo_reverse"
-        fresco:roundedCornerRadius="12dp" />
 
     <TextView
         android:id="@+id/ordersItemNameText"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
+        android:layout_height="20dp"
+        android:layout_marginBottom="4dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="16dp"
         android:textColor="@android:color/black"
         android:textSize="14sp"
-        app:layout_constraintBottom_toBottomOf="@+id/ordersItemIconImageView"
-        app:layout_constraintEnd_toStartOf="@+id/menuSwitch"
-        app:layout_constraintStart_toEndOf="@+id/ordersItemIconImageView"
-        app:layout_constraintTop_toTopOf="@+id/ordersItemIconImageView" />
+        app:layout_constraintBottom_toTopOf="@+id/foodContentText"
+        app:layout_constraintEnd_toStartOf="@+id/textView37"
+        app:layout_constraintHorizontal_chainStyle="packed"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="aaaa" />
 
     <TextView
         android:id="@+id/textView37"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="2dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="2dp"
         android:layout_marginStart="8dp"
         android:text="$"
+        app:layout_constraintBottom_toBottomOf="@+id/ordersItemNameText"
         app:layout_constraintEnd_toStartOf="@+id/itemPriceText"
-        app:layout_constraintStart_toStartOf="@+id/ordersItemNameText"
-        app:layout_constraintTop_toTopOf="@+id/itemPriceText" />
+        app:layout_constraintStart_toEndOf="@+id/ordersItemNameText"
+        app:layout_constraintTop_toTopOf="@+id/ordersItemNameText" />
 
     <TextView
         android:id="@+id/itemPriceText"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="2dp"
+        android:layout_marginEnd="16dp"
         android:layout_marginStart="2dp"
-        android:layout_marginTop="8dp"
         android:text="0"
+        app:layout_constraintBottom_toBottomOf="@+id/ordersItemNameText"
+        app:layout_constraintEnd_toStartOf="@+id/menuSwitch"
         app:layout_constraintStart_toEndOf="@+id/textView37"
-        app:layout_constraintTop_toBottomOf="@+id/ordersItemNameText" />
+        app:layout_constraintTop_toTopOf="@+id/ordersItemNameText" />
 
     <Button
         android:id="@+id/deleteBtn"
@@ -68,7 +54,6 @@
         android:layout_height="32dp"
         android:layout_marginBottom="4dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
         android:background="@drawable/naber_red_button_style"
         android:text="刪除"
@@ -106,7 +91,7 @@
         android:visibility="gone"
         app:layout_constraintBottom_toBottomOf="@+id/deleteBtn"
         app:layout_constraintEnd_toStartOf="@+id/deleteBtn"
-        app:layout_constraintStart_toEndOf="@+id/ordersItemNameText"
+        app:layout_constraintStart_toEndOf="@+id/itemPriceText"
         app:layout_constraintTop_toTopOf="@+id/deleteBtn"
         app:sb_checked="true"
         app:sb_show_indicator="false" />
@@ -120,14 +105,13 @@
         android:layout_marginTop="8dp"
         android:background="@drawable/naber_reverse_gary_button_style"
         android:hint="0"
-        android:visibility="gone"
         android:inputType="number"
         android:lines="1"
         android:maxLength="2"
         android:maxLines="1"
         android:textAlignment="center"
         android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="@+id/ordersItemIconImageView"
+        android:visibility="gone"
         app:layout_constraintEnd_toEndOf="@+id/menuSwitch"
         app:layout_constraintStart_toStartOf="@+id/menuSwitch"
         app:layout_constraintTop_toBottomOf="@+id/menuSwitch" />
@@ -137,9 +121,22 @@
         android:layout_width="wrap_content"
         android:layout_height="1dp"
         android:background="@color/colorAccent"
-        android:visibility="gone"
+        android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/foodContentText"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginTop="4dp"
+        android:text="TextView"
+        android:textSize="12sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/itemPriceText"
+        app:layout_constraintStart_toStartOf="@+id/ordersItemNameText"
+        app:layout_constraintTop_toBottomOf="@+id/ordersItemNameText" />
 
 </android.support.constraint.ConstraintLayout>

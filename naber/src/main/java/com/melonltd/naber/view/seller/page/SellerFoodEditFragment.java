@@ -50,7 +50,7 @@ import java.io.ByteArrayOutputStream;
 public class SellerFoodEditFragment extends Fragment implements View.OnFocusChangeListener {
     //    private static final String TAG = SellerFoodEditFragment.class.getSimpleName();
     public static SellerFoodEditFragment FRAGMENT = null;
-    private TextView foodNameText;
+    private TextView foodNameText, foodContentText;
     private SimpleDraweeView menuIconImage;
     private LinearLayout demandLayout;
     private LinearLayout scopeLayout, optLayout;
@@ -82,6 +82,7 @@ public class SellerFoodEditFragment extends Fragment implements View.OnFocusChan
     private void getViews(View v) {
         menuIconImage = v.findViewById(R.id.menuIconImage);
         foodNameText = v.findViewById(R.id.foodNameText);
+        foodContentText = v.findViewById(R.id.foodContentText);
         demandLayout = v.findViewById(R.id.demandLayout);
         scopeLayout = v.findViewById(R.id.scopeLayout);
         optLayout = v.findViewById(R.id.optsLayout);
@@ -217,6 +218,10 @@ public class SellerFoodEditFragment extends Fragment implements View.OnFocusChan
         }
         foodNameText.setText(foodVo.food_name);
 
+        if (!Strings.isNullOrEmpty(foodVo.food_content)){
+            foodContentText.setText(foodVo.food_content);
+        }
+
         scopeLayout.removeAllViews();
         for (int i = 0; i < foodVo.food_data.scopes.size(); i++) {
             scopeLayout.addView(addScopeEditView(i));
@@ -309,6 +314,11 @@ public class SellerFoodEditFragment extends Fragment implements View.OnFocusChan
                                 .setCancelable(true)
                                 .show();
                     } else {
+                        if (!Strings.isNullOrEmpty(foodContentText.getText().toString())){
+                            foodVo.food_content = foodContentText.getText().toString();
+                        }else {
+                            foodVo.food_content = "";
+                        }
                         ApiManager.sellerFoodUpdate(foodVo, new ThreadCallback(getContext()) {
                             @Override
                             public void onSuccess(String responseBody) {

@@ -7,6 +7,7 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,7 +30,6 @@ import com.google.firebase.iid.FirebaseInstanceId;
 import com.melonltd.naber.R;
 import com.melonltd.naber.model.api.ApiManager;
 import com.melonltd.naber.model.api.ThreadCallback;
-import com.melonltd.naber.model.bean.Model;
 import com.melonltd.naber.model.service.SPService;
 import com.melonltd.naber.model.type.Identity;
 import com.melonltd.naber.util.Tools;
@@ -38,6 +38,7 @@ import com.melonltd.naber.view.common.BaseActivity;
 import com.melonltd.naber.view.factory.PageType;
 import com.melonltd.naber.view.user.UserMainActivity;
 import com.melonltd.naber.vo.AccountInfoVo;
+import com.melonltd.naber.vo.IdentityTableVo;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -45,15 +46,16 @@ import java.util.Date;
 import java.util.List;
 
 public class RegisteredFragment extends Fragment implements View.OnClickListener {
-    //    private static final String TAG = RegisteredFragment.class.getSimpleName();
+        private static final String TAG = RegisteredFragment.class.getSimpleName();
     public static RegisteredFragment FRAGMENT = null;
     private int STATUS = -1;
-    private TextView identityText, birthdayText, genderText;
+    private TextView identityText, schoolEditText, birthdayText, genderText;
     private EditText nameEditText, passwordEditText, confirmPasswordEditText, emailEditText;
 
-    private String schoolName = "";
     private List<String> genderItems = Lists.newArrayList("男", "女");
 
+    private List<IdentityTableVo> identityTables = Lists.newArrayList();
+    private  IdRange idRange = new IdRange();
     public RegisteredFragment() {
     }
 
@@ -81,6 +83,7 @@ public class RegisteredFragment extends Fragment implements View.OnClickListener
 
     private void getViews(View v) {
         identityText = v.findViewById(R.id.identityEditText);
+        schoolEditText = v.findViewById(R.id.schoolEditText);
         birthdayText = v.findViewById(R.id.birthdayEditText);
         nameEditText = v.findViewById(R.id.nameEditText);
 //        addressEditText = v.findViewById(R.id.addressEditText);
@@ -97,6 +100,7 @@ public class RegisteredFragment extends Fragment implements View.OnClickListener
         // setListener
         HideKeyboard hideKeyboard = new HideKeyboard();
         identityText.setOnFocusChangeListener(hideKeyboard);
+        schoolEditText.setOnFocusChangeListener(hideKeyboard);
         birthdayText.setOnFocusChangeListener(hideKeyboard);
         nameEditText.setOnFocusChangeListener(hideKeyboard);
 //        addressEditText.setOnFocusChangeListener(hideKeyboard);
@@ -109,6 +113,8 @@ public class RegisteredFragment extends Fragment implements View.OnClickListener
         backToLoginBtn.setOnClickListener(this);
         largeLabel.setOnClickListener(this);
         identityText.setOnClickListener(new IdentityClick());
+        schoolEditText.setOnClickListener(new SchoolClick());
+        schoolEditText.setEnabled(false);
         birthdayText.setOnClickListener(new BirthdayClick());
         genderText.setOnClickListener(new GenderClick());
 
@@ -119,7 +125,22 @@ public class RegisteredFragment extends Fragment implements View.OnClickListener
         super.onResume();
         BaseActivity.changeToolbarStatus();
         genderText.setText("男");
-        schoolName = "";
+        idRange = new IdRange();
+
+
+        ApiManager.getIdentityTable(new ThreadCallback(getContext()) {
+            @Override
+            public void onSuccess(String responseBody) {
+                identityTables.clear();
+                List<IdentityTableVo> list = Tools.JSONPARSE.fromJsonList(responseBody, IdentityTableVo[].class);
+                identityTables.addAll(list);
+            }
+
+            @Override
+            public void onFail(Exception error, String msg) {
+                Log.i(TAG, msg);
+            }
+        });
     }
 
     @Override
@@ -144,7 +165,7 @@ public class RegisteredFragment extends Fragment implements View.OnClickListener
                     account.level = "USER";
                     account.gender = genderText.getText().toString().equals("男") ? "M" : "W";
                     account.identity = (String) identityText.getTag();
-                    account.school_name = schoolName;
+                    account.school_name = schoolEditText.getText().toString();
                     ApiManager.userRegistered(account, new ThreadCallback(getContext()) {
                         @Override
                         public void onSuccess(String responseBody) {
@@ -225,24 +246,73 @@ public class RegisteredFragment extends Fragment implements View.OnClickListener
     }
 
     class IdentityClick implements View.OnClickListener {
+        List<String> opt1 = Lists.newArrayList();
+        List<List<String>> opt2 = Lists.newArrayList();
+
         @Override
         public void onClick(final View view) {
+            opt1.clear();
+            opt2.clear();
+            for(IdentityTableVo vo: identityTables){
+                opt1.add(vo.area);
+                List<String> idNames = Lists.newArrayList();
+                for (IdentityTableVo.Identitys id : vo.identitys){
+                    idNames.add(id.name);
+                }
+                opt2.add(idNames);
+            }
+
+            schoolEditText.setText("");
             InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
             imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
             OptionsPickerView pvOptions = new OptionsPickerBuilder(getContext(), new OnOptionsSelectListener() {
                 @Override
-                public void onOptionsSelect(int options1, int option2, int options3, View v) {
-                    schoolName = Model.OPT_ITEM_2.get(options1).get(option2);
-                    identityText.setText(Model.OPT_ITEM_1.get(options1) + " " + Model.OPT_ITEM_2.get(options1).get(option2));
-                    identityText.setTag(Identity.ofName(Model.OPT_ITEM_1.get(options1)).name());
+                public void onOptionsSelect(int options1, int options2, int options3, View v) {
+                    identityText.setText(opt1.get(options1) + ", " + opt2.get(options1).get(options2));
+                    idRange.options1 = options1;
+                    idRange.options2 = options2;
+                    identityText.setTag(Identity.ofName(opt2.get(options1).get(options2)).name());
+                    if(identityTables.get(options1).identitys.get(options2).items.isEmpty()){
+                        schoolEditText.setHint("該身份無須選擇校園");
+                        schoolEditText.setEnabled(false);
+                    } else {
+                        schoolEditText.setHint("請選擇校園");
+                        schoolEditText.setEnabled(true);
+                    }
                 }
             }).setTitleSize(20)
                     .setTitleBgColor(getResources().getColor(R.color.naber_dividing_line_gray))
                     .setCancelColor(getResources().getColor(R.color.naber_dividing_gray))
                     .setSubmitColor(getResources().getColor(R.color.naber_dividing_gray))
                     .build();
-            pvOptions.setPicker(Model.OPT_ITEM_1, Model.OPT_ITEM_2);
+            pvOptions.setPicker(opt1, opt2);
             pvOptions.show();
+        }
+    }
+
+
+    class SchoolClick implements View.OnClickListener {
+        List<String> opt1 = Lists.newArrayList();
+        @Override
+        public void onClick(final View view) {
+            opt1.clear();
+            if (!identityTables.get(idRange.options1).identitys.get(idRange.options2).items.isEmpty()){
+                opt1.addAll(identityTables.get(idRange.options1).identitys.get(idRange.options2).items);
+                InputMethodManager imm = (InputMethodManager) getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+                OptionsPickerView pvOptions = new OptionsPickerBuilder(getContext(), new OnOptionsSelectListener() {
+                    @Override
+                    public void onOptionsSelect(int options1, int option2, int options3, View v) {
+                        schoolEditText.setText(opt1.get(options1));
+                    }
+                }).setTitleSize(20)
+                        .setTitleBgColor(getResources().getColor(R.color.naber_dividing_line_gray))
+                        .setCancelColor(getResources().getColor(R.color.naber_dividing_gray))
+                        .setSubmitColor(getResources().getColor(R.color.naber_dividing_gray))
+                        .build();
+                pvOptions.setPicker(opt1);
+                pvOptions.show();
+            }
         }
     }
 
@@ -364,9 +434,16 @@ public class RegisteredFragment extends Fragment implements View.OnClickListener
             message = "姓名不為空";
             result = false;
         }
+
+        // 驗證校園
+        if (!identityTables.get(idRange.options1).identitys.get(idRange.options2).items.isEmpty() && Strings.isNullOrEmpty(schoolEditText.getText().toString())){
+            message = "該身份請選擇校園";
+            result = false;
+        }
+
         // 驗證身份不為空
         if (Strings.isNullOrEmpty(identityText.getText().toString())) {
-            message = "驗證身份不為空";
+            message = "請選擇身份";
             result = false;
         }
 
@@ -377,6 +454,10 @@ public class RegisteredFragment extends Fragment implements View.OnClickListener
         return result;
     }
 
+    class IdRange {
+       public int options1 = 0 ;
+       public int options2 = 0;
+    }
 
 }
 

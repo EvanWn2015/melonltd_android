@@ -24,6 +24,29 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
             android:background="@drawable/naber_text_base_line"
+            android:hint="請選擇身份"
+            android:maxLines="1"
+            android:paddingBottom="8dp"
+            android:paddingLeft="100dp"
+            android:paddingStart="100dp"
+            android:paddingTop="8dp"
+            android:singleLine="true"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toTopOf="@+id/schoolEditText"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/schoolEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="4dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="4dp"
+            android:background="@drawable/naber_text_base_line"
+            android:hint="請選擇校園"
             android:maxLines="1"
             android:paddingBottom="8dp"
             android:paddingLeft="100dp"
@@ -34,7 +57,7 @@
             app:layout_constraintBottom_toTopOf="@+id/nameEditText"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/identityEditText" />
 
         <EditText
             android:id="@+id/nameEditText"
@@ -56,7 +79,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/identityEditText" />
+            app:layout_constraintTop_toBottomOf="@+id/schoolEditText" />
 
         <EditText
             android:id="@+id/addressEditText"
@@ -91,7 +114,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="4dp"
             android:background="@drawable/naber_text_base_line"
-            android:hint="@string/registered_birthday_hint_text"
+            android:hint="請輸入Email"
             android:inputType="textEmailAddress"
             android:maxLines="1"
             android:paddingBottom="8dp"
@@ -142,6 +165,7 @@
             android:layout_marginTop="4dp"
             android:background="@drawable/naber_text_base_line"
             android:digits="0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+            android:hint="請選確認密碼"
             android:inputType="textPassword"
             android:maxLines="1"
             android:paddingBottom="8dp"
@@ -166,6 +190,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="4dp"
             android:background="@drawable/naber_text_base_line"
+            android:hint="請選擇生日"
             android:maxLines="1"
             android:paddingBottom="8dp"
             android:paddingLeft="100dp"
@@ -179,6 +204,7 @@
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/confirmPasswordEditText" />
+
         <TextView
             android:id="@+id/genderText"
             android:layout_width="match_parent"
@@ -188,6 +214,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="4dp"
             android:background="@drawable/naber_text_base_line"
+            android:hint="請選擇性別"
             android:maxLines="1"
             android:paddingBottom="8dp"
             android:paddingLeft="100dp"
@@ -241,6 +268,20 @@
             app:layout_constraintBottom_toBottomOf="@+id/identityEditText"
             app:layout_constraintStart_toStartOf="@+id/identityEditText"
             app:layout_constraintTop_toTopOf="@+id/identityEditText" />
+
+        <TextView
+            android:id="@+id/textView22"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:text="校園"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="@+id/schoolEditText"
+            app:layout_constraintStart_toStartOf="@+id/schoolEditText"
+            app:layout_constraintTop_toTopOf="@+id/schoolEditText" />
 
         <TextView
             android:id="@+id/textView4"
@@ -325,6 +366,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/birthdayEditText"
             app:layout_constraintStart_toStartOf="@+id/birthdayEditText"
             app:layout_constraintTop_toTopOf="@+id/birthdayEditText" />
+
         <TextView
             android:id="@+id/textView10"
             android:layout_width="wrap_content"
@@ -353,6 +395,19 @@
             app:layout_constraintTop_toTopOf="@+id/identityEditText" />
 
         <ImageView
+            android:id="@+id/imageView22"
+            android:layout_width="24dp"
+            android:layout_height="24dp"
+            android:layout_marginBottom="4dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginTop="8dp"
+            android:background="@drawable/shape_reverse_triangle"
+            app:layout_constraintBottom_toBottomOf="@+id/schoolEditText"
+            app:layout_constraintEnd_toEndOf="@+id/schoolEditText"
+            app:layout_constraintTop_toTopOf="@+id/schoolEditText" />
+
+        <ImageView
             android:id="@+id/imageView2"
             android:layout_width="24dp"
             android:layout_height="24dp"
@@ -364,6 +419,7 @@
             app:layout_constraintBottom_toBottomOf="@+id/birthdayEditText"
             app:layout_constraintEnd_toEndOf="@+id/birthdayEditText"
             app:layout_constraintTop_toTopOf="@+id/birthdayEditText" />
+
         <ImageView
             android:id="@+id/imageView3"
             android:layout_width="24dp"

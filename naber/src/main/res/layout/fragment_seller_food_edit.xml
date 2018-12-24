@@ -49,15 +49,15 @@
         <TextView
             android:id="@+id/textView80"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
+            android:layout_height="19dp"
+            android:layout_marginBottom="16dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:text="產品名稱"
             android:textColor="@android:color/black"
             android:textSize="14sp"
-            app:layout_constraintBottom_toTopOf="@+id/editLayout"
+            app:layout_constraintBottom_toTopOf="@+id/textView81"
             app:layout_constraintEnd_toStartOf="@+id/foodNameText"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/view10" />
@@ -75,6 +75,41 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/textView80"
             app:layout_constraintTop_toTopOf="@+id/textView80" />
+
+
+        <TextView
+            android:id="@+id/textView81"
+            android:layout_width="wrap_content"
+            android:layout_height="19dp"
+            android:layout_marginBottom="32dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="24dp"
+            android:text="內容介紹"
+            android:textColor="@android:color/black"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toTopOf="@+id/editLayout"
+            app:layout_constraintEnd_toStartOf="@+id/foodContentText"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView80" />
+
+        <EditText
+            android:id="@+id/foodContentText"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:background="@drawable/naber_reverse_gary_button_style"
+            android:ellipsize="end"
+            android:inputType="textMultiLine"
+            android:maxLength="20"
+            android:maxLines="2"
+            android:padding="8dp"
+            android:textSize="14sp"
+            app:layout_constraintBottom_toBottomOf="@+id/textView81"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/textView81"
+            app:layout_constraintTop_toTopOf="@+id/textView81" />
 
         <LinearLayout
             android:id="@+id/editLayout"

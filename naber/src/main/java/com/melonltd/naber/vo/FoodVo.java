@@ -11,6 +11,7 @@ public class FoodVo implements Serializable{
     public String food_uuid;
     public String category_uuid;
     public String food_name;
+    public String food_content;
     public String default_price;
     public String photo;
     public String photo_type;
@@ -28,6 +29,7 @@ public class FoodVo implements Serializable{
                 .add("food_uuid",food_uuid)
                 .add("category_uuid",category_uuid)
                 .add("food_name",food_name)
+                .add("food_content" , food_content)
                 .add("default_price",default_price)
                 .add("photo",photo)
                 .add("photo_type",photo_type)
