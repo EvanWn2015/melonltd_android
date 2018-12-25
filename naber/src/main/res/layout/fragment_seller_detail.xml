@@ -191,19 +191,6 @@
 
         </android.support.constraint.ConstraintLayout>
 
-        <Button
-            android:id="@+id/daysBtn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginTop="8dp"
-            android:background="#df905f"
-            android:text="日接單開關設定"
-            app:layout_constraintBottom_toTopOf="@id/logoutBtn"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout12" />
-
 
         <Button
             android:id="@+id/logoutBtn"
@@ -215,7 +202,7 @@
             app:layout_constraintBottom_toTopOf="@+id/view12"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/daysBtn" />
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout12" />
 
         <Button
             android:id="@+id/toResetPasswordBtn"

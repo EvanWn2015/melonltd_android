@@ -45,16 +45,6 @@
                     fresco:failureImage="@drawable/naber_default_image"
                     fresco:retryImage="@drawable/naber_default_image" />
 
-                <TextView
-                    android:id="@+id/setPoint"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:text="ⓘ集點內容"
-                    app:layout_constraintBottom_toTopOf="@+id/view14"
-                    app:layout_constraintEnd_toEndOf="parent" />
-
                 <View
                     android:id="@+id/view13"
                     android:layout_width="wrap_content"

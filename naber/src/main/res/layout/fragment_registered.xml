@@ -46,7 +46,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="4dp"
             android:background="@drawable/naber_text_base_line"
-            android:hint="請選擇校園"
+            android:hint="請先選取身份"
             android:maxLines="1"
             android:paddingBottom="8dp"
             android:paddingLeft="100dp"

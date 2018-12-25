@@ -21,6 +21,7 @@
             android:background="@color/naber_dividing_line_gray"
             android:padding="8dp"
             android:text="帳號"
+            android:textColor="@android:color/black"
             app:layout_constraintBottom_toTopOf="@+id/toAccountEdit"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -51,57 +52,39 @@
             android:padding="8dp"
             android:text="紅利點數(即將開放)"
             android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@+id/textView55"
+            app:layout_constraintBottom_toTopOf="@+id/textView581"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/toAccountEdit" />
 
         <TextView
-            android:id="@+id/textView55"
+            android:id="@+id/textView581"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:background="@color/naber_dividing_line_gray"
             android:padding="8dp"
-            android:text="提示"
-            android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@+id/textView56"
+            android:text="店家設定"
+            android:textColor="@android:color/black"
+            app:layout_constraintBottom_toTopOf="@+id/dailyOpenText"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView54" />
 
         <TextView
-            android:id="@+id/textView56"
+            android:id="@+id/dailyOpenText"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:background="@drawable/naber_text_base_line"
             android:padding="8dp"
-            android:text="提示音效"
-            android:visibility="gone"
-            app:layout_constraintBottom_toTopOf="@+id/textView57"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView55" />
-
-        <TextView
-            android:id="@+id/textView57"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="8dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
-            android:padding="8dp"
-            android:text="提示震動"
-            android:visibility="gone"
+            android:text="日接單開關"
             app:layout_constraintBottom_toTopOf="@+id/textView58"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView56" />
+            app:layout_constraintTop_toBottomOf="@+id/textView581" />
 
         <TextView
             android:id="@+id/textView58"
@@ -111,10 +94,11 @@
             android:background="@color/naber_dividing_line_gray"
             android:padding="8dp"
             android:text="其它"
+            android:textColor="@android:color/black"
             app:layout_constraintBottom_toTopOf="@+id/toAboutUsText"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView57" />
+            app:layout_constraintTop_toBottomOf="@+id/dailyOpenText" />
 
         <TextView
             android:id="@+id/toAboutUsText"
@@ -181,45 +165,16 @@
             app:layout_constraintEnd_toEndOf="@+id/toAccountEdit"
             app:layout_constraintTop_toTopOf="@+id/toAccountEdit" />
 
-        <TextView
-            android:id="@+id/dividendText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="32dp"
-            android:layout_marginRight="32dp"
-            android:layout_marginTop="8dp"
-            android:text="22"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/textView54"
-            app:layout_constraintEnd_toEndOf="@+id/textView54"
-            app:layout_constraintTop_toTopOf="@+id/textView54" />
 
-        <com.melonltd.naber.view.customize.SwitchButton
-            android:id="@+id/soundSwitch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="32dp"
-            android:layout_marginRight="32dp"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/textView56"
-            app:layout_constraintEnd_toEndOf="@+id/textView56"
-            app:layout_constraintTop_toTopOf="@+id/textView56"
-            app:sb_checked="true"
-            app:sb_show_indicator="false" />
-
-        <com.melonltd.naber.view.customize.SwitchButton
-            android:id="@+id/shakeSwitch"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="32dp"
-            android:layout_marginRight="32dp"
-            android:visibility="gone"
-            app:layout_constraintBottom_toBottomOf="@+id/textView57"
-            app:layout_constraintEnd_toEndOf="@+id/textView57"
-            app:layout_constraintTop_toTopOf="@+id/textView57"
-            app:sb_checked="true"
-            app:sb_show_indicator="false" />
+        <ImageView
+            android:layout_width="16dp"
+            android:layout_height="16dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:background="@drawable/naber_arrow_right"
+            app:layout_constraintBottom_toBottomOf="@+id/dailyOpenText"
+            app:layout_constraintEnd_toEndOf="@+id/dailyOpenText"
+            app:layout_constraintTop_toTopOf="@+id/dailyOpenText" />
 
         <ImageView
             android:layout_width="16dp"

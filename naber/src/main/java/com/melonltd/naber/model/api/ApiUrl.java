@@ -5,6 +5,7 @@ package com.melonltd.naber.model.api;
  */
 
 public class ApiUrl {
+
     public final static String DOMAIN = "http://test.melonltd.com.tw";
 //    public final static String DOMAIN = "https://ap.melonltd.com.tw";
 

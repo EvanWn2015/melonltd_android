@@ -10,15 +10,11 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.AttributeSet;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.GridView;
 import android.widget.TextView;
 
 import com.bigkoo.alertview.AlertView;
@@ -32,14 +28,10 @@ import com.melonltd.naber.model.api.ThreadCallback;
 import com.melonltd.naber.model.type.SwitchStatus;
 import com.melonltd.naber.util.DensityUtil;
 import com.melonltd.naber.util.Tools;
-import com.melonltd.naber.view.customize.SwitchButton;
 import com.melonltd.naber.view.factory.PageType;
 import com.melonltd.naber.view.seller.SellerMainActivity;
-import com.melonltd.naber.view.user.UserMainActivity;
-import com.melonltd.naber.view.user.adapter.UserBonusExchangeAdapter;
 import com.melonltd.naber.vo.RestaurantInfoVo;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -112,7 +104,8 @@ public class SellerCalendarFragment extends Fragment {
             SellerMainActivity.navigationIconDisplay(true, new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    SellerMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.SELLER_DETAIL, null);
+                    SellerSetUpFragment.TO_SELLER_SIMPLE_INFO_INDEX = -1;
+                    SellerMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.SELLER_SET_UP, null);
                     SellerMainActivity.navigationIconDisplay(false, null);
 
                 }

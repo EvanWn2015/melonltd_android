@@ -42,7 +42,7 @@ public class UserFoodAdapter extends RecyclerView.Adapter<UserFoodAdapter.ViewHo
         h.itemView.setOnClickListener(this.itemClickListener);
 
         if (Strings.isNullOrEmpty(listData.get(position).food_content)){
-            h.foodContentText.setText("暫無介紹！");
+            h.foodContentText.setText("");
         } else {
             h.foodContentText.setText(listData.get(position).food_content);
         }

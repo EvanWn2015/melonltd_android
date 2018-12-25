@@ -21,7 +21,7 @@ public class SellerSetUpFragment extends Fragment implements View.OnClickListene
     //    private static final String TAG = SellerSetUpFragment.class.getSimpleName();
     public static SellerSetUpFragment FRAGMENT = null;
 
-    private TextView toSellerEdit, toAboutUsText, accountNumberText, versionName;
+    private TextView toSellerEdit, toAboutUsText, accountNumberText, versionName, dailyOpenText;
     public static int TO_SELLER_DETAIL_INDEX = -1;
     public static int TO_SELLER_SIMPLE_INFO_INDEX = -1;
 //    private Bundle bundle = new Bundle();
@@ -56,9 +56,11 @@ public class SellerSetUpFragment extends Fragment implements View.OnClickListene
     private void getViews(View v) {
         toSellerEdit = v.findViewById(R.id.toAccountEdit);
         toAboutUsText = v.findViewById(R.id.toAboutUsText);
+        dailyOpenText = v.findViewById(R.id.dailyOpenText);
         accountNumberText = v.findViewById(R.id.accountNumberText);
         versionName = v.findViewById(R.id.versionName);
         toSellerEdit.setOnClickListener(this);
+        dailyOpenText.setOnClickListener(this);
         toAboutUsText.setOnClickListener(this);
 
     }
@@ -93,6 +95,9 @@ public class SellerSetUpFragment extends Fragment implements View.OnClickListene
                 bundle.putStringArrayList(NaberConstant.SIMPLE_INFO, Lists.newArrayList("ABOUT_US", "APPLY_OF_SELLER"));
                 TO_SELLER_SIMPLE_INFO_INDEX = 1;
                 SellerMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.SELLER_SIMPLE_INFO, bundle);
+                break;
+            case R.id.dailyOpenText:
+                SellerMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.SELLER_CALENDAR, null);
                 break;
         }
 

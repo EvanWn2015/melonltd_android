@@ -60,6 +60,8 @@ public class VerifySMSFragment extends Fragment implements View.OnClickListener 
     @Override
     public void onResume() {
         super.onResume();
+        // TODO
+        // BaseActivity.removeAndReplaceWhere(FRAGMENT, PageType.REGISTERED_USER, null);
 
         BaseActivity.changeToolbarStatus();
         if (BaseActivity.toolbar != null) {

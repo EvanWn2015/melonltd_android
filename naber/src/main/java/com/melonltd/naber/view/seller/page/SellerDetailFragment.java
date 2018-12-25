@@ -12,7 +12,6 @@ import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.bigkoo.alertview.AlertView;
@@ -79,13 +78,13 @@ public class SellerDetailFragment extends Fragment implements View.OnClickListen
         bulletinEdit = v.findViewById(R.id.bulletinEdit);
         Button submitBtn = v.findViewById(R.id.submitBtn);
         Button logoutBtn = v.findViewById(R.id.logoutBtn);
-        Button daysBtn = v.findViewById(R.id.daysBtn);
+//        Button daysBtn = v.findViewById(R.id.daysBtn);
         Button toResetPasswordBtn = v.findViewById(R.id.toResetPasswordBtn);
         storeStartText = v.findViewById(R.id.storeStartText);
         storeEndText = v.findViewById(R.id.storeEndText);
 //        businessLayout = v.findViewById(R.id.businessLayout);
 
-        daysBtn.setOnClickListener(this);
+//        daysBtn.setOnClickListener(this);
         submitBtn.setOnClickListener(this);
         logoutBtn.setOnClickListener(this);
         toResetPasswordBtn.setOnClickListener(this);
@@ -318,9 +317,9 @@ public class SellerDetailFragment extends Fragment implements View.OnClickListen
                 });
 
                 break;
-            case R.id.daysBtn:
-                SellerMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.SELLER_CALENDAR, null);
-                break;
+//            case R.id.daysBtn:
+//                SellerMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.SELLER_CALENDAR, null);
+//                break;
             case R.id.storeStartText:
                 showDatePicker(R.id.storeStartText);
                 break;

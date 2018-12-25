@@ -51,7 +51,7 @@ public class SellerFoodAdapter extends RecyclerView.Adapter<SellerFoodAdapter.Vi
 
         holder.setTag(position);
         if (Strings.isNullOrEmpty(Model.SELLER_FOOD_LIST.get(position).food_content)){
-            holder.foodContentText.setText("暫無介紹！");
+            holder.foodContentText.setText("");
         } else {
             holder.foodContentText.setText(Model.SELLER_FOOD_LIST.get(position).food_content);
         }
