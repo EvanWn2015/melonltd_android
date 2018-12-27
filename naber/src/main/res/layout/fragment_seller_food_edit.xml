@@ -102,7 +102,7 @@
             android:background="@drawable/naber_reverse_gary_button_style"
             android:ellipsize="end"
             android:inputType="textMultiLine"
-            android:maxLength="20"
+            android:maxLength="44"
             android:maxLines="2"
             android:padding="8dp"
             android:textSize="14sp"
