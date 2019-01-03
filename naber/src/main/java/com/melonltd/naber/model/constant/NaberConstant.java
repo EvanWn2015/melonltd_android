@@ -5,16 +5,15 @@ import com.google.common.collect.Lists;
 import java.util.List;
 
 public class NaberConstant {
-    public static boolean IS_DEBUG = false;
+    public static boolean IS_DEBUG = true;
 
     public static long REMEMBER_DAY = 1000 * 60 * 60 * 24 * 7L * 2;
 //    public static long SELLER_STAT_REFRESH_TIMER = IS_DEBUG ? 1000 * 10L : 1000 * 60 * 60 * 10L;
 //    public static long SELLER_ORDER_REFRESH_TIMER = IS_DEBUG ? 1000 * 10L : 1000 * 60 * 60 * 10L;
 
     public static long SELLER_STAT_REFRESH_TIMER =  1000 * 60 * 10L;
-//    public static long SELLER_LIVE_ORDER_REFRESH_TIMER = 1000 * 60 * 5L;
-    public static long SELLER_LIVE_ORDER_REFRESH_TIMER = 1000 * 5L;
-//    public static long SELLER_LIVE_ORDER_REFRESH_TIMER = 1000 * 10L;
+    public static long SELLER_LIVE_ORDER_REFRESH_TIMER = 1000 * 60 * 5L;
+
     public static int PAGE = 10;
 
     public static int ORDER_MAX_AMOUNT = 5000;

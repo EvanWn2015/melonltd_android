@@ -6,7 +6,6 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -39,6 +38,7 @@ public class UserFoodListFragment extends Fragment {
     private UserFoodAdapter adapter;
     private ViewHolder holder;
     public static int TO_MENU_DETAIL_INDEX = -1;
+    public static int TO_REST_DETAIL_INDEX = -1;
 
     public UserFoodListFragment() {
     }
@@ -75,9 +75,15 @@ public class UserFoodListFragment extends Fragment {
 
 
     private void serHeaderValue(Bundle bundle) {
-        CategoryRelVo vo = (CategoryRelVo) bundle.getSerializable(NaberConstant.RESTAURANT_CATEGORY_REL);
-        holder.categoryInfo = vo;
-        holder.categoryNameText.setText(vo.category_name);
+        if (bundle == null){
+            UserMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.USER_RESTAURANT_DETAIL, null);
+            UserMainActivity.navigationIconDisplay(false, null);
+            onStop();
+        }else {
+            CategoryRelVo vo = (CategoryRelVo) bundle.getSerializable(NaberConstant.RESTAURANT_CATEGORY_REL);
+            holder.categoryInfo = vo;
+            holder.categoryNameText.setText(vo.category_name);
+        }
     }
 
     private void getViews(View v) {
@@ -146,9 +152,17 @@ public class UserFoodListFragment extends Fragment {
     public void onResume() {
         super.onResume();
         UserMainActivity.changeTabAndToolbarStatus();
-        if (TO_MENU_DETAIL_INDEX == -1) {
+        if (TO_MENU_DETAIL_INDEX == -1 && TO_REST_DETAIL_INDEX == -1) {
             doLoadData(true);
         }
+
+        if (TO_REST_DETAIL_INDEX != -1){
+            UserRestaurantDetailFragment.TO_CATEGORY_MENU_INDEX = -1;
+            TO_REST_DETAIL_INDEX = -1;
+            UserMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.USER_RESTAURANT_DETAIL, null);
+            UserMainActivity.navigationIconDisplay(false, null);
+        }
+
         if (UserMainActivity.toolbar != null) {
             UserMainActivity.navigationIconDisplay(true, new View.OnClickListener() {
                 @Override
@@ -166,7 +180,12 @@ public class UserFoodListFragment extends Fragment {
             bundle.putSerializable(NaberConstant.FOOD_INFO, Model.CATEGORY_FOOD_REL_LIST.get(TO_MENU_DETAIL_INDEX));
             UserMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.USER_FOOD_DETAIL, bundle);
         }
-        UserMainActivity.toolbar.setTitle(holder.categoryInfo.category_name);
+
+        if (holder != null){
+            if (holder.categoryInfo != null){
+                UserMainActivity.toolbar.setTitle(holder.categoryInfo.category_name);
+            }
+        }
     }
 
     @Override

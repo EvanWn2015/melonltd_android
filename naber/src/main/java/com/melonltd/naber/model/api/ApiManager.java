@@ -113,7 +113,7 @@ public class ApiManager {
     }
     //7.取得區域學校列表
     public static void getSchoolDivided(ThreadCallback callback){
-        Call call = getClient().post(ApiUrl.SCHOOL_DIVIDED_LIST);
+        Call call = getClient().post(ApiUrl.SCHOOL_DIVIDED);
         call.enqueue(callback);
     }
 
@@ -211,6 +211,12 @@ public class ApiManager {
         call.enqueue(callback);
     }
 
+
+    // 亂序取得餐館圖片集
+    public static void getRestaurantPhotoList (ReqData req, ThreadCallback callback){
+        Call call = getClient().postHeader(ApiUrl.RESTAURANT_PHOTO_LIST, SPService.getOauth(), Base64Service.encryptBASE64(Tools.JSONPARSE.toJson(req)));
+        call.enqueue(callback);
+    }
 
     /////// SELLSE API /////
 
@@ -351,7 +357,7 @@ public class ApiManager {
     }
     //送出活動
     public static void resEventSubmit(ReqData req,ThreadCallback callback){
-        Call call = getClient().postHeader(ApiUrl.SERIAL, SPService.getOauth(), Base64Service.encryptBASE64(Tools.JSONPARSE.toJson(req)));
+        Call call = getClient().postHeader(ApiUrl.RES_EVENT_SUBMIT, SPService.getOauth(), Base64Service.encryptBASE64(Tools.JSONPARSE.toJson(req)));
         call.enqueue(callback);
     }
 }

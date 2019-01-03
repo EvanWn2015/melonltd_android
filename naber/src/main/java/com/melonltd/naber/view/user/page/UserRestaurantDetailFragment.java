@@ -3,9 +3,11 @@ package com.melonltd.naber.view.user.page;
 import android.location.Location;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.PagerSnapHelper;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,11 +29,17 @@ import com.melonltd.naber.model.constant.NaberConstant;
 import com.melonltd.naber.util.IntegerTools;
 import com.melonltd.naber.util.Tools;
 import com.melonltd.naber.view.common.BaseCore;
+import com.melonltd.naber.view.customize.CoverFlowLayoutManger;
+import com.melonltd.naber.view.customize.RecyclerCoverFlow;
 import com.melonltd.naber.view.factory.PageType;
 import com.melonltd.naber.view.user.UserMainActivity;
 import com.melonltd.naber.view.user.adapter.UserCategoryAdapter;
+import com.melonltd.naber.view.user.adapter.UserStorePhotoAdapter;
 import com.melonltd.naber.vo.CategoryRelVo;
+import com.melonltd.naber.vo.FoodVo;
+import com.melonltd.naber.vo.ReqData;
 import com.melonltd.naber.vo.RestaurantInfoVo;
+import com.melonltd.naber.vo.RestaurantPhotoVo;
 
 import java.util.Collections;
 import java.util.Comparator;
@@ -41,12 +49,19 @@ import cn.bingoogolapple.refreshlayout.BGANormalRefreshViewHolder;
 import cn.bingoogolapple.refreshlayout.BGARefreshLayout;
 
 public class UserRestaurantDetailFragment extends Fragment {
-    //    private static final String TAG = UserRestaurantDetailFragment.class.getSimpleName();
+    private static final String TAG = UserRestaurantDetailFragment.class.getSimpleName();
     public static UserRestaurantDetailFragment FRAGMENT = null;
     public static List<CategoryRelVo> restaurantCategoryRelVos = Lists.newArrayList();
     private UserCategoryAdapter adapter;
     private ViewHolder holder;
     public static int TO_CATEGORY_MENU_INDEX = -1;
+
+    private UserStorePhotoAdapter photoAdapter;
+    private Handler handler = new Handler();
+    private PhotoRun photoRun;
+    private List<RestaurantPhotoVo> photos = Lists.newArrayList();
+    private CoverFlowLayoutManger coverFlowLayoutManger;
+    private int photoAutoPlayInterval = 3000;
 
     public UserRestaurantDetailFragment() {
     }
@@ -66,6 +81,7 @@ public class UserRestaurantDetailFragment extends Fragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         adapter = new UserCategoryAdapter(restaurantCategoryRelVos);
+        photoAdapter = new UserStorePhotoAdapter(photos, new PhotoClick());
         Fresco.initialize(getContext());
     }
 
@@ -117,12 +133,15 @@ public class UserRestaurantDetailFragment extends Fragment {
     }
 
     private void getViews(View v) {
-        // header view
-        holder = new ViewHolder(v);
+
+        final BGARefreshLayout bgaRefreshLayout = v.findViewById(R.id.restaurantBGARefreshLayout);
+
+        View header = LayoutInflater.from(getContext()).inflate(R.layout.fragment_user_restaurant_detail_header, null, true);
+        bgaRefreshLayout.setCustomHeaderView(header, true);
+        holder = new ViewHolder(header);
         Bundle bundle = getArguments();
         serHeaderValue(bundle);
 
-        final BGARefreshLayout bgaRefreshLayout = v.findViewById(R.id.restaurantBGARefreshLayout);
         RecyclerView recyclerView = v.findViewById(R.id.restaurantRecyclerView);
         BGANormalRefreshViewHolder refreshViewHolder = new BGANormalRefreshViewHolder(getContext(), true);
         refreshViewHolder.setPullDownRefreshText("Pull");
@@ -135,8 +154,8 @@ public class UserRestaurantDetailFragment extends Fragment {
         layoutManager.setOrientation(LinearLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(layoutManager);
 
-        // setListener
         recyclerView.setAdapter(adapter);
+
         adapter.setItemClickListener(new ItemOnClickListener());
 
         bgaRefreshLayout.setDelegate(new BGARefreshLayout.BGARefreshLayoutDelegate() {
@@ -151,11 +170,42 @@ public class UserRestaurantDetailFragment extends Fragment {
                 return false;
             }
         });
+
+
+        final RecyclerCoverFlow photoRecycler = header.findViewById(R.id.recyclerCoverFlow);
+        coverFlowLayoutManger = new CoverFlowLayoutManger.Builder()
+                .setFlat(false)
+                .setGreyItem(true)
+                .setAlphaItem(true)
+                .setIntervalRatio(-1.0f)
+                .build();
+        photoRecycler.setLayoutManager(coverFlowLayoutManger);
+        photoRecycler.setHasFixedSize(true);
+        photoRecycler.setAdapter(photoAdapter);
+        PagerSnapHelper snapHelper = new PagerSnapHelper();
+        snapHelper.attachToRecyclerView(photoRecycler);
+        photoRecycler.scrollToPosition(this.photos.size() / 2);
+
+        photoRecycler.setOnItemSelectedListener(new CoverFlowLayoutManger.OnSelected() {
+            @Override
+            public void onItemSelected(int position) {
+            }
+        });
+
+        photoRecycler.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+            }
+        });
+
+        this.photoRun = new PhotoRun(photoRecycler);
     }
+
 
     @Override
     public void onResume() {
         super.onResume();
+
         // 回到此畫面即時更新種類列表
         if (TO_CATEGORY_MENU_INDEX == -1) {
             doLoadData(true);
@@ -208,6 +258,7 @@ public class UserRestaurantDetailFragment extends Fragment {
         if (TO_CATEGORY_MENU_INDEX >= 0) {
             toCategoryMenuPage(TO_CATEGORY_MENU_INDEX);
         }
+
     }
 
     private void toCategoryMenuPage(int index) {
@@ -224,6 +275,10 @@ public class UserRestaurantDetailFragment extends Fragment {
     private void doLoadData(boolean isRefresh) {
         if (isRefresh) {
             restaurantCategoryRelVos.clear();
+            handler.removeCallbacks(this.photoRun);
+            coverFlowLayoutManger.scrollToPosition(0);
+            photos.clear();
+            photoAdapter.notifyDataSetChanged();
         }
         ApiManager.restaurantDetail(holder.uuid, new ThreadCallback(getContext()) {
             @Override
@@ -243,12 +298,38 @@ public class UserRestaurantDetailFragment extends Fragment {
 
             }
         });
+
+        ReqData req = new ReqData();
+        req.uuid = holder.uuid;
+        ApiManager.getRestaurantPhotoList(req, new ThreadCallback(getContext()) {
+            @Override
+            public void onSuccess(String responseBody) {
+                List<RestaurantPhotoVo> vos = Tools.JSONPARSE.fromJsonList(responseBody, RestaurantPhotoVo[].class);
+                photos.addAll(vos);
+                photoAdapter.notifyDataSetChanged();
+                if (!photos.isEmpty() || photos.size() > 1) {
+                    if (photos.size() > 2){
+                        coverFlowLayoutManger.scrollToPosition(photos.size() / 2);
+                    }
+                    handler.post(photoRun);
+                }
+            }
+
+            @Override
+            public void onFail(Exception error, String msg) {
+
+            }
+        });
     }
 
     @Override
     public void onStop() {
         super.onStop();
         UserMainActivity.navigationIconDisplay(false, null);
+        handler.removeCallbacks(this.photoRun);
+        coverFlowLayoutManger.scrollToPosition(0);
+//        photos.clear();
+//        photoAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -261,6 +342,56 @@ public class UserRestaurantDetailFragment extends Fragment {
         public void onClick(View v) {
             int index = (int) v.getTag();
             toCategoryMenuPage(index);
+        }
+    }
+
+    // 輪播圖片線程
+    class PhotoRun implements  Runnable {
+        RecyclerCoverFlow mList;
+        PhotoRun (RecyclerCoverFlow mList){
+            this.mList = mList;
+        }
+        @Override
+        public void run() {
+            mList.smoothScrollToPosition(mList.getSelectedPos() + 1);
+            handler.postDelayed(this, photoAutoPlayInterval);
+        }
+    }
+
+    class PhotoClick implements View.OnClickListener {
+
+        @Override
+        public void onClick(View view) {
+            RestaurantPhotoVo vo = (RestaurantPhotoVo)view.getTag();
+
+            ApiManager.restaurantFoodDetail(vo.uuid, new ThreadCallback(getContext()) {
+                @Override
+                public void onSuccess(String responseBody) {
+                    FoodVo food = Tools.JSONPARSE.fromJson(responseBody, FoodVo.class);
+                    String catName = "";
+                    int index = 0;
+                    for(CategoryRelVo cat : restaurantCategoryRelVos){
+                        if (food.category_uuid.equals(cat.category_uuid)){
+                            catName = cat.category_name;
+                            index = restaurantCategoryRelVos.indexOf(cat);
+                        }
+                    }
+                    UserFoodListFragment.TO_REST_DETAIL_INDEX = 1;
+                    UserRestaurantListFragment.TO_RESTAURANT_DETAIL_INDEX = index;
+                    Bundle bundle = new Bundle();
+                    bundle.putSerializable(NaberConstant.RESTAURANT_CATEGORY_REL, restaurantCategoryRelVos.get(index));
+                    bundle.putSerializable(NaberConstant.RESTAURANT_INFO, getArguments().getSerializable(NaberConstant.RESTAURANT_INFO));
+                    bundle.putString(NaberConstant.CATEGORY_NAME, catName);
+                    bundle.putSerializable(NaberConstant.FOOD_INFO, food);
+                    UserMainActivity.removeAndReplaceWhere(FRAGMENT, PageType.USER_FOOD_DETAIL, bundle);
+
+                }
+
+                @Override
+                public void onFail(Exception error, String msg) {
+
+                }
+            });
         }
     }
 
@@ -285,6 +416,7 @@ public class UserRestaurantDetailFragment extends Fragment {
             this.distanceText = v.findViewById(R.id.distanceText);
             this.warningText = v.findViewById(R.id.warningText);
         }
+
     }
 
 }

@@ -38,7 +38,9 @@ import com.melonltd.naber.view.user.page.UserShoppingCartFragment;
 import com.melonltd.naber.view.user.page.UserSimpleInformationFragment;
 import com.melonltd.naber.view.user.page.UserSubmitOrdersFragment;
 
-public enum PageType {
+import java.io.Serializable;
+
+public enum PageType implements Serializable{
     LOGIN(R.string.common_page_login_title, 100, LoginFragment.class),
     RECOVER_PASSWORD(R.string.common_page_recover_password_title, 101, RecoverPasswordFragment.class),
     REGISTERED_USER(R.string.user_page_registered_title, 103, RegisteredFragment.class),
@@ -124,6 +126,7 @@ public enum PageType {
         }
         return 0;
     }
+
 
     public Class toClass() {
         return this.zlass.asSubclass(Fragment.class);
